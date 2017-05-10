@@ -1,8 +1,15 @@
 package it.polimi.ingsw.ps06.model;
 
+/**
+* Class representing the four Family Member each player has (three dice colored and one neutral)
+*
+* @author  ps06
+* @version 1.0
+* @since   2017-05-10 
+*/
 public class FamilyMember {
 	
-	private int rappresentativeDice;
+	private ColorPalette rappresentativeDiceColor;
 	private int value;
 	
 	
@@ -13,7 +20,7 @@ public class FamilyMember {
 	public FamilyMember()
 	{
 		super();
-		this.rappresentativeDice = ColorPalette.EMPTY;
+		this.rappresentativeDiceColor = ColorPalette.EMPTY;
 	}
 	
 	/**
@@ -22,16 +29,28 @@ public class FamilyMember {
 	   * 									Values accepted comes from the ColorPalette interface.
 	   * @return 	Nothing.
 	   */
-	public FamilyMember(int rappresentativeDice) throws IllegalArgumentException
+	public FamilyMember(ColorPalette rappresentativeDice)
 	{
 		super();
 		
-		if (rappresentativeDice != ColorPalette.DICE_BLACK && rappresentativeDice != ColorPalette.DICE_ORANGE && rappresentativeDice != ColorPalette.DICE_WHITE)
-			throw new IllegalArgumentException();
-		
-		this.rappresentativeDice = rappresentativeDice;
+		this.rappresentativeDiceColor = rappresentativeDice;
 	}
 	
+	/**
+	   * Setter for the value attribute
+	   * @param 	value		New value associated
+	   * @return 	Nothing.
+	   */
+	public void setValue(int value) {
+		this.value = value;
+	}
 	
-
+	/**
+	   * Getter for the value attribute
+	   * @param 	Nothing.
+	   * @return 	Current value associated
+	   */
+	public int getValue() {
+		return value;
+	}
 }

@@ -8,6 +8,7 @@ public class App
 {
     public static void main( String[] args )
     {
-        System.out.println( "Lorenzo il magnifico!" );
+        System.out.println( "Lorenzo il magnifico!");
     }
+ 
 }
