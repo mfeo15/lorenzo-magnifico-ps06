@@ -14,13 +14,12 @@ public class Market implements ActionSpace {
 	private FamilyMember market1, market2, market3, market4;
 	private Player player;
 	
-	
 	/**
-	* Metodo per il piazzamento di un familiare su di uno degli spazi del mercato, include controlli di posizionamento
+	* Metodo per il piazzamento di un familiare nel mercato, include controlli di posizionamento
 	*
-	* @author  ps06
-	* @version 1.1
-	* @since   2017-05-11 
+	* @param 	member			Familiare che si vuole piazzare
+	* @param 	chosenAction 	Codice dell'azione da eseguire
+	* @return 					Nothing
 	*/
 	@Override
 	public void placeMember(FamilyMember member, Action chosenAction) throws IllegalStateException {
@@ -33,8 +32,14 @@ public class Market implements ActionSpace {
 		// player = member.associatedPlayer();
 	}
 	
+	/**
+	* Costruttore del mercato. Si occupa di impostarlo in maniera adeguata
+	*
+	* @param 	numberPlayers	Numero di giocatori della partita
+	* @return 	Nothing
+	*/
 	public Market(int numberPlayers) {
-		
+		setSpaces(numberPlayers);
 	}
 	
 	/**
@@ -44,7 +49,7 @@ public class Market implements ActionSpace {
 	* @version 1.0
 	* @since   2017-05-11 
 	*/
-	public void setSpaces(int giocatori) {
+	public void setSpaces(int numberPlayers) {
 		
 	}
 	
@@ -67,7 +72,10 @@ public class Market implements ActionSpace {
 	* @since   2017-05-11 
 	*/
 	public void cleanMarket() {
-		
+		market1=null;
+		market2=null;
+		market3=null;
+		market4=null;
 	}
 	
 	

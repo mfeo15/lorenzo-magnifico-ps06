@@ -17,9 +17,8 @@ public class Towers implements ActionSpace {
 	private ArrayList<Character> characters;
 	private ArrayList<Venture> ventures;
 	
-	
 	/**
-	* Metodo per il piazzamento di un familiare si di una delle torri, include controlli di posizionamento
+	* Metodo per il piazzamento di un familiare su di una delle torri, include controlli di posizionamento
 	*
 	* @param 	member			Familiare che si vuole piazzare
 	* @param 	chosenAction 	Codice dell'azione da eseguire
@@ -29,6 +28,16 @@ public class Towers implements ActionSpace {
 	@Override
 	public void placeMember(FamilyMember member, Action chosenAction) {
 		// TODO Auto-generated method stub
+	}
+	
+	/**
+	* Costruttore delle torri. Si occupa di disporre le carte
+	*
+	* @param 	numberPlayers	Numero di giocatori della partita
+	* @return 	Nothing
+	*/
+	public Towers() {
+		setCards();
 	}
 	
 	/**

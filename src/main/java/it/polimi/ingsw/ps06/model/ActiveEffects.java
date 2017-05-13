@@ -13,6 +13,7 @@ import java.util.ArrayList;
 public class ActiveEffects extends Effect {
 	int modifier=0;
 	int set=0;
+	boolean multi;
 	
 	/**
 	* Constructor.
@@ -34,7 +35,7 @@ public class ActiveEffects extends Effect {
 	* @param 	chosenAction	Codice dell'azione da eseguire	
 	* @return 					Nothing
 	*/
-	public static void checkAction(Player player, Action chosenAction){
+	public void checkAction(Player player, Action chosenAction){
 	
 	}
 	
@@ -45,7 +46,7 @@ public class ActiveEffects extends Effect {
 	* @param 	value			Valore dell'azione eseguita
 	* @return 					Nothing 
 	*/
-	public static void setValue(Player player, int value){
+	public void setValue(Player player, int value){
 		
 		
 	}
@@ -57,8 +58,9 @@ public class ActiveEffects extends Effect {
 	* @param 	Unused
 	* @return 	boolean 
 	*/
-	public static boolean handleLeaderMulti(){
-		return false;
+	public boolean handleLeaderMulti(boolean multi){
+		this.multi=multi;
+		return multi;
 	}
 
 	
@@ -68,7 +70,7 @@ public class ActiveEffects extends Effect {
 	* @param 	Unused
 	* @return 	Nothing 
 	*/
-	public static void handleLeaderCopy(){
+	public void handleLeaderCopy(){
 
 	}
 }

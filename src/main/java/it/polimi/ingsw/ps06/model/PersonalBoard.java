@@ -42,6 +42,10 @@ public class PersonalBoard
 		bonusTile = new BonusTile();
 	}
 	
+	public Warehouse getStatus(){
+		return status;
+	}
+	
 	public void addCard(Territory cardTerritory) 
 	{
 		

@@ -24,7 +24,12 @@ public class Player {
 	private FamilyMember memberOrange;
 	private FamilyMember memberUncolored;
 	 
-	
+	/**
+	* Constructorre della classe
+	* 
+	* @param name	nome del giocatore
+	* @param color	colore del giocatore
+	*/
 	public Player(String name, ColorPalette color) {
 		super();
 		
@@ -37,5 +42,16 @@ public class Player {
 		memberUncolored = new FamilyMember(this);
 		
 		this.personalBoard = new PersonalBoard();
+	}
+	
+	/**
+	* Metodo per l'esecuzione di un azione
+	*
+	* @param 	value	valore dell'azione
+	* @param 	color	colore del familiare usato
+	* @return 	Nothing
+	*/
+	public void doAction(int value, ColorPalette color){
+		
 	}
 }

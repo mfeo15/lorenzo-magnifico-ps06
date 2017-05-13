@@ -2,6 +2,8 @@ package it.polimi.ingsw.ps06.model;
 
 import static it.polimi.ingsw.ps06.model.Types.Action;
 
+import java.util.ArrayList;
+
 /**
 * Classe per la gestione del palazzo del consiglio
 *
@@ -11,7 +13,9 @@ import static it.polimi.ingsw.ps06.model.Types.Action;
 */
 
 public class CouncilPalace implements ActionSpace {
-
+	private ArrayList<FamilyMember> familiari;
+	
+	
 	/**
 	* Metodo per il piazzamento di un familiare nel palazzo del consiglio
 	*
@@ -26,13 +30,22 @@ public class CouncilPalace implements ActionSpace {
 	}
 	
 	/**
-	* Metodo per valutare l'ordine dei giocatori per la prossima fase di gioco
+	* Costruttore del palazzo del consiglio
 	*
-	* @param 	Unused
+	* @param 	numberPlayers	Numero di giocatori della partita
 	* @return 	Nothing
 	*/
-	public void checkOrder(){
+	public void CouncilPalace(){
 		
+	}
+	
+	/**
+	* Metodo per valutare l'ordine dei giocatori per la prossima fase di gioco
+	*
+	* @return 	familiari	array di familiari prima della pulizia
+	*/
+	public ArrayList<FamilyMember> checkOrder(){
+		return familiari;
 	}
 	
 	/**

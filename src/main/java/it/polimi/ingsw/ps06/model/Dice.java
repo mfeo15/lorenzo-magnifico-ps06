@@ -3,7 +3,7 @@ package it.polimi.ingsw.ps06.model;
 import static it.polimi.ingsw.ps06.model.Types.ColorPalette;
 
 /**
-* Class modeling the Dice
+* Classe per la gestione dei dadi
 *
 * @author  ps06
 * @version 1.0
@@ -15,8 +15,8 @@ public class Dice {
 	private ColorPalette color;
 	
 	/**
-	* This is the constructor of the class
-	* @param 	color 		Color associated to the dice
+	* Costruttore della classe
+	* @param 	color 		Colore associato al dado
 	* @return 	Nothing.
 	*/
 	public Dice(ColorPalette color)

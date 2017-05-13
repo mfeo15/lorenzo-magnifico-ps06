@@ -25,8 +25,14 @@ public class HarvestProduction implements ActionSpace {
 		
 	}
 	
+	/**
+	* Costruttore della zona Produzione e Raccolto. Imposta la zona
+	*
+	* @param 	numberPlayers	Numero di giocatori della partita
+	* @return 	Nothing
+	*/
 	public HarvestProduction(int numberPlayers) {
-		
+		setSpaces(numberPlayers);
 	}
 	
 	/**
@@ -35,7 +41,7 @@ public class HarvestProduction implements ActionSpace {
 	* @param 	giocatori	Numero di giocatori della partita
 	* @return 				Nothing
 	*/
-	public void setSpaces(int giocatori){
+	public void setSpaces(int numberPlayers){
 		
 	}
 	

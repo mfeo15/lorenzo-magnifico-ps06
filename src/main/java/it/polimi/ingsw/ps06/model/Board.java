@@ -1,5 +1,7 @@
 package it.polimi.ingsw.ps06.model;
 
+import java.util.ArrayList;
+
 /**
 * Classe per la gestione del tabellone
 *
@@ -15,7 +17,12 @@ public class Board {
 	private CouncilPalace councilPalaceZone;
 	private HarvestProduction harvestProductionZone;
 	
+	private ArrayList<FamilyMember> order;
+	
 	private ExcommunicationTile excomunicationTiles[];
+	
+	private int random1, random2, random3;
+	
 	
 	/**
 	* Costruttore della Board. Si occupa dell'inizializzazione delle zone 
@@ -25,40 +32,40 @@ public class Board {
 	* @return 	Nothing
 	*/
 	public Board(int numberPlayers) {
-		
 		towersZone = new Towers();
 		marketZone = new Market(numberPlayers);
 		councilPalaceZone = new CouncilPalace();
 		harvestProductionZone = new HarvestProduction(numberPlayers);
-		
+	
 		drawExcommunicationTiles();
 	}
 	
 	private void drawExcommunicationTiles() {
-	
+		random1 = (int)(Math.random() * 8);
+		random2 = 7 + (int)(Math.random() * 8);
+		random3 = 14 + (int)(Math.random() * 8);
 	}
 	
-	// DA RIMUOVERE! GIA' PREVISTO NEL COSTRUTTORE
 	/**
-	* Metodo per inizializzare il tabellone
+	* Metodo per ritornare l'ordine dei familiari, per stabilire l'ordine di gioco
+	*
+	* @return 		order	ordine dei familiari
+	*/ 
+	public ArrayList<FamilyMember> getOrder() {
+		return order;
+	}
+	
+	/**
+	* Metodo per impostare il gioco per un nuovo round
 	*
 	* @param 	giocatori	Numero di giocatori della partita
 	* @return 				Nothing
 	*/ 
-	public void setup(int giocatori) {
-		/*
-		 * COMPLETAMENTE DA RIVEDERE
-		 * 
-		Market.setSpaces(giocatori);
-		Towers.setCards();
-		HarvestProduction.setSpaces(giocatori);
-		*/
+	public void setupRound() {
+		clean();
+		towersZone.setCards();
 	}
 	
-	//DA IMPLEMENTARE
-	public void setupRound() {
-		
-	}
 	
 	/**
 	* Metodo per ripulire il tabellone alla fine di una fase
@@ -67,15 +74,11 @@ public class Board {
 	* @return 	Nothing
 	*/
 	public void clean() {
-		/*
-		 * COMPLETAMENTE DA RIVEDERE
-		 * 
-		Market.cleanMarket();
-		Towers.cleanTowers();
-		HarvestProduction.cleanZone();
-		CouncilPalace.checkOrder();
-		CouncilPalace.cleanPalace();
-		*/
+		marketZone.cleanMarket();
+		towersZone.cleanTowers();
+		harvestProductionZone.cleanZone();
+		order = councilPalaceZone.checkOrder();
+		councilPalaceZone.cleanPalace();
 	}
 
 }

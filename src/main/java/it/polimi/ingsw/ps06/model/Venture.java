@@ -8,7 +8,7 @@ package it.polimi.ingsw.ps06.model;
 * @since   2017-05-11
 */
 public class Venture extends DevelopementCard {
-
+ResourcesEffects effect;
 	/**
 	* Metodo per la gestione degli effetti finali di aggiunta punti vittoria
 	* 
@@ -16,8 +16,8 @@ public class Venture extends DevelopementCard {
 	* @param 	value			Valore in punti vittoria da aggiungere a fine partita
 	* @return 					Nothing
 	*/
-	public void saveEffect(Player player, int value){
+	public void fianlEffect(Player player, int value){
 		
-		ResourcesEffects.handleFinalEffects(player, value);
+		effect.handleFinalEffects(player, value);
 	}
 }
