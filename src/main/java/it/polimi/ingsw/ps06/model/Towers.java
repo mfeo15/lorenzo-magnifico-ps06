@@ -37,7 +37,7 @@ public class Towers implements ActionSpace {
 	* @param 	Unused
 	* @return 	Nothing
 	*/
-	public static void setCards(){
+	public void setCards(){
 		
 	}
 	
@@ -48,7 +48,7 @@ public class Towers implements ActionSpace {
 	* @param 	chosenAction	Codice dell'azione da eseguire	
 	* @return 	
 	*/
-	public static void checkCosts(Player player, Action chosenAction){
+	public void checkCosts(Player player, Action chosenAction){
 		//chiama risorse
 	}
 	
@@ -59,7 +59,7 @@ public class Towers implements ActionSpace {
 	* @param 	chosenAction	Codice dell'azione da eseguire	
 	* @return 	 
 	*/
-	public static void giveCard(Player player, Action chosenAction){
+	public void giveCard(Player player, Action chosenAction){
 		
 	}
 	
@@ -69,7 +69,7 @@ public class Towers implements ActionSpace {
 	* @param 	Unused
 	* @return 	Nothing
 	*/
-	public static void cleanTowers(){
+	public void cleanTowers(){
 		
 	}
 	

@@ -1,8 +1,9 @@
 package it.polimi.ingsw.ps06.model;
 
 import static it.polimi.ingsw.ps06.model.Types.ColorPalette;
+
 /**
-* Class to model a single game between multiple players
+* Classe che modellizza una partita tra n giocatori
 *
 * @author  ps06
 * @version 1.0
@@ -16,27 +17,28 @@ public class Game {
 	
 	private Player[] players;
 	
-	private Dice[] dices;
+	private Board board;
+	
+	private Dice diceBlack;
+	private Dice diceWhite;
+	private Dice diceOrange;
 	
 	public Game(int numberPlayers) {
 		
-		dices = new Dice[3];
-		dices[0] = new Dice(ColorPalette.DICE_BLACK);
-		dices[1] = new Dice(ColorPalette.DICE_WHITE);
-		dices[2] = new Dice(ColorPalette.DICE_ORANGE);
+		diceBlack = new Dice(ColorPalette.DICE_BLACK);
+		diceWhite = new Dice(ColorPalette.DICE_WHITE);
+		diceOrange = new Dice(ColorPalette.DICE_ORANGE);
+		
+		board = new Board(numberPlayers);
 		
 		players = new Player[numberPlayers];
-		for (Player p : players) p = new Player("Lorenzo", 0);
+		for (Player p : players) p = new Player("Lorenzo", ColorPalette.UNCOLORED);
 	}
 	
 	public void addPlayer(Player newPlayer) {
 		
 	}
 	
-	
-	public void setupGame() {
-		
-	}
 	
 	public void setupRound() {
 		
@@ -46,7 +48,31 @@ public class Game {
 		
 	}
 	
-	public void start() {
+	private void reorderPlayers() {
 		
+	}
+	
+	public void start() 
+	{
+		for(int period = 0; period < NUMBER_OF_PERIODS; period++) 
+		{
+			for(int round = 0; round < NUMBER_OF_ROUNDS; round++) 
+			{
+				for(int phase = 0; phase < NUMBER_OF_PERIODS; phase++) 
+				{
+					switch (phase) {
+						case 0:
+							setupRound();
+						case 1: 
+							for( Player p : players) {
+								
+							}
+						case 2: 
+							if (round == 2 || round == 4 || round == 6) vaticanReport();
+						case 3: //end of round
+					}
+				}
+			}
+		}
 	}
 }

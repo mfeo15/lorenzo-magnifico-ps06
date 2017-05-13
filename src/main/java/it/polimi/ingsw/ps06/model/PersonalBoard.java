@@ -20,6 +20,11 @@ public class PersonalBoard
 	
 	private BonusTile bonusTile;
 	
+	private Warehouse status;
+	
+	/*
+	 * implementazione da rivedere di tutte queste costanti !!!
+	 * 
 	private final int MILITARY_REQUIREMENT_THIRD_TERRITORY 	= 3;
 	private final int MILITARY_REQUIREMENT_FOURTH_TERRITORY	= 7;
 	private final int MILITARY_REQUIREMENT_FIFTH_TERRITORY 	= 12;
@@ -27,15 +32,14 @@ public class PersonalBoard
 	
 	private final int MAX_NUMBER_TERRITORY 	= 6;
 	private final int MAX_NUMBER_BUILDING 	= 6;
+	*/
 	
-	
-	public PersonalBoard(Coins coins, Wood wood, Stone stone, Servants servants) {
+	public PersonalBoard() {
 		
 		super();
-		this.coins = coins;
-		this.wood = wood;
-		this.stone = stone;
-		this.servants = servants;
+		
+		status = new Warehouse();
+		bonusTile = new BonusTile();
 	}
 	
 	public void addCard(Territory cardTerritory) 

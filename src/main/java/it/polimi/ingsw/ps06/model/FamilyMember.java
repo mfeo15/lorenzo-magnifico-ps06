@@ -14,15 +14,18 @@ public class FamilyMember {
 	private ColorPalette rappresentativeDiceColor;
 	private int value;
 	
+	private Player ownerPlayer;
+	
 	
 	/**
 	   * This is the default constructor of the class. The Family Member instanced is by default neutral
 	   * @return 	Nothing.
 	   */
-	public FamilyMember()
+	public FamilyMember(Player p)
 	{
 		super();
-		this.rappresentativeDiceColor = ColorPalette.EMPTY;
+		this.ownerPlayer = p;
+		this.rappresentativeDiceColor = ColorPalette.UNCOLORED;
 	}
 	
 	/**
@@ -31,10 +34,9 @@ public class FamilyMember {
 	   * 									Values accepted comes from the ColorPalette interface.
 	   * @return 	Nothing.
 	   */
-	public FamilyMember(ColorPalette rappresentativeDice)
+	public FamilyMember(Player p, ColorPalette rappresentativeDice)
 	{
 		super();
-		
 		this.rappresentativeDiceColor = rappresentativeDice;
 	}
 	

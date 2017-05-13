@@ -25,13 +25,17 @@ public class HarvestProduction implements ActionSpace {
 		
 	}
 	
+	public HarvestProduction(int numberPlayers) {
+		
+	}
+	
 	/**
 	* Metodo per impostare quali degli spazi sono accessibili in base al numero di giocatori
 	*
 	* @param 	giocatori	Numero di giocatori della partita
 	* @return 				Nothing
 	*/
-	public static void setSpaces(int giocatori){
+	public void setSpaces(int giocatori){
 		
 	}
 	
@@ -42,7 +46,7 @@ public class HarvestProduction implements ActionSpace {
 	* @param 	chosenAction	Codice dell'azione da eseguire	
 	* @return 	
 	*/
-	public static void startGathering(Player player, Action chosenAction){
+	public void startGathering(Player player, Action chosenAction){
 		//chiama risorse
 	}
 	
@@ -52,7 +56,7 @@ public class HarvestProduction implements ActionSpace {
 	* @param 	Unused
 	* @return 	Nothing
 	*/
-	public static void cleanZone(){
+	public void cleanZone(){
 		
 	}
 	

@@ -1,9 +1,10 @@
 package it.polimi.ingsw.ps06.model;
 
 import java.util.ArrayList;
+import it.polimi.ingsw.ps06.model.Types.ColorPalette;
 
 /**
-* Class representing a single player engaged in a game battle
+* Classe rappresentante un singolo giocatore in una partita
 *
 * @author  ps06
 * @version 1.0
@@ -12,19 +13,29 @@ import java.util.ArrayList;
 public class Player {
 	
 	private String name;
-	private int color;
+	private ColorPalette color;
 	
 	private ArrayList<Leader> leaders;
 	
 	private PersonalBoard personalBoard;
+	
+	private FamilyMember memberBlack;
+	private FamilyMember memberWhite;
+	private FamilyMember memberOrange;
+	private FamilyMember memberUncolored;
 	 
 	
-	public Player(String name, int color) {
+	public Player(String name, ColorPalette color) {
 		super();
 		
 		this.name = name;
 		this.color = color;
 		
-		this.personalBoard = new PersonalBoard(new Coins(), new Wood(), new Stone(), new Servants());
+		memberBlack = new FamilyMember(this, ColorPalette.DICE_BLACK);
+		memberWhite = new FamilyMember(this, ColorPalette.DICE_WHITE);
+		memberOrange = new FamilyMember(this, ColorPalette.DICE_ORANGE);
+		memberUncolored = new FamilyMember(this);
+		
+		this.personalBoard = new PersonalBoard();
 	}
 }

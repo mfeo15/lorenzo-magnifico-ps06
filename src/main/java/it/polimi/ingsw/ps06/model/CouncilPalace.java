@@ -31,7 +31,7 @@ public class CouncilPalace implements ActionSpace {
 	* @param 	Unused
 	* @return 	Nothing
 	*/
-	public static void checkOrder(){
+	public void checkOrder(){
 		
 	}
 	
@@ -42,7 +42,7 @@ public class CouncilPalace implements ActionSpace {
 	* @param 	chosenAction	Codice dell'azione da eseguire	
 	* @return 					Nothing
 	*/
-	public static void giveResources(Player player, Action chosenAction){
+	public void giveResources(Player player, Action chosenAction){
 		
 	}
 	
@@ -52,7 +52,7 @@ public class CouncilPalace implements ActionSpace {
 	* @param 	Unused
 	* @return 	Nothing
 	*/
-	public static void cleanPalace(){
+	public void cleanPalace(){
 		
 	}
 }

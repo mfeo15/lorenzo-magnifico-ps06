@@ -2,7 +2,8 @@ package it.polimi.ingsw.ps06.model;
 
 public class Types {
 	
-	public enum Action{
+	public enum Action 
+	{
 		NULL,
 		
 		TOWER_GREEN_1,
@@ -39,8 +40,9 @@ public class Types {
 		MARKET_4
 	}
 	
-	public enum ColorPalette{
-		 EMPTY,
+	public enum ColorPalette 
+	{
+		 UNCOLORED,
 		    
 		 CARD_GREEN,
 		 CARD_BLUE,
@@ -53,20 +55,18 @@ public class Types {
 		
 	}
 	
-	public enum PointsKind{
+	public enum PointsKind 
+	{
 		VICTORY_POINTS,
 		MILITARY_POINTS,
-		FAITH_POINTS,
-		
-		
+		FAITH_POINTS,	
 	}
 	
-	public enum MaterialsKind{
+	public enum MaterialsKind 
+	{
 		STONE,
 		WOOD,
 		COIN,
-		SERVANT
-		
+		SERVANT	
 	}
-
 }
