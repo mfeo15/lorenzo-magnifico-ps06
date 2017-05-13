@@ -10,7 +10,7 @@ import java.util.ArrayList;
 * @version 1.0
 * @since   2017-05-11
 */
-public class ActiveEffects extends Effects {
+public class ActiveEffects extends Effect {
 	int modifier=0;
 	int set=0;
 	

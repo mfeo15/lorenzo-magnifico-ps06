@@ -9,7 +9,7 @@ import static it.polimi.ingsw.ps06.model.Types.Action;
 * @since   2017-05-11
 */
 
-public class ActionsEffects extends Effects {
+public class ActionsEffects extends Effect {
 	
 	/**
 	* Metodo per l'utilizzo dell'azione supplementare concessa
