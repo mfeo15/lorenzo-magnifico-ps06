@@ -13,9 +13,8 @@ public class Board {
 	/**
 	* Metodo per inizializzare il tabellone
 	*
-	* @author  ps06
-	* @version 1.0
-	* @since   2017-05-11 
+	* @param 	giocatori	Numero di giocatori della partita
+	* @return 				Nothing
 	*/
 	public void setup(int giocatori){
 		Market.setSpaces(giocatori);
@@ -26,9 +25,8 @@ public class Board {
 	/**
 	* Metodo per ripulire il tabellone alla fine di una fase
 	*
-	* @author  ps06
-	* @version 1.0
-	* @since   2017-05-11 
+	* @param 	Unused
+	* @return 	Nothing
 	*/
 	public void clean(){
 		Market.cleanMarket();

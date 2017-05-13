@@ -1,5 +1,7 @@
 package it.polimi.ingsw.ps06.model;
 
+import static it.polimi.ingsw.ps06.model.Types.ColorPalette;
+
 /**
 * Class representing the four Family Member each player has (three dice colored and one neutral)
 *

@@ -1,5 +1,7 @@
 package it.polimi.ingsw.ps06.model;
 
+import static it.polimi.ingsw.ps06.model.Types.ColorPalette;
+
 /**
 * Class modeling the Dice
 *
@@ -13,10 +15,10 @@ public class Dice {
 	private ColorPalette color;
 	
 	/**
-	   * This is the constructor of the class
-	   * @param 	color 		Color associated to the dice
-	   * @return 	Nothing.
-	   */
+	* This is the constructor of the class
+	* @param 	color 		Color associated to the dice
+	* @return 	Nothing.
+	*/
 	public Dice(ColorPalette color)
 	{
 		this.color = color;

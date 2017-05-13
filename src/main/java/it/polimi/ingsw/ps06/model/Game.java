@@ -1,5 +1,6 @@
 package it.polimi.ingsw.ps06.model;
 
+import static it.polimi.ingsw.ps06.model.Types.ColorPalette;
 /**
 * Class to model a single game between multiple players
 *

@@ -8,14 +8,13 @@ package it.polimi.ingsw.ps06.model;
 * @since   2017-05-10
 */
 
-public class ExcommunicationTile {
+public class ExcommunicationTile extends Card {
 	
 	/**
 	* Metodo per scegliere in maniera randomica ed assegnare le tessere scomunica
 	*
-	* @author  ps06
-	* @version 1.0
-	* @since   2017-05-11 
+	* @param 	Unused
+	* @return 	Nothing
 	*/
 	public static void setTiles(){
 		
@@ -24,9 +23,8 @@ public class ExcommunicationTile {
 	/**
 	* Metodo per valutare il supporto che un giocatore ha fornito alla chiesa, viene offerta una scelta solo se il supporto è sufficiente
 	*
-	* @author  ps06
-	* @version 1.0
-	* @since   2017-05-11 
+	* @param 	player		Giocatore da verificare
+	* @return 				Nothing
 	*/
 	public static void checkSupport(Player player){
 		
@@ -35,9 +33,8 @@ public class ExcommunicationTile {
 	/**
 	* Metodo per scomunicare un giocatore, in base alla scelta che ha effettuato o alla poca dedizione alla fede
 	*
-	* @author  ps06
-	* @version 1.0
-	* @since   2017-05-11 
+	* @param 	player		Giocatore da scomunicare
+	* @return 				Nothing
 	*/
 	public static void eccommunicate(Player player){
 		

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.ps06.model;
 
 import java.util.ArrayList;
+import static it.polimi.ingsw.ps06.model.Types.Action;
 
 /**
 * Classe per la gestione delle torri
@@ -11,7 +12,6 @@ import java.util.ArrayList;
 */
 
 public class Towers implements ActionSpace {
-
 	private ArrayList<Territory> territories;
 	private ArrayList<Building> buildings;
 	private ArrayList<Character> characters;
@@ -21,9 +21,9 @@ public class Towers implements ActionSpace {
 	/**
 	* Metodo per il piazzamento di un familiare si di una delle torri, include controlli di posizionamento
 	*
-	* @author  ps06
-	* @version 1.0
-	* @since   2017-05-11 
+	* @param 	member			Familiare che si vuole piazzare
+	* @param 	chosenAction 	Codice dell'azione da eseguire
+	* @return 					Nothing
 	*/
 	
 	@Override
@@ -34,9 +34,8 @@ public class Towers implements ActionSpace {
 	/**
 	* Metodo per il posizionamento delle 16 carte sulle varie torri
 	*
-	* @author  ps06
-	* @version 1.0
-	* @since   2017-05-11 
+	* @param 	Unused
+	* @return 	Nothing
 	*/
 	public static void setCards(){
 		
@@ -45,9 +44,9 @@ public class Towers implements ActionSpace {
 	/**
 	* Metodo per verificare i costi dovuti al posizionamento di un familiare sulla torre
 	*
-	* @author  ps06
-	* @version 1.0
-	* @since   2017-05-11 
+	* @param 	player			Giocatore su cui fare la verifica della disponibilità di risorse
+	* @param 	chosenAction	Codice dell'azione da eseguire	
+	* @return 	
 	*/
 	public static void checkCosts(Player player, Action chosenAction){
 		//chiama risorse
@@ -56,9 +55,9 @@ public class Towers implements ActionSpace {
 	/**
 	* Metodo per attribuire la carta al giocatore che l'ha scelta con successo
 	*
-	* @author  ps06
-	* @version 1.0
-	* @since   2017-05-11 
+	* @param 	player			Giocatore a cui dare la carta
+	* @param 	chosenAction	Codice dell'azione da eseguire	
+	* @return 	 
 	*/
 	public static void giveCard(Player player, Action chosenAction){
 		
@@ -67,9 +66,8 @@ public class Towers implements ActionSpace {
 	/**
 	* Metodo per togliere le carte rimaste sulla torre e i familiari utilizzati
 	*
-	* @author  ps06
-	* @version 1.0
-	* @since   2017-05-11 
+	* @param 	Unused
+	* @return 	Nothing
 	*/
 	public static void cleanTowers(){
 		

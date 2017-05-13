@@ -11,10 +11,7 @@ import java.util.ArrayList;
 */
 public class PersonalBoard 
 {
-	private Coins coins;
-	private Wood wood;
-	private Stone stone;
-	private Servants servants;
+	private ArrayList<Resources> resources; //<------- modificato dalle varie classi risorse
 	
 	private ArrayList<Territory> territories;
 	private ArrayList<Building> buildings;
