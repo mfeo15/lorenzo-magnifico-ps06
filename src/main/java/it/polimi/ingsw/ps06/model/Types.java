@@ -69,4 +69,12 @@ public class Types {
 		COIN,
 		SERVANT	
 	}
+	
+	public enum Privileges
+	{
+		BONUS_1,
+		BONUS_2,
+		BONUS_3,
+		BONUS_4
+	}
 }

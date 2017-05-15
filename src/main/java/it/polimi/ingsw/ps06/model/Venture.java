@@ -8,7 +8,7 @@ package it.polimi.ingsw.ps06.model;
 * @since   2017-05-11
 */
 public class Venture extends DevelopementCard {
-ResourcesEffects effect;
+EffectsResources effect;
 	/**
 	* Metodo per la gestione degli effetti finali di aggiunta punti vittoria
 	* 

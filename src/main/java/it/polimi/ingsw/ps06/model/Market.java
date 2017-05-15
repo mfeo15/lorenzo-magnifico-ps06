@@ -1,18 +1,22 @@
 package it.polimi.ingsw.ps06.model;
 
+import java.util.ArrayList;
+
 import it.polimi.ingsw.ps06.model.Types.Action;
+import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
+import it.polimi.ingsw.ps06.model.Types.PointsKind;
 
 /**
 * Classe per la gestione dello spazio di mercato
 *
 * @author  ps06
-* @version 1.0
+* @version 1.1
 * @since   2017-05-10 
 */
 
 public class Market implements ActionSpace {
-	private FamilyMember market1, market2, market3, market4;
-	private Player player;
+	private ArrayList<FamilyMember> memberSpaces;
+	private ArrayList<Effect> bonus;
 	
 	/**
 	* Metodo per il piazzamento di un familiare nel mercato, include controlli di posizionamento
@@ -24,12 +28,11 @@ public class Market implements ActionSpace {
 	@Override
 	public void placeMember(FamilyMember member, Action chosenAction) throws IllegalStateException {
 		
-		if(chosenAction==Action.MARKET_1) if(market1 != null) market1=member; else throw new IllegalStateException();
-		if(chosenAction==Action.MARKET_2) if(market2 != null) market2=member; else throw new IllegalStateException();
-		if(chosenAction==Action.MARKET_3) if(market3 != null) market3=member; else throw new IllegalStateException();
-		if(chosenAction==Action.MARKET_4) if(market4 != null) market4=member; else throw new IllegalStateException();
+		if(chosenAction==Action.MARKET_1) if(memberSpaces.get(0) != null) memberSpaces.add(0, member); else throw new IllegalStateException();
+		if(chosenAction==Action.MARKET_2) if(memberSpaces.get(1) != null) memberSpaces.add(1, member); else throw new IllegalStateException();
+		if(chosenAction==Action.MARKET_3) if(memberSpaces.get(2) != null) memberSpaces.add(2, member); else throw new IllegalStateException();
+		if(chosenAction==Action.MARKET_4) if(memberSpaces.get(3) != null) memberSpaces.add(3, member); else throw new IllegalStateException();
 		
-		// player = member.associatedPlayer();
 	}
 	
 	/**
@@ -39,29 +42,64 @@ public class Market implements ActionSpace {
 	* @return 	Nothing
 	*/
 	public Market(int numberPlayers) {
+		
+		bonus = new ArrayList();
 		setSpaces(numberPlayers);
+		initBonus(numberPlayers);
+		
 	}
 	
 	/**
 	* Metodo per rendere disponibli solo il numero di finestre di cui si hanno bisogno, a seconda del numero di giocatori
 	*
-	* @author  ps06
-	* @version 1.0
-	* @since   2017-05-11 
+	* @param 	numberPlayers	Numero di giocatori della partita
+	* @return 	Nothing
 	*/
-	public void setSpaces(int numberPlayers) {
+	private void setSpaces(int numberPlayers) {
+		memberSpaces.add(new FamilyMember());
+		memberSpaces.add(new FamilyMember());
 		
+		if(numberPlayers>3){
+			memberSpaces.add(new FamilyMember());
+			memberSpaces.add(new FamilyMember());
+		
+			if(numberPlayers>5){
+				memberSpaces.add(new FamilyMember());
+			}
+		}
 	}
 	
 	/**
-	* Metodo per aumentare le risorse di chi usa una casella del mercato
+	* Metodo per inizializzare i bonus del mercato
 	*
-	* @author  ps06
-	* @version 1.0
-	* @since   2017-05-11 
+	* @param 	numberPlayers	Numero di giocatori della partita
+	* @return 	Nothing
 	*/
-	public void giveResources(Player player, Action chosenAction) {
+	private void initBonus(int numberPlayers){
 		
+		//Creazione del primo bonus del market
+		bonus.add(new EffectsResources(new Resources(MaterialsKind.COIN,5)));
+		//Creazione del secondo bonus del market
+		bonus.add(new EffectsResources(new Resources(MaterialsKind.SERVANT,5)));
+		
+		if(numberPlayers>3) { 
+
+			//Creazione del terzo bonus del market
+			Resources r = new Resources(MaterialsKind.COIN,2);
+			r.setResourceValue(PointsKind.MILITARY_POINTS, 3);
+			bonus.add(new EffectsResources(r));
+			
+			//Creazione del quarto bonus del market
+			bonus.add(new EffectsActions());
+			
+			if(numberPlayers>4) { 
+				//Creazione del quinto bonus del market
+				r.clearResources();
+				r.setResourceValue(PointsKind.FAITH_POINTS,2);
+				r.setResourceValue(PointsKind.MILITARY_POINTS, 1);
+				bonus.add(new EffectsResources(r));
+			}
+		}	
 	}
 	
 	/**
@@ -72,10 +110,7 @@ public class Market implements ActionSpace {
 	* @since   2017-05-11 
 	*/
 	public void cleanMarket() {
-		market1=null;
-		market2=null;
-		market3=null;
-		market4=null;
+		memberSpaces.clear();
 	}
 	
 	

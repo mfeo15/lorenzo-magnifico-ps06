@@ -10,7 +10,7 @@ import java.util.ArrayList;
 * @version 1.0
 * @since   2017-05-11
 */
-public class ActiveEffects extends Effect {
+public class EffectsActive extends Effect {
 	int modifier=0;
 	int set=0;
 	boolean multi;
@@ -21,7 +21,7 @@ public class ActiveEffects extends Effect {
 	* @param modifier 	 Contatore di modifica del valore di un familiare
 	* @param set		 Valore a cui impostare uno specifico dado, prima di modificarlo
 	*/
-	public ActiveEffects(int modifier, int set){
+	public EffectsActive(int modifier, int set){
 		super();
 		
 		this.modifier=modifier;

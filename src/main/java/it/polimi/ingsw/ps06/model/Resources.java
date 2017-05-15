@@ -32,6 +32,18 @@ public class Resources {
 		for (PointsKind kind : PointsKind.values()) 		points.put(kind, 0);
 	}
 	
+	public Resources (MaterialsKind kind, int value) {
+		
+		this();
+		materials.put(kind, value);
+	}
+	
+	public Resources (PointsKind kind, int value) {
+		
+		this();
+		points.put(kind, value);
+	}
+	
 	/**
 	* Imposta un valore ad una certa risorsa di tipo materiale
 	*
@@ -54,6 +66,20 @@ public class Resources {
 	*/
 	public void setResourceValue(PointsKind kind, int value) {
 		points.put(kind, value);
+	}
+	
+	/**
+	*	Pulisce tutte le risorse
+	*
+	* @return 	Nothing
+	*/
+	public void clearResources() {
+		Set<MaterialsKind> materialsSet = materials.keySet();
+        for(MaterialsKind currentMaterial : materialsSet) setResourceValue(currentMaterial, 0);
+        
+        Set<PointsKind> pointsSet = points.keySet();
+        for(PointsKind currentPoint : pointsSet) setResourceValue(currentPoint, 0);
+
 	}
 	
 	/**

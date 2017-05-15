@@ -10,7 +10,7 @@ import static it.polimi.ingsw.ps06.model.Types.ColorPalette;
 * @since   2017-05-11
 */
 
-public class ActionsEffects extends Effect {
+public class EffectsActions extends Effect {
 	Player player;
 	
 	/**

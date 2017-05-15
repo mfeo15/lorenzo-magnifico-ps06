@@ -14,28 +14,30 @@ import it.polimi.ingsw.ps06.model.Types.PointsKind;
 */
 public class Warehouse {
 	
-	private EnumMap<MaterialsKind, Integer> materials;
-	private EnumMap<PointsKind, Integer> points;
+	private Resources status;
 	
 	public Warehouse() {
-		
+		status = new Resources();
 		initMaterials();
 		initPoints();
+		
 	}
 	
-	private void initMaterials() {
-		materials = new EnumMap<MaterialsKind, Integer>(MaterialsKind.class);
+	public void addResources(Resources r){
+		status.add(r);
+	}
+	
+	private void initMaterials() {	
 		
-		materials.put(MaterialsKind.WOOD, 2);
-		materials.put(MaterialsKind.STONE, 2);
-		materials.put(MaterialsKind.SERVANT, 3);
+		status.setResourceValue(MaterialsKind.WOOD, 2);
+		status.setResourceValue(MaterialsKind.STONE, 2);
+		status.setResourceValue(MaterialsKind.SERVANT, 3);
 	}
 	
 	private void initPoints() {
-		points = new EnumMap<PointsKind, Integer>(PointsKind.class);
 		
-		points.put(PointsKind.VICTORY_POINTS, 0);
-		points.put(PointsKind.FAITH_POINTS, 0);
-		points.put(PointsKind.MILITARY_POINTS, 0);
+		status.setResourceValue(PointsKind.VICTORY_POINTS, 0);
+		status.setResourceValue(PointsKind.FAITH_POINTS, 0);
+		status.setResourceValue(PointsKind.MILITARY_POINTS, 0);
 	}
 }

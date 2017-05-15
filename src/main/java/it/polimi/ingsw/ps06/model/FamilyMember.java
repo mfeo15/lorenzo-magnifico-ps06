@@ -16,16 +16,22 @@ public class FamilyMember {
 	
 	private Player ownerPlayer;
 	
+	/**
+	* Constructor
+	*/
+	public FamilyMember()
+	{
+		this.rappresentativeDiceColor = ColorPalette.UNCOLORED;
+	}
 	
 	/**
-	   * This is the default constructor of the class. The Family Member instanced is by default neutral
-	   * @return 	Nothing.
-	   */
+	* This is the default constructor of the class. The Family Member instanced is by default neutral
+	* @return 	Nothing.
+	*/
 	public FamilyMember(Player p)
 	{
-		super();
+		this();
 		this.ownerPlayer = p;
-		this.rappresentativeDiceColor = ColorPalette.UNCOLORED;
 	}
 	
 	/**
