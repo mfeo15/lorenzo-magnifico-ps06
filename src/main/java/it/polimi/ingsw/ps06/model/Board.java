@@ -17,7 +17,7 @@ public class Board {
 	private CouncilPalace councilPalaceZone;
 	private HarvestProduction harvestProductionZone;
 	
-	private ArrayList<FamilyMember> order;
+	private ArrayList<Player> order;
 	
 	private ExcommunicationTile excomunicationTiles[];
 	
@@ -51,7 +51,7 @@ public class Board {
 	*
 	* @return 		order	ordine dei familiari
 	*/ 
-	public ArrayList<FamilyMember> getOrder() {
+	public ArrayList<Player> getOrder() {
 		return order;
 	}
 	
@@ -74,6 +74,7 @@ public class Board {
 	* @return 	Nothing
 	*/
 	public void clean() {
+		
 		marketZone.cleanMarket();
 		towersZone.cleanTowers();
 		harvestProductionZone.cleanZone();

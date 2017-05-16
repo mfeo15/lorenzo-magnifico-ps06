@@ -11,7 +11,7 @@ import static it.polimi.ingsw.ps06.model.Types.Action;
 * @since   2017-05-10
 */
 
-public class Towers implements ActionSpace {
+public class Towers implements PlaceSpace {
 	private ArrayList<Territory> territories;
 	private ArrayList<Building> buildings;
 	private ArrayList<Character> characters;

@@ -16,6 +16,15 @@ import it.polimi.ingsw.ps06.model.Types.PointsKind;
 public class EffectsResources extends Effect {
 	private Resources bonus;
 	
+	
+	/**
+	* Basic Constructor.
+	* 
+	*/
+	public EffectsResources(){
+		
+	}
+	
 	/**
 	* Constructor.
 	* 

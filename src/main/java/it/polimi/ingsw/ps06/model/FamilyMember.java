@@ -63,4 +63,8 @@ public class FamilyMember {
 	public int getValue() {
 		return value;
 	}
+	
+	public Player getPlayer() {
+		return ownerPlayer;
+	}
 }

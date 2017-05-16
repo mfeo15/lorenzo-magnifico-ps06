@@ -4,40 +4,56 @@ public class Types {
 	
 	public enum Action 
 	{
-		NULL,
+		NULL(0),
 		
-		TOWER_GREEN_1,
-		TOWER_GREEN_2,
-		TOWER_GREEN_3,
-		OWER_GREEN_4,
+		TOWER_GREEN_1(1),
+		TOWER_GREEN_2(2),
+		TOWER_GREEN_3(3),
+		TOWER_GREEN_4(4),
 		
-		TOWER_BLUE_1,
-		TOWER_BLUE_2,
-		TOWER_BLUE_3,
-		TOWER_BLUE_4,
+		TOWER_BLUE_1(5),
+		TOWER_BLUE_2(6),
+		TOWER_BLUE_3(7),
+		TOWER_BLUE_4(8),
 		
-		TOWER_YELLOW_1,
-		TOWER_YELLOW_2,
-		TOWER_YELLOW_3,
-		TOWER_YELLOW_4,
+		TOWER_YELLOW_1(9),
+		TOWER_YELLOW_2(10),
+		TOWER_YELLOW_3(11),
+		TOWER_YELLOW_4(12),
 		
-		TOWER_PURPLE_1,
-		TOWER_PURPLE_2,
-		TOWER_PURPLE_3,
-		TOWER_PURPLE_4,
+		TOWER_PURPLE_1(13),
+		TOWER_PURPLE_2(14),
+		TOWER_PURPLE_3(15),
+		TOWER_PURPLE_4(16),
 
-		CONCIL_SPACE,
+		CONCIL_SPACE(17),
 		
-		HARVEST_1,
-		HARVEST_2,
+		HARVEST_1(18),
+		HARVEST_2(19),
 		
-		PRODUCTION_1,
-		PRODUCTION_2,
+		PRODUCTION_1(20),
+		PRODUCTION_2(21),
 		
-		MARKET_1,
-		MARKET_2,
-		MARKET_3,
-		MARKET_4
+		MARKET_1(22),
+		MARKET_2(23),
+		MARKET_3(24),
+		MARKET_4(25),
+		MARKET_5(26);
+		
+		private int index;
+		private Action(int index) { this.index=index; }
+		
+		public static Action getAction(int index){
+			for (Action a : Action.values()) {
+				if(a.index == index) return a;
+			}
+			throw new IllegalArgumentException("Action not found");
+		}
+		
+		public int getIndex(){
+			return index;
+		}
+		
 	}
 	
 	public enum ColorPalette 
@@ -76,5 +92,15 @@ public class Types {
 		BONUS_2,
 		BONUS_3,
 		BONUS_4
+	}
+	
+	public enum CardType {
+		LEADER,
+		BUILDING,
+		TERRITORY,
+		CHARACTER,
+		VENTURE,
+		EXCOMMUNICATIONTILE
+		
 	}
 }

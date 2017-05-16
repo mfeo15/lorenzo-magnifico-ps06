@@ -1,6 +1,7 @@
 package it.polimi.ingsw.ps06.model;
 
-import static it.polimi.ingsw.ps06.model.Types.Action;
+import java.util.ArrayList;
+import it.polimi.ingsw.ps06.model.Types.Action;
 
 /**
 * Classe per la gestione degli spazi produzione e raccolto
@@ -10,8 +11,10 @@ import static it.polimi.ingsw.ps06.model.Types.Action;
 * @since   2017-05-10
 */
 
-public class HarvestProduction implements ActionSpace {
-
+public class HarvestProduction implements PlaceSpace {
+	private ArrayList<FamilyMember> harvestSpaces;
+	private ArrayList<FamilyMember> gatherSpaces;
+	int numberPlayers;
 	/**
 	* Metodo per il piazzamento di un familiare su di una zona Produzione o Raccolto, include controllo di posizionamento
 	*
@@ -20,8 +23,24 @@ public class HarvestProduction implements ActionSpace {
 	* @return 					Nothing
 	*/
 	@Override
-	public void placeMember(FamilyMember member, Action chosenAction) {
-		// TODO Auto-generated method stub
+	public void placeMember(FamilyMember member, Action chosenAction) throws IllegalStateException {
+		
+	//condizioni da rivedere, non è sempre l'indice 1	
+		
+		if(chosenAction==Action.HARVEST_1){
+			if(harvestSpaces.get(0) == null || (harvestSpaces.get(1) == null && numberPlayers>4)){
+				harvestSpaces.add(member); 
+			} else throw new IllegalStateException();
+		}
+		if(chosenAction==Action.HARVEST_2) if(numberPlayers>2) harvestSpaces.add(member);
+		
+		
+		if(chosenAction==Action.PRODUCTION_1){
+			if(gatherSpaces.get(0) == null || (gatherSpaces.get(1) == null && numberPlayers>4)){
+				gatherSpaces.add(member); 
+			}else throw new IllegalStateException();
+		}
+		if(chosenAction==Action.PRODUCTION_2) if(numberPlayers>2) gatherSpaces.add(member);
 		
 	}
 	
@@ -33,6 +52,7 @@ public class HarvestProduction implements ActionSpace {
 	*/
 	public HarvestProduction(int numberPlayers) {
 		setSpaces(numberPlayers);
+		this.numberPlayers=numberPlayers;
 	}
 	
 	/**
@@ -42,6 +62,7 @@ public class HarvestProduction implements ActionSpace {
 	* @return 				Nothing
 	*/
 	public void setSpaces(int numberPlayers){
+		// restringi azioni
 		
 	}
 	
@@ -53,17 +74,18 @@ public class HarvestProduction implements ActionSpace {
 	* @return 	
 	*/
 	public void startGathering(Player player, Action chosenAction){
-		//chiama risorse
+		//PersonalBoard.startGathering();
 	}
 	
 	/**
-	* Metodo per ripulire i familiari allocati in questa zona
+	* Metodo per ripulire i familiari allocati in queste zone
 	*
 	* @param 	Unused
 	* @return 	Nothing
 	*/
 	public void cleanZone(){
-		
+		harvestSpaces.clear();
+		gatherSpaces.clear();
 	}
 	
 }

@@ -4,6 +4,8 @@ import static it.polimi.ingsw.ps06.model.Types.Action;
 
 import java.util.ArrayList;
 
+import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
+
 /**
 * Classe per la gestione del palazzo del consiglio
 *
@@ -12,9 +14,10 @@ import java.util.ArrayList;
 * @since   2017-05-10
 */
 
-public class CouncilPalace implements ActionSpace {
-	private ArrayList<FamilyMember> familiari;
-	
+public class CouncilPalace implements PlaceSpace {
+	private ArrayList<FamilyMember> memberSpaces;
+	private ArrayList<Player> players;
+	private EffectsResources councilReward;
 	
 	/**
 	* Metodo per il piazzamento di un familiare nel palazzo del consiglio
@@ -25,7 +28,7 @@ public class CouncilPalace implements ActionSpace {
 	*/
 	@Override
 	public void placeMember(FamilyMember member, Action chosenAction) {
-		// TODO Auto-generated method stub
+		memberSpaces.add(member);
 		
 	}
 	
@@ -35,17 +38,28 @@ public class CouncilPalace implements ActionSpace {
 	* @param 	numberPlayers	Numero di giocatori della partita
 	* @return 	Nothing
 	*/
-	public void CouncilPalace(){
-		
+	public CouncilPalace(){
+		councilReward = new EffectsResources();
 	}
 	
 	/**
 	* Metodo per valutare l'ordine dei giocatori per la prossima fase di gioco
 	*
-	* @return 	familiari	array di familiari prima della pulizia
+	* @return 	players		array di players nell'ordine giusto
 	*/
-	public ArrayList<FamilyMember> checkOrder(){
-		return familiari;
+	public ArrayList<Player> checkOrder(){
+		
+		Player player;
+		int index = 0;
+		FamilyMember member = memberSpaces.get(0);
+	
+		while(member!=null)
+			{
+				player = member.getPlayer();
+				players.add(player);
+				member = memberSpaces.get(index);
+			}
+		return players;
 	}
 	
 	/**
@@ -56,7 +70,8 @@ public class CouncilPalace implements ActionSpace {
 	* @return 					Nothing
 	*/
 	public void giveResources(Player player, Action chosenAction){
-		
+		// dai privilegio
+		councilReward = new EffectsResources(new Resources(MaterialsKind.COIN,1));
 	}
 	
 	/**
@@ -66,6 +81,6 @@ public class CouncilPalace implements ActionSpace {
 	* @return 	Nothing
 	*/
 	public void cleanPalace(){
-		
+		memberSpaces.clear();
 	}
 }

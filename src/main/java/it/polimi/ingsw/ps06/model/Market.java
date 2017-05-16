@@ -14,9 +14,11 @@ import it.polimi.ingsw.ps06.model.Types.PointsKind;
 * @since   2017-05-10 
 */
 
-public class Market implements ActionSpace {
+public class Market implements PlaceSpace {
 	private ArrayList<FamilyMember> memberSpaces;
 	private ArrayList<Effect> bonus;
+	EffectsActive attivi;
+	int openedWindows;
 	
 	/**
 	* Metodo per il piazzamento di un familiare nel mercato, include controlli di posizionamento
@@ -27,12 +29,46 @@ public class Market implements ActionSpace {
 	*/
 	@Override
 	public void placeMember(FamilyMember member, Action chosenAction) throws IllegalStateException {
+		boolean multi = attivi.getMulti();
+		//int actionIndex = Action.MARKET_1.getIndex();
+		int actionIndex = Action.valueOf("MARKET_1").ordinal();
+		int memberIndex = 0;
 		
-		if(chosenAction==Action.MARKET_1) if(memberSpaces.get(0) != null) memberSpaces.add(0, member); else throw new IllegalStateException();
-		if(chosenAction==Action.MARKET_2) if(memberSpaces.get(1) != null) memberSpaces.add(1, member); else throw new IllegalStateException();
-		if(chosenAction==Action.MARKET_3) if(memberSpaces.get(2) != null) memberSpaces.add(2, member); else throw new IllegalStateException();
-		if(chosenAction==Action.MARKET_4) if(memberSpaces.get(3) != null) memberSpaces.add(3, member); else throw new IllegalStateException();
 		
+		if(chosenAction==Action.getAction(actionIndex)){
+			if(memberSpaces.get(memberIndex) == null || multi ){
+				memberSpaces.add(memberIndex, member); 
+			} else throw new IllegalStateException();
+		}
+		
+		
+		if(chosenAction==Action.MARKET_2){
+			if(memberSpaces.get(1) == null || multi){
+				memberSpaces.add(1, member); 
+			} else throw new IllegalStateException();
+		}
+		
+		
+		if(chosenAction==Action.MARKET_3){
+			if(memberSpaces.get(2) == null || multi){
+				memberSpaces.add(2, member); 
+			} else throw new IllegalStateException();
+		}
+		
+		
+		if(chosenAction==Action.MARKET_4){
+			if(memberSpaces.get(3) == null || multi){
+				memberSpaces.add(3, member); 
+			} else throw new IllegalStateException();
+		}
+		
+		
+		if(chosenAction==Action.MARKET_5){
+			if(memberSpaces.get(4) == null || multi){
+				memberSpaces.add(4, member); 
+			} else throw new IllegalStateException();
+		}
+			
 	}
 	
 	/**
@@ -43,6 +79,7 @@ public class Market implements ActionSpace {
 	*/
 	public Market(int numberPlayers) {
 		
+		attivi = new EffectsActive();
 		bonus = new ArrayList();
 		setSpaces(numberPlayers);
 		initBonus(numberPlayers);
@@ -56,6 +93,21 @@ public class Market implements ActionSpace {
 	* @return 	Nothing
 	*/
 	private void setSpaces(int numberPlayers) {
+		// basta restringere le azioni!
+		
+		switch (numberPlayers) {
+		case 2:
+		case 3:
+			openedWindows = 2;
+		case 4:
+			openedWindows = 4;
+		case 5:
+			openedWindows = 5;
+		default:
+			throw new IllegalArgumentException("Il numero di giocatori non è accettato");
+		}
+		
+	/*	
 		memberSpaces.add(new FamilyMember());
 		memberSpaces.add(new FamilyMember());
 		
@@ -67,6 +119,8 @@ public class Market implements ActionSpace {
 				memberSpaces.add(new FamilyMember());
 			}
 		}
+	*/
+	
 	}
 	
 	/**

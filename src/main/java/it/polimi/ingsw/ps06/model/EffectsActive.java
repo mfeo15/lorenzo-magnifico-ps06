@@ -13,7 +13,15 @@ import java.util.ArrayList;
 public class EffectsActive extends Effect {
 	int modifier=0;
 	int set=0;
-	boolean multi;
+	boolean multi = false;
+	
+	/**
+	* Basic Constructor.
+	* 
+	*/
+	public EffectsActive(){
+		
+	}
 	
 	/**
 	* Constructor.
@@ -72,5 +80,9 @@ public class EffectsActive extends Effect {
 	*/
 	public void handleLeaderCopy(){
 
+	}
+	
+	public boolean getMulti(){
+		return multi;
 	}
 }
