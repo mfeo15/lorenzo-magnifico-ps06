@@ -65,6 +65,9 @@ public class FamilyMember {
 	}
 	
 	public Player getPlayer() {
+		if(rappresentativeDiceColor == ColorPalette.UNCOLORED) return null;
+		
 		return ownerPlayer;
 	}
+	
 }

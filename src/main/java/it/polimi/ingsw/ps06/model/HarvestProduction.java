@@ -7,13 +7,16 @@ import it.polimi.ingsw.ps06.model.Types.Action;
 * Classe per la gestione degli spazi produzione e raccolto
 *
 * @author  ps06
-* @version 1.0
+* @version 1.1
 * @since   2017-05-10
 */
 
 public class HarvestProduction implements PlaceSpace {
-	private ArrayList<FamilyMember> harvestSpaces;
-	private ArrayList<FamilyMember> gatherSpaces;
+	private ArrayList<FamilyMember> harvestSpaces1;
+	private ArrayList<FamilyMember> harvestSpaces2;
+	private ArrayList<FamilyMember> productionSpaces1;
+	private ArrayList<FamilyMember> productionSpaces2;
+	EffectsActive attivi;
 	int numberPlayers;
 	/**
 	* Metodo per il piazzamento di un familiare su di una zona Produzione o Raccolto, include controllo di posizionamento
@@ -24,23 +27,64 @@ public class HarvestProduction implements PlaceSpace {
 	*/
 	@Override
 	public void placeMember(FamilyMember member, Action chosenAction) throws IllegalStateException {
+		boolean multi = attivi.getMulti();
+		int errorCode = 0;
 		
-	//condizioni da rivedere, non è sempre l'indice 1	
-		
-		if(chosenAction==Action.HARVEST_1){
-			if(harvestSpaces.get(0) == null || (harvestSpaces.get(1) == null && numberPlayers>4)){
-				harvestSpaces.add(member); 
-			} else throw new IllegalStateException();
+		// Gestione condizioni della PRIMA casella di Harvest
+		if(chosenAction==Action.HARVEST_1 && member.getValue()> 1){
+			
+			if( (harvestSpaces1.get(0) == null) || (harvestSpaces1.get(0) != null && harvestSpaces1.get(1) == null && numberPlayers>4) ){
+				harvestSpaces1.add(member); 
+				startGathering(member.getValue(), chosenAction);
+			} 
+			
+			// Gestione attributo azione multipla del leader
+			if(multi){
+				for(FamilyMember family : harvestSpaces1)
+					if(member.getPlayer() != family.getPlayer()){
+						harvestSpaces1.add(member); 
+						startGathering(member.getValue(), chosenAction);
+					}
+				
+			}
 		}
-		if(chosenAction==Action.HARVEST_2) if(numberPlayers>2) harvestSpaces.add(member);
 		
-		
-		if(chosenAction==Action.PRODUCTION_1){
-			if(gatherSpaces.get(0) == null || (gatherSpaces.get(1) == null && numberPlayers>4)){
-				gatherSpaces.add(member); 
-			}else throw new IllegalStateException();
+		// Gestione condizioni della SECONDA casella di Harvest
+		if(chosenAction==Action.HARVEST_2 && member.getValue()> 4){
+			if(numberPlayers>2){
+				harvestSpaces2.add(member);
+				startGathering(member.getValue() - 3, chosenAction);
+			}
 		}
-		if(chosenAction==Action.PRODUCTION_2) if(numberPlayers>2) gatherSpaces.add(member);
+		
+		
+		
+		// Gestione condizioni della PRIMA casella di Produzione
+		if(chosenAction==Action.PRODUCTION_1 && member.getValue()> 1){
+			
+			if( (productionSpaces1.get(0) == null) || (productionSpaces1.get(0) != null && productionSpaces1.get(1) == null && numberPlayers>4) ){
+				productionSpaces1.add(member);
+				startGathering(member.getValue(), chosenAction);
+			} 
+			
+			// Gestione attributo azione multipla del leader
+			if(multi){
+				for(FamilyMember family : productionSpaces1)
+					if(member.getPlayer() != family.getPlayer()){
+						productionSpaces1.add(member);
+						startGathering(member.getValue(), chosenAction);
+					}
+				
+			}
+		}
+		
+		// Gestione condizioni della SECONDA casella di Produzione
+		if(chosenAction==Action.PRODUCTION_2 && member.getValue()> 4){
+			if(numberPlayers>2){
+				productionSpaces2.add(member);
+				startGathering(member.getValue() - 3, chosenAction);
+			} else handle(errorCode);
+		}
 		
 	}
 	
@@ -67,13 +111,24 @@ public class HarvestProduction implements PlaceSpace {
 	}
 	
 	/**
+	* Gestisci errori di posizionamento familiare
+	*
+	* @param	code		codice errore
+	* @return 	Nothing
+	*/
+	private void handle(int code){
+		
+	}
+	
+	/**
 	* Metodo per avviare il processo di Raccolto o di Produzione
 	*
 	* @param 	player			Giocatore che effettua Produzione o Raccolto
 	* @param 	chosenAction	Codice dell'azione da eseguire	
 	* @return 	
 	*/
-	public void startGathering(Player player, Action chosenAction){
+	public void startGathering(int value, Action chosenAction){
+
 		//PersonalBoard.startGathering();
 	}
 	
@@ -84,8 +139,10 @@ public class HarvestProduction implements PlaceSpace {
 	* @return 	Nothing
 	*/
 	public void cleanZone(){
-		harvestSpaces.clear();
-		gatherSpaces.clear();
+		harvestSpaces1.clear();
+		harvestSpaces2.clear();
+		productionSpaces1.clear();
+		productionSpaces2.clear();
 	}
 	
 }

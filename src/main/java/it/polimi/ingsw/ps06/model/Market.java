@@ -17,8 +17,9 @@ import it.polimi.ingsw.ps06.model.Types.PointsKind;
 public class Market implements PlaceSpace {
 	private ArrayList<FamilyMember> memberSpaces;
 	private ArrayList<Effect> bonus;
-	EffectsActive attivi;
+	EffectsActive attivi; // da modificare in listener
 	int openedWindows;
+	boolean check;
 	
 	/**
 	* Metodo per il piazzamento di un familiare nel mercato, include controlli di posizionamento
@@ -28,47 +29,38 @@ public class Market implements PlaceSpace {
 	* @return 					Nothing
 	*/
 	@Override
-	public void placeMember(FamilyMember member, Action chosenAction) throws IllegalStateException {
+	public void placeMember(FamilyMember member, Action chosenAction) throws IllegalArgumentException {
 		boolean multi = attivi.getMulti();
-		//int actionIndex = Action.MARKET_1.getIndex();
-		int actionIndex = Action.valueOf("MARKET_1").ordinal();
-		int memberIndex = 0;
+		int marketIndex = Action.valueOf("MARKET_1").ordinal();
+		int actionIndex = chosenAction.ordinal();
+		int relativeIndex = actionIndex - marketIndex;
+		int errorCode = 0;
 		
+		// Gestione condizione di selezione sbagliata
+		if ( (relativeIndex > openedWindows) || (member.getValue()<1) ) {errorCode=1; handle(errorCode);}
 		
-		if(chosenAction==Action.getAction(actionIndex)){
-			if(memberSpaces.get(memberIndex) == null || multi ){
-				memberSpaces.add(memberIndex, member); 
-			} else throw new IllegalStateException();
-		}
-		
-		
-		if(chosenAction==Action.MARKET_2){
-			if(memberSpaces.get(1) == null || multi){
-				memberSpaces.add(1, member); 
-			} else throw new IllegalStateException();
-		}
-		
-		
-		if(chosenAction==Action.MARKET_3){
-			if(memberSpaces.get(2) == null || multi){
-				memberSpaces.add(2, member); 
-			} else throw new IllegalStateException();
-		}
-		
-		
-		if(chosenAction==Action.MARKET_4){
-			if(memberSpaces.get(3) == null || multi){
-				memberSpaces.add(3, member); 
-			} else throw new IllegalStateException();
-		}
-		
-		
-		if(chosenAction==Action.MARKET_5){
-			if(memberSpaces.get(4) == null || multi){
-				memberSpaces.add(4, member); 
-			} else throw new IllegalStateException();
-		}
+		else{
 			
+			
+			// Gestione condizione base in cui il campo è vuoto
+			if(memberSpaces.get(relativeIndex) == null){
+				memberSpaces.add(relativeIndex, member);
+				giveBonus(member.getPlayer(), relativeIndex);
+					
+			} 
+			else  {
+					
+				// Gestione regola del colore in caso di bonus attivo di azione multipla
+				if( multi && (member.getPlayer() != memberSpaces.get(relativeIndex).getPlayer()) ){
+							
+					// Solo i familiari non neutri contano al fine di non ripetere familiari dello stesso colore nello stesso spazio
+					if(member.getPlayer()!=null) { memberSpaces.add(relativeIndex, member);}
+					giveBonus(member.getPlayer(), relativeIndex);
+					
+				} else {errorCode=2; handle(errorCode);}
+				
+			}
+		}
 	}
 	
 	/**
@@ -83,6 +75,16 @@ public class Market implements PlaceSpace {
 		bonus = new ArrayList();
 		setSpaces(numberPlayers);
 		initBonus(numberPlayers);
+		
+	}
+	
+	/**
+	* Gestisci errori di posizionamento familiare
+	*
+	* @param	code		codice errore
+	* @return 	Nothing
+	*/
+	private void handle(int code){
 		
 	}
 	
@@ -106,20 +108,6 @@ public class Market implements PlaceSpace {
 		default:
 			throw new IllegalArgumentException("Il numero di giocatori non è accettato");
 		}
-		
-	/*	
-		memberSpaces.add(new FamilyMember());
-		memberSpaces.add(new FamilyMember());
-		
-		if(numberPlayers>3){
-			memberSpaces.add(new FamilyMember());
-			memberSpaces.add(new FamilyMember());
-		
-			if(numberPlayers>5){
-				memberSpaces.add(new FamilyMember());
-			}
-		}
-	*/
 	
 	}
 	
@@ -144,7 +132,7 @@ public class Market implements PlaceSpace {
 			bonus.add(new EffectsResources(r));
 			
 			//Creazione del quarto bonus del market
-			bonus.add(new EffectsActions());
+			bonus.add(new EffectsActions()); //privilegi
 			
 			if(numberPlayers>4) { 
 				//Creazione del quinto bonus del market
@@ -154,6 +142,16 @@ public class Market implements PlaceSpace {
 				bonus.add(new EffectsResources(r));
 			}
 		}	
+	}
+	
+	/**
+	* Metodo per assegnare le risorse ai giocatori
+	*
+	* @param 	player		Giocatore a cui dare il bonus
+	* @return 	Nothing
+	*/
+	private void giveBonus(Player player, int index){
+		bonus.get(index); //activate
 	}
 	
 	/**

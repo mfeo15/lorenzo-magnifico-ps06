@@ -6,7 +6,7 @@ import java.util.ArrayList;
 * Classe per la gestione del tabellone
 *
 * @author  ps06
-* @version 1.0
+* @version 1.1
 * @since   2017-05-10
 */
 
@@ -22,6 +22,7 @@ public class Board {
 	private ExcommunicationTile excomunicationTiles[];
 	
 	private int random1, random2, random3;
+	private ArrayList<DevelopementCard> deck;
 	
 	
 	/**
@@ -32,12 +33,18 @@ public class Board {
 	* @return 	Nothing
 	*/
 	public Board(int numberPlayers) {
-		towersZone = new Towers();
+		buildDeck();
+		towersZone = new Towers(deck);
 		marketZone = new Market(numberPlayers);
 		councilPalaceZone = new CouncilPalace();
 		harvestProductionZone = new HarvestProduction(numberPlayers);
 	
 		drawExcommunicationTiles();
+	}
+	
+	private void buildDeck(){
+		
+		//Riempi Deck con carte dal file
 	}
 	
 	private void drawExcommunicationTiles() {
@@ -63,7 +70,6 @@ public class Board {
 	*/ 
 	public void setupRound() {
 		clean();
-		towersZone.setCards();
 	}
 	
 	
