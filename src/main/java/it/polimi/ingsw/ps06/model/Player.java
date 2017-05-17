@@ -25,7 +25,7 @@ public class Player {
 	private FamilyMember memberUncolored;
 	 
 	/**
-	* Constructorre della classe
+	* Costruttore della classe
 	* 
 	* @param name	nome del giocatore
 	* @param color	colore del giocatore
@@ -44,6 +44,26 @@ public class Player {
 		this.personalBoard = new PersonalBoard();
 	}
 	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public void setColor(ColorPalette color) {
+		this.color = color;
+	}
+	
+	public ArrayList<Leader> getLeaders() {
+		return leaders;
+	}
+	
+	public void addLeaders(ArrayList<Leader> leaders) {
+		this.leaders.addAll(leaders);
+	}
+	
+	public void removeLeader(int index) {
+		this.leaders.remove(index);
+	}
+	
 	/**
 	* Metodo per l'esecuzione di un azione
 	*
@@ -51,7 +71,18 @@ public class Player {
 	* @param 	color	colore del familiare usato
 	* @return 	Nothing
 	*/
-	public void doAction(int value, ColorPalette color){
+	public void doMemberPlacement(int value, ColorPalette color){
+		
+	}
+	
+	/**
+	* Metodo per l'esecuzione di un azione
+	*
+	* @param 	value	valore dell'azione
+	* @param 	color	colore del familiare usato
+	* @return 	Nothing
+	*/
+	public void doLeaderDiscarding(int value, ColorPalette color){
 		
 	}
 }
