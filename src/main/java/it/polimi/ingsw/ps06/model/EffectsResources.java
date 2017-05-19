@@ -1,11 +1,5 @@
 package it.polimi.ingsw.ps06.model;
 
-import java.util.ArrayList;
-import java.util.EnumMap;
-
-import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
-import it.polimi.ingsw.ps06.model.Types.PointsKind;
-
 /**
 * Classe per la gestione di effetti che comportano una modifica alle risorse di un player
 *
@@ -16,33 +10,19 @@ import it.polimi.ingsw.ps06.model.Types.PointsKind;
 public class EffectsResources extends Effect {
 	private Resources bonus;
 	
+	@Override
+	public void activate(Player p) {
+		
+		//TODO add Resources to Player Warehouse ==> Need some setter method
+	}
 	
 	/**
-	* Basic Constructor.
+	* Costruttore della classe Effetto per le Risorse.
+	* 
+	* @param	bonus	Risorsa bonus che l'effetto procura al Player quando attivato
 	* 
 	*/
-	public EffectsResources(){
-		
+	public EffectsResources(Resources bonus) {
+		this.bonus = bonus;
 	}
-	
-	/**
-	* Constructor.
-	* 
-	*/
-	public EffectsResources(Resources r){
-		this.bonus = new Resources();
-		bonus=r;
-		
-	}
-	
-	/**
-	* Metodo per l'assegnazione delle risorse ad un determinato player
-	*
-	* @param 	player		Giocatore a cui dare le risorse
-	* @return 				Nothing
-	*/
-	public void updateResources(Warehouse wh){
-		wh.addResources(bonus);
-	}
-	
 }

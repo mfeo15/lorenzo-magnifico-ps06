@@ -1,7 +1,8 @@
 package it.polimi.ingsw.ps06.model;
 
 import static it.polimi.ingsw.ps06.model.Types.Action;
-import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
 * Classe per la gestione di effetti che rimangono attivi nel tempo ed effetti senza una categorizzazione precisa
@@ -10,10 +11,21 @@ import java.util.ArrayList;
 * @version 1.0
 * @since   2017-05-11
 */
-public class EffectsActive extends Effect {
-	int modifier=0;
-	int set=0;
-	boolean multi = false;
+public class EffectsActive extends Effect implements Observer {
+	
+	private int diceBonus;
+	
+	@Override
+	public void update(Observable o, Object arg) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void activate(Player p) {
+		
+		//TODO add Resources to Player Warehouse ==> Need some setter method
+	}
 	
 	/**
 	* Basic Constructor.
@@ -30,10 +42,7 @@ public class EffectsActive extends Effect {
 	* @param set		 Valore a cui impostare uno specifico dado, prima di modificarlo
 	*/
 	public EffectsActive(int modifier, int set){
-		super();
-		
-		this.modifier=modifier;
-		this.set=set;
+
 	}
 	
 	/**

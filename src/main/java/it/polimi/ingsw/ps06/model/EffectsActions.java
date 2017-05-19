@@ -10,8 +10,19 @@ import static it.polimi.ingsw.ps06.model.Types.ColorPalette;
 * @since   2017-05-11
 */
 
-public class EffectsActions extends Effect {
-	Player player;
+public class EffectsActions extends Effect 
+{
+	private Actions action;
+	
+	@Override
+	public void activate(Player p) 
+	{	
+		action.activate(p);
+	}
+	
+	public EffectsActions(Actions action) {
+		this.action = action;
+	}
 	
 	/**
 	* Metodo per l'utilizzo dell'azione supplementare concessa
@@ -21,7 +32,7 @@ public class EffectsActions extends Effect {
 	* @return 					Nothing
 	*/
 	public void doRestrictedAction(Player player, int value, ColorPalette color){
-		this.player=player;
+		//this.player=player;
 		player.doAction(value, color);
 	}
 
