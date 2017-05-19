@@ -52,7 +52,7 @@ public class Resources {
 	* 
 	* @return 	Nothing
 	*/
-	public void setResourceValue(MaterialsKind kind, int value) {
+	public void setMaterialsValue(MaterialsKind kind, int value) {
 		materials.put(kind, value);
 	}
 	
@@ -64,7 +64,7 @@ public class Resources {
 	* 
 	* @return 	Nothing
 	*/
-	public void setResourceValue(PointsKind kind, int value) {
+	public void setPointsValue(PointsKind kind, int value) {
 		points.put(kind, value);
 	}
 	
@@ -90,7 +90,7 @@ public class Resources {
 	* 
 	* @return 	Nothing
 	*/
-	public void increaseResourceValue(MaterialsKind kind, int increaseValue) {
+	public void increaseMaterialsValue(MaterialsKind kind, int increaseValue) {
 		int currentValue = materials.get(kind);
 		materials.put(kind, currentValue + increaseValue);
 	}
@@ -103,7 +103,7 @@ public class Resources {
 	* 
 	* @return 	Nothing
 	*/
-	public void increaseResourceValue(PointsKind kind, int increaseValue) {
+	public void increasePointsValue(PointsKind kind, int increaseValue) {
 		int currentValue = points.get(kind);
 		points.put(kind, currentValue + increaseValue);
 	}
@@ -115,7 +115,7 @@ public class Resources {
 	* 
 	* @return 	valore della risorsa 
 	*/
-	public int getResourceValue(MaterialsKind kind) {
+	public int getMaterialsValue(MaterialsKind kind) {
 		return (materials.get(kind));
 	}
 	
@@ -126,7 +126,7 @@ public class Resources {
 	* 
 	* @return 	valore della risorsa 
 	*/
-	public int getResourceValue(PointsKind kind) {
+	public int getPointsValue(PointsKind kind) {
 		return (points.get(kind));
 	}
 
