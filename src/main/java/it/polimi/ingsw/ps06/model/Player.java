@@ -64,6 +64,10 @@ public class Player {
 		this.leaders.remove(index);
 	}
 	
+	public PersonalBoard getPersonalBoard() {
+		return personalBoard;
+	}
+	
 	/**
 	* Metodo per l'esecuzione di un azione
 	*

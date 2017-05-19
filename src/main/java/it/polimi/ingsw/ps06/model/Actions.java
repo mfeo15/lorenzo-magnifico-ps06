@@ -1,5 +1,6 @@
 package it.polimi.ingsw.ps06.model;
 
+import java.util.Observable;
 
 /**
 * Classe per la gestione delle azioni
@@ -10,4 +11,5 @@ package it.polimi.ingsw.ps06.model;
 */
 public abstract class Actions {
 
+	public abstract void activate(Player p);
 }

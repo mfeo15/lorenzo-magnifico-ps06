@@ -87,7 +87,7 @@ public class Game {
 			//Get the Player Faith points, p ==> player_faith = p.getFaith();
 			
 			if (player_faith < VaticanRequirementOnPeriod(period)) {
-				//Manda una scomunica!!!
+				board.getTiles(period).activate(p);  // <== Mancano implementazioni di metodi
 			}
 
 		}
