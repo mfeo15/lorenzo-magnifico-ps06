@@ -12,7 +12,7 @@ import java.util.Observer;
 * @since   2017-05-11
 */
 public class EffectsActive extends Effect implements Observer {
-	
+	boolean multi;
 	private int diceBonus;
 	
 	@Override

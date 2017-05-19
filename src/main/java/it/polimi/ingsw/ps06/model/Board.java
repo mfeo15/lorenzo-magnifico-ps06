@@ -19,7 +19,7 @@ public class Board {
 	
 	private ArrayList<Player> order;
 	
-	private ExcommunicationTile excomunicationTiles[];
+	private ExcommunicationTile excommunicationTiles[];
 	
 	private int random1, random2, random3;
 	private ArrayList<DevelopementCard> deck;
@@ -47,10 +47,20 @@ public class Board {
 		//Riempi Deck con carte dal file
 	}
 	
+	/**
+	* Metodo per ritornare l'ordine dei familiari, per stabilire l'ordine di gioco
+	*
+	* @return 		order	ordine dei familiari
+	*/ 
 	private void drawExcommunicationTiles() {
 		random1 = (int)(Math.random() * 8);
 		random2 = 7 + (int)(Math.random() * 8);
 		random3 = 14 + (int)(Math.random() * 8);
+	}
+	
+	public ExcommunicationTile getTiles(int period){
+		int param = period - 1;
+		return excommunicationTiles[param];
 	}
 	
 	/**

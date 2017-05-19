@@ -10,7 +10,7 @@ import it.polimi.ingsw.ps06.model.Types.PointsKind;
 * Classe per la gestione dello spazio di mercato
 *
 * @author  ps06
-* @version 1.1
+* @version 1.2
 * @since   2017-05-10 
 */
 
@@ -132,7 +132,7 @@ public class Market implements PlaceSpace {
 			bonus.add(new EffectsResources(r));
 			
 			//Creazione del quarto bonus del market
-			bonus.add(new EffectsActions()); //privilegi
+			//bonus.add(new EffectsActions(new Privilege())); //privilegi
 			
 			if(numberPlayers>4) { 
 				//Creazione del quinto bonus del market
@@ -151,18 +151,36 @@ public class Market implements PlaceSpace {
 	* @return 	Nothing
 	*/
 	private void giveBonus(Player player, int index){
-		bonus.get(index); //activate
+		bonus.get(index);
+		//bonus.activate(player);
+		// if(index==3) bonus.activate(player);
 	}
 	
 	/**
-	* Metodo per reimpostare i familiari alla loro posizione di partenza
+	* Metodo per rimuovere i familiari dagli spazi
 	*
-	* @author  ps06
-	* @version 1.0
-	* @since   2017-05-11 
+	* @return 	Nothing
 	*/
 	public void cleanMarket() {
 		memberSpaces.clear();
+	}
+	
+	/**
+	* Metodo per ritornare l'arraylist di familiari
+	*
+	* @return 	memberSpaces	ArrayList familiari
+	*/
+	public ArrayList<FamilyMember> getFamilyList(){
+		return memberSpaces;
+	}
+	
+	/**
+	* Metodo per ritornare l'arraylist di bonus
+	*
+	* @return 	memberSpaces	ArrayList bonus
+	*/
+	public ArrayList<Effect> getBonuses(){
+		return bonus;
 	}
 	
 	

@@ -10,7 +10,7 @@ import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
 * Classe per la gestione del palazzo del consiglio
 *
 * @author  ps06
-* @version 1.0
+* @version 1.1
 * @since   2017-05-10
 */
 
@@ -18,6 +18,7 @@ public class CouncilPalace implements PlaceSpace {
 	private ArrayList<FamilyMember> memberSpaces;
 	private ArrayList<Player> players;
 	private EffectsResources councilReward;
+	private EffectsActions privilegeReward;
 	
 	/**
 	* Metodo per il piazzamento di un familiare nel palazzo del consiglio
@@ -29,6 +30,7 @@ public class CouncilPalace implements PlaceSpace {
 	@Override
 	public void placeMember(FamilyMember member, Action chosenAction) {
 		memberSpaces.add(member);
+		giveRewards(member.getPlayer());
 		
 	}
 	
@@ -39,7 +41,7 @@ public class CouncilPalace implements PlaceSpace {
 	* @return 	Nothing
 	*/
 	public CouncilPalace(){
-		councilReward = new EffectsResources();
+		initRewards();
 	}
 	
 	/**
@@ -63,15 +65,26 @@ public class CouncilPalace implements PlaceSpace {
 	}
 	
 	/**
+	* Metodo per inizializzare i rewards
+	*	
+	* @return 					Nothing
+	*/
+	private void initRewards(){
+		//privilegeReward = new EffectsActions(new Privilege());
+		councilReward = new EffectsResources(new Resources(MaterialsKind.COIN,1));
+	}
+	
+	/**
 	* Metodo per assegnare le risorse che sono state scelte dal giocatore
 	*
 	* @param 	player			Giocatore a cui dare le risorse
 	* @param 	chosenAction	Codice dell'azione da eseguire	
 	* @return 					Nothing
 	*/
-	public void giveResources(Player player, Action chosenAction){
-		// dai privilegio
-		councilReward = new EffectsResources(new Resources(MaterialsKind.COIN,1));
+	public void giveRewards(Player player){
+
+		//councilReward.activate(player);
+		//privilegeReward.activate(player);
 	}
 	
 	/**
@@ -83,4 +96,14 @@ public class CouncilPalace implements PlaceSpace {
 	public void cleanPalace(){
 		memberSpaces.clear();
 	}
+	
+	/**
+	* Metodo per ritornare l'arraylist di familiari
+	*
+	* @return 	memberSpaces	ArrayList familiari
+	*/
+	public ArrayList<FamilyMember> getFamilyList(){
+		return memberSpaces;
+	}
+
 }

@@ -11,5 +11,11 @@ import java.util.Observable;
 */
 public abstract class Actions {
 
+	/**
+	* Metodo di attivazione dell'azione
+	*
+	* @param 	p		Giocatore a cui attivare l'azione
+	* @return 	
+	*/
 	public abstract void activate(Player p);
 }

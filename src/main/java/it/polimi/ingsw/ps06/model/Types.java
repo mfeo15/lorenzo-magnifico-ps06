@@ -106,11 +106,11 @@ public class Types {
 	
 	public enum CouncilPrivilege {
 		
-		BONUS_WOOD_STONE,
-		BONUS_SERVANTS,
-		BONUS_COINS,
-		BONUS_MILITARY,
-		BONUS_FAITH
+		BONUS_1, //Wood e Stone
+		BONUS_2, // 2 Servants
+		BONUS_3, // 2 Coins
+		BONUS_4, // 2 Military
+		BONUS_5 // 1 Faith
 
 	}
 }
