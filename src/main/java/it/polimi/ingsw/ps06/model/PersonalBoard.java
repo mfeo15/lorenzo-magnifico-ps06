@@ -120,6 +120,19 @@ public class PersonalBoard {
 		return;
 	}
 	
+
+	/**
+	* Metodo che permette di aggiungere un intero tipo risorsa al warehouse
+	*
+	* @param 	Resources	risorse da aggiungere al warehouse
+	* @return 	nothing
+	*/
+	
+	public void increaseResources(Resources r){
+		inventory.addResources(r);
+		return;
+	}
+	
 	/**
 	* Metodo che permette di aggiungere territory sulla plancia giocatore
 	*

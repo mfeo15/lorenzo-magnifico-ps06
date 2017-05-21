@@ -1,7 +1,5 @@
 package it.polimi.ingsw.ps06.model;
 
-import java.util.EnumMap;
-
 import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
 import it.polimi.ingsw.ps06.model.Types.PointsKind;
 import it.polimi.ingsw.ps06.model.Resources;
@@ -37,9 +35,9 @@ public class Warehouse {
 	*/
 	
 	public void initialSetup(){
-		status.setMaterialsValue(MaterialsKind.STONE, 2);
-		status.setMaterialsValue(MaterialsKind.WOOD, 2);
-		status.setMaterialsValue(MaterialsKind.SERVANT, 3);
+		status.setResourceValue(MaterialsKind.STONE, 2);
+		status.setResourceValue(MaterialsKind.WOOD, 2);
+		status.setResourceValue(MaterialsKind.SERVANT, 3);
 		return;
 	}
 	
@@ -62,7 +60,7 @@ public class Warehouse {
 	*/
 	
 	public int getMaterial(MaterialsKind kind){
-		return status.getMaterialsValue(kind);
+		return status.getResourceValue(kind);
 	}
 	
 	/**
@@ -73,7 +71,7 @@ public class Warehouse {
 	*/
 	
 	public int getPoints(PointsKind type){
-		return status.getPointsValue(type);
+		return status.getResourceValue(type);
 	}
 	
 	/**
@@ -85,7 +83,7 @@ public class Warehouse {
 	*/
 	
 	public void increaseMaterials(MaterialsKind kind, int increase){
-		status.increaseMaterialsValue(kind, increase);
+		status.increaseResourceValue(kind, increase);
 	}
 	
 	/**
@@ -97,7 +95,7 @@ public class Warehouse {
 	*/
 	
 	public void increasePoints(PointsKind type, int increase){
-		status.increasePointsValue(type, increase);
+		status.increaseResourceValue(type, increase);
 	}
 	
 	/**
