@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import it.polimi.ingsw.ps06.model.Types.ColorPalette;
+import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
 
 /**
 * Classe che modellizza una partita tra n giocatori
@@ -21,6 +22,8 @@ public class Game {
 	private final int VATICAN_REQUIREMENT_PERIOD_1 = 3;
 	private final int VATICAN_REQUIREMENT_PERIOD_2 = 4;
 	private final int VATICAN_REQUIREMENT_PERIOD_3 = 5;
+	
+	private final int STANDARD_AMOUNT_COINS_FIRST_PLAYER = 5;
 	
 	private int numberPlayers;
 	private ArrayList<Player> players;
@@ -140,6 +143,13 @@ public class Game {
 	*/
 	public void start() 
 	{
+		//Bad placement, temporary
+		//Assegnamento dei vari coin ad ogni singolo giocatore ad inizio partita in relazione alla posizione di turno
+		for (int i=0; i < players.size(); i++) {
+			Player p = players.get(i);
+			p.getPersonalBoard().addMaterials(MaterialsKind.COIN, STANDARD_AMOUNT_COINS_FIRST_PLAYER + i);
+		}
+		
 		for(int period = 0; period < NUMBER_OF_PERIODS; period++) 
 		{
 			for(int round = 0; round < NUMBER_OF_ROUNDS; round++) 
@@ -149,12 +159,15 @@ public class Game {
 					switch (phase) {
 						case 1:
 							setupRound();
+							break;
 						case 2: 
 							for( Player p : players) {
 								
 							}
+							break;
 						case 3: 
 							if (round == 2 || round == 4 || round == 6) vaticanReport(period);
+							break;
 					}
 				}
 			}

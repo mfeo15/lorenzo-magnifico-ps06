@@ -144,8 +144,6 @@ public class PersonalBoard {
 		
 			switch(territories.size()){
 			case 0:
-				territories.add(cardTerritory);
-				break;
 			case 1:
 				territories.add(cardTerritory);
 				break;

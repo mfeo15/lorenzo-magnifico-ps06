@@ -95,7 +95,7 @@ public class Towers implements PlaceSpace {
 				tower=1;
 				range1=0;
 				range2=3;
-				
+				break;
 			case TOWER_BLUE_1:
 			case TOWER_BLUE_2:
 			case TOWER_BLUE_3:
@@ -103,7 +103,7 @@ public class Towers implements PlaceSpace {
 				tower=2;
 				range1=4;
 				range2=7;
-				
+				break;
 			case TOWER_YELLOW_1:
 			case TOWER_YELLOW_2:
 			case TOWER_YELLOW_3:
@@ -111,7 +111,7 @@ public class Towers implements PlaceSpace {
 				tower=3;
 				range1=8;
 				range2=11;
-				
+				break;
 			case TOWER_PURPLE_1:
 			case TOWER_PURPLE_2:
 			case TOWER_PURPLE_3:
@@ -119,6 +119,7 @@ public class Towers implements PlaceSpace {
 				tower=4;
 				range1=12;
 				range2=15;
+				break;
 		}
 			
 	}

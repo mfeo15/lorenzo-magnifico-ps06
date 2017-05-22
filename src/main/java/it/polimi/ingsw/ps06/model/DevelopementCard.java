@@ -12,6 +12,6 @@ public class DevelopementCard extends Card {
 	
 	private int color;
 	private int period;
-	private Effect instant_effect;
+	private Effect instant_effect;   // <== Se ci fossero più effetti? Un Array no?
 	
 }
