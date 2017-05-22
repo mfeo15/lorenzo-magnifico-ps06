@@ -12,7 +12,7 @@ import it.polimi.ingsw.ps06.model.Types.Action;
 public class CardAcquisition extends Actions{
 
 	private DevelopementCard card;
-
+	private PersonalBoard pb = new PersonalBoard();
 	
 	public CardAcquisition(DevelopementCard card){
 		this.card=card;
@@ -25,7 +25,7 @@ public class CardAcquisition extends Actions{
 	* @param 	chosenAction	Codice dell'azione da eseguire	
 	* @return 	
 	*/
-	public boolean checkCosts(Player player, Action chosenAction){
+	public boolean checkCosts(Player player, Action chosenAction, Boolean extraCost){
 		//chiama risorse
 		return true;
 	}
@@ -51,7 +51,22 @@ public class CardAcquisition extends Actions{
 	*/
 	@Override
 	public void activate(Player p) {
-		// TODO Auto-generated method stub
+		
+		if(card instanceof Territory){
+			pb.addTerritory( (Territory) card);
+		}
+		
+		if(card instanceof Building){
+			pb.addBuilding( (Building) card);
+		}
+		
+		if(card instanceof Character){
+			pb.addCharacter( (Character) card);
+		}
+		
+		if(card instanceof Venture){
+			pb.addVenture( (Venture) card);
+		}
 		
 	}
 

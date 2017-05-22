@@ -17,9 +17,10 @@ import it.polimi.ingsw.ps06.model.Types.PointsKind;
 public class Market implements PlaceSpace {
 	private ArrayList<FamilyMember> memberSpaces;
 	private ArrayList<Effect> bonus;
-	EffectsActive attivi; // da modificare in listener
-	int openedWindows;
-	boolean check;
+	private Effect e;
+	private EffectsActive attivi; // da modificare in listener
+	private int openedWindows;
+	private boolean check;
 	
 	/**
 	* Metodo per il piazzamento di un familiare nel mercato, include controlli di posizionamento
@@ -35,6 +36,8 @@ public class Market implements PlaceSpace {
 		int actionIndex = chosenAction.ordinal();
 		int relativeIndex = actionIndex - marketIndex;
 		int errorCode = 0;
+		
+		// Gestire carta scomunica del mercato if(EffectsActive.checkNoMarket == true) handle();
 		
 		// Gestione condizione di selezione sbagliata
 		if ( (relativeIndex > openedWindows) || (member.getValue()<1) ) {errorCode=1; handle(errorCode);}
@@ -154,9 +157,9 @@ public class Market implements PlaceSpace {
 	* @return 	Nothing
 	*/
 	private void giveBonus(Player player, int index){
-		bonus.get(index);
-		//bonus.activate(player);
-		// if(index==3) bonus.activate(player);
+		e = bonus.get(index);
+		e.activate(player);
+		if(index==3) e.activate(player);
 	}
 	
 	/**

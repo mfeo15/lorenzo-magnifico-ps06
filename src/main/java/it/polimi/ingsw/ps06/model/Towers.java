@@ -28,6 +28,8 @@ public class Towers implements PlaceSpace {
 	private int tower=0;
 	private int range1=0, range2=0;
 	private int errorCode=0;
+	private int spotRequirement;
+	private DevelopementCard card;
 	
 	/**
 	* Metodo per il piazzamento di un familiare su di una delle torri, include controlli di posizionamento
@@ -43,35 +45,58 @@ public class Towers implements PlaceSpace {
 		int actionIndex = chosenAction.ordinal();
 		int relativeIndex = actionIndex - towerIndex;
 		int arrayIndex;
-		boolean condition; // Regola del colore
+		int memberValue;
+		boolean value=false;
+		boolean colorRule; // Regola del colore
+		boolean extraCost; // Familiare avversario presente, +3 oro
 		
 		
-		if(memberSpaces.get(relativeIndex) == null){
-			
-			checkWhichTower(chosenAction);
-			arrayIndex=range1;
-			condition=true;
-			
-			while(arrayIndex<range2){
-				if(member.getPlayer() == memberSpaces.get(arrayIndex).getPlayer()){
-					condition = false;
-				}
-			}
-			
-			// Caso in cui il familiare sia neutro
-			if(member.getPlayer()==null) condition=true;
-			
-			if(!condition)handle(errorCode);
-			else {
-				boolean satisfied1 = acquire.checkCosts(member.getPlayer(), chosenAction);
-				boolean satisfied2 = acquire.checkRequirements(member.getPlayer(), chosenAction);
+		memberValue=member.getValue();
+		//int bonus = EffectsActive.valueBonus(p);
+		//memberValue = memberValue + bonus;
+		
+		checkRequirement(chosenAction);
+		if(memberValue > spotRequirement) value=true;
+		
+		card = deck.get(deckIndex + relativeIndex);
+		
+		// Si può piazzare solo se la carta è ancora presente, se c'è sono sicuro che non c'è un familiare
+		if( (card != null) && value){
+		
+			acquire = new CardAcquisition(card);
 				
-				if(satisfied1 && satisfied2){
-					memberSpaces.add(relativeIndex, member); 
-					getCard(member.getPlayer(), chosenAction);
+				checkWhichTower(chosenAction);
+				arrayIndex=range1;
+				
+				colorRule=true;
+				extraCost=false;
+				
+				while(arrayIndex<range2){
+					
+					// Se è presente un familiare avversario si paga un costo extra
+					if(member.getPlayer() != null) extraCost=true; 
+					
+					// Se è presente un familiare proprio, non è possibile metterne un altro
+					if(member.getPlayer() == memberSpaces.get(arrayIndex).getPlayer()) colorRule = false;
+					
 				}
-			}
-			
+				
+				// Caso in cui il familiare sia neutro
+				if(member.getPlayer()==null) colorRule=true;
+				
+				// Caso in cui il familiare può essere piazzato
+				if(!colorRule)handle(errorCode);
+				else {
+					boolean satisfied1 = acquire.checkCosts(member.getPlayer(), chosenAction, extraCost);
+					boolean satisfied2 = acquire.checkRequirements(member.getPlayer(), chosenAction);
+					
+					if(satisfied1 && satisfied2){
+						memberSpaces.add(relativeIndex, member); 
+						getCard(member.getPlayer());
+						deck.add(deckIndex + relativeIndex, null);
+					}
+				}
+				 
 		} else handle(errorCode);
 	}
 	
@@ -96,6 +121,7 @@ public class Towers implements PlaceSpace {
 				range1=0;
 				range2=3;
 				break;
+				
 			case TOWER_BLUE_1:
 			case TOWER_BLUE_2:
 			case TOWER_BLUE_3:
@@ -104,6 +130,7 @@ public class Towers implements PlaceSpace {
 				range1=4;
 				range2=7;
 				break;
+				
 			case TOWER_YELLOW_1:
 			case TOWER_YELLOW_2:
 			case TOWER_YELLOW_3:
@@ -112,6 +139,7 @@ public class Towers implements PlaceSpace {
 				range1=8;
 				range2=11;
 				break;
+				
 			case TOWER_PURPLE_1:
 			case TOWER_PURPLE_2:
 			case TOWER_PURPLE_3:
@@ -120,6 +148,46 @@ public class Towers implements PlaceSpace {
 				range1=12;
 				range2=15;
 				break;
+				
+			default:
+				throw new IllegalArgumentException();
+		}
+			
+	}
+	
+private void checkRequirement(Action chosenAction){
+		
+		switch(chosenAction){
+			case TOWER_GREEN_1:
+			case TOWER_BLUE_1:
+			case TOWER_YELLOW_1:
+			case TOWER_PURPLE_1:
+				spotRequirement = 1;
+				break;
+				
+			case TOWER_GREEN_2:
+			case TOWER_BLUE_2:
+			case TOWER_YELLOW_2:
+			case TOWER_PURPLE_2:
+				spotRequirement = 3;
+				break;
+				
+			case TOWER_GREEN_3:
+			case TOWER_BLUE_3:
+			case TOWER_YELLOW_3:
+			case TOWER_PURPLE_3:
+				spotRequirement = 5;
+				break;
+				
+			case TOWER_GREEN_4:
+			case TOWER_BLUE_4:
+			case TOWER_YELLOW_4:
+			case TOWER_PURPLE_4:
+				spotRequirement = 7;
+				break;
+				
+			default:
+				throw new IllegalArgumentException();
 		}
 			
 	}
@@ -130,10 +198,8 @@ public class Towers implements PlaceSpace {
 	* @param 	Unused
 	* @return 	Nothing
 	*/
-	private void getCard(Player player, Action chosenAction){
+	private void getCard(Player player){
 		
-		int position = chosenAction.ordinal();
-		DevelopementCard card = deck.get((position + deckIndex)-1);
 		acquire = new CardAcquisition(card);
 		acquire.activate(player);
 	}

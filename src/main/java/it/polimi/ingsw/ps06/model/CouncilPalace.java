@@ -29,8 +29,16 @@ public class CouncilPalace implements PlaceSpace {
 	*/
 	@Override
 	public void placeMember(FamilyMember member, Action chosenAction) {
-		memberSpaces.add(member);
-		giveRewards(member.getPlayer());
+		int errorCode=0;
+		int memberValue;
+		
+		
+		if(member.getValue()>1){
+			
+			memberSpaces.add(member);
+			giveRewards(member.getPlayer());
+		
+		} else handle(errorCode);
 		
 	}
 	
@@ -42,6 +50,16 @@ public class CouncilPalace implements PlaceSpace {
 	*/
 	public CouncilPalace(){
 		initRewards();
+	}
+	
+	/**
+	* Gestisci errori di posizionamento familiare
+	*
+	* @param	code		codice errore
+	* @return 	Nothing
+	*/
+	private void handle(int code){
+		
 	}
 	
 	/**
@@ -70,7 +88,7 @@ public class CouncilPalace implements PlaceSpace {
 	* @return 					Nothing
 	*/
 	private void initRewards(){
-		//privilegeReward = new EffectsActions(new Privilege());
+		privilegeReward = new EffectsActions(new Privilege());
 		councilReward = new EffectsResources(new Resources(MaterialsKind.COIN,1));
 	}
 	
@@ -83,8 +101,8 @@ public class CouncilPalace implements PlaceSpace {
 	*/
 	public void giveRewards(Player player){
 
-		//councilReward.activate(player);
-		//privilegeReward.activate(player);
+		councilReward.activate(player);
+		privilegeReward.activate(player);
 	}
 	
 	/**
