@@ -2,6 +2,7 @@ package it.polimi.ingsw.ps06.model;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Observable;
 
 import it.polimi.ingsw.ps06.model.Types.ColorPalette;
 
@@ -12,7 +13,7 @@ import it.polimi.ingsw.ps06.model.Types.ColorPalette;
 * @version 1.0
 * @since   2017-05-09 
 */
-public class Game {
+public class Game extends Observable {
 	
 	private final int NUMBER_OF_PERIODS	= 3;
 	private final int NUMBER_OF_ROUNDS	= 2;
@@ -87,7 +88,7 @@ public class Game {
 			//Get the Player Faith points, p ==> player_faith = p.getFaith();
 			
 			if (player_faith < VaticanRequirementOnPeriod(period)) {
-				board.getTiles(period).activate(p);  // <== Mancano implementazioni di metodi
+				//board.getTiles(period).activate(p);  // <== Mancano implementazioni di metodi
 			}
 
 		}

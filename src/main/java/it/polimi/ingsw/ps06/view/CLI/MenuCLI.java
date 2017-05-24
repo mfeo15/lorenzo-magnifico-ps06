@@ -1,6 +1,5 @@
 package it.polimi.ingsw.ps06.view.CLI;
 
-import java.io.PrintStream;
 import java.util.Observable;
 import java.util.Scanner;
 
@@ -24,16 +23,16 @@ public class MenuCLI extends Observable {
 	}
 	
 	public void show() {
+		
 		System.out.println();
 		System.out.println(" --- Lorenzo il Magnifio --- ");
 		System.out.println();
 		System.out.println(" 1) Nuova Partita");
-		System.out.println(" 2) Impostazioni");
-		System.out.println(" 3) Credits");
+		System.out.println(" 2) Esci");
 		System.out.println();
 		System.out.print(" > ");
 		
-		readInput();
+		while(true) readInput();
 	}
 	
 	public void readInput() {
@@ -41,5 +40,10 @@ public class MenuCLI extends Observable {
 		
 		setChanged();
 		notifyObservers(i);
+	}
+	
+	public void showErrorMessage(String messageError) {
+		System.out.println();
+		System.out.print(messageError);
 	}
 }

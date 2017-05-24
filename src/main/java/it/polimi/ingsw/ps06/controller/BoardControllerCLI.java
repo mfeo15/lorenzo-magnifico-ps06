@@ -27,18 +27,9 @@ public class BoardControllerCLI implements BoardController, Observer {
 
 	}
 
-
-	@Override
-	public void initView() {
-		// TODO Auto-generated method stub
-		
-		theView.setTowers(new ArrayList<DevelopementCard>());
-	}
-
-
 	@Override
 	public void init() {
 		// TODO Auto-generated method stub
-		theView.setTowers(new ArrayList<DevelopementCard>());
+		theView.printTowers(/* model.getBoard().getTower() */ new ArrayList<DevelopementCard>());
 	}
 }

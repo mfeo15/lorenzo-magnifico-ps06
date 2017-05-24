@@ -22,6 +22,6 @@ public class RoomControllerCLI implements RoomController, Observer {
 	@Override
 	public void init() {
 		// TODO Auto-generated method stub
-		
+		theView.show();
 	}
 }

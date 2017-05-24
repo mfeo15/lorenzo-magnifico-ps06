@@ -1,26 +1,24 @@
 package it.polimi.ingsw.ps06;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 import it.polimi.ingsw.ps06.controller.MenuControllerCLI;
 import it.polimi.ingsw.ps06.controller.MenuControllerGUI;
 import it.polimi.ingsw.ps06.view.CLI.MenuCLI;
-import it.polimi.ingsw.ps06.view.GUI.TestGUI;
+import it.polimi.ingsw.ps06.view.GUI.MenuGUI;
 
-/**
- * Hello world!
- *
- */
+
 public class App 
 {
-    public static void main( String[] args )
+    public static void main( String[] args ) throws IOException
     {
         System.out.println( "Lorenzo il magnifico!");
         
         setup();
     }
     
-    public static void setup() {
+    public static void setup() throws IOException {
     	Scanner s = new Scanner(System.in);
     	
     	System.out.print("Press 1 for CLI or 2 for GUI > ");
@@ -38,5 +36,4 @@ public class App
     		break;
     	}
     }
- 
 }

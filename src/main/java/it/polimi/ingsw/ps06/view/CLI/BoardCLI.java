@@ -20,8 +20,9 @@ public class BoardCLI extends Observable {
 		addObserver(controller);
 	}
 	
-	public void setTowers(ArrayList<DevelopementCard> t) {
+	public void printTowers(ArrayList<DevelopementCard> t) {
 		printTowerASCII();
+		
 	}
 	
 	public void show() {
@@ -47,5 +48,9 @@ public class BoardCLI extends Observable {
 		System.out.println("   ||: . |");
 		System.out.println("  _||_   |");
 		System.out.println("-~    ~`--");
+	}
+	
+	public void printPoints() {
+		
 	}
 }

@@ -1,13 +1,11 @@
 package it.polimi.ingsw.ps06.view.GUI;
 
 
-import javafx.scene.media.AudioClip;
 import java.awt.Image;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
-import java.beans.EventHandler;
 import java.io.File;
 import java.io.IOException;
 
@@ -26,7 +24,7 @@ public class MenuGUI extends JFrame {
 	
 	private Image backgroundImage;
 	private JButton button;
-	private JButton button2;
+	private JButton button1;
 	private JFrame f;
      
 	private JFXPanel fxPanel = new JFXPanel();
@@ -66,7 +64,7 @@ public class MenuGUI extends JFrame {
         button.setBorderPainted(false);
         
         f.add(button);
-        
+        /*
         button.addMouseListener(new MouseAdapter()
         {
             public void mouseEntered(MouseEvent evt)
@@ -119,18 +117,18 @@ public class MenuGUI extends JFrame {
             }
                 
             });
+        */
+        button1 = new JButton();
+        button1.setLocation(960,0);
+        button1.setSize(55,55);
         
-        button2 = new JButton();
-        button2.setLocation(960,0);
-        button2.setSize(55,55);
+        button1.setOpaque(false);
+        button1.setContentAreaFilled(false);
+        button1.setBorderPainted(false);
         
-        button2.setOpaque(false);
-        button2.setContentAreaFilled(false);
-        button2.setBorderPainted(false);
+        f.add(button1);
         
-        f.add(button2);
-        
-        button2.addMouseListener(new MouseAdapter()
+        button1.addMouseListener(new MouseAdapter()
         {
             public void mouseEntered(MouseEvent evt)
             {
@@ -169,7 +167,6 @@ public class MenuGUI extends JFrame {
         		mediaPlayer3.play();
                 f.dispose();
                 System.exit(0);
-                
             }
     	});
         
@@ -182,14 +179,10 @@ public class MenuGUI extends JFrame {
         f.setResizable(false);
         f.setLocationRelativeTo(null);
         f.setVisible(true);   
- 
     }   
-        
-    
-    public static void main(String[] args) throws IOException
-    {   
-        new MenuGUI();  
-    }   
-    
+	
+	public void addNewControllerListener(ActionListener controllerListener) {
+		button.addActionListener(controllerListener);
+	}
  }  
 
