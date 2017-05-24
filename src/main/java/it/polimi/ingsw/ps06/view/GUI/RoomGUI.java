@@ -1,8 +1,11 @@
 package it.polimi.ingsw.ps06.view.GUI;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.Insets;
+import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -21,109 +24,123 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
 public class RoomGUI extends JFrame {
-	private JButton button;
+	private JButton exit;
 	private JFrame f;
-	private JTextField tf1, tf3, tf4, tf5, tf6, tf7, player1, player2, player3, player4;
-	private JPasswordField tf2;
-	private JButton b1, b2, b3;
+	private JTextField username, stat1, stat2, stat3, stat4, logged, player1, player2, player3, player4;
+	private JPasswordField password;
+	private JButton login, start, ready;
 	private Font font,font2;
+	private int width;
+	private int height;
 		
 	public RoomGUI() throws IOException
 	{
-		button = new JButton();
+		exit = new JButton();
 		f = new JFrame();
+		
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		
+		width = (int)(screenSize.getWidth()*75/100*0.84);
+		height = (int)(screenSize.getHeight()*75/100);
 		
 		font = new Font("Lucida Handwriting",Font.PLAIN,12);
 		font2 = new Font("Lucida Handwriting",Font.PLAIN,18);
 	    
-		String path = "resources/stanza2.jpg";
-	    File file = new File(path);
-	    BufferedImage image = ImageIO.read(file);
-	    JLabel label = new JLabel(new ImageIcon(image)); 
-	    
-	    String bip = "resources/menuhover.wav";
-		Media hit = new Media(new File(bip).toURI().toString());
+		BufferedImage image1 = ImageIO.read(new File("resources/stanza2.jpg")); 
+		BufferedImage exit1 = ImageIO.read(new File("resources/button.png")); 
 		
-		String bip2 = "resources/menuselect.wav";
-		Media hit2 = new Media(new File(bip2).toURI().toString());
+		BufferedImage stanza1 = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		
-		String exit = "resources/exit.wav";
-		Media music1 = new Media(new File(exit).toURI().toString());
+		Graphics g1 = stanza1.createGraphics();
+        g1.drawImage(image1, 0, 0, width, height, null);
+        g1.dispose();
 		
 		
-	    
-	    
-	    button = new JButton();
-        button.setLocation(1066,0);
-        button.setSize(40,40);
-        button.setOpaque(false);
-        button.setContentAreaFilled(false);
-        button.setBorderPainted(false);
-        f.add(button);
+        String hoverSound = "resources/menuhover.wav";
+		Media hit = new Media(new File(hoverSound).toURI().toString());
+		
+		String selectSound = "resources/menuselect.wav";
+		Media hit2 = new Media(new File(selectSound).toURI().toString());
+		
+		String exitSound = "resources/exit.wav";
+		Media music1 = new Media(new File(exitSound).toURI().toString());
+		
+		JLabel label = new JLabel(new ImageIcon(stanza1)); 
+		
+	        
+	    exit = new JButton();
+	    exit.setLocation(width*95/100,0);
+	    exit.setSize(width*5/100,width*5/100);
+	    exit.setOpaque(false);
+	    exit.setContentAreaFilled(false);
+	    exit.setFocusPainted(false);
+	    exit.setBorderPainted(false);
+        f.add(exit);
+       
         
-        tf1 = new JTextField();
-        tf1.setLocation(325,121);
-        tf1.setSize(135,24);
-        tf1.setOpaque(false);
-        tf1.setFont(font);
-        f.add(tf1);
+        username = new JTextField();
+        username.setLocation(width*29/100,(int)(height*16.6/100));
+        username.setSize(width*13/100,(int)(height*3/100));
+        username.setOpaque(false);
+        username.setFont(font);
+        f.add(username);
         
-        tf2 = new JPasswordField();
-        tf2.setLocation(325,175);
-        tf2.setSize(135,24);
-        tf2.setOpaque(false);
-        f.add(tf2);
+        password = new JPasswordField();
+        password.setLocation(width*29/100,(int)(height*24/100));
+        password.setSize(width*13/100,(int)(height*3/100));
+        password.setOpaque(false);
+        f.add(password);
         
         
-        tf3 = new JTextField();
-        tf3.setLocation(300,520);
-        tf3.setSize(60,24);
-        tf3.setOpaque(false);
-        tf3.setEditable(false);
-        tf3.setBorder(null);
-        tf3.setFont(font);
-        f.add(tf3);
+        stat1 = new JTextField();
+        stat1.setLocation(width*28/100,height*64/100);
+        stat1.setSize(width*6/100, height*3/100);
+        stat1.setOpaque(false);
+        stat1.setEditable(false);
+        stat1.setBorder(null);
+        stat1.setFont(font);
+        f.add(stat1);
         
-        tf4 = new JTextField();
-        tf4.setLocation(300,568);
-        tf4.setSize(60,24);
-        tf4.setOpaque(false);
-        tf4.setEditable(false);
-        tf4.setBorder(null);
-        tf4.setFont(font);
-        f.add(tf4);
+        stat2 = new JTextField();
+        stat2.setLocation(width*28/100,(int)(height*70.6/100));
+        stat2.setSize(width*6/100, height*3/100);
+        stat2.setOpaque(false);
+        stat2.setEditable(false);
+        stat2.setBorder(null);
+        stat2.setFont(font);
+        f.add(stat2);
         
-        tf5 = new JTextField();
-        tf5.setLocation(300,615);
-        tf5.setSize(60,24);
-        tf5.setOpaque(false);
-        tf5.setEditable(false);
-        tf5.setBorder(null);
-        tf5.setFont(font);
-        f.add(tf5);
+        stat3 = new JTextField();
+        stat3.setLocation(width*28/100,(int)(height*77.1/100));
+        stat3.setSize(width*6/100, height*3/100);
+        stat3.setOpaque(false);
+        stat3.setEditable(false);
+        stat3.setBorder(null);
+        stat3.setFont(font);
+        f.add(stat3);
         
-        tf6 = new JTextField();
-        tf6.setLocation(300,470);
-        tf6.setSize(60,24);
-        tf6.setOpaque(false);
-        tf6.setEditable(false);
-        tf6.setBorder(null);
-        tf6.setFont(font);
-        f.add(tf6);
+        stat4 = new JTextField();
+        stat4.setLocation(width*28/100,(int)(height*83.6/100));
+        stat4.setSize(width*6/100, height*3/100);
+        stat4.setOpaque(false);
+        stat4.setEditable(false);
+        stat4.setBorder(null);
+        stat4.setFont(font);
+        f.add(stat4);
         
-        tf7 = new JTextField("Now logged in:");
-        tf7.setLocation(35,300);
-        tf7.setSize(400,30);
-        tf7.setOpaque(false);
-        tf7.setEditable(false);
-        tf7.setBorder(null);
-        tf7.setFont(font2);
-        tf7.setForeground(Color.BLACK);
-        f.add(tf7);
+        logged = new JTextField("Now logged in:");
+        logged.setLocation(width*3/100,height*42/100);
+        logged.setSize(width*30/100,height*4/100);
+        logged.setOpaque(false);
+        logged.setEditable(false);
+        logged.setBorder(null);
+        logged.setFont(font2);
+        logged.setForeground(Color.BLACK);
+        f.add(logged);
         
         player1 = new JTextField();
-        player1.setLocation(650,230);
-        player1.setSize(300,30);
+        player1.setLocation(width*59/100,height*29/100);
+        player1.setSize(width*30/100,height*4/100);
         player1.setOpaque(false);
         player1.setEditable(false);
         //player1.setBorder(null);
@@ -132,8 +149,8 @@ public class RoomGUI extends JFrame {
         f.add(player1);
         
         player2 = new JTextField();
-        player2.setLocation(650,280);
-        player2.setSize(300,30);
+        player2.setLocation(width*59/100,height*35/100);
+        player2.setSize(width*30/100,height*4/100);
         player2.setOpaque(false);
         player2.setEditable(false);
         //player2.setBorder(null);
@@ -142,8 +159,8 @@ public class RoomGUI extends JFrame {
         f.add(player2);
         
         player3 = new JTextField();
-        player3.setLocation(650,330);
-        player3.setSize(300,30);
+        player3.setLocation(width*59/100,height*41/100);
+        player3.setSize(width*30/100,height*4/100);
         player3.setOpaque(false);
         player3.setEditable(false);
         //player3.setBorder(null);
@@ -152,8 +169,8 @@ public class RoomGUI extends JFrame {
         f.add(player3);
         
         player4 = new JTextField();
-        player4.setLocation(650,380);
-        player4.setSize(300,30);
+        player4.setLocation(width*59/100,height*47/100);
+        player4.setSize(width*30/100,height*4/100);
         player4.setOpaque(false);
         player4.setEditable(false);
         //player4.setBorder(null);
@@ -161,48 +178,49 @@ public class RoomGUI extends JFrame {
         player4.setForeground(Color.BLACK);
         f.add(player4);
         
-        b1 = new JButton();
-        b1.setLocation(342,227);
-        b1.setSize(80,40);
-        b1.setOpaque(false);
-        b1.setContentAreaFilled(false);
-        f.add(b1);
+        login = new JButton("Login");
+        login.setLocation(width*31/100,height*32/100);
+        login.setSize(width*8/100,width*4/100);
+        login.setOpaque(false);
+        login.setContentAreaFilled(false);
+        login.setFocusPainted(false);
+        login.setMargin(new Insets(0,0,0,5));
+        login.setForeground(Color.BLACK);
+        login.setFont(font2);
+        f.add(login);
         
-        b2 = new JButton("Pronto");
-        b2.setLocation(720,612);
-        b2.setSize(90,50);
-        b2.setOpaque(false);
-        b2.setContentAreaFilled(false);
-        b2.setFocusPainted(false);
-        b2.setMargin(new Insets(0,0,0,2));
-        b2.setForeground(Color.BLACK);
-        b2.setFont(font2);
-        f.add(b2);
+        ready = new JButton("Pronto");
+        ready.setLocation(width*66/100,height*77/100);
+        ready.setSize(width*8/100,width*4/100);
+        ready.setOpaque(false);
+        ready.setContentAreaFilled(false);
+        ready.setFocusPainted(false);
+        ready.setMargin(new Insets(0,0,0,5));
+        ready.setForeground(Color.BLACK);
+        ready.setFont(font2);
+        f.add(ready);
         
-        b3 = new JButton("Avvia");
-        b3.setLocation(840,612);
-        b3.setSize(90,50);
-        b3.setOpaque(false);
-        b3.setContentAreaFilled(false);
-        b3.setFocusPainted(false);
-        b3.setMargin(new Insets(0,0,0,2));
-        b3.setForeground(Color.BLACK);
-        b3.setFont(font2);
-        b3.setEnabled(false);
-        f.add(b3);
+        start = new JButton("Avvia");
+        start.setLocation(width*76/100,height*77/100);
+        start.setSize(width*8/100,width*4/100);
+        start.setOpaque(false);
+        start.setContentAreaFilled(false);
+        start.setFocusPainted(false);
+        start.setMargin(new Insets(0,0,0,5));
+        start.setForeground(Color.BLACK);
+        start.setFont(font2);
+        start.setEnabled(false);
+        f.add(start);
         
-        button.addMouseListener(new MouseAdapter()
+        exit.addMouseListener(new MouseAdapter()
         {
             public void mouseEntered(MouseEvent evt)
             {
-            	String imageName = "resources/button.png";
-            	try {
-            		
-            		MediaPlayer mediaPlayer = new MediaPlayer(hit);
-					mediaPlayer.play();
-					button.setIcon( new ImageIcon(ImageIO.read( new File(imageName) ) ) );
+
+            	MediaPlayer mediaPlayer = new MediaPlayer(hit);
+				mediaPlayer.play();
+				exit.setIcon(new ImageIcon(exit1));
 			    
-            	} catch (IOException e) {e.printStackTrace();}
             }
             
             public void mouseExited(MouseEvent evt)
@@ -210,7 +228,7 @@ public class RoomGUI extends JFrame {
             	
             	MediaPlayer mediaPlayer = new MediaPlayer(hit);
 				mediaPlayer.play();
-            	button.setIcon(null);
+            	exit.setIcon(null);
 		        
             }
             
