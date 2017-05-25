@@ -85,7 +85,7 @@ public class Gathering extends Actions{
 		
 		if(production==true){
 			
-			buildings=PersonalBoard.getBuildings();
+			buildings = p.getPersonalBoard().getBuildings();
 			
 			for (Building b : buildings){
 				b.activateProduction(p);
@@ -94,7 +94,7 @@ public class Gathering extends Actions{
 		
 		else{
 			
-			territories = PersonalBoard.getTerritories();
+			territories = p.getPersonalBoard().getTerritories();
 			
 			for (Territory t : territories){
 				t.activateHarvest(p);

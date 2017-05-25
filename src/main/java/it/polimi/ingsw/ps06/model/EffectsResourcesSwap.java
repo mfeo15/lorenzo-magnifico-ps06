@@ -37,8 +37,12 @@ public class EffectsResourcesSwap extends EffectsResources {
 	@Override
 	public void activate(Player p) {
 		
-		//p.getPersonalBoard().remove...
-		
-		p.getPersonalBoard().increaseResources(bonus);
+		if (p.getPersonalBoard().getInventory().isBiggerThan(input)) 
+		{
+			p.getPersonalBoard().reduceResources(input);
+			p.getPersonalBoard().increaseResources(bonus);
+		} else {
+			//Manage the problem (notify the controller)
+		}
 	}
 }

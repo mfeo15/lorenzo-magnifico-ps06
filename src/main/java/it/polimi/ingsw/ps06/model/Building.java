@@ -39,5 +39,5 @@ public class Building extends DevelopementCard {
 	public void activateProduction(Player player){
 		production_effect.activate(player);
 		return;
-	
+	}
 }

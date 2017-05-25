@@ -23,17 +23,4 @@ public class EffectsActions extends Effect
 	public EffectsActions(Actions action) {
 		this.action = action;
 	}
-	
-	/**
-	* Metodo per l'utilizzo dell'azione supplementare concessa
-	*
-	* @param 	player			Giocatore a cui concedere l'azione
-	* @param	possibilites	Array di azioni possibili
-	* @return 					Nothing
-	*/
-	public void doRestrictedAction(Player player, int value, ColorPalette color){
-		//this.player=player;
-		player.doAction(value, color);
-	}
-
 }

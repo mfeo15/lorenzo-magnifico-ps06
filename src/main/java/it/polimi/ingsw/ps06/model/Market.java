@@ -31,7 +31,7 @@ public class Market implements PlaceSpace {
 	*/
 	@Override
 	public void placeMember(FamilyMember member, Action chosenAction) throws IllegalArgumentException {
-		boolean multi = attivi.getMulti();
+		boolean multi = true; //attivi.getMulti();
 		int marketIndex = Action.valueOf("MARKET_1").ordinal();
 		int actionIndex = chosenAction.ordinal();
 		int relativeIndex = actionIndex - marketIndex;
@@ -74,7 +74,7 @@ public class Market implements PlaceSpace {
 	*/
 	public Market(int numberPlayers) {
 		
-		attivi = new EffectsActive();
+		//attivi = new EffectsActive();
 		bonus = new ArrayList();
 		setSpaces(numberPlayers);
 		initBonus(numberPlayers);

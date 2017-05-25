@@ -28,7 +28,7 @@ public class HarvestProduction implements PlaceSpace {
 	*/
 	@Override
 	public void placeMember(FamilyMember member, Action chosenAction) throws IllegalStateException {
-		boolean multi = attivi.getMulti();
+		boolean multi = true; // = attivi.getMulti();
 		int errorCode = 0;
 		boolean condition; //Regola del colore
 		

@@ -11,9 +11,7 @@ public class EffectsActiveGathering extends EffectsActive {
 
 	@Override
 	public void update(Observable o, Object arg) {
-		// TODO Auto-generated method stub
 		
-		Gathering g = (Gathering) toStalk;
+		//Gathering g = (Gathering) toStalk;
 	}
-
 }
