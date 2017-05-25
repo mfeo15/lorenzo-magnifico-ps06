@@ -1,5 +1,7 @@
 package it.polimi.ingsw.ps06.model;
 
+import java.util.ArrayList;
+
 /**
 * Classe per la gestione delle carte di tipo impresa
 *
@@ -8,7 +10,8 @@ package it.polimi.ingsw.ps06.model;
 * @since   2017-05-11
 */
 public class Venture extends DevelopementCard {
-	private EffectsResources effect;
+	private EffectsResources finaleffect;
+	private ArrayList<Resources> requirement;
 
 
 	/**
@@ -31,7 +34,6 @@ public class Venture extends DevelopementCard {
 	*/
 	
 	public void activateEffect(Player player){
-		effect.activate(player);
+		finaleffect.activate(player);
 	}
-	
 }

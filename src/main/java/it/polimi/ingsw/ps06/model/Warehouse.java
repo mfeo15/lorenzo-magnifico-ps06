@@ -110,12 +110,42 @@ public class Warehouse {
 		return;
 	}
 	
-/* public **** showMaterials(){
+	/**
+	 * Metodo che permette di togliere da status un tipo risorsa
+	 * 
+	 * @param res	risorse da togliere
+	 * @return	nothing
+	 */
 	
+	public void reduceRes(Resources res){
+		status.decreaseResources(res);
+		return;
 	}
-	   public **** showPoints(){
-	   
-	   }
-	*/
+	
+	/**
+	 * Metodo che permette di togliere una certa quantità di un materiale da status
+	 * 
+	 * @param kind 	tipo di materiale da togliere
+	 * @param x		quantità di materiale
+	 * @return	nothing
+	 */
+
+	public void decreaseMaterial(MaterialsKind kind, int x){
+		status.decreaseResourceValue(kind, x);
+		return;
+	}
+	
+	/**
+	 * Metodo che permette di togliere una certa quantità di un tipo di punti da status
+	 * 
+	 * @param kind 	tipo di punti da togliere
+	 * @param x		quantità di punti
+	 * @return	nothing
+	 */
+
+	public void decreasePoints(PointsKind kind, int x){
+		status.decreaseResourceValue(kind, x);
+		return;
+	}
 	
 }

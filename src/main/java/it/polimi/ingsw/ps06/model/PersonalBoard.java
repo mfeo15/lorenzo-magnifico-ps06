@@ -86,13 +86,29 @@ public class PersonalBoard {
 		return inventory.getPoints(type);
 	}	
 	
-	/* public **** showMaterials(){
-	
-	}
-	   public **** showPoints(){
-	   
-	   }
+	/**
+	* Metodo che restituisce i territori presenti sulla plancia giocatore
+	*
+	* @param 	none
+	* 
+	* @return 	territories		territori sulla plancia
 	*/
+	
+	public ArrayList<Territory> getTerritories(){
+		return territories;
+	}	
+	
+	/**
+	* Metodo che restituisce gli edifici presenti sulla plancia giocatore
+	*
+	* @param 	none
+	* 
+	* @return 	buildings	edifici sulla plancia
+	*/
+	
+	public ArrayList<Building> getBuildings(){
+		return buildings;
+	}	
 	
 	/**
 	* Metodo che permette di aggiungere materiali al warehouse
@@ -152,35 +168,35 @@ public class PersonalBoard {
 					territories.add(cardTerritory);
 				}
 				else {
-					controller.handleNotEnoughMILPoints();		//da implementare ancora il controller
+				//	controller.handleNotEnoughMILPoints();		da implementare ancora il controller
 				}
 				break;
 			case 3:
-				if(inventory.getPointsCount(PointsKind.MILITARY_POINTS)>=7){
+				if(inventory.getPoints(PointsKind.MILITARY_POINTS)>=7){
 					territories.add(cardTerritory);
 				}
 				else {
-					controller.handleNotEnoughMILPoints();
+					//controller.handleNotEnoughMILPoints();
 				}
 				break;
 			case 4:
-				if(inventory.getPointsCount(PointsKind.MILITARY_POINTS)>=12){
+				if(inventory.getPoints(PointsKind.MILITARY_POINTS)>=12){
 					territories.add(cardTerritory);
 				}
 				else {
-					controller.handleNotEnoughMILPoints();
+					//controller.handleNotEnoughMILPoints();
 				}
 				break;
 			case 5:
-				if(inventory.getPointsCount(PointsKind.MILITARY_POINTS)>=18) {
+				if(inventory.getPoints(PointsKind.MILITARY_POINTS)>=18) {
 					territories.add(cardTerritory);
 				}
 				else {
-					controller.handleNotEnoughMILPoints(); 
+					//controller.handleNotEnoughMILPoints(); 
 				}
 				break;		
 			default:
-				Controller.handleMaxTerritories();  //Controller ancora da implementare, dovrà gestire e informare la view che è stato raggiunto il numero massimo di territori
+				//Controller.handleMaxTerritories();  Controller ancora da implementare, dovrà gestire e informare la view che è stato raggiunto il numero massimo di territori
 				break;
 				}			
 	}
@@ -196,7 +212,7 @@ public class PersonalBoard {
 		if(buildings.size()<6)
 			buildings.add(cardBuilding);
 		else
-			Controller.handleMaxBuildings();  // controller ancora da implementare
+			//Controller.handleMaxBuildings();  controller ancora da implementare
 	return;
 	}
 	
@@ -223,5 +239,43 @@ public class PersonalBoard {
 		ventures.add(cardVenture);
 		return;		
 	}
+	
+	/**
+	 * Metodo che permette di togliere dall'inventory un tipo risorsa
+	 * 
+	 * @param r	risorse da togliere
+	 * @return	nothing
+	 */
 
+	public void reduceResources(Resources r){
+		inventory.reduceRes(r);
+		return;
+	}
+
+	/**
+	 * Metodo che permette di togliere una certa quantità di un materiale dell'inventory 
+	 * 
+	 * @param kind 	tipo di materiale da togliere
+	 * @param x		quantità di materiale
+	 * @return	nothing
+	 */
+
+	public void reduceMaterials(MaterialsKind kind, int x){
+		inventory.decreaseMaterial(kind, x);
+		return;
+	}
+	
+	/**
+	 * Metodo che permette di togliere una certa quantità di un tipo di punti dell'inventory 
+	 * 
+	 * @param kind 	tipo di punti da togliere
+	 * @param x		quantità di punti
+	 * @return	nothing
+	 */
+
+	public void reducePoints(PointsKind kind, int x){
+		inventory.decreasePoints(kind, x);
+		return;
+	}
+	
 }

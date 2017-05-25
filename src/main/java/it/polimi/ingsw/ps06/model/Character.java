@@ -8,6 +8,7 @@ package it.polimi.ingsw.ps06.model;
 * @since   2017-05-11
 */
 public class Character extends DevelopementCard {
+	private Resources requirement;
 	
 	/**
 	* Metodo per la gestione degli effetti per quanto riguarda la singola carta

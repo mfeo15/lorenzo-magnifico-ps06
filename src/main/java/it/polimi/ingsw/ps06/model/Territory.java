@@ -27,6 +27,7 @@ public class Territory extends DevelopementCard {
 	
 	//ancora da implementare la lettura da file
 	public Territory(){
+		code = 2;
 		//code = x;
 		//dice_requirement = n;
 		//harvest_effect = new //tipo di effetto

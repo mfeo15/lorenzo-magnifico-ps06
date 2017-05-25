@@ -10,7 +10,7 @@ package it.polimi.ingsw.ps06.model;
 
 public abstract class Card {
 	
-	private int code;
-	private String title;
+	protected int code;
+	protected String title;
 	
 }

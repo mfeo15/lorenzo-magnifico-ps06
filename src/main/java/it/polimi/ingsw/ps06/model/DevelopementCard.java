@@ -1,5 +1,8 @@
 package it.polimi.ingsw.ps06.model;
 
+import java.util.ArrayList;
+
+
 /**
  * classe per la gestione delle carte sviluppo
  * 
@@ -10,8 +13,8 @@ package it.polimi.ingsw.ps06.model;
 
 public class DevelopementCard extends Card {
 	
-	private int color;
-	private int period;
-	private Effect instant_effect;   // <== Se ci fossero più effetti? Un Array no?
+	protected int color;
+	protected int period;
+	protected ArrayList<Effect> instant_effect;  
 	
 }

@@ -11,6 +11,7 @@ public class Building extends DevelopementCard {
 	
 	private int dice_requirement;
 	private Effect production_effect;
+	private Resources requirement;
 	
 	public Building(){
 		
