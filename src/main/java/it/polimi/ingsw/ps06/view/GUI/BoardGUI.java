@@ -13,6 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.Timer;
 import javax.swing.UIManager;
 
+import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
 import java.awt.BorderLayout;
@@ -49,9 +50,10 @@ public class BoardGUI extends JFrame {
 	private boolean change=true;
 	private Direction direction;
 	
-	private int distance = 9;
+	private double distance;
 	private int runTime = 700;
     private long startTime = -1;
+    private double smooth;
     
     private enum Direction {
 		LEFT,
@@ -67,10 +69,16 @@ public class BoardGUI extends JFrame {
 		JFrame others = new JFrame();
 		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		double ratio= (screenSize.getWidth()/screenSize.getHeight());
 		
-		width = (int)(screenSize.getWidth()*75/100*0.75);
+		width = (int)((screenSize.getWidth()*75/100)*(1.377 / ratio));
 		height = (int)(screenSize.getHeight()*75/100);
 		
+		distance = 9 * ((screenSize.getHeight()/1080)*2);
+		smooth = 10 * ((screenSize.getHeight()/1080));
+		
+		
+		//Caricamento e resize delle immagini
 		BufferedImage image1 = ImageIO.read(new File("resources/board1.jpg")); 
 		BufferedImage image2 = ImageIO.read(new File("resources/board2.jpg")); 
 		
@@ -85,9 +93,22 @@ public class BoardGUI extends JFrame {
         g2.drawImage(image2, 0, 0, width, height, null);
         g2.dispose();
         
+        
+        //Caricamento suoni del gioco
+        String hoverSound = "resources/menuhover.wav";
+		Media hit = new Media(new File(hoverSound).toURI().toString());
+		
+		String selectSound = "resources/menuselect.wav";
+		Media hit2 = new Media(new File(selectSound).toURI().toString());
+		
+		String exitSound = "resources/exit.wav";
+		Media music1 = new Media(new File(exitSound).toURI().toString());
+        
         JLabel board1Label = new JLabel(new ImageIcon(board1)); 
         JLabel board2Label = new JLabel(new ImageIcon(board2));
        
+        
+        //Inizializzazione dei componenti
         scrollOthers.setLocation(width*35/100,0);
         scrollOthers.setSize(width*30/100,height*7/100);
         scrollOthers.setOpaque(false);
@@ -99,7 +120,7 @@ public class BoardGUI extends JFrame {
         {
             public void mousePressed(MouseEvent evt)
             {
-            	Animation(towers ,others,Direction.TOP);
+            	Animation(others ,towers,Direction.TOP);
             }
         });
         
@@ -116,7 +137,7 @@ public class BoardGUI extends JFrame {
             public void mousePressed(MouseEvent evt)
             {
             	
-            	Animation(others ,towers,Direction.BOTTOM);
+            	Animation(towers ,others,Direction.BOTTOM);
             }
         });
         
@@ -187,17 +208,17 @@ public class BoardGUI extends JFrame {
                         
                         if(phase==2 && change){
                         	change=false;
-                        	f1.setVisible(true);
+                        	f2.setVisible(true);
                         }
 
                         if(direction==Direction.TOP){
 	                        if(phase==1){
 	                        	to.x = f1.getX();
-	                            to.y = f1.getY() - (int)Math.round(10 * progress);
+	                            to.y = f1.getY() - (int)Math.round(smooth * progress);
 	                        }
 	                        else{
 	                        	to.x = f1.getX();
-	                            to.y = f1.getY() + (int)Math.round(10 * progress);
+	                            to.y = f1.getY() + (int)Math.round(smooth * progress);
 	                        }
 	                        
 	                        if(to.y>location2.y) f1.setLocation(f2.getLocation());
@@ -206,11 +227,11 @@ public class BoardGUI extends JFrame {
                         
                         if(direction==Direction.RIGHT){
 	                        if(phase==1){
-	                        	to.x = f1.getX() + (int)Math.round(10 * progress);
+	                        	to.x = f1.getX() + (int)Math.round(smooth * progress);
 	                            to.y = f1.getY();
 	                        }
 	                        else{
-	                        	to.x = f1.getX() - (int)Math.round(10 * progress);
+	                        	to.x = f1.getX() - (int)Math.round(smooth * progress);
 	                            to.y = f1.getY();
 	                        }
 	                        if(to.x<location2.x) f1.setLocation(f2.getLocation());
@@ -220,11 +241,11 @@ public class BoardGUI extends JFrame {
                         if(direction==Direction.BOTTOM){
                         	if(phase==1){
 	                        	to.x = f1.getX();
-	                            to.y = f1.getY() + (int)Math.round(10 * progress);
+	                            to.y = f1.getY() + (int)Math.round(smooth * progress);
 	                        }
 	                        else{
 	                        	to.x = f1.getX();
-	                            to.y = f1.getY() - (int)Math.round(10 * progress);
+	                            to.y = f1.getY() - (int)Math.round(smooth * progress);
 	                        }
 	                        
 	                        if(to.y<location2.y) f1.setLocation(f2.getLocation());

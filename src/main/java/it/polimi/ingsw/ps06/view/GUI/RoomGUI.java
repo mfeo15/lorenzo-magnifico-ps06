@@ -40,12 +40,16 @@ public class RoomGUI extends JFrame {
 		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		
-		width = (int)(screenSize.getWidth()*75/100*0.84);
-		height = (int)(screenSize.getHeight()*75/100);
+		double ratio= (screenSize.getWidth()/screenSize.getHeight());
+		
+		width = (int)((screenSize.getWidth()*70/100)*(1.5 / ratio));
+		height = (int)(screenSize.getHeight()*70/100);
 		
 		font = new Font("Lucida Handwriting",Font.PLAIN,12);
-		font2 = new Font("Lucida Handwriting",Font.PLAIN,18);
+		font2 = new Font("Lucida Handwriting",Font.PLAIN,(int)(18*(screenSize.getHeight()/1080)));
 	    
+		
+		//Caricamento e resize delle immagini
 		BufferedImage image1 = ImageIO.read(new File("resources/stanza2.jpg")); 
 		BufferedImage exit1 = ImageIO.read(new File("resources/button.png")); 
 		
@@ -56,6 +60,7 @@ public class RoomGUI extends JFrame {
         g1.dispose();
 		
 		
+        //Caricamento suoni del gioco
         String hoverSound = "resources/menuhover.wav";
 		Media hit = new Media(new File(hoverSound).toURI().toString());
 		
@@ -68,6 +73,7 @@ public class RoomGUI extends JFrame {
 		JLabel label = new JLabel(new ImageIcon(stanza1)); 
 		
 	        
+		//Inizializzazione dei componenti
 	    exit = new JButton();
 	    exit.setLocation(width*95/100,0);
 	    exit.setSize(width*5/100,width*5/100);
@@ -242,6 +248,40 @@ public class RoomGUI extends JFrame {
             
         });
 	    
+        start.addMouseListener(new MouseAdapter()
+        {
+            public void mousePressed(MouseEvent evt)
+            {
+            	MediaPlayer mediaPlayer3 = new MediaPlayer(hit2);
+        		mediaPlayer3.play();
+        		try {   new BoardGUI();   } catch (IOException e) {e.printStackTrace();}
+				f.dispose();
+            }
+            
+        });
+        
+        ready.addMouseListener(new MouseAdapter()
+        {
+            public void mousePressed(MouseEvent evt)
+            {
+            	MediaPlayer mediaPlayer3 = new MediaPlayer(hit2);
+        		mediaPlayer3.play();
+        		
+            }
+            
+        });
+        
+        login.addMouseListener(new MouseAdapter()
+        {
+            public void mousePressed(MouseEvent evt)
+            {
+            	MediaPlayer mediaPlayer3 = new MediaPlayer(hit2);
+        		mediaPlayer3.play();
+        		
+            }
+            
+        });
+        
 	    f.getContentPane().add(label);
         f.setUndecorated(true);
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -2,6 +2,7 @@ package it.polimi.ingsw.ps06.view.GUI;
 
 
 import java.awt.Dimension;
+import javafx.scene.media.AudioClip;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -30,6 +31,7 @@ public class MenuGUI extends JFrame {
 	private int width;
 	private int height;
 	private JFrame f;
+	
      
 	private JFXPanel fxPanel = new JFXPanel();
 	 
@@ -37,15 +39,18 @@ public class MenuGUI extends JFrame {
 		
 		f = new JFrame();
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+ 
+		double ratio= (screenSize.getWidth()/screenSize.getHeight());
 		
-		width = (int)(screenSize.getWidth()*70/100*0.77);
+		width = (int)((screenSize.getWidth()*70/100)*(1.377 / ratio));
 		height = (int)(screenSize.getHeight()*70/100);
     	
+		
+		//Caricamento e resize delle immagini
         BufferedImage image1 = ImageIO.read(new File("resources/cover4.png"));
         BufferedImage image2 = ImageIO.read(new File("resources/cover7.png"));
         BufferedImage image3 = ImageIO.read(new File("resources/cover6.png"));
-        
-        
+            
         BufferedImage cover1 = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         BufferedImage cover2 = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         BufferedImage cover3 = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -62,10 +67,10 @@ public class MenuGUI extends JFrame {
         g3.drawImage(image3, 0, 0, width, height, null);
         g3.dispose();
         
-        
-        
         JLabel label = new JLabel(new ImageIcon(cover1)); 
         
+        
+      //Caricamento suoni del gioco
         String hoverSound = "resources/menuhover.wav";
 		Media hit = new Media(new File(hoverSound).toURI().toString());
 		
@@ -75,6 +80,13 @@ public class MenuGUI extends JFrame {
 		String exitSound = "resources/exit.wav";
 		Media music1 = new Media(new File(exitSound).toURI().toString());
 		
+		String menu = "resources/music1.mp3";
+		Media menuMusic = new Media(new File(menu).toURI().toString());
+		
+		AudioClip mediaPlayer4 = new AudioClip(menuMusic.getSource());
+		mediaPlayer4.setVolume(0.3);
+       	mediaPlayer4.play();
+		
 		/*
 		String music = "resources/menuopen.mp3";
 		Media music2 = new Media(new File(music).toURI().toString());
@@ -83,6 +95,7 @@ public class MenuGUI extends JFrame {
 		*/
     	
         
+		//Inizializzazione dei componenti
 		play = new JButton();
 		play.setLocation(width*40/100,height*55/100);
 		play.setSize(width*20/100,width*20/100);
