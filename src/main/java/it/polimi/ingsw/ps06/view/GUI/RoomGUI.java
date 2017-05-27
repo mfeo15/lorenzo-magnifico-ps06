@@ -20,6 +20,7 @@ import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
@@ -69,6 +70,13 @@ public class RoomGUI extends JFrame {
 		
 		String exitSound = "resources/exit.wav";
 		Media music1 = new Media(new File(exitSound).toURI().toString());
+		
+		String menu = "resources/music1.mp3";
+		Media menuMusic = new Media(new File(menu).toURI().toString());
+		
+		AudioClip mediaPlayer4 = new AudioClip(menuMusic.getSource());
+		mediaPlayer4.setVolume(0.3);
+       	mediaPlayer4.play();
 		
 		JLabel label = new JLabel(new ImageIcon(stanza1)); 
 		
@@ -215,7 +223,7 @@ public class RoomGUI extends JFrame {
         start.setMargin(new Insets(0,0,0,5));
         start.setForeground(Color.BLACK);
         start.setFont(font2);
-        start.setEnabled(false);
+        //start.setEnabled(false);
         f.add(start);
         
         exit.addMouseListener(new MouseAdapter()
@@ -255,7 +263,9 @@ public class RoomGUI extends JFrame {
             	MediaPlayer mediaPlayer3 = new MediaPlayer(hit2);
         		mediaPlayer3.play();
         		try {   new BoardGUI();   } catch (IOException e) {e.printStackTrace();}
+        		mediaPlayer4.stop();
 				f.dispose();
+				
             }
             
         });

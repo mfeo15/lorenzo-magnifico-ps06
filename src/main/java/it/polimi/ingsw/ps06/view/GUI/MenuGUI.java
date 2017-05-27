@@ -79,13 +79,7 @@ public class MenuGUI extends JFrame {
 		
 		String exitSound = "resources/exit.wav";
 		Media music1 = new Media(new File(exitSound).toURI().toString());
-		
-		String menu = "resources/music1.mp3";
-		Media menuMusic = new Media(new File(menu).toURI().toString());
-		
-		AudioClip mediaPlayer4 = new AudioClip(menuMusic.getSource());
-		mediaPlayer4.setVolume(0.3);
-       	mediaPlayer4.play();
+
 		
 		/*
 		String music = "resources/menuopen.mp3";
