@@ -68,7 +68,6 @@ public class Types {
 		 DICE_ORANGE,
 		 DICE_BLACK,
 		 DICE_WHITE
-		
 	}
 	
 	public enum PointsKind 
@@ -101,7 +100,6 @@ public class Types {
 		CHARACTER,
 		VENTURE,
 		EXCOMMUNICATIONTILE
-		
 	}
 	
 	public enum CouncilPrivilege {

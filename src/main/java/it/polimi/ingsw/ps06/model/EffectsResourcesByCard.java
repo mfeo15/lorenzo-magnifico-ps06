@@ -30,16 +30,25 @@ public class EffectsResourcesByCard extends EffectsResources {
 	@Override
 	public void activate(Player p) {
 		
+		int cardsAmountOwned = 0; 
+		switch (cardColor) {
+		case CARD_GREEN:
+			cardsAmountOwned = p.getPersonalBoard().getTerritories().size();
+			break;
+		case CARD_YELLOW:
+			cardsAmountOwned = p.getPersonalBoard().getBuildings().size();
+			break;
+		case CARD_BLUE:
+			cardsAmountOwned = p.getPersonalBoard().getCharacters().size();
+			break;
+		case CARD_PURPLE:
+			cardsAmountOwned = p.getPersonalBoard().getVentures().size();
+			break;
+		}
 		
-		/*
-		 *  QUALCOSA DI SIMILE, ADATTO ALLE CARTE
-		 * 
-		int pointsAmountOwned = p.getPersonalBoard().getPointsCount(pointsKind);
-		
-		for (int i=0; i < pointsAmountOwned; i++) {
+		for (int i=0; i < cardsAmountOwned; i++) {
 			p.getPersonalBoard().increaseResources(bonus);
 		}
-		*/
 	}
 
 }

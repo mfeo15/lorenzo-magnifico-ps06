@@ -4,14 +4,24 @@ import java.util.Observable;
 
 public class EffectsActiveGathering extends EffectsActive {
 
-	public EffectsActiveGathering(Observable toStalk) {
+	private int bonusDiceValue;
+	
+	public EffectsActiveGathering(Observable toStalk, int bonusDiceValue) {
 		super(toStalk);
-		// TODO Auto-generated constructor stub
+		
+		this.bonusDiceValue = bonusDiceValue;
 	}
 
 	@Override
 	public void update(Observable o, Object arg) {
 		
-		//Gathering g = (Gathering) toStalk;
+		if(!(o instanceof Gathering)){
+			throw new IllegalArgumentException();			
+		}
+		
+		if ( owner.equals( (Player) arg ) ) 
+		{
+			((Gathering) o).setValue( ((Gathering) o).getValue() + bonusDiceValue );
+		}
 	}
 }

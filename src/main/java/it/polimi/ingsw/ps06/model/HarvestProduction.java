@@ -39,7 +39,7 @@ public class HarvestProduction implements PlaceSpace {
 				harvestSpaces1.add(member); 
 				startGathering(member.getValue(), chosenAction, member.getPlayer());
 			} 
-			else{
+			else {
 			
 				// Gestione attributo azione multipla del leader
 				if(multi){
@@ -192,9 +192,8 @@ public class HarvestProduction implements PlaceSpace {
 	* @return 	
 	*/
 	private void startGathering(int value, Action chosenAction, Player player){
-		gathering = new Gathering(chosenAction,value);
-		gathering.activate(player);
-		
+		gathering = new Gathering(chosenAction,value, player);
+		gathering.activate();
 	}
 	
 	/**

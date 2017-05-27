@@ -9,13 +9,14 @@ import it.polimi.ingsw.ps06.model.Types.Action;
 * @version 1.0
 * @since   2017-05-16
 */
-public class CardAcquisition extends Actions{
+public class CardAcquisition extends Actions {
 
 	private DevelopementCard card;
-	private PersonalBoard pb = new PersonalBoard();
+	private Player p;
 	
-	public CardAcquisition(DevelopementCard card){
-		this.card=card;
+	public CardAcquisition(DevelopementCard card, Player p){
+		this.card = card;
+		this.p = p;
 	}
 
 	/**
@@ -25,7 +26,7 @@ public class CardAcquisition extends Actions{
 	* @param 	chosenAction	Codice dell'azione da eseguire	
 	* @return 	
 	*/
-	public boolean checkCosts(Player player, Action chosenAction, Boolean extraCost){
+	public boolean checkCosts(Action chosenAction, Boolean extraCost) {
 		//chiama risorse
 		return true;
 	}
@@ -37,7 +38,7 @@ public class CardAcquisition extends Actions{
 	* @param 	chosenAction	Codice dell'azione da eseguire	
 	* @return 	
 	*/
-	public boolean checkRequirements(Player player, Action chosenAction){
+	public boolean checkRequirements(Action chosenAction){
 		//chiama risorse
 		return true;
 	}
@@ -50,22 +51,22 @@ public class CardAcquisition extends Actions{
 	* @return 	
 	*/
 	@Override
-	public void activate(Player p) {
+	public void activate() {
 		
 		if(card instanceof Territory){
-			pb.addTerritory( (Territory) card);
+			p.getPersonalBoard().addTerritory( (Territory) card);
 		}
 		
 		if(card instanceof Building){
-			pb.addBuilding( (Building) card);
+			p.getPersonalBoard().addBuilding( (Building) card);
 		}
 		
 		if(card instanceof Character){
-			pb.addCharacter( (Character) card);
+			p.getPersonalBoard().addCharacter( (Character) card);
 		}
 		
 		if(card instanceof Venture){
-			pb.addVenture( (Venture) card);
+			p.getPersonalBoard().addVenture( (Venture) card);
 		}
 		
 	}

@@ -61,9 +61,9 @@ public class Towers implements PlaceSpace {
 		card = deck.get(deckIndex + relativeIndex);
 		
 		// Si può piazzare solo se la carta è ancora presente, se c'è sono sicuro che non c'è un familiare
-		if( (card != null) && value){
+		if( (card != null) && value) {
 		
-			acquire = new CardAcquisition(card);
+			acquire = new CardAcquisition(card, member.getPlayer());
 				
 				checkWhichTower(chosenAction);
 				arrayIndex=range1;
@@ -87,8 +87,8 @@ public class Towers implements PlaceSpace {
 				// Caso in cui il familiare può essere piazzato
 				if(!colorRule)handle(errorCode);
 				else {
-					boolean satisfied1 = acquire.checkCosts(member.getPlayer(), chosenAction, extraCost);
-					boolean satisfied2 = acquire.checkRequirements(member.getPlayer(), chosenAction);
+					boolean satisfied1 = acquire.checkCosts(chosenAction, extraCost);
+					boolean satisfied2 = acquire.checkRequirements(chosenAction);
 					
 					if(satisfied1 && satisfied2){
 						memberSpaces.add(relativeIndex, member); 
@@ -200,8 +200,8 @@ private void checkRequirement(Action chosenAction){
 	*/
 	private void getCard(Player player){
 		
-		acquire = new CardAcquisition(card);
-		acquire.activate(player);
+		acquire = new CardAcquisition(card, player);
+		acquire.activate();
 	}
 	
 	/**
