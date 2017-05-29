@@ -19,22 +19,6 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.ImageIcon;
-import javax.swing.InputMap;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JDesktopPane;
-import javax.swing.JFrame;
-import javax.swing.JInternalFrame;
-import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
-import javax.swing.JPanel;
-import javax.swing.JRootPane;
-import javax.swing.KeyStroke;
-import javax.swing.Timer;
-import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 
 import javafx.embed.swing.JFXPanel;
@@ -60,6 +44,9 @@ public class BoardGUI extends JFrame {
 	private JButton scrollTowers = new JButton();
 	private JButton scrollOthers = new JButton();
 	
+	private JTextField playerInfo;
+	private JTextField roundInfo;
+	
 	private JButton escMenu1;
 	private JButton escMenu2;
 	
@@ -68,9 +55,10 @@ public class BoardGUI extends JFrame {
 	private Direction direction;
 	
 	private double distance;
-	private int runTime = 700;
+	private int runTime = 1000;
     private long startTime = -1;
     private double smooth;
+    private boolean ok=true;
     
     private Font fontBIG;
     private JDesktopPane desktop;
@@ -87,6 +75,10 @@ public class BoardGUI extends JFrame {
 
 
 	public BoardGUI() throws IOException{
+		
+		try {
+		    UIManager.setLookAndFeel( UIManager.getCrossPlatformLookAndFeelClassName() );
+		 } catch (Exception e) { e.printStackTrace();}
 		
 		//JFrame towers = new JFrame();
 		//JFrame others = new JFrame();
@@ -112,13 +104,19 @@ public class BoardGUI extends JFrame {
 	    personalBoard.getRootPane().setWindowDecorationStyle(JRootPane.NONE);
 	    
 	    
-	    //Rimuovi la barra per muovere le finestre
+	    //Rimuovi la barra per muovere le finestre	    
+	    towers.putClientProperty("JInternalFrame.isPalette", Boolean.TRUE);
+	    towers.setBorder(null);
 	    BasicInternalFrameUI bi = (BasicInternalFrameUI)towers.getUI();
 	    bi.setNorthPane(null);
 	    
+	    others.putClientProperty("JInternalFrame.isPalette", Boolean.TRUE);
+	    others.setBorder(null);
 	    BasicInternalFrameUI bi2 = (BasicInternalFrameUI)others.getUI();
 	    bi2.setNorthPane(null);
 	    
+	    personalBoard.putClientProperty("JInternalFrame.isPalette", Boolean.TRUE);
+	    personalBoard.setBorder(null);
 	    BasicInternalFrameUI bi3 = (BasicInternalFrameUI)personalBoard.getUI();
 	    bi3.setNorthPane(null);
 	    
@@ -133,7 +131,7 @@ public class BoardGUI extends JFrame {
 		distance = 9 * ((screenSize.getHeight()/1080)*2);
 		smooth = 10 * ((screenSize.getHeight()/1080));
 		
-		fontBIG = new Font("Lucida Handwriting",Font.PLAIN,(int)(24*(screenSize.getHeight()/1080)) );
+		fontBIG = new Font("Lucida Handwriting",Font.PLAIN,(int)(40*(screenSize.getHeight()/1080)) );
 		
 		//Caricamento e resize delle immagini
 		BufferedImage image1 = ImageIO.read(new File("resources/board1.jpg")); 
@@ -146,7 +144,7 @@ public class BoardGUI extends JFrame {
 		BufferedImage board2 = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		BufferedImage board3 = new BufferedImage(escWidth, escHeight, BufferedImage.TYPE_INT_RGB);
 		BufferedImage desktopImage = new BufferedImage((int)screenSize.getWidth(), (int)screenSize.getHeight(), BufferedImage.TYPE_INT_RGB);
-		BufferedImage pbImage = new BufferedImage( (int)(screenSize.getWidth()), (int)(screenSize.getHeight()*0.2), BufferedImage.TYPE_INT_RGB);
+		BufferedImage pbImage = new BufferedImage( (int)(screenSize.getWidth()), (int)(screenSize.getHeight()*0.18), BufferedImage.TYPE_INT_RGB);
 		
 		Graphics g1 = board1.createGraphics();
         g1.drawImage(image1, 0, 0, width, height, null);
@@ -165,7 +163,7 @@ public class BoardGUI extends JFrame {
         g4.dispose();
         
         Graphics g5 = pbImage.createGraphics();
-        g5.drawImage(image5, 0, 0, (int)screenSize.getWidth(), (int)(screenSize.getHeight()*0.2), null);
+        g5.drawImage(image5, 0, 0, (int)screenSize.getWidth(), (int)(screenSize.getHeight()*0.18), null);
         g5.dispose();
         
         JLabel board1Label = new JLabel(new ImageIcon(board1)); 
@@ -203,44 +201,92 @@ public class BoardGUI extends JFrame {
           
  
         //Inizializzazione dei componenti
+		String player="";
 		
+		playerInfo = new JTextField("  Turno del giocatore: "+player);
+		playerInfo.setLocation(0,0);
+		playerInfo.setSize((int)screenSize.getWidth()*70/100,(int)screenSize.getHeight()*6/100);
+		playerInfo.setOpaque(false);
+		playerInfo.setEditable(false);
+		playerInfo.setBorder(null);
+		playerInfo.setFont(fontBIG);
+		playerInfo.setForeground(Color.BLACK);
 		
-        scrollOthers.setLocation(width*35/100,0);
-        scrollOthers.setSize(width*30/100,height*5/100);
+		int roundNumber=1;
+		int periodNumber=1;
+		
+		roundInfo = new JTextField("Turno: "+roundNumber+"  Periodo: "+periodNumber);
+		roundInfo.setLocation((int)screenSize.getWidth()*70/100,0);
+		roundInfo.setSize((int)screenSize.getWidth()*30/100,(int)screenSize.getHeight()*6/100);
+		roundInfo.setOpaque(false);
+		roundInfo.setEditable(false);
+		roundInfo.setBorder(null);
+		roundInfo.setFont(fontBIG);
+		roundInfo.setForeground(Color.BLACK);
+		
+        scrollOthers.setLocation(width*95/100,height*35/100);
+        scrollOthers.setSize(width*5/100,height*30/100);
         scrollOthers.setOpaque(false);
         scrollOthers.setContentAreaFilled(false);
         scrollOthers.setFocusPainted(false);
         //scrollOthers.setBorderPainted(false);
-   
-        scrollOthers.addMouseListener(new MouseAdapter()
-        {
-            public void mousePressed(MouseEvent evt)
-            {
+        
+        scrollOthers.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
             	MediaPlayer mediaPlayer1 = new MediaPlayer(slideSound);
 				mediaPlayer1.play();
             	Animation(others ,towers,Direction.RIGHT);
             	
+            	scrollTowers.setEnabled(false);
+            	scrollOthers.setEnabled(false);
+            	
+            	new java.util.Timer().schedule( 
+            	        new java.util.TimerTask() {
+            	            @Override
+            	            public void run() {
+            	            	scrollTowers.setEnabled(true);
+                        		scrollOthers.setEnabled(true);
+            	            }
+            	        }, 
+            	        2000 
+            	);
             }
-        });
+          }
+        );
+
         
-        
-        scrollTowers.setLocation(width*35/100,height*95/100);
-        scrollTowers.setSize(width*30/100,height*5/100);
+        scrollTowers.setLocation(0,height*35/100);
+        scrollTowers.setSize(width*5/100,height*30/100);
         scrollTowers.setOpaque(false);
         scrollTowers.setContentAreaFilled(false);
         scrollTowers.setFocusPainted(false);
         //scrollTowers.setBorderPainted(false);
    
-        scrollTowers.addMouseListener(new MouseAdapter()
-        {
-            public void mousePressed(MouseEvent evt)
-            {
+        
+        scrollTowers.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+            	
+            	
             	MediaPlayer mediaPlayer2 = new MediaPlayer(slideSound);
 				mediaPlayer2.play();
-            	Animation(towers ,others,Direction.BOTTOM);
+            	Animation(towers ,others,Direction.LEFT);
             	
+            	scrollTowers.setEnabled(false);
+            	scrollOthers.setEnabled(false);
+            	
+            	new java.util.Timer().schedule( 
+            	        new java.util.TimerTask() {
+            	            @Override
+            	            public void run() {
+            	            	scrollTowers.setEnabled(true);
+                        		scrollOthers.setEnabled(true);
+            	            }
+            	        }, 
+            	        2000 
+            	);
             }
-        });
+          });
+            
         
         
         escMenu1 = new JButton("Ritorna al gioco");
@@ -284,7 +330,6 @@ public class BoardGUI extends JFrame {
             	
             	MediaPlayer mediaPlayer6 = new MediaPlayer(exitSound);
         		mediaPlayer6.play();
-        		try {Thread.sleep(200);} catch (InterruptedException e) {e.printStackTrace();}
         		System.exit(0);
 				
             }
@@ -308,24 +353,32 @@ public class BoardGUI extends JFrame {
 				mediaPlayer5.play();
             	escFrame.dispose();}};
             	
-            	
+        KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0); 
+        
         JPanel towerPanel = (JPanel) towers.getContentPane();
         InputMap inputMap = towerPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-        KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
         inputMap.put(stroke, "OPEN");
         towerPanel.getActionMap().put("OPEN", esc);    
         
         JPanel otherPanel = (JPanel) others.getContentPane();
         InputMap inputMap2 = otherPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-        KeyStroke stroke2 = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
-        inputMap2.put(stroke2, "OPEN");
+        inputMap2.put(stroke, "OPEN");
         otherPanel.getActionMap().put("OPEN", esc);
+        
+        JPanel pbPanel = (JPanel) personalBoard.getContentPane();
+        InputMap inputMap4 = pbPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        inputMap4.put(stroke, "OPEN");
+        pbPanel.getActionMap().put("OPEN", esc);
         
         JPanel escPanel = (JPanel) escFrame.getContentPane();
         InputMap inputMap3 = escPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-        KeyStroke stroke3 = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
-        inputMap3.put(stroke3, "OPEN");
-        escPanel.getActionMap().put("OPEN", escClose);
+        inputMap3.put(stroke, "OPEN");
+        escPanel.getActionMap().put("OPEN", escClose); 
+        
+        JPanel desktopPanel = (JPanel) desktopFrame.getContentPane();
+        InputMap inputMap5 = desktopPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        inputMap5.put(stroke, "OPEN");
+        desktopPanel.getActionMap().put("OPEN", esc);
         
         
         
@@ -352,8 +405,8 @@ public class BoardGUI extends JFrame {
        
         personalBoard.getContentPane().add(pbLabel);
         personalBoard.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        personalBoard.setSize((int)screenSize.getWidth(), (int)(screenSize.getHeight()*20/100));
-        personalBoard.setLocation(0, (int)screenSize.getHeight()*80/100);
+        personalBoard.setSize((int)screenSize.getWidth(), (int)(screenSize.getHeight()*18/100));
+        personalBoard.setLocation(0, (int)screenSize.getHeight()*82/100);
         
         
         towers.setResizable(false);
@@ -371,7 +424,11 @@ public class BoardGUI extends JFrame {
         desktop.add(personalBoard);
 	    desktop.setVisible(true);
 
-	        
+	    
+	    desktopFrame.add(playerInfo);
+	    desktopFrame.add(roundInfo);
+	    desktopFrame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+	    desktopFrame.getRootPane().putClientProperty("apple.awt.fullscreenable", Boolean.valueOf(true));
 	    desktopFrame.add(desktop);
 	    desktopFrame.setSize((int)screenSize.getWidth(), (int)screenSize.getHeight());
 	    desktopFrame.setLocationRelativeTo(null);
@@ -403,7 +460,8 @@ public class BoardGUI extends JFrame {
                 } catch (Exception ex) {
                 }
 
-
+                ok = false;
+                
                 Timer timer = new Timer(40, new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -463,6 +521,20 @@ public class BoardGUI extends JFrame {
 	                        }
 	                        if(to.x<location2.x) f1.setLocation(f2.getLocation());
 	                        else f1.setLocation(to);   
+	                        
+                        }
+                        
+                        if(direction==Direction.LEFT){
+	                        if(phase==1){
+	                        	to.x = f1.getX() - (int)Math.round(smooth * progress);
+	                            to.y = f1.getY();
+	                        }
+	                        else{
+	                        	to.x = f1.getX() + (int)Math.round(smooth * progress);
+	                            to.y = f1.getY();
+	                        }
+	                        if(to.x>location2.x) f1.setLocation(f2.getLocation());
+	                        else f1.setLocation(to);   
                         }
                         
                         if(direction==Direction.BOTTOM){
@@ -477,6 +549,8 @@ public class BoardGUI extends JFrame {
 	                        
 	                        if(to.y<location2.y) f1.setLocation(f2.getLocation());
 	                        else f1.setLocation(to);
+	                        
+	                        
                         }
                         
                         //f2.setLocation(to);
@@ -490,11 +564,13 @@ public class BoardGUI extends JFrame {
             
         });
 		
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		phase=1;
 		change=true;	
 		distance = 9;
-		runTime = 700;
+		runTime = 1000;
 	    startTime = -1;
+	    
     }
 
 	/**
@@ -507,7 +583,8 @@ public class BoardGUI extends JFrame {
 		Dimension desktopSize = desktopFrame.getSize();
 	    Dimension jInternalFrameSize = jif.getSize();
 	    int width = (desktopSize.width - jInternalFrameSize.width) / 2;
-	    int height = ((desktopSize.height - jInternalFrameSize.height) / 2)-desktopSize.height*9/100;
+	    //int height = ((desktopSize.height - jInternalFrameSize.height) / 2)-desktopSize.height*8/100;
+	    int height=desktopSize.height*6/100;
 	    jif.setLocation(width, height);
 	    jif.setVisible(true);
 	    
