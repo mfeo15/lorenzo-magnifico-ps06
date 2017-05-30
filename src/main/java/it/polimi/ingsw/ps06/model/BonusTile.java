@@ -1,9 +1,5 @@
 package it.polimi.ingsw.ps06.model;
 
-import it.polimi.ingsw.ps06.model.Player;
-import it.polimi.ingsw.ps06.model.Board;
-import it.polimi.ingsw.ps06.model.Dice;
-
 
 /**
  * classe per la definizione e gestione della tessera bonus personale

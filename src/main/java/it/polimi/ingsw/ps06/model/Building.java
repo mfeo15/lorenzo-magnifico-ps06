@@ -10,12 +10,28 @@ package it.polimi.ingsw.ps06.model;
 public class Building extends DevelopementCard {
 	
 	private int dice_requirement;
-	private Effect production_effect;
 	private Resources requirement;
 	
-	public Building(){
-		
-	}
+	/**Metodo per settare il requisito di dado
+	 * @param	code	periodo della carta
+	 * @return	nothing
+	 */
+ 
+	public void setDiceReq(int dice_requirement){
+		this.dice_requirement=dice_requirement;
+		return;
+ 	}	
+	
+	/**Metodo per settare i requisiti della carta
+	 * 
+	 * @param	requirement		requisiti della carta
+	 * @return	nothing
+	 */
+	 
+	public void setRequirement(Resources requirements){
+		requirement=requirements;
+	 	return;
+	}	
 	
 	/**
 	* Metodo per controllare che il valore del familiare sia sufficiente per avere bonus
@@ -29,15 +45,4 @@ public class Building extends DevelopementCard {
 			return false;
 	}
 	
-	/**
-	* Metodo per la gestione dell'azione di produzione per quanto riguarda la singola carta
-	* 
-	* @param 	player			Giocatore interessato
-	* @return 					Nothing
-	*/
-	
-	public void activateProduction(Player player){
-		production_effect.activate(player);
-		return;
-	}
 }
