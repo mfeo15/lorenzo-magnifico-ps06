@@ -1,5 +1,6 @@
 package it.polimi.ingsw.ps06.model;
 
+import java.util.ArrayList;
 /**
  * classe astratta per definire le carte
  * 
@@ -12,7 +13,7 @@ package it.polimi.ingsw.ps06.model;
 	
 		protected int code;
 		protected String title;
-		protected Effect effect;
+		protected ArrayList<Effect> effect;
 	
 		/**
 		 * Metodo per settare il codice della carta
@@ -44,7 +45,9 @@ package it.polimi.ingsw.ps06.model;
 		 */
 		
 		public void activateEffect(Player player){
-			effect.activate(player);
+			for(Effect i : effect){
+			i.activate(player);
+			}
 			return;
 		}
 		

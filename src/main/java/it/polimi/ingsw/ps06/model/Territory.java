@@ -13,10 +13,6 @@ public class Territory extends DevelopementCard {
 	
 	private int dice_requirement;
 	
-	public void setEffect(Effect effect){
-		this.effect=effect;
-		return;
-	}
 	
 	/**Metodo per settare il requisito di dado
 	 * @param	code	periodo della carta
@@ -34,8 +30,8 @@ public class Territory extends DevelopementCard {
 	* @return 	Boolean
 	**/
 	
-	public boolean check_dice(Dice dice){
-		if( dice.getValue() >= dice_requirement)
+	public boolean check_dice(int dice){
+		if( dice >= dice_requirement)
 			return true;
 		else
 			return false;

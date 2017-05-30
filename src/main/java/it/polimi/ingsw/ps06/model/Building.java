@@ -38,8 +38,8 @@ public class Building extends DevelopementCard {
 	* @return 	Boolean
 	**/
 	
-	public boolean check_dice(Dice dice){
-		if( dice.getValue() >= dice_requirement)
+	public boolean check_dice(int dice){
+		if( dice >= dice_requirement)
 			return true;
 		else
 			return false;
