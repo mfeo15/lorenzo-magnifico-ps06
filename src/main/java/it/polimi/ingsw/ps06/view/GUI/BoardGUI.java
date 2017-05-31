@@ -64,7 +64,10 @@ public class BoardGUI extends JFrame {
     private JDesktopPane desktop;
     private JFrame desktopFrame;
     
+   
 	private JFXPanel fxPanel = new JFXPanel();
+	
+
     
     private enum Direction {
 		LEFT,
@@ -80,8 +83,6 @@ public class BoardGUI extends JFrame {
 		    UIManager.setLookAndFeel( UIManager.getCrossPlatformLookAndFeelClassName() );
 		 } catch (Exception e) { e.printStackTrace();}
 		
-		//JFrame towers = new JFrame();
-		//JFrame others = new JFrame();
 		JFrame escFrame = new JFrame();
 		
 		desktopFrame = new JFrame();
@@ -91,7 +92,7 @@ public class BoardGUI extends JFrame {
 			
 		
 	    //Due frame interni al desktop per la parte delle torri e la sezione rimanente
-	    JInternalFrame towers = new JInternalFrame("frame", false, false, false, false);
+		JInternalFrame towers = new JInternalFrame("frame", false, false, false, false);
 	    towers.putClientProperty("JInternalFrame.isPalette", Boolean.TRUE);
 	    towers.getRootPane().setWindowDecorationStyle(JRootPane.NONE);
 	    
@@ -203,8 +204,8 @@ public class BoardGUI extends JFrame {
         //Inizializzazione dei componenti
 		String player="";
 		
-		playerInfo = new JTextField("  Turno del giocatore: "+player);
-		playerInfo.setLocation(0,0);
+		playerInfo = new JTextField("Turno del giocatore: "+player);
+		playerInfo.setLocation((int)screenSize.getWidth()*5/100,0);
 		playerInfo.setSize((int)screenSize.getWidth()*70/100,(int)screenSize.getHeight()*6/100);
 		playerInfo.setOpaque(false);
 		playerInfo.setEditable(false);
@@ -217,7 +218,7 @@ public class BoardGUI extends JFrame {
 		
 		roundInfo = new JTextField("Turno: "+roundNumber+"  Periodo: "+periodNumber);
 		roundInfo.setLocation((int)screenSize.getWidth()*70/100,0);
-		roundInfo.setSize((int)screenSize.getWidth()*30/100,(int)screenSize.getHeight()*6/100);
+		roundInfo.setSize((int)screenSize.getWidth()*25/100,(int)screenSize.getHeight()*6/100);
 		roundInfo.setOpaque(false);
 		roundInfo.setEditable(false);
 		roundInfo.setBorder(null);
@@ -248,7 +249,7 @@ public class BoardGUI extends JFrame {
                         		scrollOthers.setEnabled(true);
             	            }
             	        }, 
-            	        2000 
+            	        3000 
             	);
             }
           }
@@ -282,7 +283,7 @@ public class BoardGUI extends JFrame {
                         		scrollOthers.setEnabled(true);
             	            }
             	        }, 
-            	        2000 
+            	        3000 
             	);
             }
           });
@@ -336,7 +337,72 @@ public class BoardGUI extends JFrame {
             
         });
         
+        //Impostazioni dei bottoni di gioco
+    	JButton[] members = new JButton[4];
+    	JButton[] cards = new JButton[16];
+    	JButton[] markets = new JButton[4];
+    	JButton[] productions = new JButton[6];
+    	JButton[] harvests = new JButton[6];
+    	JButton[] councils = new JButton[10];
+    	
+    	JTextField[] dices = new JTextField[3];
+    	JTextField[] orders = new JTextField[5];
         
+        
+    	members = initializeButtons(members);
+        cards = initializeButtons(cards);
+        markets = initializeButtons(markets);
+        productions = initializeButtons(productions);
+        harvests = initializeButtons(harvests);
+        councils = initializeButtons(councils);
+        
+        dices = initializeTexts(dices);
+        orders = initializeTexts(orders);
+        
+        
+        cards = locateCards(cards);
+        members = locateMembers(members);
+        councils = locateCouncils(councils);
+        dices = locateDices(dices);
+        harvests = locateHarvests(harvests);
+        productions = locateProductions(productions);
+        orders = locateOrders(orders);
+        
+        markets[0].setLocation((int)(width*58/100),(int)(height*61/100));
+		markets[0].setSize(width*7/100,height*9/100);
+		
+		markets[1].setLocation((int)(width*68/100),(int)(height*61/100));
+		markets[1].setSize(width*7/100,height*9/100);
+		
+		markets[2].setLocation((int)(width*78/100),(int)(height*65/100));
+		markets[2].setSize(width*7/100,height*9/100);
+		
+		markets[3].setLocation((int)(width*85.5/100),(int)(height*75/100));
+		markets[3].setSize(width*7/100,height*9/100);  
+        
+        members = set(members);
+        cards = set(cards);
+        markets = set(markets);
+        productions = set(productions);
+        harvests = set(harvests);
+        councils = set(councils);
+        
+        dices = setFields(dices);
+        orders = setFields(orders);
+        
+        
+        for(int j=0; j<members.length;j++){ desktopFrame.add(members[j]); }
+        for(int j=0; j<cards.length;j++){ towers.add(cards[j]); }
+        for(int j=0; j<markets.length;j++){ others.add(markets[j]); }
+        for(int j=0; j<productions.length;j++){ others.add(productions[j]); }
+        for(int j=0; j<harvests.length;j++){ others.add(harvests[j]); }
+        for(int j=0; j<councils.length;j++){ others.add(councils[j]); }
+        
+        for(int j=0; j<dices.length;j++){ others.add(dices[j]); }
+        for(int j=0; j<orders.length;j++){ others.add(orders[j]); }
+        
+        
+         
         //KeyBinding per tasto ESC
         Action esc = new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
@@ -423,7 +489,6 @@ public class BoardGUI extends JFrame {
         desktop.add(towers);
         desktop.add(personalBoard);
 	    desktop.setVisible(true);
-
 	    
 	    desktopFrame.add(playerInfo);
 	    desktopFrame.add(roundInfo);
@@ -578,7 +643,7 @@ public class BoardGUI extends JFrame {
 	 * 
 	 * @param jif
 	 */
-	public void centerJIF(JInternalFrame jif) {
+	private void centerJIF(JInternalFrame jif) {
 	    
 		Dimension desktopSize = desktopFrame.getSize();
 	    Dimension jInternalFrameSize = jif.getSize();
@@ -588,6 +653,175 @@ public class BoardGUI extends JFrame {
 	    jif.setLocation(width, height);
 	    jif.setVisible(true);
 	    
+	}
+	
+	private JButton[] initializeButtons(JButton...btns){
+		
+		for (int j=0;j<btns.length;j++) {
+	        btns[j]=new JButton();
+	    }
+		return btns;
+	}
+	
+	private JTextField[] initializeTexts(JTextField...tfs){
+		
+		for (int j=0;j<tfs.length;j++) {
+	        tfs[j]=new JTextField();
+	    }
+		return tfs;
+	}
+	
+	private JTextField[] setFields(JTextField...tfs){
+		
+		for (JTextField tf : tfs) {
+			
+			tf.setOpaque(false);
+			tf.setEditable(false);
+	        //btn.setBorderPainted(false);
+		}
+		
+		return tfs;
+	}
+	
+	private JButton[] set(JButton[] btns){
+		
+		for (JButton btn : btns) {
+			
+			btn.setOpaque(false);
+			btn.setContentAreaFilled(false);
+			btn.setFocusPainted(false);
+	        //btn.setBorderPainted(false);
+		}
+		
+		return btns;
+	}
+	
+		
+	private JButton[] locateCards(JButton[] btns){
+		double x=3.2;
+		double y;
+		int i=0;
+		
+		//Ciclo 16 volte diviso per colonne ogni colonna 4 posti
+		for(int j=0;j<=3;j++){
+			y=5;
+			for(int z=0;z<=3;z++){
+				
+				btns[i].setLocation((int)(width*x/100),(int)(height*y/100));
+				btns[i].setSize(width*12/100,height*22/100);
+				y=y+24.3;
+				i++;
+			}	
+			x=x+21.9;		
+		}
+		return btns;
+	}
+	
+	private JButton[] locateMembers(JButton[] btns){
+		double x=1;
+		double y=10;
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		
+		for(int j=0;j<btns.length;j++){
+			btns[j].setLocation((int)(screenSize.getWidth()*x/100),(int)(screenSize.getHeight()*y/100));
+			btns[j].setSize((int)screenSize.getWidth()*4/100,(int)screenSize.getWidth()*4/100);
+			x=x+5;		
+		}
+		return btns;
+	}
+	
+	private JButton[] locateCouncils(JButton[] btns){
+		double x=49;
+		double y=7;
+		int j;
+		
+		for(j=0;j<btns.length/2;j++){
+			btns[j].setLocation((int)(width*x/100),(int)(height*y/100));
+			btns[j].setSize(width*6/100,height*7/100);
+			x=x+6;		
+		}
+		
+		x=49;
+		y=14;
+		
+		for(j=btns.length/2; j<btns.length;j++){
+			btns[j].setLocation((int)(width*x/100),(int)(height*y/100));
+			btns[j].setSize(width*6/100,height*7/100);
+			x=x+6;	
+		}
+		return btns;
+	}
+	
+	private JTextField[] locateDices(JTextField[] tfs){
+		double x=55.1;
+		double y=85;
+		
+		for(int j=0;j<tfs.length;j++){
+			tfs[j].setLocation((int)(width*x/100),(int)(height*y/100));
+			tfs[j].setSize(width*8/100,height*10/100);
+			x=x+10.7;		
+		}
+		return tfs;
+	}
+	
+	private JTextField[] locateOrders(JTextField[] tfs){
+		double x=84;
+		double y=0.5;
+		
+		for(int j=0;j<tfs.length;j++){
+			tfs[j].setLocation((int)(width*x/100),(int)(height*y/100));
+			tfs[j].setSize(width*6/100,height*8/100);
+			y=y+8;		
+		}
+		return tfs;
+	}
+	
+	private JButton[] locateHarvests(JButton[] btns){
+		boolean first=true;
+		double x=15;
+		double y=65.8;
+		
+		if(first){
+			btns[0].setLocation((int)(width*3.5/100),(int)(height*65/100));
+			btns[0].setSize(width*7/100,height*9/100);
+		}
+		
+		for(int j=1;j<btns.length;j++){
+			btns[j].setLocation((int)(width*x/100),(int)(height*y/100));
+			btns[j].setSize(width*5/100,height*7/100);
+			x=x+5;		
+		}
+		return btns;
+	}
+	
+	private JButton[] locateProductions(JButton[] btns){
+		boolean first=true;
+		double x=15;
+		double y=84;
+		
+		if(first){
+			btns[0].setLocation((int)(width*3.5/100),(int)(height*83/100));
+			btns[0].setSize(width*7/100,height*9/100);
+		}
+		
+		for(int j=1;j<btns.length;j++){
+			btns[j].setLocation((int)(width*x/100),(int)(height*y/100));
+			btns[j].setSize(width*5/100,height*7/100);
+			x=x+5;		
+		}
+		return btns;
+	}
+	
+	private void enable(JButton...btns){
+		for (JButton btn : btns) {
+	        btn.setEnabled(true);
+	    }
+	}
+	
+	private void disable(JButton...btns){
+		for (JButton btn : btns) {
+	        btn.setEnabled(false);
+	    }
 	}
 	
 	public static void main(String[] args) throws IOException

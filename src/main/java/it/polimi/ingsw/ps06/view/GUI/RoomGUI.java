@@ -94,14 +94,14 @@ public class RoomGUI extends JFrame {
         
         username = new JTextField();
         username.setLocation(width*29/100,(int)(height*16.6/100));
-        username.setSize(width*13/100,(int)(height*3/100));
+        username.setSize(width*13/100,(int)(height*3.5/100));
         username.setOpaque(false);
         username.setFont(font);
         f.add(username);
         
         password = new JPasswordField();
         password.setLocation(width*29/100,(int)(height*24/100));
-        password.setSize(width*13/100,(int)(height*3/100));
+        password.setSize(width*13/100,(int)(height*3.5/100));
         password.setOpaque(false);
         f.add(password);
         
