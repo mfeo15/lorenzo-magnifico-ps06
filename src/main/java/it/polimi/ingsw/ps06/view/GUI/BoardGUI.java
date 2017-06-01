@@ -64,6 +64,11 @@ public class BoardGUI extends JFrame {
     private JDesktopPane desktop;
     private JFrame desktopFrame;
     
+    String playerString="G";
+    int blackValue=1;
+    int orangeValue=1;
+    int whiteValue=1;
+    
    
 	private JFXPanel fxPanel = new JFXPanel();
 	
@@ -171,6 +176,19 @@ public class BoardGUI extends JFrame {
         JLabel board2Label = new JLabel(new ImageIcon(board2));
         JLabel board3Label = new JLabel(new ImageIcon(board3));
         JLabel pbLabel = new JLabel(new ImageIcon(pbImage));
+        
+        JLabel membersLabel[] = new JLabel[4];
+        
+        membersLabel[0] = setImage("resources/member/"+playerString+"N.png",5,7);
+        membersLabel[1] = setImage("resources/member/"+playerString+"A.png",5,7);
+        membersLabel[2] = setImage("resources/member/"+playerString+"B.png",5,7);
+        membersLabel[3] = setImage("resources/member/"+playerString+"E.png",5,7);
+        
+        
+        JLabel dicesLabel[] = new JLabel[3];
+        dicesLabel[0] = setImage("resources/dice/N"+blackValue+".png",7,9);
+        dicesLabel[1] = setImage("resources/dice/A"+orangeValue+".png",7,9);
+        dicesLabel[2] = setImage("resources/dice/B"+whiteValue+".png",7,9);
         
         
         //Creazione DesktopPane con Background
@@ -341,12 +359,19 @@ public class BoardGUI extends JFrame {
     	JButton[] members = new JButton[4];
     	JButton[] cards = new JButton[16];
     	JButton[] markets = new JButton[4];
-    	JButton[] productions = new JButton[6];
-    	JButton[] harvests = new JButton[6];
-    	JButton[] councils = new JButton[10];
+    	JButton[] productions = new JButton[9];
+    	JButton[] harvests = new JButton[9];
+    	JButton[] players = new JButton[5];
     	
+    	JButton council = new JButton();
+    	JButton production = new JButton();
+    	JButton harvest = new JButton();
+    	
+    	JTextField[] councils = new JTextField[16];
     	JTextField[] dices = new JTextField[3];
     	JTextField[] orders = new JTextField[5];
+    	JTextField[] playersInfo = new JTextField[5];
+    	JTextField[] excommunications = new JTextField[3];
         
         
     	members = initializeButtons(members);
@@ -354,19 +379,26 @@ public class BoardGUI extends JFrame {
         markets = initializeButtons(markets);
         productions = initializeButtons(productions);
         harvests = initializeButtons(harvests);
-        councils = initializeButtons(councils);
+        players = initializeButtons(players);
         
+        councils = initializeTexts(councils);
         dices = initializeTexts(dices);
         orders = initializeTexts(orders);
+        playersInfo = initializeTexts(playersInfo);
+        excommunications = initializeTexts(excommunications);
         
         
         cards = locateCards(cards);
         members = locateMembers(members);
-        councils = locateCouncils(councils);
         dices = locateDices(dices);
         harvests = locateHarvests(harvests);
         productions = locateProductions(productions);
+        players = locatePlayers(players);
+        
+        councils = locateCouncils(councils);
         orders = locateOrders(orders);
+        playersInfo = locatePlayersInfo(playersInfo);
+        excommunications = locateExcommunications(excommunications);
         
         markets[0].setLocation((int)(width*58/100),(int)(height*61/100));
 		markets[0].setSize(width*7/100,height*9/100);
@@ -379,27 +411,57 @@ public class BoardGUI extends JFrame {
 		
 		markets[3].setLocation((int)(width*85.5/100),(int)(height*75/100));
 		markets[3].setSize(width*7/100,height*9/100);  
-        
+		
+        council.setLocation((int)(width*49/100),(int)(height*7/100));
+        council.setSize(width*29/100,height*15/100);
+        council.setOpaque(false);
+        council.setContentAreaFilled(false);
+		council.setFocusPainted(false);
+		others.add(council);
+		
+		production.setLocation((int)(width*15/100),(int)(height*64/100));
+		production.setSize(width*23/100,height*10/100);
+		production.setOpaque(false);
+		production.setContentAreaFilled(false);
+		production.setFocusPainted(false);
+		others.add(production);
+		
+		harvest.setLocation((int)(width*15/100),(int)(height*82.5/100));
+		harvest.setSize(width*23/100,height*10/100);
+		harvest.setOpaque(false);
+		harvest.setContentAreaFilled(false);
+		harvest.setFocusPainted(false);
+		others.add(harvest);
+		
         members = set(members);
         cards = set(cards);
         markets = set(markets);
         productions = set(productions);
         harvests = set(harvests);
-        councils = set(councils);
+        players = set(players);
         
+        councils = setFields(councils);
         dices = setFields(dices);
         orders = setFields(orders);
+        playersInfo = setFields(playersInfo);
+		excommunications = setFields(excommunications);
+        
+        members = fillMembers(members,membersLabel);
+        dices = fillDices(dices,dicesLabel);
         
         
-        for(int j=0; j<members.length;j++){ desktopFrame.add(members[j]); }
+        for(int j=0; j<members.length;j++){ desktop.add(members[j]); }
         for(int j=0; j<cards.length;j++){ towers.add(cards[j]); }
         for(int j=0; j<markets.length;j++){ others.add(markets[j]); }
         for(int j=0; j<productions.length;j++){ others.add(productions[j]); }
         for(int j=0; j<harvests.length;j++){ others.add(harvests[j]); }
         for(int j=0; j<councils.length;j++){ others.add(councils[j]); }
+        for(int j=0; j<players.length;j++){ desktopFrame.add(players[j]); }
         
         for(int j=0; j<dices.length;j++){ others.add(dices[j]); }
         for(int j=0; j<orders.length;j++){ others.add(orders[j]); }
+        for(int j=0; j<playersInfo.length;j++){ desktopFrame.add(playersInfo[j]); }
+        for(int j=0; j<excommunications.length;j++){ others.add(excommunications[j]); }
         
         
          
@@ -718,38 +780,47 @@ public class BoardGUI extends JFrame {
 	}
 	
 	private JButton[] locateMembers(JButton[] btns){
-		double x=1;
-		double y=10;
+		double x=86;
+		double y=63;
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		
-		for(int j=0;j<btns.length;j++){
+		for(int j=0;j<2;j++){
 			btns[j].setLocation((int)(screenSize.getWidth()*x/100),(int)(screenSize.getHeight()*y/100));
 			btns[j].setSize((int)screenSize.getWidth()*4/100,(int)screenSize.getWidth()*4/100);
-			x=x+5;		
+			x=x+7;		
+		}
+		
+		x=86;
+		y=72;
+		
+		for(int j=2;j<4;j++){
+			btns[j].setLocation((int)(screenSize.getWidth()*x/100),(int)(screenSize.getHeight()*y/100));
+			btns[j].setSize((int)screenSize.getWidth()*4/100,(int)screenSize.getWidth()*4/100);
+			x=x+7;		
 		}
 		return btns;
 	}
 	
-	private JButton[] locateCouncils(JButton[] btns){
+	private JTextField[] locateCouncils(JTextField[] tfs){
 		double x=49;
 		double y=7;
 		int j;
 		
-		for(j=0;j<btns.length/2;j++){
-			btns[j].setLocation((int)(width*x/100),(int)(height*y/100));
-			btns[j].setSize(width*6/100,height*7/100);
-			x=x+6;		
+		for(j=0;j<tfs.length/2;j++){
+			tfs[j].setLocation((int)(width*x/100),(int)(height*y/100));
+			tfs[j].setSize(width*6/100,height*7/100);
+			x=x+4;		
 		}
 		
 		x=49;
 		y=14;
 		
-		for(j=btns.length/2; j<btns.length;j++){
-			btns[j].setLocation((int)(width*x/100),(int)(height*y/100));
-			btns[j].setSize(width*6/100,height*7/100);
-			x=x+6;	
+		for(j=tfs.length/2; j<tfs.length;j++){
+			tfs[j].setLocation((int)(width*x/100),(int)(height*y/100));
+			tfs[j].setSize(width*6/100,height*7/100);
+			x=x+4;	
 		}
-		return btns;
+		return tfs;
 	}
 	
 	private JTextField[] locateDices(JTextField[] tfs){
@@ -789,7 +860,8 @@ public class BoardGUI extends JFrame {
 		for(int j=1;j<btns.length;j++){
 			btns[j].setLocation((int)(width*x/100),(int)(height*y/100));
 			btns[j].setSize(width*5/100,height*7/100);
-			x=x+5;		
+			btns[j].setEnabled(false);
+			x=x+3;		
 		}
 		return btns;
 	}
@@ -807,9 +879,74 @@ public class BoardGUI extends JFrame {
 		for(int j=1;j<btns.length;j++){
 			btns[j].setLocation((int)(width*x/100),(int)(height*y/100));
 			btns[j].setSize(width*5/100,height*7/100);
-			x=x+5;		
+			btns[j].setEnabled(false);
+			
+			x=x+3;		
 		}
 		return btns;
+	}
+	
+	private JButton[] locatePlayers(JButton[] btns){
+		double x=7;
+		double y=10;
+		
+		
+		for(int j=0;j<btns.length;j++){
+			btns[j].setLocation((int)(width*x/100),(int)(height*y/100));
+			btns[j].setSize(width*7/100,height*9/100);
+			y=y+16;		
+		}
+		return btns;
+	}
+	
+	private JTextField[] locateExcommunications(JTextField[] tfs){
+		
+		double x=17.3;
+		double y=16;
+		
+		
+		for(int j=0;j<tfs.length;j++){
+			tfs[j].setLocation((int)(width*x/100),(int)(height*y/100));
+			tfs[j].setSize((int)(width*8.6/100),height*25/100);
+			x=x+8.6;		
+		}
+		return tfs;
+	}
+	
+	private JTextField[] locatePlayersInfo(JTextField[] tfs){
+		double x=1;
+		double y=20;
+		
+		
+		for(int j=0;j<tfs.length;j++){
+			tfs[j].setLocation((int)(width*x/100),(int)(height*y/100));
+			tfs[j].setSize(width*18/100,height*3/100);
+			y=y+16;	
+		}
+		return tfs;
+	}
+	
+	
+	private JButton[] fillMembers(JButton[] btns, JLabel[] lbs){
+		
+		for (int j=0;j<btns.length;j++) {
+			btns[j].setDisabledIcon( btns[j].getIcon() );
+			btns[j].setIcon(lbs[j].getIcon());
+		}
+		
+		return btns;
+		
+	}
+	
+	private JTextField[] fillDices(JTextField[] fts, JLabel[] lbs){
+		
+		for (int j=0;j<fts.length;j++) {
+			
+			fts[j].add(lbs[j]);
+		}
+		
+		return fts;
+		
 	}
 	
 	private void enable(JButton...btns){
@@ -822,6 +959,22 @@ public class BoardGUI extends JFrame {
 		for (JButton btn : btns) {
 	        btn.setEnabled(false);
 	    }
+	}
+	
+	private JLabel setImage(String s,int xMod, int yMod) throws IOException{
+		
+		BufferedImage image = ImageIO.read(new File(s)); 
+		
+		BufferedImage board = new BufferedImage(width*xMod/100, height*yMod/100, BufferedImage.TYPE_INT_ARGB);
+		
+		Graphics g = board.createGraphics();
+        g.drawImage(image, 0, 0, width*xMod/100, height*yMod/100, null);
+        g.dispose();
+        
+        JLabel label = new JLabel(new ImageIcon(board)); 
+        
+        return label;
+		
 	}
 	
 	public static void main(String[] args) throws IOException
