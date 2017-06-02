@@ -1,7 +1,9 @@
 package it.polimi.ingsw.ps06.view.GUI;
 
+// for Container
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -9,6 +11,11 @@ import java.awt.Graphics;
 import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
+import java.awt.dnd.DnDConstants;
+// for WindowAdapter
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -17,17 +24,35 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.ImageIcon;
+import javax.swing.InputMap;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JDesktopPane;
+import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
+import javax.swing.JPanel;
+import javax.swing.JRootPane;
+import javax.swing.JTextField;
+import javax.swing.KeyStroke;
+import javax.swing.Timer;
+import javax.swing.TransferHandler;
+import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-
-import java.awt.*;				// for Container
-import java.awt.event.*;			// for WindowAdapter
-import javax.swing.*;
 
 
 
@@ -36,6 +61,7 @@ public class BoardGUI extends JFrame {
 	
 	private int width, escWidth;
 	private int height, escHeight;
+	private double screenWidth, screenHeight;
     private JLayeredPane lp = new JLayeredPane();
     private JPanel panel1 = new JPanel();
     private JPanel panel2 = new JPanel();
@@ -64,16 +90,22 @@ public class BoardGUI extends JFrame {
     private JDesktopPane desktop;
     private JFrame desktopFrame;
     
-    String playerString="G";
-    int blackValue=1;
-    int orangeValue=1;
-    int whiteValue=1;
+    private JLabel membersLabel[] = new JLabel[4];
+    private JButton[] members = new JButton[4];
     
-   
+    private String playerString="G";
+    private int blackValue;
+    private int orangeValue;
+    private int whiteValue;
+    private int playerNumber;
+    private int ex1;
+    private int ex2;
+    private int ex3;
+    private int harvestIndex=1, productionIndex=1, councilIndex=0;
+    private boolean check = true;
+    
 	private JFXPanel fxPanel = new JFXPanel();
 	
-
-    
     private enum Direction {
 		LEFT,
 		RIGHT,
@@ -88,13 +120,17 @@ public class BoardGUI extends JFrame {
 		    UIManager.setLookAndFeel( UIManager.getCrossPlatformLookAndFeelClassName() );
 		 } catch (Exception e) { e.printStackTrace();}
 		
+		setBoard();
+		
 		JFrame escFrame = new JFrame();
 		
 		desktopFrame = new JFrame();
 		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		double ratio= (screenSize.getWidth()/screenSize.getHeight());
-			
+		
+		screenWidth = screenSize.getWidth();
+		screenHeight = screenSize.getHeight();
 		
 	    //Due frame interni al desktop per la parte delle torri e la sezione rimanente
 		JInternalFrame towers = new JInternalFrame("frame", false, false, false, false);
@@ -177,7 +213,6 @@ public class BoardGUI extends JFrame {
         JLabel board3Label = new JLabel(new ImageIcon(board3));
         JLabel pbLabel = new JLabel(new ImageIcon(pbImage));
         
-        JLabel membersLabel[] = new JLabel[4];
         
         membersLabel[0] = setImage("resources/member/"+playerString+"N.png",5,7);
         membersLabel[1] = setImage("resources/member/"+playerString+"A.png",5,7);
@@ -186,11 +221,31 @@ public class BoardGUI extends JFrame {
         
         
         JLabel dicesLabel[] = new JLabel[3];
-        dicesLabel[0] = setImage("resources/dice/N"+blackValue+".png",7,9);
-        dicesLabel[1] = setImage("resources/dice/A"+orangeValue+".png",7,9);
-        dicesLabel[2] = setImage("resources/dice/B"+whiteValue+".png",7,9);
+        dicesLabel[0] = setImage("resources/dice/N"+blackValue+".png",6,8);
+        dicesLabel[1] = setImage("resources/dice/B"+whiteValue+".png",6,8);
+        dicesLabel[2] = setImage("resources/dice/A"+orangeValue+".png",6,8);
         
+        JLabel playersLabel[] = new JLabel[5];
         
+        playersLabel[0] = setImage("resources/player/avatar1.jpg",7,9);
+        playersLabel[1] = setImage("resources/player/avatar2.jpg",7,9);
+        playersLabel[2] = setImage("resources/player/avatar3.jpg",7,9);
+        playersLabel[3] = setImage("resources/player/avatar4.jpg",7,9);
+        playersLabel[4] = setImage("resources/player/avatar5.jpg",7,9);
+        
+        JLabel excommunicationsLabel[] = new JLabel[5];
+        
+        excommunicationsLabel[0] = setImage("resources/excomm/"+ex1+".png",9,23);
+        excommunicationsLabel[1] = setImage("resources/excomm/"+ex2+".png",9,22);
+        excommunicationsLabel[2] = setImage("resources/excomm/"+ex3+".png",9,23);
+        
+        JLabel marketCover1 = setImage("resources/cover/cover1.png",10,12);
+        JLabel marketCover2 = setImage("resources/cover/cover3.png",10,12);
+        JLabel productionCover = setImage("resources/cover/cover2.png",25,13);
+        JLabel harvestCover = setImage("resources/cover/cover4.png",25,15);
+        
+        //JLabel stone = setImage("resources/"+color+",3,3);
+        		
         //Creazione DesktopPane con Background
         desktop = new JDesktopPane(){
 			@Override
@@ -265,13 +320,8 @@ public class BoardGUI extends JFrame {
             	            public void run() {
             	            	scrollTowers.setEnabled(true);
                         		scrollOthers.setEnabled(true);
-            	            }
-            	        }, 
-            	        3000 
-            	);
-            }
-          }
-        );
+            	            }}, 3000 );}
+            });
 
         
         scrollTowers.setLocation(0,height*35/100);
@@ -299,14 +349,9 @@ public class BoardGUI extends JFrame {
             	            public void run() {
             	            	scrollTowers.setEnabled(true);
                         		scrollOthers.setEnabled(true);
-            	            }
-            	        }, 
-            	        3000 
-            	);
-            }
-          });
+            	            }}, 3000 );}
+            });
             
-        
         
         escMenu1 = new JButton("Ritorna al gioco");
         escMenu1.setLocation(escWidth*20/100,escHeight*20/100);
@@ -356,22 +401,25 @@ public class BoardGUI extends JFrame {
         });
         
         //Impostazioni dei bottoni di gioco
-    	JButton[] members = new JButton[4];
+    	
     	JButton[] cards = new JButton[16];
     	JButton[] markets = new JButton[4];
     	JButton[] productions = new JButton[9];
     	JButton[] harvests = new JButton[9];
     	JButton[] players = new JButton[5];
+    	JButton[] placements = new JButton[16];
     	
-    	JButton council = new JButton();
-    	JButton production = new JButton();
-    	JButton harvest = new JButton();
+    	JButton[] council = new JButton[1];
+    	JButton[] production = new JButton[1];
+    	JButton[] harvest = new JButton[1];
     	
-    	JTextField[] councils = new JTextField[16];
-    	JTextField[] dices = new JTextField[3];
-    	JTextField[] orders = new JTextField[5];
-    	JTextField[] playersInfo = new JTextField[5];
-    	JTextField[] excommunications = new JTextField[3];
+    	JButton[] councils = new JButton[16];
+    	JButton[] dices = new JButton[3];
+    	JButton[] orders = new JButton[5];
+    	JButton[] playersInfo = new JButton[5];
+    	JButton[] excommunications = new JButton[3];
+    	JButton[] excommStones = new JButton[12];
+    	JButton[] personalCards = new JButton[12];
         
         
     	members = initializeButtons(members);
@@ -380,12 +428,18 @@ public class BoardGUI extends JFrame {
         productions = initializeButtons(productions);
         harvests = initializeButtons(harvests);
         players = initializeButtons(players);
+        placements = initializeButtons(placements);
+        council = initializeButtons(council);
+        harvest = initializeButtons(harvest);
+        production = initializeButtons(production);
         
-        councils = initializeTexts(councils);
-        dices = initializeTexts(dices);
-        orders = initializeTexts(orders);
-        playersInfo = initializeTexts(playersInfo);
-        excommunications = initializeTexts(excommunications);
+        councils = initializeButtons(councils);
+        dices = initializeButtons(dices);
+        orders = initializeButtons(orders);
+        playersInfo = initializeButtons(playersInfo);
+        excommunications = initializeButtons(excommunications);
+        excommStones = initializeButtons(excommStones);
+        personalCards = initializeButtons(personalCards);
         
         
         cards = locateCards(cards);
@@ -394,11 +448,15 @@ public class BoardGUI extends JFrame {
         harvests = locateHarvests(harvests);
         productions = locateProductions(productions);
         players = locatePlayers(players);
+        placements = locatePlacements(placements);
         
         councils = locateCouncils(councils);
         orders = locateOrders(orders);
         playersInfo = locatePlayersInfo(playersInfo);
         excommunications = locateExcommunications(excommunications);
+        excommStones = locateExcommStones(excommStones);
+        personalCards = locatePersonalCards(personalCards);
+        
         
         markets[0].setLocation((int)(width*58/100),(int)(height*61/100));
 		markets[0].setSize(width*7/100,height*9/100);
@@ -412,59 +470,150 @@ public class BoardGUI extends JFrame {
 		markets[3].setLocation((int)(width*85.5/100),(int)(height*75/100));
 		markets[3].setSize(width*7/100,height*9/100);  
 		
-        council.setLocation((int)(width*49/100),(int)(height*7/100));
-        council.setSize(width*29/100,height*15/100);
-        council.setOpaque(false);
-        council.setContentAreaFilled(false);
-		council.setFocusPainted(false);
-		others.add(council);
+        council[0].setLocation((int)(width*49/100),(int)(height*7/100));
+        council[0].setSize(width*29/100,height*15/100);
+        council = set(council);
+
+		production[0].setLocation((int)(width*15/100),(int)(height*64.3/100));
+		production[0].setSize(width*23/100,height*10/100);
+		production = set(production);
 		
-		production.setLocation((int)(width*15/100),(int)(height*64/100));
-		production.setSize(width*23/100,height*10/100);
-		production.setOpaque(false);
-		production.setContentAreaFilled(false);
-		production.setFocusPainted(false);
-		others.add(production);
-		
-		harvest.setLocation((int)(width*15/100),(int)(height*82.5/100));
-		harvest.setSize(width*23/100,height*10/100);
-		harvest.setOpaque(false);
-		harvest.setContentAreaFilled(false);
-		harvest.setFocusPainted(false);
-		others.add(harvest);
-		
+		harvest[0].setLocation((int)(width*15.1/100),(int)(height*82.5/100));
+		harvest[0].setSize(width*23/100,height*10/100);
+		harvest = set(harvest);
+
+	
         members = set(members);
-        cards = set(cards);
         markets = set(markets);
+        players = set(players);
         productions = set(productions);
         harvests = set(harvests);
-        players = set(players);
+        placements = set(placements);
         
-        councils = setFields(councils);
-        dices = setFields(dices);
-        orders = setFields(orders);
-        playersInfo = setFields(playersInfo);
-		excommunications = setFields(excommunications);
+        cards = setLabels(cards);
+        councils = setLabels(councils);
+        dices = setLabels(dices);
+        orders = setLabels(orders);
+        playersInfo = setLabels(playersInfo);
+		excommunications = setLabels(excommunications);
+		excommStones = setLabels(excommStones);
+		personalCards = setLabels(personalCards);
         
-        members = fillMembers(members,membersLabel);
-        dices = fillDices(dices,dicesLabel);
+        members = fillButtons(members,membersLabel);
+        dices = fillLabels(dices,dicesLabel);
+        excommunications = fillLabels(excommunications, excommunicationsLabel);
+        players = fillButtons(players,playersLabel);
         
+        switch(playerNumber){
         
+        case 2:
+        	players[2].setEnabled(false);
+        	
+        	harvest[0].setDisabledIcon(harvestCover.getIcon());
+        	harvest[0].setIcon(harvestCover.getIcon());
+        	harvest[0].setBorderPainted(false);
+        	harvest[0].setEnabled(false);
+        	
+        	production[0].setDisabledIcon(productionCover.getIcon());
+        	production[0].setIcon(productionCover.getIcon());
+        	production[0].setBorderPainted(false);
+        	production[0].setEnabled(false);
+        	
+        case 3:
+        	players[3].setEnabled(false);
+        	
+        	markets[2].setDisabledIcon(marketCover1.getIcon());
+        	markets[2].setIcon(marketCover1.getIcon());
+        	markets[2].setBorderPainted(false);
+        	markets[2].setEnabled(false);
+        	
+        	markets[3].setDisabledIcon(marketCover2.getIcon());
+        	markets[3].setIcon(marketCover2.getIcon());
+        	markets[3].setBorderPainted(false);
+        	markets[3].setEnabled(false);
+       
+        case 4:
+        	players[4].setEnabled(false);
+        
+        case 5:
+        	break;
+        
+        default: 
+        	break;
+        }
+        
+        others.add(production[0]);
+        others.add(harvest[0]);
+        others.add(council[0]);
+        
+        for(int j=0; j<excommStones.length;j++){ others.add(excommStones[j]); }
         for(int j=0; j<members.length;j++){ desktop.add(members[j]); }
         for(int j=0; j<cards.length;j++){ towers.add(cards[j]); }
         for(int j=0; j<markets.length;j++){ others.add(markets[j]); }
         for(int j=0; j<productions.length;j++){ others.add(productions[j]); }
         for(int j=0; j<harvests.length;j++){ others.add(harvests[j]); }
         for(int j=0; j<councils.length;j++){ others.add(councils[j]); }
-        for(int j=0; j<players.length;j++){ desktopFrame.add(players[j]); }
-        
+        for(int j=0; j<players.length;j++){ desktop.add(players[j]); }
+        for(int j=0; j<placements.length;j++){ towers.add(placements[j]); }
+             
         for(int j=0; j<dices.length;j++){ others.add(dices[j]); }
         for(int j=0; j<orders.length;j++){ others.add(orders[j]); }
-        for(int j=0; j<playersInfo.length;j++){ desktopFrame.add(playersInfo[j]); }
+        for(int j=0; j<playersInfo.length;j++){ desktop.add(playersInfo[j]); }
         for(int j=0; j<excommunications.length;j++){ others.add(excommunications[j]); }
+        for(int j=0; j<personalCards.length;j++){ personalBoard.add(personalCards[j]); }
         
         
+
+        for(int j=0; j<players.length;j++)
+        {
+        	if(players[j].isEnabled()){
+	        	players[j].addMouseListener(new MouseAdapter()
+	        	{        		
+		            public void mousePressed(MouseEvent evt)
+		            {
+		            	MediaPlayer mediaPlayer3 = new MediaPlayer(hit2);
+		        		mediaPlayer3.play();
+						try {new PersonalViewGUI();} catch (IOException e) {e.printStackTrace();}
+		            }
+	            
+	        	});
+        	}
+        }
+        
+        
+        for(int j=0; j<4;j++){
+	        if(members[j].isEnabled()) members[j].setTransferHandler(new ValueExportTransferHandler(Integer.toString(j)));
+	
+	        members[j].addMouseMotionListener(new MouseAdapter() {
+	            @Override
+	            public void mouseDragged(MouseEvent e) {
+	                JButton button = (JButton) e.getSource();
+	                TransferHandler handle = button.getTransferHandler();
+	                handle.exportAsDrag(button, e, TransferHandler.COPY);
+	            }
+	        });
+	        
+	        if(markets[j].isEnabled()){markets[j].setTransferHandler(new ValueImportTransferHandler());}
+        }
+        
+        if(production[0].isEnabled()){production[0].setTransferHandler(new ValueImportTransferHandler());}
+        if(productions[0].isEnabled()){productions[0].setTransferHandler(new ValueImportTransferHandler());}
+        if(harvest[0].isEnabled()){harvest[0].setTransferHandler(new ValueImportTransferHandler());}
+        if(harvests[0].isEnabled()){harvests[0].setTransferHandler(new ValueImportTransferHandler());}
+        if(council[0].isEnabled()){council[0].setTransferHandler(new ValueImportTransferHandler());}
+        
+        for(int j=0; j<16; j++){
+        	if(placements[j].isEnabled()){placements[j].setTransferHandler(new ValueImportTransferHandler());}
+        }
+
+        
+        java.util.Timer timer = new java.util.Timer();
+        timer.schedule(new SayHello(harvest,harvests,1), 0, 5000);
+        timer.schedule(new SayHello(production,productions,2), 0, 5000);
+        timer.schedule(new SayHello(council,councils,3), 0, 5000);
+       
          
+        
         //KeyBinding per tasto ESC
         Action esc = new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
@@ -513,7 +662,7 @@ public class BoardGUI extends JFrame {
         //Inizializzazione dei Frame 
         escFrame.getContentPane().add(board3Label);
     	escFrame.setUndecorated(true);
-   	 	escFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+   	 	escFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
    	 	escFrame.setSize(escWidth, escHeight);
    	 	escFrame.setResizable(false);
    	 	escFrame.setLocationRelativeTo(null);
@@ -565,8 +714,6 @@ public class BoardGUI extends JFrame {
 	    centerJIF(others);
 	    centerJIF(towers);
 	    
-	    
-
 	}
 	
 	
@@ -717,6 +864,20 @@ public class BoardGUI extends JFrame {
 	    
 	}
 	
+	private int transfer(JButton[] btns, JButton[] lbs, int currentIndex){
+		   
+			if(btns[0].getIcon()!=null)
+	        	{
+					lbs[currentIndex].setIcon(btns[0].getIcon());
+	        		btns[0].setIcon(null);
+	        		lbs[currentIndex].setEnabled(true);
+	        		currentIndex++;
+	        	}
+			
+			return currentIndex;
+		
+	}
+	
 	private JButton[] initializeButtons(JButton...btns){
 		
 		for (int j=0;j<btns.length;j++) {
@@ -724,25 +885,20 @@ public class BoardGUI extends JFrame {
 	    }
 		return btns;
 	}
+
 	
-	private JTextField[] initializeTexts(JTextField...tfs){
+	private JButton[] setLabels(JButton[] btns){
 		
-		for (int j=0;j<tfs.length;j++) {
-	        tfs[j]=new JTextField();
-	    }
-		return tfs;
-	}
-	
-	private JTextField[] setFields(JTextField...tfs){
-		
-		for (JTextField tf : tfs) {
+		for (JButton btn : btns) {
 			
-			tf.setOpaque(false);
-			tf.setEditable(false);
-	        //btn.setBorderPainted(false);
+			btn.setOpaque(false);
+			btn.setContentAreaFilled(false);
+			btn.setFocusPainted(false);
+			btn.setEnabled(false);
+	        btn.setBorderPainted(false);
 		}
 		
-		return tfs;
+		return btns;
 	}
 	
 	private JButton[] set(JButton[] btns){
@@ -779,6 +935,27 @@ public class BoardGUI extends JFrame {
 		return btns;
 	}
 	
+	private JButton[] locatePlacements(JButton[] btns){
+		double x=15.7;
+		double y;
+		int i=0;
+		
+		//Ciclo 16 volte diviso per colonne ogni colonna 4 posti
+		for(int j=0;j<=3;j++){
+			y=12;
+			for(int z=0;z<=3;z++){
+				
+				btns[i].setLocation((int)(width*x/100),(int)(height*y/100));
+				btns[i].setSize((int)(width*7.9/100),height*9/100);
+				y=y+24.8;
+				i++;
+			}	
+			x=x+21.9;		
+		}
+		return btns;
+	}
+	
+	
 	private JButton[] locateMembers(JButton[] btns){
 		double x=86;
 		double y=63;
@@ -801,7 +978,38 @@ public class BoardGUI extends JFrame {
 		return btns;
 	}
 	
-	private JTextField[] locateCouncils(JTextField[] tfs){
+	private JButton[] locateExcommStones(JButton[] btns){
+		double x=19.3;
+		double y=22;
+		int i=0;
+		
+		for(int z=0;z<3;z++){
+		if(z==1){y=y+1.5;}
+			for(int j=0;j<2;j++){
+				btns[i].setLocation((int)(width*x/100),(int)(height*y/100));
+				btns[i].setSize(width*2/100,height*2/100);
+				i=i+1;
+				x=x+2;		
+			}
+			
+			x=x-4;;
+			y=y+2;
+			
+			for(int j=2;j<4;j++){
+				btns[i].setLocation((int)(width*x/100),(int)(height*y/100));
+				btns[i].setSize(width*2/100,height*2/100);
+				i=i+1;
+				x=x+2;		
+			}
+			if(z==1){y=y-1.5;}
+			x=x+4.7;
+			y=y-2;
+		}
+		
+		return btns;
+	}
+	
+	private JButton[] locateCouncils(JButton[] tfs){
 		double x=49;
 		double y=7;
 		int j;
@@ -823,7 +1031,7 @@ public class BoardGUI extends JFrame {
 		return tfs;
 	}
 	
-	private JTextField[] locateDices(JTextField[] tfs){
+	private JButton[] locateDices(JButton[] tfs){
 		double x=55.1;
 		double y=85;
 		
@@ -835,7 +1043,19 @@ public class BoardGUI extends JFrame {
 		return tfs;
 	}
 	
-	private JTextField[] locateOrders(JTextField[] tfs){
+	private JButton[] locatePersonalCards(JButton[] tfs){
+		double x=0;
+		double y=0;
+		
+		for(int j=0;j<tfs.length;j++){
+			tfs[j].setLocation((int)(screenWidth*x/100),(int)(screenHeight*y/100));
+			tfs[j].setSize((int)(screenWidth*8.3/100),(int)(screenHeight*18/100));
+			x=x+8.3;		
+		}
+		return tfs;
+	}
+	
+	private JButton[] locateOrders(JButton[] tfs){
 		double x=84;
 		double y=0.5;
 		
@@ -847,7 +1067,7 @@ public class BoardGUI extends JFrame {
 		return tfs;
 	}
 	
-	private JButton[] locateHarvests(JButton[] btns){
+	private JButton[] locateProductions(JButton[] btns){
 		boolean first=true;
 		double x=15;
 		double y=65.8;
@@ -861,12 +1081,13 @@ public class BoardGUI extends JFrame {
 			btns[j].setLocation((int)(width*x/100),(int)(height*y/100));
 			btns[j].setSize(width*5/100,height*7/100);
 			btns[j].setEnabled(false);
+			btns[j].setBorderPainted(false);
 			x=x+3;		
 		}
 		return btns;
 	}
 	
-	private JButton[] locateProductions(JButton[] btns){
+	private JButton[] locateHarvests(JButton[] btns){
 		boolean first=true;
 		double x=15;
 		double y=84;
@@ -880,7 +1101,7 @@ public class BoardGUI extends JFrame {
 			btns[j].setLocation((int)(width*x/100),(int)(height*y/100));
 			btns[j].setSize(width*5/100,height*7/100);
 			btns[j].setEnabled(false);
-			
+			btns[j].setBorderPainted(false);
 			x=x+3;		
 		}
 		return btns;
@@ -888,7 +1109,7 @@ public class BoardGUI extends JFrame {
 	
 	private JButton[] locatePlayers(JButton[] btns){
 		double x=7;
-		double y=10;
+		double y=14;
 		
 		
 		for(int j=0;j<btns.length;j++){
@@ -899,7 +1120,7 @@ public class BoardGUI extends JFrame {
 		return btns;
 	}
 	
-	private JTextField[] locateExcommunications(JTextField[] tfs){
+	private JButton[] locateExcommunications(JButton[] tfs){
 		
 		double x=17.3;
 		double y=16;
@@ -910,43 +1131,45 @@ public class BoardGUI extends JFrame {
 			tfs[j].setSize((int)(width*8.6/100),height*25/100);
 			x=x+8.6;		
 		}
+		y=y+2;
+		x=25.9;
+		tfs[1].setLocation((int)(width*x/100),(int)(height*y/100));
 		return tfs;
 	}
 	
-	private JTextField[] locatePlayersInfo(JTextField[] tfs){
+	private JButton[] locatePlayersInfo(JButton[] tfs){
 		double x=1;
-		double y=20;
+		double y=24;
 		
 		
 		for(int j=0;j<tfs.length;j++){
 			tfs[j].setLocation((int)(width*x/100),(int)(height*y/100));
-			tfs[j].setSize(width*18/100,height*3/100);
+			tfs[j].setSize(width*20/100,height*3/100);
 			y=y+16;	
 		}
 		return tfs;
 	}
 	
 	
-	private JButton[] fillMembers(JButton[] btns, JLabel[] lbs){
+	private JButton[] fillButtons(JButton[] btns, JLabel[] lbs){
 		
 		for (int j=0;j<btns.length;j++) {
 			btns[j].setDisabledIcon( btns[j].getIcon() );
 			btns[j].setIcon(lbs[j].getIcon());
 		}
 		
-		return btns;
-		
+		return btns;	
 	}
 	
-	private JTextField[] fillDices(JTextField[] fts, JLabel[] lbs){
+	private JButton[] fillLabels(JButton[] btns, JLabel[] lbs){
 		
-		for (int j=0;j<fts.length;j++) {
+		for (int j=0;j<btns.length;j++) {
 			
-			fts[j].add(lbs[j]);
+			btns[j].setIcon(lbs[j].getIcon());
+			btns[j].setDisabledIcon( btns[j].getIcon() );
 		}
 		
-		return fts;
-		
+		return btns;
 	}
 	
 	private void enable(JButton...btns){
@@ -977,8 +1200,123 @@ public class BoardGUI extends JFrame {
 		
 	}
 	
+	private void fillStones(int index){
+		
+	}
+	
 	public static void main(String[] args) throws IOException
     {   
         new BoardGUI();  
     }   
+
+
+	public static class ValueExportTransferHandler extends TransferHandler {
+	
+	    public static final DataFlavor SUPPORTED_DATE_FLAVOR = DataFlavor.stringFlavor;
+	    private String value;
+	
+	    public ValueExportTransferHandler(String value) {
+	        this.value = value;
+	    }
+	
+	    public String getValue() {
+	        return value;
+	    }
+	
+	    @Override
+	    public int getSourceActions(JComponent c) {
+	        return DnDConstants.ACTION_COPY_OR_MOVE;
+	    }
+	
+	    @Override
+	    protected Transferable createTransferable(JComponent c) {
+	        Transferable t = new StringSelection(getValue());
+	        return t;
+	    }
+	
+	    @Override
+	    protected void exportDone(JComponent source, Transferable data, int action) {
+	        super.exportDone(source, data, action);
+	    }
+	
+	}
+
+	public class ValueImportTransferHandler extends TransferHandler {
+	
+	    public final DataFlavor SUPPORTED_DATE_FLAVOR = DataFlavor.stringFlavor;
+	
+	    public ValueImportTransferHandler() {
+	    }
+	
+	    @Override
+	    public boolean canImport(TransferHandler.TransferSupport support) {
+	        return support.isDataFlavorSupported(SUPPORTED_DATE_FLAVOR);
+	    }
+	
+	    @Override
+	    public boolean importData(TransferHandler.TransferSupport support) {
+	        boolean accept = false;
+	        if (canImport(support)) {
+	            try {
+	                Transferable t = support.getTransferable();
+	                Object value = t.getTransferData(SUPPORTED_DATE_FLAVOR);
+	                if (value instanceof String) {
+	                    Component component = support.getComponent();
+	                    //Chiedi per un check 
+	                    if (check && component instanceof JButton && component.isEnabled() && ((JButton) component).getIcon()==null && members[Integer.parseInt(value.toString())].isEnabled()) {
+	                        
+	                    	((JButton) component).setDisabledIcon(membersLabel[Integer.parseInt(value.toString())].getIcon());
+	                        ((JButton) component).setIcon(membersLabel[Integer.parseInt(value.toString())].getIcon());
+	                        members[Integer.parseInt(value.toString())].setEnabled(false);
+	                        
+	                        accept = true;
+	                    }
+	                }
+	            } catch (Exception exp) {
+	                exp.printStackTrace();
+	            }
+	        }
+	        return accept;
+	    }
+	}
+	
+	class SayHello extends TimerTask {
+		JButton big[];
+		JButton small[];
+		int index;
+		
+		public SayHello(JButton[] b1, JButton[] b2, int index){
+			this.big=b1;
+			this.small=b2;
+			this.index=index;
+		}
+		
+	    public void run() {
+	    	
+	    	switch(index){
+	    	case 1:
+	    		harvestIndex=transfer(big,small,harvestIndex);
+	    		break;
+	    	case 2:
+	    		productionIndex=transfer(big,small,productionIndex);
+	    		break;
+	    	case 3:
+	    		councilIndex=transfer(big,small,councilIndex);
+	    		break;
+	    	}
+	    }
+	}
+	
+	private void setBoard(){
+	    
+		playerString="G";
+	    blackValue=1;
+	    orangeValue=1;
+	    whiteValue=1;
+	    playerNumber=3;
+	    ex1=5;
+	    ex2=9;
+	    ex3=17;
+	    
+	}
 }
