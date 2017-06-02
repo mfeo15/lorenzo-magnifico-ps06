@@ -72,6 +72,8 @@ public class BoardGUI extends JFrame {
 	
 	private JTextField playerInfo;
 	private JTextField roundInfo;
+	private JTextField resourcesInfo;
+	private JTextField actionsLog = new JTextField();
 	
 	private JButton escMenu1;
 	private JButton escMenu2;
@@ -86,7 +88,9 @@ public class BoardGUI extends JFrame {
     private double smooth;
     private boolean ok=true;
     
-    private Font fontBIG;
+    private String playerName;
+    
+    private Font fontBIG, fontMEDIUM, fontSMALL;
     private JDesktopPane desktop;
     private JFrame desktopFrame;
     
@@ -103,6 +107,8 @@ public class BoardGUI extends JFrame {
     private int ex3;
     private int harvestIndex=1, productionIndex=1, councilIndex=0;
     private boolean check = true;
+    private int code1, code2, code3, code4;
+    private int coinV, woodV, stoneV, servantV;
     
 	private JFXPanel fxPanel = new JFXPanel();
 	
@@ -173,6 +179,8 @@ public class BoardGUI extends JFrame {
 		distance = 9 * ((screenSize.getHeight()/1080)*2);
 		smooth = 10 * ((screenSize.getHeight()/1080));
 		
+		fontMEDIUM = new Font("Lucida Handwriting",Font.PLAIN,(int)(15*(screenSize.getHeight()/1080)) );
+		fontMEDIUM = new Font("Lucida Handwriting",Font.PLAIN,(int)(25*(screenSize.getHeight()/1080)) );
 		fontBIG = new Font("Lucida Handwriting",Font.PLAIN,(int)(40*(screenSize.getHeight()/1080)) );
 		
 		//Caricamento e resize delle immagini
@@ -244,6 +252,13 @@ public class BoardGUI extends JFrame {
         JLabel productionCover = setImage("resources/cover/cover2.png",25,13);
         JLabel harvestCover = setImage("resources/cover/cover4.png",25,15);
         
+        JLabel leadersLabel[] = new JLabel[4];
+        
+        leadersLabel[0] = setImage("resources/leader/leader"+code1+".jpg",20,40);
+        leadersLabel[1] = setImage("resources/leader/leader"+code2+".jpg",20,40);
+        leadersLabel[2] = setImage("resources/leader/leader"+code3+".jpg",20,40);
+        leadersLabel[3] = setImage("resources/leader/leader"+code4+".jpg",20,40);
+        
         //JLabel stone = setImage("resources/"+color+",3,3);
         		
         //Creazione DesktopPane con Background
@@ -291,12 +306,31 @@ public class BoardGUI extends JFrame {
 		
 		roundInfo = new JTextField("Turno: "+roundNumber+"  Periodo: "+periodNumber);
 		roundInfo.setLocation((int)screenSize.getWidth()*70/100,0);
-		roundInfo.setSize((int)screenSize.getWidth()*25/100,(int)screenSize.getHeight()*6/100);
+		roundInfo.setSize((int)screenSize.getWidth()*30/100,(int)screenSize.getHeight()*6/100);
 		roundInfo.setOpaque(false);
 		roundInfo.setEditable(false);
 		roundInfo.setBorder(null);
 		roundInfo.setFont(fontBIG);
 		roundInfo.setForeground(Color.BLACK);
+		
+		resourcesInfo = new JTextField(coinV+" Coin   "+woodV+" Wood   "+stoneV+" Wood   "+servantV+" Servant");
+		resourcesInfo.setLocation((int)screenSize.getWidth()*30/100,(int)screenSize.getHeight()*96/100);
+		resourcesInfo.setSize((int)screenSize.getWidth()*40/100,(int)screenSize.getHeight()*4/100);
+		resourcesInfo.setOpaque(false);
+		resourcesInfo.setEditable(false);
+		resourcesInfo.setBorder(null);
+		resourcesInfo.setFont(fontMEDIUM);
+		resourcesInfo.setForeground(Color.BLACK);
+		resourcesInfo.setHorizontalAlignment(JTextField.CENTER);
+		
+		actionsLog.setLocation((int)screenSize.getWidth()*80/100,(int)screenSize.getHeight()*11/100);
+		actionsLog.setSize((int)screenSize.getWidth()*20/100,(int)screenSize.getHeight()*4/100);
+		actionsLog.setOpaque(false);
+		actionsLog.setEditable(false);
+		actionsLog.setBorder(null);
+		actionsLog.setFont(fontSMALL);
+		actionsLog.setForeground(Color.BLACK);
+		actionsLog.setHorizontalAlignment(JTextField.CENTER);
 		
         scrollOthers.setLocation(width*95/100,height*35/100);
         scrollOthers.setSize(width*5/100,height*30/100);
@@ -408,6 +442,7 @@ public class BoardGUI extends JFrame {
     	JButton[] harvests = new JButton[9];
     	JButton[] players = new JButton[5];
     	JButton[] placements = new JButton[16];
+    	JButton[] leaders = new JButton[4];
     	
     	JButton[] council = new JButton[1];
     	JButton[] production = new JButton[1];
@@ -419,7 +454,6 @@ public class BoardGUI extends JFrame {
     	JButton[] playersInfo = new JButton[5];
     	JButton[] excommunications = new JButton[3];
     	JButton[] excommStones = new JButton[12];
-    	JButton[] personalCards = new JButton[12];
         
         
     	members = initializeButtons(members);
@@ -433,13 +467,14 @@ public class BoardGUI extends JFrame {
         harvest = initializeButtons(harvest);
         production = initializeButtons(production);
         
+        
         councils = initializeButtons(councils);
         dices = initializeButtons(dices);
         orders = initializeButtons(orders);
         playersInfo = initializeButtons(playersInfo);
         excommunications = initializeButtons(excommunications);
         excommStones = initializeButtons(excommStones);
-        personalCards = initializeButtons(personalCards);
+        leaders = initializeButtons(leaders);
         
         
         cards = locateCards(cards);
@@ -455,7 +490,7 @@ public class BoardGUI extends JFrame {
         playersInfo = locatePlayersInfo(playersInfo);
         excommunications = locateExcommunications(excommunications);
         excommStones = locateExcommStones(excommStones);
-        personalCards = locatePersonalCards(personalCards);
+        leaders = locateLeaders(leaders);
         
         
         markets[0].setLocation((int)(width*58/100),(int)(height*61/100));
@@ -497,12 +532,13 @@ public class BoardGUI extends JFrame {
         playersInfo = setLabels(playersInfo);
 		excommunications = setLabels(excommunications);
 		excommStones = setLabels(excommStones);
-		personalCards = setLabels(personalCards);
+		leaders = setLabels(leaders);
         
         members = fillButtons(members,membersLabel);
         dices = fillLabels(dices,dicesLabel);
         excommunications = fillLabels(excommunications, excommunicationsLabel);
         players = fillButtons(players,playersLabel);
+        leaders = fillLeaders(leaders,leadersLabel);
         
         switch(playerNumber){
         
@@ -560,7 +596,7 @@ public class BoardGUI extends JFrame {
         for(int j=0; j<orders.length;j++){ others.add(orders[j]); }
         for(int j=0; j<playersInfo.length;j++){ desktop.add(playersInfo[j]); }
         for(int j=0; j<excommunications.length;j++){ others.add(excommunications[j]); }
-        for(int j=0; j<personalCards.length;j++){ personalBoard.add(personalCards[j]); }
+        for(int j=0; j<leaders.length;j++){ desktop.add(leaders[j]); }
         
         
 
@@ -608,9 +644,9 @@ public class BoardGUI extends JFrame {
 
         
         java.util.Timer timer = new java.util.Timer();
-        timer.schedule(new SayHello(harvest,harvests,1), 0, 5000);
-        timer.schedule(new SayHello(production,productions,2), 0, 5000);
-        timer.schedule(new SayHello(council,councils,3), 0, 5000);
+        timer.schedule(new Repeat(harvest,harvests,1), 0, 5000);
+        timer.schedule(new Repeat(production,productions,2), 0, 5000);
+        timer.schedule(new Repeat(council,councils,3), 0, 5000);
        
          
         
@@ -698,9 +734,10 @@ public class BoardGUI extends JFrame {
         
         desktop.add(others);
         desktop.add(towers);
-        desktop.add(personalBoard);
+        //desktop.add(personalBoard);
 	    desktop.setVisible(true);
 	    
+	    desktopFrame.add(resourcesInfo);
 	    desktopFrame.add(playerInfo);
 	    desktopFrame.add(roundInfo);
 	    desktopFrame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
@@ -858,7 +895,7 @@ public class BoardGUI extends JFrame {
 	    Dimension jInternalFrameSize = jif.getSize();
 	    int width = (desktopSize.width - jInternalFrameSize.width) / 2;
 	    //int height = ((desktopSize.height - jInternalFrameSize.height) / 2)-desktopSize.height*8/100;
-	    int height=desktopSize.height*6/100;
+	    int height=desktopSize.height*12/100;
 	    jif.setLocation(width, height);
 	    jif.setVisible(true);
 	    
@@ -958,22 +995,22 @@ public class BoardGUI extends JFrame {
 	
 	private JButton[] locateMembers(JButton[] btns){
 		double x=86;
-		double y=63;
+		double y=48;
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		
 		for(int j=0;j<2;j++){
 			btns[j].setLocation((int)(screenSize.getWidth()*x/100),(int)(screenSize.getHeight()*y/100));
 			btns[j].setSize((int)screenSize.getWidth()*4/100,(int)screenSize.getWidth()*4/100);
-			x=x+7;		
+			x=x+6;		
 		}
 		
 		x=86;
-		y=72;
+		y=57;
 		
 		for(int j=2;j<4;j++){
 			btns[j].setLocation((int)(screenSize.getWidth()*x/100),(int)(screenSize.getHeight()*y/100));
 			btns[j].setSize((int)screenSize.getWidth()*4/100,(int)screenSize.getWidth()*4/100);
-			x=x+7;		
+			x=x+6;		
 		}
 		return btns;
 	}
@@ -1043,17 +1080,28 @@ public class BoardGUI extends JFrame {
 		return tfs;
 	}
 	
-	private JButton[] locatePersonalCards(JButton[] tfs){
-		double x=0;
-		double y=0;
+	private JButton[] locateLeaders(JButton[] btns){
+		double x=0.5;
+		double y=95;
 		
-		for(int j=0;j<tfs.length;j++){
-			tfs[j].setLocation((int)(screenWidth*x/100),(int)(screenHeight*y/100));
-			tfs[j].setSize((int)(screenWidth*8.3/100),(int)(screenHeight*18/100));
-			x=x+8.3;		
+		for(int j=0;j<2;j++){
+			btns[j].setLocation((int)(width*x/100),(int)(height*y/100));
+			btns[j].setSize(width*17/100,height*38/100);
+			x=x+18;		
 		}
-		return tfs;
+		
+		x=x+100.3;
+		
+		for(int j=2;j<4;j++){
+			btns[j].setLocation((int)(width*x/100),(int)(height*y/100));
+			btns[j].setSize(width*17/100,height*38/100);
+			x=x+18;		
+		}
+		
+		return btns;
 	}
+	
+	
 	
 	private JButton[] locateOrders(JButton[] tfs){
 		double x=84;
@@ -1135,6 +1183,17 @@ public class BoardGUI extends JFrame {
 		x=25.9;
 		tfs[1].setLocation((int)(width*x/100),(int)(height*y/100));
 		return tfs;
+	}
+	
+	private JButton[] fillLeaders(JButton[] btns, JLabel[] lbs){
+		
+		for (int j=0;j<btns.length;j++) {
+			
+			btns[j].setIcon(lbs[j].getIcon());
+			btns[j].setDisabledIcon( btns[j].getIcon() );
+		}
+		
+		return btns;
 	}
 	
 	private JButton[] locatePlayersInfo(JButton[] tfs){
@@ -1267,7 +1326,8 @@ public class BoardGUI extends JFrame {
 	                        
 	                    	((JButton) component).setDisabledIcon(membersLabel[Integer.parseInt(value.toString())].getIcon());
 	                        ((JButton) component).setIcon(membersLabel[Integer.parseInt(value.toString())].getIcon());
-	                        members[Integer.parseInt(value.toString())].setEnabled(false);
+	                        members[Integer.parseInt(value.toString())].setEnabled(false);	                       
+	                        //cambia testo ad actionslog somehow
 	                        
 	                        accept = true;
 	                    }
@@ -1280,15 +1340,19 @@ public class BoardGUI extends JFrame {
 	    }
 	}
 	
-	class SayHello extends TimerTask {
+	class Repeat extends TimerTask {
 		JButton big[];
 		JButton small[];
 		int index;
 		
-		public SayHello(JButton[] b1, JButton[] b2, int index){
+		public Repeat(JButton[] b1, JButton[] b2, int index){
 			this.big=b1;
 			this.small=b2;
 			this.index=index;
+		}
+		
+		public void setLogText(String s){
+			actionsLog.setText(s);
 		}
 		
 	    public void run() {
@@ -1317,6 +1381,14 @@ public class BoardGUI extends JFrame {
 	    ex1=5;
 	    ex2=9;
 	    ex3=17;
-	    
+	    code1=5;
+	    code2=9;
+	    code3=18;
+	    code4=12;
+	    coinV=5;
+	    woodV=5;
+	    stoneV=5;
+	    servantV=5;
+	    playerName="Gigi Scarfani";
 	}
 }

@@ -73,6 +73,7 @@ public class PersonalViewGUI {
 		    exit.setContentAreaFilled(false);
 		    exit.setFocusPainted(false);
 		    exit.setBorderPainted(false);
+		    exit.setIcon(new ImageIcon(exit1));
 	        f.add(exit);
 	        
 	        exit.addMouseListener(new MouseAdapter()
@@ -81,9 +82,7 @@ public class PersonalViewGUI {
 	            {
 
 	            	MediaPlayer mediaPlayer = new MediaPlayer(hit);
-					mediaPlayer.play();
-					exit.setIcon(new ImageIcon(exit1));
-				    
+					mediaPlayer.play();  
 	            }
 	            
 	            public void mouseExited(MouseEvent evt)
@@ -91,7 +90,6 @@ public class PersonalViewGUI {
 	            	
 	            	MediaPlayer mediaPlayer = new MediaPlayer(hit);
 					mediaPlayer.play();
-	            	exit.setIcon(null);
 			        
 	            }
 	            
@@ -104,53 +102,36 @@ public class PersonalViewGUI {
 	            
 	        });
 	        
-	        JButton[] leaders = new JButton[4];
+	        JButton[] territories = new JButton[6];
+	        JButton[] buildings = new JButton[6];
 	        
-	        leaders = initializeButtons(leaders);
-	        int x=11;
-        	int y=40;
-        	
-	        for(int j=0; j<4; j++){
+	        territories = initializeButtons(territories);
+	        buildings = initializeButtons(buildings);
 
-	        	leaders[j].setLocation((int)(width*x/100),(int)(height*y/100));
-				leaders[j].setSize(width*20/100,height*40/100);
-	        	leaders[j].setOpaque(false);
-	        	leaders[j].setContentAreaFilled(false);
-	        	leaders[j].setFocusPainted(false);
-				leaders[j].setEnabled(false);
-				//leaders[j].setBorderPainted(false);
-				x=x+22;
-				
-	        }
+	        territories = setLabels(territories);
+	        buildings = setLabels(buildings);
 	        
-	        JLabel leadersLabel[] = new JLabel[4];
+        	territories = locatePersonalCards(territories,false);
+        	buildings = locatePersonalCards(buildings,true);
+	          
 	        
-	        leadersLabel[0] = setImage("resources/leader/leader"+code1+".jpg",20,40);
-	        leadersLabel[1] = setImage("resources/leader/leader"+code2+".jpg",20,40);
-	        leadersLabel[2] = setImage("resources/leader/leader"+code3+".jpg",20,40);
-	        leadersLabel[3] = setImage("resources/leader/leader"+code4+".jpg",20,40);
+	        JButton[] bonusTile = new JButton[1];
+	        bonusTile = initializeButtons(bonusTile);
+	        bonusTile=setLabels(bonusTile);
+	        bonusTile[0].setLocation((int)(width*0.2/100),(int)(height*0.3/100));
+	        bonusTile[0].setSize((int)(width*8/100),(int)(height*99.6/100));
 	        
 	        
-	        JButton bonusTile = new JButton();
-	        bonusTile.setLocation((int)(width*0.5/100),(int)(height*30/100));
-	        bonusTile.setSize(width*5/100,(int)(height*69.5/100));
-	        bonusTile.setOpaque(false);
-	        bonusTile.setContentAreaFilled(false);
-	        bonusTile.setFocusPainted(false);
-	        bonusTile.setEnabled(false);
-			//bonusTile.setBorderPainted(false);
+	        JLabel bonusTileLabel = new JLabel();       
+	        bonusTileLabel = setImage("resources/tile/pb"+btCode+".png",8,100);
 	        
-	        JLabel bonusTileLabel = new JLabel();
-	        
-	        bonusTileLabel = setImage("resources/tile/pb"+btCode+".png",5,68);
-	        
-	        bonusTile.setIcon(bonusTileLabel.getIcon());
-			bonusTile.setDisabledIcon( bonusTile.getIcon() );
+	        bonusTile[0].setIcon(bonusTileLabel.getIcon());
+			bonusTile[0].setDisabledIcon( bonusTile[0].getIcon() );
 			
-			fillLabels(leaders,leadersLabel);
 	        
-			for(int j=0; j<leaders.length;j++){ f.add(leaders[j]); }
-			f.add(bonusTile);
+			for(int j=0; j<territories.length;j++){ f.add(territories[j]); }
+			for(int j=0; j<buildings.length;j++){ f.add(buildings[j]); }
+			f.add(bonusTile[0]);
 			
 	        f.getContentPane().add(label);
 	        f.setUndecorated(true);
@@ -182,25 +163,57 @@ public class PersonalViewGUI {
 			return btns;
 		}
 		
-		private JButton[] fillLabels(JButton[] btns, JLabel[] lbs){
+		
+		private JButton[] setLabels(JButton[] btns){
 			
-			for (int j=0;j<btns.length;j++) {
+			for (JButton btn : btns) {
 				
-				btns[j].setIcon(lbs[j].getIcon());
-				btns[j].setDisabledIcon( btns[j].getIcon() );
+				btn.setOpaque(false);
+				btn.setContentAreaFilled(false);
+				btn.setFocusPainted(false);
+				btn.setEnabled(false);
+		        //btn.setBorderPainted(false);
 			}
 			
 			return btns;
 		}
 		
-		private JLabel setImage(String s,int xMod, int yMod) throws IOException{
+		private JButton[] set(JButton[] btns){
+			
+			for (JButton btn : btns) {
+				
+				btn.setOpaque(false);
+				btn.setContentAreaFilled(false);
+				btn.setFocusPainted(false);
+		        //btn.setBorderPainted(false);
+			}
+			
+			return btns;
+		}
+		
+		private JButton[] locatePersonalCards(JButton[] btns, boolean buildings){
+			double x=9;
+			double y=3;
+			
+			if(buildings)y=y+40;
+			
+			for(int j=0;j<btns.length;j++){
+				
+				btns[j].setLocation((int)(width*x/100),(int)(height*y/100));
+				btns[j].setSize(width*15/100,height*32/100);
+				x=x+15;		
+			}
+			return btns;
+		}
+		
+		private JLabel setImage(String s,double xMod, double yMod) throws IOException{
 			
 			BufferedImage image = ImageIO.read(new File(s)); 
 			
-			BufferedImage board = new BufferedImage(width*xMod/100, height*yMod/100, BufferedImage.TYPE_INT_ARGB);
+			BufferedImage board = new BufferedImage((int)(width*xMod/100), (int)(height*yMod/100), BufferedImage.TYPE_INT_ARGB);
 			
 			Graphics g = board.createGraphics();
-	        g.drawImage(image, 0, 0, width*xMod/100, height*yMod/100, null);
+	        g.drawImage(image, 0, 0, (int)(width*xMod/100), (int)(height*yMod/100), null);
 	        g.dispose();
 	        
 	        JLabel label = new JLabel(new ImageIcon(board)); 

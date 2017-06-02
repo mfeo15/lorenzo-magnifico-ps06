@@ -89,6 +89,7 @@ public class RoomGUI extends JFrame {
 	    exit.setContentAreaFilled(false);
 	    exit.setFocusPainted(false);
 	    exit.setBorderPainted(false);
+	    exit.setIcon(new ImageIcon(exit1));
         f.add(exit);
        
         
@@ -233,8 +234,6 @@ public class RoomGUI extends JFrame {
 
             	MediaPlayer mediaPlayer = new MediaPlayer(hit);
 				mediaPlayer.play();
-				exit.setIcon(new ImageIcon(exit1));
-			    
             }
             
             public void mouseExited(MouseEvent evt)
@@ -242,7 +241,6 @@ public class RoomGUI extends JFrame {
             	
             	MediaPlayer mediaPlayer = new MediaPlayer(hit);
 				mediaPlayer.play();
-            	exit.setIcon(null);
 		        
             }
             
