@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintStream;
+import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketAddress;
 import java.net.UnknownHostException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -13,24 +13,21 @@ import java.util.Scanner;
 public class Connection implements Runnable {
 	
 	private Socket socket;
+	private SocketServer connectedToServer;
 	
+	/*
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
+	*/
 	
-	private String name;
+	private Scanner in;
+	private PrintStream out;
 	
 	private boolean active = true;
 	
-	public Connection(Socket socket) throws UnknownHostException, IOException {
+	public Connection(Socket socket, SocketServer connectedToServer) throws UnknownHostException, IOException {
 		this.socket = socket;
-		
-		this.out = new ObjectOutputStream(socket.getOutputStream());
-		this.in = new ObjectInputStream(socket.getInputStream());
-
-	}
-	
-	public SocketAddress ID() {
-		return socket.getRemoteSocketAddress();
+		this.connectedToServer = connectedToServer;
 	}
 	
 	private synchronized boolean isActive(){
@@ -39,25 +36,37 @@ public class Connection implements Runnable {
 	
 	@Override
 	public void run() {
-		try{
-			send("Benvenuto! Chi sei?");
-			String read = in.nextLine();
-			name = read;
-			//server.rednezvous(this, name);
+		try {
+			/*
+			this.out = new ObjectOutputStream(socket.getOutputStream());
+			this.in = new ObjectInputStream(socket.getInputStream());
+			*/
+			
+			this.in = new Scanner(socket.getInputStream());
+			this.out = new PrintStream(socket.getOutputStream());
+			
+			connectedToServer.rednezvous(this);
+			
+			String read;
 			while(isActive()){
 				read = in.nextLine();				
-				//notify(read);
+				System.out.println("Client said: " + read);
+				
+				out.println("I'm a Computer! I'am a Computery Guy!");
 			}			
-		} catch (IOException | NoSuchElementException e) {
+		} catch ( NoSuchElementException e) {
 			System.err.println("Errore!");
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}finally{
 			close();
 		}		
 	}
 	
 	public void send(String message) {
-		out.println(message);
-		out.flush();
+		//out.println(message);
+		//out.flush();
 	}
 	
 	public void asyncSend(final String message){

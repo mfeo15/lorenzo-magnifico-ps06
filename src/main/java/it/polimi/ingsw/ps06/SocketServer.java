@@ -5,17 +5,12 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketAddress;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import it.polimi.ingsw.ps06.model.Player;
 
 /*
  * La classe Server resta in ascolto su una specifica porta e gestisce la ripartizione delle connessioni in ingresso,
@@ -25,19 +20,14 @@ public class SocketServer {
 	
 	private ServerSocket serverSocket;
 	
-	private ObjectInputStream in;
-	private ObjectOutputStream out;
-	
 	private ExecutorService executor = 
 			Executors.newFixedThreadPool(128);
 	
 	private List<Connection> connections = new ArrayList<Connection>();
 	
-	private Map<SocketAddress, Connection> waitingConnection = new HashMap<>();
+	private List<Connection> waitingConnection = new ArrayList<Connection>();
 	
 	private List< MatchSet > playingConnection;
-	
-	//private Map<Connection, Connection> playingConnection = new HashMap<>();
 	
 	
 	/*
@@ -64,8 +54,8 @@ public class SocketServer {
 		playingConnection.remove(c);
 		playingConnection.remove(enemy);
 		*/
-		
-		waitingConnection.entrySet().removeIf(connection -> connection.getValue().equals(c));
+
+		waitingConnection.removeIf(connection -> connection.equals(c));
 		
 		/*
 		Iterator<SocketAddress> iterator = waitingConnection.keySet().iterator();
@@ -82,7 +72,11 @@ public class SocketServer {
 	 */
 	public synchronized void rednezvous(Connection c) {
 		
-		waitingConnection.put(c.ID(), c);
+		waitingConnection.add(c);
+		
+		System.out.println();
+		System.out.println();
+		System.out.println("New connection in the WaitingRoom");
 		
 		if (waitingConnection.size() == 4)
 		{
@@ -99,12 +93,15 @@ public class SocketServer {
 			player1.addObserver(controller);
 			player2.addObserver(controller);
 			*/
+			try {
+				MatchSet m = new MatchSet();
+				m.add( (ArrayList<Connection>) waitingConnection);
+				waitingConnection.clear();
 			
-			MatchSet m = new MatchSet();
-			m.add(waitingConnection);
-			waitingConnection.clear();
-			
-			playingConnection.add(m);
+				playingConnection.add(m);
+			} catch (Exception e) {
+				
+			}
 		}
 	}
 	
@@ -117,21 +114,18 @@ public class SocketServer {
 		this.serverSocket = new ServerSocket(PORT);
 	}
 	
-	public void run(){
-		while(true){
+	public void start()
+	{
+		while(true) {
 			try {
-		
 				Socket connectionSocket = serverSocket.accept();
-				
-				in = new ObjectInputStream(connectionSocket.getInputStream());
-				out = new ObjectOutputStream(connectionSocket.getOutputStream());
 				
 				System.out.println();
 				System.out.println();
 				System.out.println("IP Client : " + connectionSocket.getInetAddress());
 				System.out.println("-------Connection Enstabilished-------- ");
 				
-				Connection connection = new Connection(connectionSocket);
+				Connection connection = new Connection(connectionSocket, this);
 				registerConnection(connection);
 				
 				executor.submit(connection);//Equivalente a new Thread(c).start();				
@@ -141,10 +135,8 @@ public class SocketServer {
 		}
 	}
 	
-	public void close() throws IOException {
+	public void close() throws IOException 
+	{
 		serverSocket.close();
-		
-		in.close();
-		out.close();
 	}
 }
