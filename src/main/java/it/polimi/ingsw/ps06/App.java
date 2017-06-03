@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 import it.polimi.ingsw.ps06.controller.MenuControllerCLI;
 import it.polimi.ingsw.ps06.controller.MenuControllerGUI;
-import it.polimi.ingsw.ps06.view.CLI.MenuCLI;
+import it.polimi.ingsw.ps06.view.GUI.MenuCLI;
 import it.polimi.ingsw.ps06.view.GUI.MenuGUI;
 
 

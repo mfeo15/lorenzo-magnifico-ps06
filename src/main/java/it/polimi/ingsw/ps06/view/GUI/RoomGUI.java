@@ -24,7 +24,7 @@ import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
-public class RoomGUI extends JFrame {
+public class RoomGUI extends JFrame implements Room {
 	private JButton exit;
 	private JFrame f;
 	private JTextField username, stat1, stat2, stat3, stat4, logged, player1, player2, player3, player4;

@@ -3,8 +3,8 @@ package it.polimi.ingsw.ps06.controller;
 import java.util.Observable;
 import java.util.Observer;
 
-import it.polimi.ingsw.ps06.view.CLI.MenuCLI;
-import it.polimi.ingsw.ps06.view.CLI.RoomCLI;
+import it.polimi.ingsw.ps06.view.GUI.MenuCLI;
+import it.polimi.ingsw.ps06.view.GUI.RoomCLI;
 
 public class MenuController extends Observable implements Observer {
 	

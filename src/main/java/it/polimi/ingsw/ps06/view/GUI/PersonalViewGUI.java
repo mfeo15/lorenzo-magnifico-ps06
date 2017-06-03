@@ -1,6 +1,7 @@
 package it.polimi.ingsw.ps06.view.GUI;
 
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
@@ -13,16 +14,20 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
+import javax.swing.JTextField;
 
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
-public class PersonalViewGUI {
+public class PersonalViewGUI implements PersonalView {
 	private int playerCode;
 	private int width, height;
 	private JFrame f;
 	private JButton exit;
+	private JTextField coins, woods, stones, servants, victory, military, faith;
+	private Font font;
 	
 	private int code1, code2, code3, code4;
 	private int btCode;
@@ -32,7 +37,7 @@ public class PersonalViewGUI {
 			
 		}
 		
-		public PersonalViewGUI() throws IOException{
+		public PersonalViewGUI() throws IOException {
 			
 			setPersonalView();
 			
@@ -43,13 +48,16 @@ public class PersonalViewGUI {
 			
 			double ratio= (screenSize.getWidth()/screenSize.getHeight());
 			
-			width = (int)((screenSize.getWidth()*70/100)*(1.5 / ratio));
+			font = new Font("Lucida Handwriting",Font.PLAIN,(int)(18*(screenSize.getHeight()/1080)));
+			
+			width = (int)((screenSize.getWidth()*70/100)*(1.349 / ratio));
 			height = (int)(screenSize.getHeight()*70/100);
 			
 			BufferedImage image1 = ImageIO.read(new File("resources/personalView.png")); 
 			BufferedImage exit1 = ImageIO.read(new File("resources/button.png")); 
 			
 			BufferedImage stanza1 = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+			
 			
 			Graphics g1 = stanza1.createGraphics();
 	        g1.drawImage(image1, 0, 0, width, height, null);
@@ -102,6 +110,62 @@ public class PersonalViewGUI {
 	            
 	        });
 	        
+	        coins = new JTextField("10");
+	        coins.setLocation((int)(width*11.3/100),(int)(height*87.2/100));
+	        coins.setSize(width*4/100,(int)(height*4/100));
+	        coins.setOpaque(false);
+	        coins.setFont(font);
+	        coins.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+	        f.add(coins);
+	        
+	        woods = new JTextField("22");
+	        woods.setLocation((int)(width*27.7/100),(int)(height*87.7/100));
+	        woods.setSize(width*4/100,(int)(height*4/100));
+	        woods.setOpaque(false);
+	        woods.setFont(font);
+	        woods.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+	        f.add(woods);
+	        
+	        stones = new JTextField("31");
+	        stones.setLocation((int)(width*43.3/100),(int)(height*86.5/100));
+	        stones.setSize(width*4/100,(int)(height*4/100));
+	        stones.setOpaque(false);
+	        stones.setFont(font);
+	        stones.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+	        f.add(stones);
+	        
+	        servants = new JTextField("44");
+	        servants.setLocation((int)(width*58.4/100),(int)(height*92.3/100));
+	        servants.setSize(width*4/100,(int)(height*4/100));
+	        servants.setOpaque(false);
+	        servants.setFont(font);
+	        servants.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+	        f.add(servants);
+	        
+	        victory = new JTextField("101");
+	        victory.setLocation(width*73/100,(int)(height*85.8/100));
+	        victory.setSize(width*4/100,(int)(height*4/100));
+	        victory.setOpaque(false);
+	        victory.setFont(font);
+	        victory.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+	        f.add(victory);
+	        
+	        military = new JTextField("31");
+	        military.setLocation((int)(width*81.7/100),(int)(height*85.8/100));
+	        military.setSize(width*4/100,(int)(height*4/100));
+	        military.setOpaque(false);
+	        military.setFont(font);
+	        military.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+	        f.add(military);
+	        
+	        faith = new JTextField("5");
+	        faith.setLocation((int)(width*90.4/100),(int)(height*85.8/100));
+	        faith.setSize(width*4/100,(int)(height*4/100));
+	        faith.setOpaque(false);
+	        faith.setFont(font);
+	        faith.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+	        f.add(faith);
+	        
 	        JButton[] territories = new JButton[6];
 	        JButton[] buildings = new JButton[6];
 	        
@@ -118,12 +182,12 @@ public class PersonalViewGUI {
 	        JButton[] bonusTile = new JButton[1];
 	        bonusTile = initializeButtons(bonusTile);
 	        bonusTile=setLabels(bonusTile);
-	        bonusTile[0].setLocation((int)(width*0.2/100),(int)(height*0.3/100));
-	        bonusTile[0].setSize((int)(width*8/100),(int)(height*99.6/100));
+	        bonusTile[0].setLocation((int)(width*0.10/100),(int)(height*4.38/100));
+	        bonusTile[0].setSize((int)(width*5.8/100),(int)(height*72.8/100));
 	        
 	        
 	        JLabel bonusTileLabel = new JLabel();       
-	        bonusTileLabel = setImage("resources/tile/pb"+btCode+".png",8,100);
+	        bonusTileLabel = setImage("resources/tile/pb"+btCode+".png",5.8,73.1);
 	        
 	        bonusTile[0].setIcon(bonusTileLabel.getIcon());
 			bonusTile[0].setDisabledIcon( bonusTile[0].getIcon() );
@@ -133,14 +197,16 @@ public class PersonalViewGUI {
 			for(int j=0; j<buildings.length;j++){ f.add(buildings[j]); }
 			f.add(bonusTile[0]);
 			
+			
 	        f.getContentPane().add(label);
 	        f.setUndecorated(true);
 	        f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-	        f.pack();
-	     
+	        
+	        f.setSize(width, height);
+			f.setLocation((int)((screenSize.getWidth()-f.getWidth())/2), (int)((screenSize.getHeight()-f.getHeight())/2)- (int)(screenSize.getHeight()/182.4));
 	        
 	        f.setResizable(false);
-	        f.setLocationRelativeTo(null);
+	        //f.setLocationRelativeTo(null);
 	        f.setVisible(true);  
 	        
 		}
@@ -172,7 +238,7 @@ public class PersonalViewGUI {
 				btn.setContentAreaFilled(false);
 				btn.setFocusPainted(false);
 				btn.setEnabled(false);
-		        //btn.setBorderPainted(false);
+		        btn.setBorderPainted(false);
 			}
 			
 			return btns;
@@ -192,7 +258,7 @@ public class PersonalViewGUI {
 		}
 		
 		private JButton[] locatePersonalCards(JButton[] btns, boolean buildings){
-			double x=9;
+			double x=6.5;
 			double y=3;
 			
 			if(buildings)y=y+40;
@@ -200,8 +266,8 @@ public class PersonalViewGUI {
 			for(int j=0;j<btns.length;j++){
 				
 				btns[j].setLocation((int)(width*x/100),(int)(height*y/100));
-				btns[j].setSize(width*15/100,height*32/100);
-				x=x+15;		
+				btns[j].setSize((int)(width*15.4/100),height*32/100);
+				x=x+15.3;		
 			}
 			return btns;
 		}
@@ -221,4 +287,7 @@ public class PersonalViewGUI {
 	        return label;
 			
 		}
+		
+
+		
 }

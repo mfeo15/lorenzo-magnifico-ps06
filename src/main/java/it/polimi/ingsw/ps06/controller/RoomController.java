@@ -3,7 +3,7 @@ package it.polimi.ingsw.ps06.controller;
 import java.util.Observable;
 import java.util.Observer;
 
-import it.polimi.ingsw.ps06.view.CLI.RoomCLI;
+import it.polimi.ingsw.ps06.view.GUI.RoomCLI;
 
 public class RoomController implements Observer {
 	

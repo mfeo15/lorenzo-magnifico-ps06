@@ -57,7 +57,7 @@ import javafx.scene.media.MediaPlayer;
 
 
 @SuppressWarnings("restriction")
-public class BoardGUI extends JFrame {
+public class BoardGUI extends JFrame implements Board {
 	
 	private int width, escWidth;
 	private int height, escHeight;
@@ -254,10 +254,16 @@ public class BoardGUI extends JFrame {
         
         JLabel leadersLabel[] = new JLabel[4];
         
-        leadersLabel[0] = setImage("resources/leader/leader"+code1+".jpg",20,40);
-        leadersLabel[1] = setImage("resources/leader/leader"+code2+".jpg",20,40);
-        leadersLabel[2] = setImage("resources/leader/leader"+code3+".jpg",20,40);
-        leadersLabel[3] = setImage("resources/leader/leader"+code4+".jpg",20,40);
+        leadersLabel[0] = new JLabel();
+        leadersLabel[1] = new JLabel();
+        leadersLabel[2] = new JLabel();
+        leadersLabel[3] = new JLabel();
+        
+        
+        leadersLabel[0] = setImageScreen("resources/leader/leader"+code1+".jpg",10,(int)(14.7*ratio));
+        leadersLabel[1] = setImageScreen("resources/leader/leader"+code2+".jpg",10,(int)(14.7*ratio));
+        leadersLabel[2] = setImageScreen("resources/leader/leader"+code3+".jpg",10,(int)(14.7*ratio));
+        leadersLabel[3] = setImageScreen("resources/leader/leader"+code4+".jpg",10,(int)(14.7*ratio));
         
         //JLabel stone = setImage("resources/"+color+",3,3);
         		
@@ -499,11 +505,11 @@ public class BoardGUI extends JFrame {
 		markets[1].setLocation((int)(width*68/100),(int)(height*61/100));
 		markets[1].setSize(width*7/100,height*9/100);
 		
-		markets[2].setLocation((int)(width*78/100),(int)(height*65/100));
-		markets[2].setSize(width*7/100,height*9/100);
+		markets[2].setLocation((int)(width*76/100),(int)(height*62/100));
+		markets[2].setSize(width*11/100,height*14/100);
 		
-		markets[3].setLocation((int)(width*85.5/100),(int)(height*75/100));
-		markets[3].setSize(width*7/100,height*9/100);  
+		markets[3].setLocation((int)(width*83.3/100),(int)(height*71.6/100));
+		markets[3].setSize((int)(width*11.2/100),(int)(height*15.6/100));  
 		
         council[0].setLocation((int)(width*49/100),(int)(height*7/100));
         council[0].setSize(width*29/100,height*15/100);
@@ -538,7 +544,7 @@ public class BoardGUI extends JFrame {
         dices = fillLabels(dices,dicesLabel);
         excommunications = fillLabels(excommunications, excommunicationsLabel);
         players = fillButtons(players,playersLabel);
-        leaders = fillLeaders(leaders,leadersLabel);
+        leaders = fillButtons(leaders,leadersLabel);
         
         switch(playerNumber){
         
@@ -730,7 +736,7 @@ public class BoardGUI extends JFrame {
         
         personalBoard.setResizable(false);
         personalBoard.setVisible(true); 
-          
+         
         
         desktop.add(others);
         desktop.add(towers);
@@ -902,7 +908,9 @@ public class BoardGUI extends JFrame {
 	}
 	
 	private int transfer(JButton[] btns, JButton[] lbs, int currentIndex){
-		   
+		
+		if(btns[0].isEnabled()){
+		
 			if(btns[0].getIcon()!=null)
 	        	{
 					lbs[currentIndex].setIcon(btns[0].getIcon());
@@ -910,7 +918,7 @@ public class BoardGUI extends JFrame {
 	        		lbs[currentIndex].setEnabled(true);
 	        		currentIndex++;
 	        	}
-			
+		}
 			return currentIndex;
 		
 	}
@@ -994,8 +1002,8 @@ public class BoardGUI extends JFrame {
 	
 	
 	private JButton[] locateMembers(JButton[] btns){
-		double x=86;
-		double y=48;
+		double x=3;
+		double y=78;
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		
 		for(int j=0;j<2;j++){
@@ -1004,8 +1012,8 @@ public class BoardGUI extends JFrame {
 			x=x+6;		
 		}
 		
-		x=86;
-		y=57;
+		x=3;
+		y=85;
 		
 		for(int j=2;j<4;j++){
 			btns[j].setLocation((int)(screenSize.getWidth()*x/100),(int)(screenSize.getHeight()*y/100));
@@ -1069,33 +1077,33 @@ public class BoardGUI extends JFrame {
 	}
 	
 	private JButton[] locateDices(JButton[] tfs){
-		double x=55.1;
-		double y=85;
+		double x=55.2;
+		double y=84.6;
 		
 		for(int j=0;j<tfs.length;j++){
 			tfs[j].setLocation((int)(width*x/100),(int)(height*y/100));
 			tfs[j].setSize(width*8/100,height*10/100);
-			x=x+10.7;		
+			x=x+10.6;		
 		}
 		return tfs;
 	}
 	
 	private JButton[] locateLeaders(JButton[] btns){
-		double x=0.5;
-		double y=95;
 		
-		for(int j=0;j<2;j++){
-			btns[j].setLocation((int)(width*x/100),(int)(height*y/100));
-			btns[j].setSize(width*17/100,height*38/100);
-			x=x+18;		
-		}
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		double screenWidth = screenSize.getWidth();
+		double screenHeight = screenSize.getHeight();
 		
-		x=x+100.3;
+		double space = screenWidth - width;
+		double spacePercent = (space/screenWidth)*100;
 		
-		for(int j=2;j<4;j++){
-			btns[j].setLocation((int)(width*x/100),(int)(height*y/100));
-			btns[j].setSize(width*17/100,height*38/100);
-			x=x+18;		
+		double y=100-(spacePercent*4/1.38);
+		double x=100-(spacePercent/2.4);
+		
+		for(int j=0;j<4;j++){
+			btns[j].setLocation((int)(screenWidth*x/100),(int)(screenHeight*y/100));
+			btns[j].setSize((int)(screenWidth*(spacePercent/3)/100),(int)(screenHeight*(spacePercent/1.5)/100));
+			y=y+(spacePercent/1.46);		
 		}
 		
 		return btns;
@@ -1185,16 +1193,6 @@ public class BoardGUI extends JFrame {
 		return tfs;
 	}
 	
-	private JButton[] fillLeaders(JButton[] btns, JLabel[] lbs){
-		
-		for (int j=0;j<btns.length;j++) {
-			
-			btns[j].setIcon(lbs[j].getIcon());
-			btns[j].setDisabledIcon( btns[j].getIcon() );
-		}
-		
-		return btns;
-	}
 	
 	private JButton[] locatePlayersInfo(JButton[] tfs){
 		double x=1;
@@ -1251,6 +1249,23 @@ public class BoardGUI extends JFrame {
 		
 		Graphics g = board.createGraphics();
         g.drawImage(image, 0, 0, width*xMod/100, height*yMod/100, null);
+        g.dispose();
+        
+        JLabel label = new JLabel(new ImageIcon(board)); 
+        
+        return label;
+		
+	}
+	
+	private JLabel setImageScreen(String s,int xMod, int yMod) throws IOException{
+		
+		BufferedImage image = ImageIO.read(new File(s)); 
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		
+		BufferedImage board = new BufferedImage((int)(screenSize.getWidth())*xMod/100, (int)(screenSize.getHeight())*yMod/100, BufferedImage.TYPE_INT_ARGB);
+		
+		Graphics g = board.createGraphics();
+        g.drawImage(image, 0, 0, (int)(screenSize.getWidth())*xMod/100, (int)(screenSize.getHeight())*yMod/100, null);
         g.dispose();
         
         JLabel label = new JLabel(new ImageIcon(board)); 
@@ -1377,7 +1392,7 @@ public class BoardGUI extends JFrame {
 	    blackValue=1;
 	    orangeValue=1;
 	    whiteValue=1;
-	    playerNumber=3;
+	    playerNumber=2;
 	    ex1=5;
 	    ex2=9;
 	    ex3=17;

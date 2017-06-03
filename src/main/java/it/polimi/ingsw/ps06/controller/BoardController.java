@@ -4,7 +4,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import it.polimi.ingsw.ps06.model.Game;
-import it.polimi.ingsw.ps06.view.CLI.BoardCLI;
+import it.polimi.ingsw.ps06.view.GUI.BoardCLI;
 
 public class BoardController implements Observer {
 	
