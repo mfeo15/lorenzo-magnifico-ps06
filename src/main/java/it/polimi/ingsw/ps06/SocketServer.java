@@ -1,21 +1,19 @@
 package it.polimi.ingsw.ps06;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /*
  * La classe Server resta in ascolto su una specifica porta e gestisce la ripartizione delle connessioni in ingresso,
  */
-public class SocketServer {
+public class SocketServer extends Observable {
 	private static final int PORT = 12345;
 	
 	private ServerSocket serverSocket;
@@ -73,6 +71,8 @@ public class SocketServer {
 	public synchronized void rednezvous(Connection c) {
 		
 		waitingConnection.add(c);
+		
+		notifyChangement(waitingConnection);
 		
 		System.out.println();
 		System.out.println();
@@ -138,5 +138,16 @@ public class SocketServer {
 	public void close() throws IOException 
 	{
 		serverSocket.close();
+	}
+	
+	/* MVC - SERVER IS MODEL AND SO IS AN OBSERVABLE OBJECT */
+	
+	public void notifyChangement(Object o) {
+		setChanged();
+		notifyObservers(o);
+	}
+	
+	public void addNewObser(Observer obs) {
+		addObserver(obs);
 	}
 }
