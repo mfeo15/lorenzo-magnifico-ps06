@@ -149,14 +149,15 @@ public class BoardGUI extends JFrame implements Board {
 		
 		desktopFrame = new JFrame();
 		
-		//enableOSXFullscreen(desktopFrame);
-		//requestOSXFullscreen(desktopFrame);
-		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		ratio= (screenSize.getWidth()/screenSize.getHeight());
 		
 		screenWidth = screenSize.getWidth();
 		screenHeight = screenSize.getHeight();
+		
+		try{
+			//com.apple.eawt.Application.getApplication().requestToggleFullScreen(desktopFrame);
+		} catch(Exception e){e.printStackTrace();}
 		
 	    //Due frame interni al desktop per la parte delle torri e la sezione rimanente
 		JInternalFrame towers = new JInternalFrame("frame", false, false, false, false);
@@ -380,11 +381,12 @@ public class BoardGUI extends JFrame implements Board {
 		actionsLog.setForeground(Color.BLACK);
 		actionsLog.setHorizontalAlignment(JTextField.CENTER);
 		
-        scrollOthers.setLocation(width*95/100,height*35/100);
-        scrollOthers.setSize(width*5/100,height*30/100);
+        scrollOthers.setLocation(width*96/100,height*45/100);
+        scrollOthers.setSize(width*4/100,height*10/100);
         scrollOthers.setOpaque(false);
         scrollOthers.setContentAreaFilled(false);
         scrollOthers.setFocusPainted(false);
+        scrollOthers.setIcon(new ImageIcon(ImageIO.read(new File("resources/backRight.png"))));
         //scrollOthers.setBorderPainted(false);
         
         scrollOthers.addActionListener(new ActionListener() {
@@ -406,11 +408,13 @@ public class BoardGUI extends JFrame implements Board {
             });
 
         
-        scrollTowers.setLocation(0,height*35/100);
-        scrollTowers.setSize(width*5/100,height*30/100);
+        scrollTowers.setLocation(0,height*45/100);
+        scrollTowers.setSize(width*4/100,height*10/100);
         scrollTowers.setOpaque(false);
         scrollTowers.setContentAreaFilled(false);
         scrollTowers.setFocusPainted(false);
+        scrollTowers.setIcon(setImageScreen("resources/backLeft.png",2,(int)(2*ratio)).getIcon());
+        scrollTowers.setIcon(new ImageIcon(ImageIO.read(new File("resources/backLeft.png"))));
         //scrollTowers.setBorderPainted(false);
    
         
@@ -801,11 +805,12 @@ public class BoardGUI extends JFrame implements Board {
 	    desktopFrame.setUndecorated(true);
 	    desktopFrame.setVisible(true);
 	    
+		enableOSXFullscreen(desktopFrame);
+		requestOSXFullscreen(desktopFrame);
+	    
 	    centerJIF(others);
 	    centerJIF(towers);
-	    
-	    enableOSXFullscreen(desktopFrame);
-		requestOSXFullscreen(desktopFrame);
+
 	}
 	
 	
