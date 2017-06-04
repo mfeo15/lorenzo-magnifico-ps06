@@ -12,11 +12,11 @@ import it.polimi.ingsw.ps06.view.GUI.BoardCLI;
 public class BoardController implements Observer {
 	
 	private Board theView;
-	private Game  theModel;
+	private Client theClient;
 	
-	public BoardController(Game game, Board boardView) {
-		this.theModel = game;
+	public BoardController(Client client, Board boardView) {
 		this.theView = boardView;
+		this.theClient = client;
 	}
 
 	@Override
@@ -24,7 +24,16 @@ public class BoardController implements Observer {
 		if (!(arg instanceof Event))
 			return;
 		
-		EventParser parser = new EventParser();
-		((Event) arg).accept(parser);
+		//Smista le comunicazioni provenienti dal Client
+		if ( o.getClass().isInstance(theClient) ) {
+			
+		}			
+		
+		//Smista le comunicazioni provenienti dalla View
+		if ( o.getClass().isInstance(theView) ) {					
+		
+			EventParser parser = new EventParser(theClient);
+			((Event) arg).accept(parser);
+		}
 	}
 }

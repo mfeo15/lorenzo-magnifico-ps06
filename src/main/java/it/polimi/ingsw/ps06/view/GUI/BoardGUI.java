@@ -149,8 +149,8 @@ public class BoardGUI extends JFrame implements Board {
 		
 		desktopFrame = new JFrame();
 		
-		enableOSXFullscreen(desktopFrame);
-		requestOSXFullscreen(desktopFrame);
+		//enableOSXFullscreen(desktopFrame);
+		//requestOSXFullscreen(desktopFrame);
 		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		ratio= (screenSize.getWidth()/screenSize.getHeight());
@@ -804,6 +804,8 @@ public class BoardGUI extends JFrame implements Board {
 	    centerJIF(others);
 	    centerJIF(towers);
 	    
+	    enableOSXFullscreen(desktopFrame);
+		requestOSXFullscreen(desktopFrame);
 	}
 	
 	

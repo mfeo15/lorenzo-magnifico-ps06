@@ -11,9 +11,11 @@ import it.polimi.ingsw.ps06.view.GUI.MenuCLI;
 public class MenuController extends Observable implements Observer {
 	
 	private Menu theView;
+	private Client theClient;
 	
-	public MenuController(Menu menuView) {
+	public MenuController(Client client, Menu menuView) {
 		this.theView = menuView;
+		this.theClient = client;
 	}
 	
 	@Override
@@ -21,7 +23,16 @@ public class MenuController extends Observable implements Observer {
 		if (!(arg instanceof Event))
 			return;
 		
-		EventParser parser = new EventParser();
-		((Event) arg).accept(parser);
+		//Smista le comunicazioni provenienti dal Client
+		if ( o.getClass().isInstance(theClient) ) {
+			
+		}
+				
+		//Smista le comunicazioni provenienti dalla View
+		if ( o.getClass().isInstance(theView) ) {
+					
+			EventParser parser = new EventParser(theClient);
+			((Event) arg).accept(parser);
+		}
 	}
 }
