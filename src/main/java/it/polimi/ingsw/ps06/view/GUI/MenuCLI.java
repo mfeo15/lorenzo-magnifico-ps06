@@ -3,22 +3,24 @@ package it.polimi.ingsw.ps06.view.GUI;
 import java.util.Observable;
 import java.util.Scanner;
 
-import it.polimi.ingsw.ps06.controller.MenuControllerCLI;
+import it.polimi.ingsw.ps06.controller.MenuController;
 
-public class MenuCLI extends Observable {
+public class MenuCLI extends Observable implements Menu {
 	
 	private Scanner input;
 	
 	public MenuCLI(Scanner input) {
 		
 		this.input = input;
+		
+		show();
 	}
 	
 	public Scanner getScanner() {
 		return input;
 	}
 	
-	public void addNewControllerObserver(MenuControllerCLI controller) {
+	public void addNewControllerObserver(MenuController controller) {
 		addObserver(controller);
 	}
 	

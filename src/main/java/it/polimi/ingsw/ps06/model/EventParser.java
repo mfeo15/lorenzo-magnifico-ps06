@@ -69,4 +69,23 @@ public class EventParser implements EventVisitor {
 		// TODO Auto-generated method stub
 
 	}
+
+	@Override
+	public void visit(EventClose eventClose) {
+		System.exit(0);
+	}
+
+	@Override
+	public void visit(StoryBoard2Room storyboard) {
+		//storyboard.view = new 
+		
+		
+	}
+
+	@Override
+	public void visit(StoryBoard2Board storyboard) {
+		// TODO Auto-generated method stub
+		
+		//BoardController controller = new BoardController();
+	}
 }
