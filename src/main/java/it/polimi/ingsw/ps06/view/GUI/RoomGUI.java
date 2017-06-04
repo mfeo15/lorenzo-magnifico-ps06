@@ -300,5 +300,38 @@ public class RoomGUI extends JFrame implements Room {
         f.setLocationRelativeTo(null);
         f.setVisible(true);   
 	}
+
+	
+	@Override
+	public void setPlayer(String name, int index) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void giveCredentials(String username, String password) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean checkLogin() {
+		return true;
+		
+	}
+
+	@Override
+	public void startGame() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void notifyExit() {
+		// TODO Auto-generated method stub
+		
+	}
+	
 		
 }

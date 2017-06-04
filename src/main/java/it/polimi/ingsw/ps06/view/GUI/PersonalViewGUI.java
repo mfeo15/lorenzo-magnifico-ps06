@@ -16,6 +16,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 
 import javafx.scene.media.Media;
@@ -24,7 +26,7 @@ import javafx.scene.media.MediaPlayer;
 public class PersonalViewGUI implements PersonalView {
 	private int playerCode;
 	private int width, height;
-	private JFrame f;
+	private JFrame f = new JFrame();
 	private JButton exit;
 	private JTextField coins, woods, stones, servants, victory, military, faith;
 	private Font font;
@@ -32,12 +34,9 @@ public class PersonalViewGUI implements PersonalView {
 	private int code1, code2, code3, code4;
 	private int btCode;
 
-		public PersonalViewGUI(int code){
+
+		public PersonalViewGUI(int code) throws IOException {
 			this.playerCode=code;
-			
-		}
-		
-		public PersonalViewGUI() throws IOException {
 			
 			setPersonalView();
 			
@@ -50,8 +49,8 @@ public class PersonalViewGUI implements PersonalView {
 			
 			font = new Font("Lucida Handwriting",Font.PLAIN,(int)(18*(screenSize.getHeight()/1080)));
 			
-			width = (int)((screenSize.getWidth()*70/100)*(1.349 / ratio));
-			height = (int)(screenSize.getHeight()*70/100);
+			width = (int)((screenSize.getWidth()*77/100)*(1.349 / ratio));
+			height = (int)(screenSize.getHeight()*77/100);
 			
 			BufferedImage image1 = ImageIO.read(new File("resources/personalView.png")); 
 			BufferedImage exit1 = ImageIO.read(new File("resources/button.png")); 
@@ -182,7 +181,7 @@ public class PersonalViewGUI implements PersonalView {
 	        JButton[] bonusTile = new JButton[1];
 	        bonusTile = initializeButtons(bonusTile);
 	        bonusTile=setLabels(bonusTile);
-	        bonusTile[0].setLocation((int)(width*0.10/100),(int)(height*4.38/100));
+	        bonusTile[0].setLocation((int)(width*0.07/100),(int)(height*4.38/100));
 	        bonusTile[0].setSize((int)(width*5.8/100),(int)(height*72.8/100));
 	        
 	        
@@ -208,6 +207,7 @@ public class PersonalViewGUI implements PersonalView {
 	        f.setResizable(false);
 	        //f.setLocationRelativeTo(null);
 	        f.setVisible(true);  
+	        
 	        
 		}
 		
@@ -270,6 +270,10 @@ public class PersonalViewGUI implements PersonalView {
 				x=x+15.3;		
 			}
 			return btns;
+		}
+		
+		public void close(){
+			f.dispose();
 		}
 		
 		private JLabel setImage(String s,double xMod, double yMod) throws IOException{

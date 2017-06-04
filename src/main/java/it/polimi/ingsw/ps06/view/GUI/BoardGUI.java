@@ -11,6 +11,7 @@ import java.awt.Graphics;
 import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.Window;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
@@ -21,13 +22,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.TimerTask;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
@@ -41,7 +42,9 @@ import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JRootPane;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
@@ -66,6 +69,7 @@ public class BoardGUI extends JFrame implements Board {
     private JPanel panel1 = new JPanel();
     private JPanel panel2 = new JPanel();
 	private CardLayout cl = new CardLayout();
+	private JLabel leaderBack;
 	
 	private JButton scrollTowers = new JButton();
 	private JButton scrollOthers = new JButton();
@@ -73,10 +77,12 @@ public class BoardGUI extends JFrame implements Board {
 	private JTextField playerInfo;
 	private JTextField roundInfo;
 	private JTextField resourcesInfo;
+	private JTextField timerInfo = new JTextField("00");
 	private JTextField actionsLog = new JTextField();
 	
 	private JButton escMenu1;
 	private JButton escMenu2;
+	private Timer timer = createTimer(1000);
 	
 	private int phase=1;
 	private boolean change=true;
@@ -90,18 +96,24 @@ public class BoardGUI extends JFrame implements Board {
     
     private String playerName;
     
-    private Font fontBIG, fontMEDIUM, fontSMALL;
+    private Font fontBIG, fontMEDIUM, fontSMALL, fontbig;
     private JDesktopPane desktop;
     private JFrame desktopFrame;
     
+	JButton[] leaders = new JButton[4];
+    
     private JLabel membersLabel[] = new JLabel[4];
     private JButton[] members = new JButton[4];
+    private double ratio;
     
-    private String playerString="G";
+    
+    private String player="";
+    private String playerColor="G";
     private int blackValue;
     private int orangeValue;
     private int whiteValue;
     private int playerNumber;
+    private String roundPlayer;
     private int ex1;
     private int ex2;
     private int ex3;
@@ -109,7 +121,11 @@ public class BoardGUI extends JFrame implements Board {
     private boolean check = true;
     private int code1, code2, code3, code4;
     private int coinV, woodV, stoneV, servantV;
+    int y;
     
+    private JFrame personalView;
+    
+    PersonalViewGUI view=null;
 	private JFXPanel fxPanel = new JFXPanel();
 	
     private enum Direction {
@@ -126,14 +142,18 @@ public class BoardGUI extends JFrame implements Board {
 		    UIManager.setLookAndFeel( UIManager.getCrossPlatformLookAndFeelClassName() );
 		 } catch (Exception e) { e.printStackTrace();}
 		
+		
 		setBoard();
 		
 		JFrame escFrame = new JFrame();
 		
 		desktopFrame = new JFrame();
 		
+		enableOSXFullscreen(desktopFrame);
+		requestOSXFullscreen(desktopFrame);
+		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		double ratio= (screenSize.getWidth()/screenSize.getHeight());
+		ratio= (screenSize.getWidth()/screenSize.getHeight());
 		
 		screenWidth = screenSize.getWidth();
 		screenHeight = screenSize.getHeight();
@@ -182,17 +202,17 @@ public class BoardGUI extends JFrame implements Board {
 		fontMEDIUM = new Font("Lucida Handwriting",Font.PLAIN,(int)(15*(screenSize.getHeight()/1080)) );
 		fontMEDIUM = new Font("Lucida Handwriting",Font.PLAIN,(int)(25*(screenSize.getHeight()/1080)) );
 		fontBIG = new Font("Lucida Handwriting",Font.PLAIN,(int)(40*(screenSize.getHeight()/1080)) );
+		fontbig = new Font("Lucida Handwriting",Font.PLAIN,(int)(33*(screenSize.getHeight()/1080)) );
 		
 		//Caricamento e resize delle immagini
 		BufferedImage image1 = ImageIO.read(new File("resources/board1.jpg")); 
 		BufferedImage image2 = ImageIO.read(new File("resources/board2.jpg")); 
 		BufferedImage image3 = ImageIO.read(new File("resources/stanzaVuota.png")); 
 		BufferedImage image4 = ImageIO.read(new File("resources/desktop.jpg")); 
-		BufferedImage image5 = ImageIO.read(new File("resources/personalboard2.png")); 
 		
 		BufferedImage board1 = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		BufferedImage board2 = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-		BufferedImage board3 = new BufferedImage(escWidth, escHeight, BufferedImage.TYPE_INT_RGB);
+		BufferedImage board3 = new BufferedImage(escWidth, escHeight, BufferedImage.TYPE_INT_ARGB);
 		BufferedImage desktopImage = new BufferedImage((int)screenSize.getWidth(), (int)screenSize.getHeight(), BufferedImage.TYPE_INT_RGB);
 		BufferedImage pbImage = new BufferedImage( (int)(screenSize.getWidth()), (int)(screenSize.getHeight()*0.18), BufferedImage.TYPE_INT_RGB);
 		
@@ -212,9 +232,6 @@ public class BoardGUI extends JFrame implements Board {
         g4.drawImage(image4, 0, 0, (int)screenSize.getWidth(), (int)screenSize.getHeight(), null);
         g4.dispose();
         
-        Graphics g5 = pbImage.createGraphics();
-        g5.drawImage(image5, 0, 0, (int)screenSize.getWidth(), (int)(screenSize.getHeight()*0.18), null);
-        g5.dispose();
         
         JLabel board1Label = new JLabel(new ImageIcon(board1)); 
         JLabel board2Label = new JLabel(new ImageIcon(board2));
@@ -222,10 +239,10 @@ public class BoardGUI extends JFrame implements Board {
         JLabel pbLabel = new JLabel(new ImageIcon(pbImage));
         
         
-        membersLabel[0] = setImage("resources/member/"+playerString+"N.png",5,7);
-        membersLabel[1] = setImage("resources/member/"+playerString+"A.png",5,7);
-        membersLabel[2] = setImage("resources/member/"+playerString+"B.png",5,7);
-        membersLabel[3] = setImage("resources/member/"+playerString+"E.png",5,7);
+        membersLabel[0] = setImage("resources/member/"+playerColor+"N.png",5,7);
+        membersLabel[1] = setImage("resources/member/"+playerColor+"A.png",5,7);
+        membersLabel[2] = setImage("resources/member/"+playerColor+"B.png",5,7);
+        membersLabel[3] = setImage("resources/member/"+playerColor+"E.png",5,7);
         
         
         JLabel dicesLabel[] = new JLabel[3];
@@ -259,11 +276,27 @@ public class BoardGUI extends JFrame implements Board {
         leadersLabel[2] = new JLabel();
         leadersLabel[3] = new JLabel();
         
+        leadersLabel[0] = setImageScreen("resources/leader/leader"+code1+".jpg",9,(int)(13.23*ratio));
+        leadersLabel[1] = setImageScreen("resources/leader/leader"+code2+".jpg",9,(int)(13.23*ratio));
+        leadersLabel[2] = setImageScreen("resources/leader/leader"+code3+".jpg",9,(int)(13.23*ratio));
+        leadersLabel[3] = setImageScreen("resources/leader/leader"+code4+".jpg",9,(int)(13.23*ratio));
         
-        leadersLabel[0] = setImageScreen("resources/leader/leader"+code1+".jpg",10,(int)(14.7*ratio));
-        leadersLabel[1] = setImageScreen("resources/leader/leader"+code2+".jpg",10,(int)(14.7*ratio));
-        leadersLabel[2] = setImageScreen("resources/leader/leader"+code3+".jpg",10,(int)(14.7*ratio));
-        leadersLabel[3] = setImageScreen("resources/leader/leader"+code4+".jpg",10,(int)(14.7*ratio));
+        JLabel leadersLabelFade[] = new JLabel[4];
+        
+        leadersLabelFade[0] = new JLabel();
+        leadersLabelFade[1] = new JLabel();
+        leadersLabelFade[2] = new JLabel();
+        leadersLabelFade[3] = new JLabel();
+        
+        leadersLabelFade[0] = setImageScreen("resources/leader/leader"+code1+"fade.png",9,(int)(13.23*ratio));
+        leadersLabelFade[1] = setImageScreen("resources/leader/leader"+code2+"fade.png",9,(int)(13.23*ratio));
+        leadersLabelFade[2] = setImageScreen("resources/leader/leader"+code3+"fade.png",9,(int)(13.23*ratio));
+        leadersLabelFade[3] = setImageScreen("resources/leader/leader"+code4+"fade.png",9,(int)(13.23*ratio));
+        
+        leaderBack = new JLabel();
+        leaderBack = setImageScreen("resources/leader/leaderBack.jpg", 9,(int)(13.23*ratio));
+        
+        
         
         //JLabel stone = setImage("resources/"+color+",3,3);
         		
@@ -296,11 +329,10 @@ public class BoardGUI extends JFrame implements Board {
           
  
         //Inizializzazione dei componenti
-		String player="";
 		
 		playerInfo = new JTextField("Turno del giocatore: "+player);
-		playerInfo.setLocation((int)screenSize.getWidth()*5/100,0);
-		playerInfo.setSize((int)screenSize.getWidth()*70/100,(int)screenSize.getHeight()*6/100);
+		playerInfo.setLocation((int)(screenSize.getWidth()*3/100),0);
+		playerInfo.setSize((int)screenSize.getWidth()*60/100,(int)screenSize.getHeight()*6/100);
 		playerInfo.setOpaque(false);
 		playerInfo.setEditable(false);
 		playerInfo.setBorder(null);
@@ -311,13 +343,23 @@ public class BoardGUI extends JFrame implements Board {
 		int periodNumber=1;
 		
 		roundInfo = new JTextField("Turno: "+roundNumber+"  Periodo: "+periodNumber);
-		roundInfo.setLocation((int)screenSize.getWidth()*70/100,0);
-		roundInfo.setSize((int)screenSize.getWidth()*30/100,(int)screenSize.getHeight()*6/100);
+		roundInfo.setLocation((int)screenSize.getWidth()*60/100,0);
+		roundInfo.setSize((int)screenSize.getWidth()*29/100,(int)screenSize.getHeight()*6/100);
 		roundInfo.setOpaque(false);
 		roundInfo.setEditable(false);
 		roundInfo.setBorder(null);
 		roundInfo.setFont(fontBIG);
 		roundInfo.setForeground(Color.BLACK);
+		
+		timerInfo = new JTextField();
+		timerInfo.setLocation((int)screenSize.getWidth()*89/100,0);
+		timerInfo.setSize((int)screenSize.getWidth()*11/100,(int)screenSize.getHeight()*6/100);
+		timerInfo.setOpaque(false);
+		timerInfo.setEditable(false);
+		timerInfo.setBorder(null);
+		timerInfo.setFont(fontbig);
+		timerInfo.setForeground(Color.BLACK);
+		timerInfo.setHorizontalAlignment(JTextField.CENTER);
 		
 		resourcesInfo = new JTextField(coinV+" Coin   "+woodV+" Wood   "+stoneV+" Wood   "+servantV+" Servant");
 		resourcesInfo.setLocation((int)screenSize.getWidth()*30/100,(int)screenSize.getHeight()*96/100);
@@ -329,8 +371,8 @@ public class BoardGUI extends JFrame implements Board {
 		resourcesInfo.setForeground(Color.BLACK);
 		resourcesInfo.setHorizontalAlignment(JTextField.CENTER);
 		
-		actionsLog.setLocation((int)screenSize.getWidth()*80/100,(int)screenSize.getHeight()*11/100);
-		actionsLog.setSize((int)screenSize.getWidth()*20/100,(int)screenSize.getHeight()*4/100);
+		actionsLog.setLocation((int)screenSize.getWidth()*25/100,(int)(screenSize.getHeight()*86/100));
+		actionsLog.setSize((int)screenSize.getWidth()*50/100,(int)screenSize.getHeight()*4/100);
 		actionsLog.setOpaque(false);
 		actionsLog.setEditable(false);
 		actionsLog.setBorder(null);
@@ -448,7 +490,6 @@ public class BoardGUI extends JFrame implements Board {
     	JButton[] harvests = new JButton[9];
     	JButton[] players = new JButton[5];
     	JButton[] placements = new JButton[16];
-    	JButton[] leaders = new JButton[4];
     	
     	JButton[] council = new JButton[1];
     	JButton[] production = new JButton[1];
@@ -515,12 +556,12 @@ public class BoardGUI extends JFrame implements Board {
         council[0].setSize(width*29/100,height*15/100);
         council = set(council);
 
-		production[0].setLocation((int)(width*15/100),(int)(height*64.3/100));
-		production[0].setSize(width*23/100,height*10/100);
+		production[0].setLocation((int)(width*14.5/100),(int)(height*62.5/100));
+		production[0].setSize((int)(width*24.3/100),(int)(height*13.5/100));
 		production = set(production);
 		
-		harvest[0].setLocation((int)(width*15.1/100),(int)(height*82.5/100));
-		harvest[0].setSize(width*23/100,height*10/100);
+		harvest[0].setLocation((int)(width*14.5/100),(int)(height*81/100));
+		harvest[0].setSize(width*24/100,height*13/100);
 		harvest = set(harvest);
 
 	
@@ -544,7 +585,9 @@ public class BoardGUI extends JFrame implements Board {
         dices = fillLabels(dices,dicesLabel);
         excommunications = fillLabels(excommunications, excommunicationsLabel);
         players = fillButtons(players,playersLabel);
-        leaders = fillButtons(leaders,leadersLabel);
+        leaders = fillLeaders(leaders,leadersLabel,leadersLabelFade);
+        
+        
         
         switch(playerNumber){
         
@@ -602,21 +645,24 @@ public class BoardGUI extends JFrame implements Board {
         for(int j=0; j<orders.length;j++){ others.add(orders[j]); }
         for(int j=0; j<playersInfo.length;j++){ desktop.add(playersInfo[j]); }
         for(int j=0; j<excommunications.length;j++){ others.add(excommunications[j]); }
-        for(int j=0; j<leaders.length;j++){ desktop.add(leaders[j]); }
+        for(int j=0; j<leaders.length;j++){ 
+        	desktop.add(leaders[j]); 
+        	leaders[j].addMouseListener(new PopClickListener(j));
+        }
         
         
 
-        for(int j=0; j<players.length;j++)
+        for(y=0; y<players.length;y++)
         {
-        	if(players[j].isEnabled()){
-	        	players[j].addMouseListener(new MouseAdapter()
+        	if(players[y].isEnabled()){
+	        	players[y].addMouseListener(new MouseAdapter()
 	        	{        		
 		            public void mousePressed(MouseEvent evt)
 		            {
 		            	MediaPlayer mediaPlayer3 = new MediaPlayer(hit2);
 		        		mediaPlayer3.play();
-						try {new PersonalViewGUI();} catch (IOException e) {e.printStackTrace();}
-		            }
+		        		if(view!=null) view.close();
+						try {view = new PersonalViewGUI(y);} catch (IOException e) {e.printStackTrace();}}
 	            
 	        	});
         	}
@@ -737,12 +783,13 @@ public class BoardGUI extends JFrame implements Board {
         personalBoard.setResizable(false);
         personalBoard.setVisible(true); 
          
-        
+        desktop.add(actionsLog);
         desktop.add(others);
         desktop.add(towers);
         //desktop.add(personalBoard);
 	    desktop.setVisible(true);
 	    
+	    desktopFrame.add(timerInfo);
 	    desktopFrame.add(resourcesInfo);
 	    desktopFrame.add(playerInfo);
 	    desktopFrame.add(roundInfo);
@@ -1002,23 +1049,24 @@ public class BoardGUI extends JFrame implements Board {
 	
 	
 	private JButton[] locateMembers(JButton[] btns){
-		double x=3;
-		double y=78;
+		double x=7;
+		double y=100;
+		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		
 		for(int j=0;j<2;j++){
-			btns[j].setLocation((int)(screenSize.getWidth()*x/100),(int)(screenSize.getHeight()*y/100));
-			btns[j].setSize((int)screenSize.getWidth()*4/100,(int)screenSize.getWidth()*4/100);
-			x=x+6;		
+			btns[j].setLocation((int)(width*x/100),(int)(height*y/100));
+			btns[j].setSize((int)width*6/100,(int)width*6/100);
+			x=x+8;		
 		}
 		
-		x=3;
-		y=85;
+		x=7;
+		y=110;
 		
 		for(int j=2;j<4;j++){
-			btns[j].setLocation((int)(screenSize.getWidth()*x/100),(int)(screenSize.getHeight()*y/100));
-			btns[j].setSize((int)screenSize.getWidth()*4/100,(int)screenSize.getWidth()*4/100);
-			x=x+6;		
+			btns[j].setLocation((int)(width*x/100),(int)(height*y/100));
+			btns[j].setSize((int)width*6/100,(int)width*6/100);
+			x=x+8;		
 		}
 		return btns;
 	}
@@ -1094,16 +1142,13 @@ public class BoardGUI extends JFrame implements Board {
 		double screenWidth = screenSize.getWidth();
 		double screenHeight = screenSize.getHeight();
 		
-		double space = screenWidth - width;
-		double spacePercent = (space/screenWidth)*100;
-		
-		double y=100-(spacePercent*4/1.38);
-		double x=100-(spacePercent/2.4);
+		double y=7.5;
+		double x=86;
 		
 		for(int j=0;j<4;j++){
 			btns[j].setLocation((int)(screenWidth*x/100),(int)(screenHeight*y/100));
-			btns[j].setSize((int)(screenWidth*(spacePercent/3)/100),(int)(screenHeight*(spacePercent/1.5)/100));
-			y=y+(spacePercent/1.46);		
+			btns[j].setSize((int)(screenWidth*8.2/100),(int)(screenHeight*12.05*ratio/100));
+			y=y+12.45*ratio;
 		}
 		
 		return btns;
@@ -1229,6 +1274,17 @@ public class BoardGUI extends JFrame implements Board {
 		return btns;
 	}
 	
+	private JButton[] fillLeaders(JButton[] btns, JLabel[] lbs, JLabel[] lbs2){
+		
+		for (int j=0;j<btns.length;j++) {
+			
+			btns[j].setIcon(lbs[j].getIcon());
+			btns[j].setDisabledIcon( lbs2[j].getIcon() );
+		}
+		
+		return btns;
+	}
+	
 	private void enable(JButton...btns){
 		for (JButton btn : btns) {
 	        btn.setEnabled(true);
@@ -1344,6 +1400,13 @@ public class BoardGUI extends JFrame implements Board {
 	                        members[Integer.parseInt(value.toString())].setEnabled(false);	                       
 	                        //cambia testo ad actionslog somehow
 	                        
+	                        String hoverSound = "resources/place.wav";
+	                		Media hit = new Media(new File(hoverSound).toURI().toString());
+	                		MediaPlayer mediaPlayer1 = new MediaPlayer(hit);
+	        				mediaPlayer1.play();
+	                        
+	                        
+	                        
 	                        accept = true;
 	                    }
 	                }
@@ -1386,9 +1449,148 @@ public class BoardGUI extends JFrame implements Board {
 	    }
 	}
 	
+	class desktopPopUp extends JPopupMenu {
+	    JMenuItem gioca;
+	    JMenuItem scarta;
+	    JMenuItem attiva;
+	    
+	    public desktopPopUp(int value){
+	    	
+	        gioca = new JMenuItem("Gioca!");
+	        
+	        gioca.addActionListener(new ActionListener() {
+	            public void actionPerformed(ActionEvent e) {
+	              leaders[value].setEnabled(true);
+	            }
+	          });
+	        
+	        scarta = new JMenuItem("Scarta!");
+	        
+	        scarta.addActionListener(new ActionListener() {
+	            public void actionPerformed(ActionEvent e) {
+	              
+	            	leaders[value].disable();
+	            	leaders[value].setIcon(null);
+	            	
+	            	MouseListener[] mouseListeners = leaders[value].getMouseListeners();
+	            	for (MouseListener mouseListener : mouseListeners) {
+	            		leaders[value].removeMouseListener(mouseListener);
+	            	}
+	            	
+	            }
+	          });
+	        
+	        attiva = new JMenuItem("Attiva!");
+	        
+	        attiva.addActionListener(new ActionListener() {
+	            public void actionPerformed(ActionEvent e) {
+	            
+	            	if(leaders[value].isEnabled()){
+	            		leaders[value].setIcon(leaderBack.getIcon());
+	  	              	leaders[value].setDisabledIcon(leaderBack.getIcon());
+	            	}
+
+	            }
+	          });
+	        
+	        add(attiva);
+	        add(gioca);
+	        add(scarta);
+	    }
+	}
+	
+	class PopClickListener extends MouseAdapter {
+		int value;
+		
+		public PopClickListener(int value){
+			this.value=value;
+		}
+		
+	    public void mousePressed(MouseEvent e){
+	        if (e.isPopupTrigger())
+	            doPop(e);
+	    }
+
+	    public void mouseReleased(MouseEvent e){
+	        if (e.isPopupTrigger())
+	            doPop(e);
+	    }
+
+	    private void doPop(MouseEvent e){
+	        desktopPopUp menu = new desktopPopUp(value);
+	        menu.show(e.getComponent(), e.getX(), e.getY());
+	    }
+	}
+
+	public void startTimer(){
+		getTimer().start();
+	}
+	
+    private Timer createTimer(int delay) {
+        Timer timer = new Timer(delay, new ActionListener(){
+            Time counter = new Time(90);
+            public void actionPerformed(ActionEvent e) {
+                if (counter.getTime() == 0) {
+                    ((Timer)e.getSource()).stop();
+                    timerInfo.setText("Times up!");
+                } else {
+                    timerInfo.setText("" + counter.getTime());
+                    counter.decTime();
+                }
+            }
+        });
+        timer.setInitialDelay(0);
+        return timer;
+    }
+
+    private Timer getTimer() {
+        return timer;
+    }
+
+    static class Time {
+        int time = 1000;
+        public Time(int time) {
+            this.time = time;
+        }
+        void decTime() {
+            time--;
+        }
+        int getTime() {
+            return time;
+        }
+    }
+	
+    
+    public static void enableOSXFullscreen(Window window) {
+        try {
+            Class util = Class.forName("com.apple.eawt.FullScreenUtilities");
+            Class params[] = new Class[]{Window.class, Boolean.TYPE};
+            Method method = util.getMethod("setWindowCanFullScreen", params);
+            method.invoke(util, window, true);
+        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | ClassNotFoundException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public static void requestOSXFullscreen(Window window) {
+        try {
+            Class appClass = Class.forName("com.apple.eawt.Application");
+            Class params[] = new Class[]{};
+
+            Method getApplication = appClass.getMethod("getApplication", params);
+            Object application = getApplication.invoke(appClass);
+            Method requestToggleFulLScreen = application.getClass().getMethod("requestToggleFullScreen", Window.class);
+
+            requestToggleFulLScreen.invoke(application, window);
+        } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+            ex.printStackTrace();
+        }
+    }
+    
 	private void setBoard(){
 	    
-		playerString="G";
+		player = "null";
+		playerColor="G";
 	    blackValue=1;
 	    orangeValue=1;
 	    whiteValue=1;
@@ -1396,7 +1598,7 @@ public class BoardGUI extends JFrame implements Board {
 	    ex1=5;
 	    ex2=9;
 	    ex3=17;
-	    code1=5;
+	    code1=1;
 	    code2=9;
 	    code3=18;
 	    code4=12;
@@ -1405,5 +1607,9 @@ public class BoardGUI extends JFrame implements Board {
 	    stoneV=5;
 	    servantV=5;
 	    playerName="Gigi Scarfani";
+	    roundPlayer="Gigi Scarfani";
+	    
+        startTimer();
+
 	}
 }
