@@ -6,39 +6,38 @@ import java.util.Observer;
 import it.polimi.ingsw.ps06.Client;
 import it.polimi.ingsw.ps06.Connection;
 import it.polimi.ingsw.ps06.Message;
-import it.polimi.ingsw.ps06.view.CLI.RoomCLI;
+import it.polimi.ingsw.ps06.model.Event;
+import it.polimi.ingsw.ps06.model.EventParser;
+import it.polimi.ingsw.ps06.view.GUI.Room;
 
 public class RoomController implements Observer {
 	
-	private RoomCLI theView;
+	private Room theView;
 	private Client theClient;
 	
-	public RoomController(Client client, RoomCLI roomView) {
+	public RoomController(Client client, Room roomView) {
 		this.theView = roomView;
 		this.theClient = client;
-		
-		theClient.addObserver(this);
-	}
-	
-	public RoomController(Client c) {
-		this.theClient = c;
-		
-		//theClient.addNewObserver(this);
 	}
 
 	@Override
 	public void update(Observable o, Object arg) {
-		// TODO Auto-generated method stub
+		if (!(arg instanceof Event))
+			return;
 		
+		//Smista le comunicazioni provenienti dal Client
 		if ( o.getClass().isInstance(theClient) ) {
-			
-			Message m = (Message) arg;
+	
+      Message m = (Message) arg;
 			
 			System.out.println("Controller received: " + m.getMessage() );
 		}
 		
+		//Smista le comunicazioni provenienti dalla View
 		if ( o.getClass().isInstance(theView) ) {
 			
+			EventParser parser = new EventParser(theClient);
+			((Event) arg).accept(parser);
 		}
 	}
 }

@@ -3,7 +3,9 @@ package it.polimi.ingsw.ps06;
 import java.io.IOException;
 import java.util.Scanner;
 
-import it.polimi.ingsw.ps06.controller.RoomController;
+import it.polimi.ingsw.ps06.controller.MenuController;
+import it.polimi.ingsw.ps06.view.GUI.MenuCLI;
+import it.polimi.ingsw.ps06.view.GUI.MenuGUI;
 
 
 public class App 
@@ -37,29 +39,18 @@ public class App
     		System.out.print("Insert the Server IP > ");
     		
     		String host = s.nextLine();
-    		
     		Client client = new Client(host, 12345);
+        
+        /*
     		RoomController c = new RoomController(client);
     		client.addNewObserver(c);
-    		
     		client.start();
+        */
     		
-    		/*
-    		System.out.print("Press 1 for CLI or 2 for GUI > ");
-        	
-        	switch(Integer.parseInt(s.nextLine())) {
-        	case 1:
-        		MenuCLI viewCLI = new MenuCLI(s);
-        		MenuControllerCLI controllerCLI = new MenuControllerCLI(viewCLI);
-        		controllerCLI.init();
-        		break;
-        	case 2:
-        		MenuGUI viewGUI = new MenuGUI();
-        		MenuControllerGUI controllerGUI = new MenuControllerGUI(viewGUI);
-        		controllerGUI.init();
-        		break;
-        	}
-        	*/
-    	}	
+    	  System.out.print("Press 1 for CLI or 2 for GUI > ");
+    	
+    	  MenuController controller = ( Integer.parseInt(s.nextLine()) == 1 ) ? new MenuController(new MenuCLI(s)) : new MenuController(new MenuGUI());
+
+      }
     }
 }

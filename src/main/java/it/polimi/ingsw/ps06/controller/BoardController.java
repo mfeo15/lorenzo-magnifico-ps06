@@ -3,26 +3,37 @@ package it.polimi.ingsw.ps06.controller;
 import java.util.Observable;
 import java.util.Observer;
 
+import it.polimi.ingsw.ps06.model.Board;
+import it.polimi.ingsw.ps06.model.Event;
+import it.polimi.ingsw.ps06.model.EventParser;
 import it.polimi.ingsw.ps06.model.Game;
-import it.polimi.ingsw.ps06.view.CLI.BoardCLI;
+import it.polimi.ingsw.ps06.view.GUI.BoardCLI;
 
 public class BoardController implements Observer {
 	
 	private Board theView;
-	private Game  theModel;
+	private Client theClient;
 	
-	public BoardController(Game game, Board boardView) {
-		this.theModel = game;
-		
+	public BoardController(Client client, Board boardView) {
 		this.theView = boardView;
-		theView.addNewControllerObserver(this);
+		this.theClient = client;
 	}
 
 	@Override
 	public void update(Observable o, Object arg) {
 		if (!(arg instanceof Event))
-			throw new Exception();
+			return;
 		
-		((Event) arg).accept(EventParser);
+		//Smista le comunicazioni provenienti dal Client
+		if ( o.getClass().isInstance(theClient) ) {
+			
+		}			
+		
+		//Smista le comunicazioni provenienti dalla View
+		if ( o.getClass().isInstance(theView) ) {					
+		
+			EventParser parser = new EventParser(theClient);
+			((Event) arg).accept(parser);
+		}
 	}
 }

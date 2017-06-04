@@ -1,6 +1,15 @@
 package it.polimi.ingsw.ps06.model;
 
+import it.polimi.ingsw.ps06.controller.BoardController;
+import it.polimi.ingsw.ps06.controller.RoomController;
+
 public class EventParser implements EventVisitor {
+	
+	private Client client;
+	
+	public EventParser(Client client) {
+		this.client = client;
+	}
 
 	@Override
 	public void visit(MemberPlaced memberPlaced) {
@@ -68,5 +77,28 @@ public class EventParser implements EventVisitor {
 	public void visit(LeaderDiscarded leaderDiscarded) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void visit(EventClose eventClose) {
+		System.exit(0);
+	}
+
+	@Override
+	public void visit(StoryBoard2Room storyboard) {
+		
+		RoomController controller = new RoomController(client, storyboard.view);
+		
+		client.addNewObserver(controller);
+		storyboard.view.addNewObserver(controller);
+	}
+
+	@Override
+	public void visit(StoryBoard2Board storyboard) {
+		
+		BoardController controller = new BoardController(client, storyboard.view);
+		
+		client.addNewObserver(controller);
+		storyboard.view.addNewObserver(controller);
 	}
 }

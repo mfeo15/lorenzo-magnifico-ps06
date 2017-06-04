@@ -23,7 +23,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
 
-public class MenuGUI extends JFrame {
+public class MenuGUI extends JFrame implements Menu {
 	
 	private Image backgroundImage;
 	private JButton play;

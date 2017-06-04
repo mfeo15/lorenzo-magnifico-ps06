@@ -24,7 +24,7 @@ import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
-public class RoomGUI extends JFrame {
+public class RoomGUI extends JFrame implements Room {
 	private JButton exit;
 	private JFrame f;
 	private JTextField username, stat1, stat2, stat3, stat4, logged, player1, player2, player3, player4;
@@ -89,6 +89,7 @@ public class RoomGUI extends JFrame {
 	    exit.setContentAreaFilled(false);
 	    exit.setFocusPainted(false);
 	    exit.setBorderPainted(false);
+	    exit.setIcon(new ImageIcon(exit1));
         f.add(exit);
        
         
@@ -233,8 +234,6 @@ public class RoomGUI extends JFrame {
 
             	MediaPlayer mediaPlayer = new MediaPlayer(hit);
 				mediaPlayer.play();
-				exit.setIcon(new ImageIcon(exit1));
-			    
             }
             
             public void mouseExited(MouseEvent evt)
@@ -242,7 +241,6 @@ public class RoomGUI extends JFrame {
             	
             	MediaPlayer mediaPlayer = new MediaPlayer(hit);
 				mediaPlayer.play();
-            	exit.setIcon(null);
 		        
             }
             
@@ -302,5 +300,38 @@ public class RoomGUI extends JFrame {
         f.setLocationRelativeTo(null);
         f.setVisible(true);   
 	}
+
+	
+	@Override
+	public void setPlayer(String name, int index) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void giveCredentials(String username, String password) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean checkLogin() {
+		return true;
+		
+	}
+
+	@Override
+	public void startGame() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void notifyExit() {
+		// TODO Auto-generated method stub
+		
+	}
+	
 		
 }

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.ps06.view.CLI;
+package it.polimi.ingsw.ps06.view.GUI;
 
 import java.util.ArrayList;
 import java.util.Observable;
