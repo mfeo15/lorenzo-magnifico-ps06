@@ -10,10 +10,15 @@ import java.util.Observer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-/*
- * La classe Server resta in ascolto su una specifica porta e gestisce la ripartizione delle connessioni in ingresso,
- */
-public class SocketServer extends Observable {
+/**
+* Classe implementativa dell'interfaccia Server per il protocollo Socket
+*
+* @author  ps06
+* @version 1.0
+* @since   2017-06-03 
+*/
+public class SocketServer implements Server, Observer {
+	
 	private static final int PORT = 12345;
 	
 	private ServerSocket serverSocket;
@@ -21,28 +26,34 @@ public class SocketServer extends Observable {
 	private ExecutorService executor = 
 			Executors.newFixedThreadPool(128);
 	
-	private List<Connection> connections = new ArrayList<Connection>();
+	private ArrayList<Connection> connections = new ArrayList<Connection>();
 	
-	private List<Connection> waitingConnection = new ArrayList<Connection>();
+	private ArrayList<Connection> waitingConnection = new ArrayList<Connection>();
 	
-	private List< MatchSet > playingConnection;
+	private ArrayList< MatchSet > playingConnection;
 	
-	
-	/*
-	 * Registro una connessione attiva
+	/**
+	 * Metodo invocato ogni qualvolta una nuova connessione viene instaurata. 
+	 * La connessione viene archiviata all'interno di una collezione per aggiornare
+	 * lo stato del server
+	 * 
+	 * @param c	Connessione da aggiungere alla collezione
 	 */
-	private synchronized void registerConnection(Connection c){
-		connections.add(c);
+	@Override
+	public synchronized void registerConnection(Connection c) {
 		
-		System.out.println();
-		System.out.println();
-		System.out.println("New connection added!");
+		connections.add(c);
+		System.out.println("[ ] Connection " + c.ID() + " registered \n");
 	}
 	
-	/*
-	 * Deregistro una connessione
+	/**
+	 * Metodo invocato quando una connessione si distacca dal Server.
+	 * La connessione viene rimossa dalla collezione per aggiornare lo stato.
+	 * 
+	 * @param c	Connessione da rimuovere
 	 */
-	public synchronized void deregisterConnection(Connection c){
+	@Override
+	public synchronized void deregisterConnection(Connection c) {
 		connections.remove(c);
 		
 		/*
@@ -53,7 +64,7 @@ public class SocketServer extends Observable {
 		playingConnection.remove(enemy);
 		*/
 
-		waitingConnection.removeIf(connection -> connection.equals(c));
+		waitingConnection.remove(c);
 		
 		/*
 		Iterator<SocketAddress> iterator = waitingConnection.keySet().iterator();
@@ -65,18 +76,23 @@ public class SocketServer extends Observable {
 		*/
 	}
 	
-	/*
-	 * Mi metto in attesa di un altro giocatore
+	/**
+	 * Metodo invocato a seguito di una nuova registrazione di connessione.
+	 * Le connessioni vengono posizionate in una collezione d'attesa fino
+	 * al momento di raggiungere abbastanza giocatori per instaurare una nuova partita
+	 * 
+	 * @param c	Connessione da aggiungere alla lista d'attesa
 	 */
 	public synchronized void rednezvous(Connection c) {
 		
-		waitingConnection.add(c);
+		waitingConnection.add(c);		
+		System.out.println("[ ] Connection " + c.ID() + " in Waiting Room \n");
 		
-		notifyChangement(waitingConnection);
 		
-		System.out.println();
-		System.out.println();
-		System.out.println("New connection in the WaitingRoom");
+		ArrayList<String> a = new ArrayList<String>();
+		waitingConnection.forEach(connection -> a.add(connection.ID()));		
+		sendToConnections(waitingConnection, new Message(a) );
+
 		
 		if (waitingConnection.size() == 4)
 		{
@@ -94,11 +110,11 @@ public class SocketServer extends Observable {
 			player2.addObserver(controller);
 			*/
 			try {
-				MatchSet m = new MatchSet();
-				m.add( (ArrayList<Connection>) waitingConnection);
+				MatchSet match = new MatchSet();
+				match.add( (ArrayList<Connection>) waitingConnection);
 				waitingConnection.clear();
 			
-				playingConnection.add(m);
+				playingConnection.add(match);
 			} catch (Exception e) {
 				
 			}
@@ -114,6 +130,12 @@ public class SocketServer extends Observable {
 		this.serverSocket = new ServerSocket(PORT);
 	}
 	
+	/**
+	 * Metodo per la messa in opera del Server. Mantiene la classe in esecuzione, 
+	 * costantemente in attesa di connessioni in ingresso
+	 * 
+	 */
+	@Override
 	public void start()
 	{
 		while(true) {
@@ -121,9 +143,7 @@ public class SocketServer extends Observable {
 				Socket connectionSocket = serverSocket.accept();
 				
 				System.out.println();
-				System.out.println();
-				System.out.println("IP Client : " + connectionSocket.getInetAddress());
-				System.out.println("-------Connection Enstabilished-------- ");
+				System.out.println("[ ] New Client IP Address : " + connectionSocket.getInetAddress() + "\n");
 				
 				Connection connection = new Connection(connectionSocket, this);
 				registerConnection(connection);
@@ -135,19 +155,31 @@ public class SocketServer extends Observable {
 		}
 	}
 	
-	public void close() throws IOException 
-	{
+	
+	public void sendToConnections(ArrayList<Connection> cs, Message m) {
+		cs.forEach(connection -> connection.asyncSend(m));
+	}
+	
+	
+	/**
+	 * Metodo invocato per concludere la normale attività del Server. 
+	 * Predispone la chiusura del proprio socket e di tutte le connessioni attive.
+	 * 
+	 * @throws IOException
+	 */
+	@Override
+	public void close() throws IOException {
 		serverSocket.close();
+		
+		connections.forEach( c -> c.closeConnection() );
 	}
+
 	
-	/* MVC - SERVER IS MODEL AND SO IS AN OBSERVABLE OBJECT */
-	
-	public void notifyChangement(Object o) {
-		setChanged();
-		notifyObservers(o);
-	}
-	
-	public void addNewObser(Observer obs) {
-		addObserver(obs);
+	/* MVC - SERVER IS MODEL AND SO IS AN OBSERVER OBJECT */
+
+	@Override
+	public void update(Observable o, Object arg) {
+		// TODO Auto-generated method stub
+		
 	}
 }

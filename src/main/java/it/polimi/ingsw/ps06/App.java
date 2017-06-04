@@ -1,8 +1,9 @@
 package it.polimi.ingsw.ps06;
 
 import java.io.IOException;
-import java.net.Socket;
 import java.util.Scanner;
+
+import it.polimi.ingsw.ps06.controller.RoomController;
 
 
 public class App 
@@ -33,8 +34,15 @@ public class App
     	} 
     	else 
     	{	
-    		Client client = new Client("127.0.0.1", 12345);
-    		(new Thread(client)).run();
+    		System.out.print("Insert the Server IP > ");
+    		
+    		String host = s.nextLine();
+    		
+    		Client client = new Client(host, 12345);
+    		RoomController c = new RoomController(client);
+    		client.addNewObserver(c);
+    		
+    		client.start();
     		
     		/*
     		System.out.print("Press 1 for CLI or 2 for GUI > ");
