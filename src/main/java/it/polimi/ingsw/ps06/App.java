@@ -20,9 +20,37 @@ public class App
     public static void setup() throws IOException {
     	Scanner s = new Scanner(System.in);
     	
-    	System.out.print("Press 1 for CLI or 2 for GUI > ");
+    	System.out.print("Press 1 for Server or 2 for Client > ");
+    	if ( Integer.parseInt(s.nextLine()) == 1 ) 
+    	{
+    		SocketServer server;
+    		try {
+    			server = new SocketServer();
+    			server.start();
+    		} catch (IOException e) {
+    			System.err.println("Impossibile inizializzare il server: " + e.getMessage() + "!");
+    		}
+    
+    		s.close();
+    		return;
+    	} 
+    	else 
+    	{	
+    		System.out.print("Insert the Server IP > ");
+    		
+    		String host = s.nextLine();
+    		Client client = new Client(host, 12345);
+        
+        /*
+    		RoomController c = new RoomController(client);
+    		client.addNewObserver(c);
+    		client.start();
+        */
+    		
+    	  System.out.print("Press 1 for CLI or 2 for GUI > ");
     	
-    	MenuController controller = ( Integer.parseInt(s.nextLine()) == 1 ) ? new MenuController(new MenuCLI(s)) : new MenuController(new MenuGUI());
+    	  MenuController controller = ( Integer.parseInt(s.nextLine()) == 1 ) ? new MenuController(new MenuCLI(s)) : new MenuController(new MenuGUI());
 
+      }
     }
 }
