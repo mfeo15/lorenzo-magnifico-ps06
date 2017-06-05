@@ -1,5 +1,6 @@
 package it.polimi.ingsw.ps06.model;
 
+import it.polimi.ingsw.ps06.Client;
 import it.polimi.ingsw.ps06.controller.BoardController;
 import it.polimi.ingsw.ps06.controller.RoomController;
 

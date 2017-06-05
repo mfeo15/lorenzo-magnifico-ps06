@@ -3,11 +3,10 @@ package it.polimi.ingsw.ps06.controller;
 import java.util.Observable;
 import java.util.Observer;
 
+import it.polimi.ingsw.ps06.Client;
 import it.polimi.ingsw.ps06.model.Board;
 import it.polimi.ingsw.ps06.model.Event;
 import it.polimi.ingsw.ps06.model.EventParser;
-import it.polimi.ingsw.ps06.model.Game;
-import it.polimi.ingsw.ps06.view.GUI.BoardCLI;
 
 public class BoardController implements Observer {
 	

@@ -4,7 +4,6 @@ import java.util.Observable;
 import java.util.Observer;
 
 import it.polimi.ingsw.ps06.Client;
-import it.polimi.ingsw.ps06.Connection;
 import it.polimi.ingsw.ps06.Message;
 import it.polimi.ingsw.ps06.model.Event;
 import it.polimi.ingsw.ps06.model.EventParser;
@@ -28,9 +27,13 @@ public class RoomController implements Observer {
 		//Smista le comunicazioni provenienti dal Client
 		if ( o.getClass().isInstance(theClient) ) {
 	
-      Message m = (Message) arg;
+			theView.clearPlayers();
 			
-			System.out.println("Controller received: " + m.getMessage() );
+			Message m = (Message) arg;
+			
+			for (String s : m.getMessage()) {
+				theView.setPlayer(s, m.getMessage().indexOf(s));
+			}
 		}
 		
 		//Smista le comunicazioni provenienti dalla View

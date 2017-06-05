@@ -807,14 +807,15 @@ public class BoardGUI extends Observable implements Board {
 	    desktopFrame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
 	    desktopFrame.getRootPane().putClientProperty("apple.awt.fullscreenable", Boolean.valueOf(true));
 	    desktopFrame.add(desktop);
+
 	    desktopFrame.setLocationRelativeTo(null);
 	    desktopFrame.setUndecorated(true);
 	    desktopFrame.setVisible(true);
 	    
-		enableOSXFullscreen(desktopFrame);
+	    enableOSXFullscreen(desktopFrame);
 		requestOSXFullscreen(desktopFrame);
-		
-	    desktopFrame.setSize((int)screenSize.getWidth(), (int)screenSize.getHeight());
+
+		desktopFrame.setSize((int)screenSize.getWidth(), (int)screenSize.getHeight());
 	    
 	    centerJIF(others);
 	    centerJIF(towers);
