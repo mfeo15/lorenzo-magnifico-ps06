@@ -4,7 +4,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import it.polimi.ingsw.ps06.Client;
-import it.polimi.ingsw.ps06.model.Board;
+import it.polimi.ingsw.ps06.view.GUI.Board;
 import it.polimi.ingsw.ps06.model.Event;
 import it.polimi.ingsw.ps06.model.EventParser;
 
@@ -13,9 +13,8 @@ public class BoardController implements Observer {
 	private Board theView;
 	private Client theClient;
 	
-	public BoardController(Client client, Board boardView) {
+	public BoardController(Board boardView) {
 		this.theView = boardView;
-		this.theClient = client;
 	}
 
 	@Override
@@ -31,7 +30,7 @@ public class BoardController implements Observer {
 		//Smista le comunicazioni provenienti dalla View
 		if ( o.getClass().isInstance(theView) ) {					
 		
-			EventParser parser = new EventParser(theClient);
+			EventParser parser = new EventParser();
 			((Event) arg).accept(parser);
 		}
 	}

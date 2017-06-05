@@ -40,17 +40,16 @@ public class App
     		System.out.print("Insert the Server IP > ");
     		
     		String host = s.nextLine();
-    		Client client = new Client(host, 12345);
-    		client.start();
-
+    		Client client = Client.getInstance(host, 12345);
     		
-    	  System.out.print("Press 1 for CLI or 2 for GUI > ");
-    	  
-    	  Menu menuView = ( Integer.parseInt(s.nextLine()) == 1 ) ? new MenuCLI(s) : new MenuGUI();
-    	  MenuController controller = 
-    			  ( Integer.parseInt(s.nextLine()) == 1 ) ? new MenuController(client, new MenuCLI(s)) : new MenuController(client, new MenuGUI());
-    			  
+    		(new Thread(client)).start();
     		
+    		System.out.print("Press 1 for CLI or 2 for GUI > ");
+    		Menu menuView = ( Integer.parseInt(s.nextLine()) == 1 ) ? new MenuCLI(s) : new MenuGUI();
+				
+			MenuController controller = new MenuController(menuView);
+			menuView.addNewObserver(controller);
+			menuView.show();
 
       }
     }

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.ps06.view.GUI;
 
+import java.io.IOException;
 import java.util.Observer;
 
 public interface Room {
@@ -17,5 +18,7 @@ public interface Room {
 	void startGame();
 	
 	void notifyExit();
+	
+	void show() throws IOException;
 
 }

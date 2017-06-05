@@ -13,9 +13,8 @@ public class MenuController extends Observable implements Observer {
 	private Menu theView;
 	private Client theClient;
 	
-	public MenuController(Client client, Menu menuView) {
+	public MenuController(Menu menuView) {
 		this.theView = menuView;
-		this.theClient = client;
 	}
 	
 	@Override
@@ -31,7 +30,7 @@ public class MenuController extends Observable implements Observer {
 		//Smista le comunicazioni provenienti dalla View
 		if ( o.getClass().isInstance(theView) ) {
 					
-			EventParser parser = new EventParser(theClient);
+			EventParser parser = new EventParser();
 			((Event) arg).accept(parser);
 		}
 	}

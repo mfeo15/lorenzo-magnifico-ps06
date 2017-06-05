@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Observable;
+import java.util.Observer;
 import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
@@ -54,6 +55,7 @@ import javax.swing.TransferHandler;
 import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 
+import it.polimi.ingsw.ps06.model.EventClose;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -136,8 +138,8 @@ public class BoardGUI extends Observable implements Board {
 		TOP;
 	}
 
-
-	public BoardGUI() throws IOException{
+    @Override
+	public void show() throws IOException{
 		
 		try {
 		    UIManager.setLookAndFeel( UIManager.getCrossPlatformLookAndFeelClassName() );
@@ -1717,7 +1719,9 @@ public class BoardGUI extends Observable implements Board {
 
 	@Override
 	public void notifyExit() {
-		// TODO Auto-generated method stub
+		setChanged();
+		EventClose close = new EventClose();
+		notifyObservers(close);
 		
 	}
 
@@ -1739,6 +1743,13 @@ public class BoardGUI extends Observable implements Board {
 	@Override
 	public void notifyLeaderPlacement(int index) {
 		// TODO Auto-generated method stub
+		
+	}
+
+	
+	@Override
+	public void addNewObserver(Observer o) {
+		addObserver(o);
 		
 	}
 

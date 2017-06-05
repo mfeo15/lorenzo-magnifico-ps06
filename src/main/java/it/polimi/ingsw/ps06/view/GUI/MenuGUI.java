@@ -19,6 +19,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import it.polimi.ingsw.ps06.model.EventClose;
 import it.polimi.ingsw.ps06.model.StoryBoard2Board;
 import it.polimi.ingsw.ps06.model.StoryBoard2Room;
 import javafx.embed.swing.JFXPanel;
@@ -38,7 +39,8 @@ public class MenuGUI extends Observable implements Menu {
      
 	private JFXPanel fxPanel = new JFXPanel();
 	 
-	public MenuGUI() throws IOException{
+	@Override
+	public void show() throws IOException{
 		
 		f = new JFrame();
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -126,7 +128,7 @@ public class MenuGUI extends Observable implements Menu {
                 	
                	MediaPlayer mediaPlayer2 = new MediaPlayer(hit2);
                	mediaPlayer2.play();
-               	try {   new RoomGUI();   } catch (IOException e) {e.printStackTrace();}
+               	startGame();
 				f.dispose();
 					
             }});
@@ -163,8 +165,9 @@ public class MenuGUI extends Observable implements Menu {
             {
             	MediaPlayer mediaPlayer3 = new MediaPlayer(music1);
         		mediaPlayer3.play();
+        		notifyExit();
                 f.dispose();
-                System.exit(0);
+                
                 
             }
     	});
@@ -195,13 +198,10 @@ public class MenuGUI extends Observable implements Menu {
 	public void startGame() {
 		setChanged();
 		StoryBoard2Room storyBoard;
-		try {
-			storyBoard = new StoryBoard2Room(new RoomGUI());
-			notifyObservers(storyBoard);
-		} catch (IOException e) {e.printStackTrace();}
+		storyBoard = new StoryBoard2Room(new RoomGUI());
+		notifyObservers(storyBoard);
 		
 	}
-
 
 
 	@Override
@@ -212,12 +212,15 @@ public class MenuGUI extends Observable implements Menu {
 		
 	}
 
-
+	public MenuGUI() {
+		
+	}
+	
 
 	public static void main(String[] args) throws IOException
     {   
         new MenuGUI();  
-    }   
+    } 
     
  }  
 

@@ -14,18 +14,15 @@ public class RoomController implements Observer {
 	private Room theView;
 	private Client theClient;
 	
-	public RoomController(Client client, Room roomView) {
+	public RoomController(Room roomView) {
 		this.theView = roomView;
-		this.theClient = client;
 	}
 
 	@Override
 	public void update(Observable o, Object arg) {
-		if (!(arg instanceof Event))
-			return;
-		
+
 		//Smista le comunicazioni provenienti dal Client
-		if ( o.getClass().isInstance(theClient) ) {
+		if ( o.getClass().isInstance(Client.getInstance()) ) {
 	
 			theView.clearPlayers();
 			
@@ -39,7 +36,7 @@ public class RoomController implements Observer {
 		//Smista le comunicazioni provenienti dalla View
 		if ( o.getClass().isInstance(theView) ) {
 			
-			EventParser parser = new EventParser(theClient);
+			EventParser parser = new EventParser();
 			((Event) arg).accept(parser);
 		}
 	}

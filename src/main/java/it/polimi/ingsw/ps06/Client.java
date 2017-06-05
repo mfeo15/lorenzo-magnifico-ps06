@@ -12,14 +12,27 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Scanner;
 
-public class Client extends Observable {
+public class Client extends Observable implements Runnable {
+	
+	private static Client instance = null;
 
 	private Socket socket;
 	
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
 	
-	public Client(String host, int port) throws UnknownHostException, IOException {
+	public static Client getInstance(String host, int port) throws UnknownHostException, IOException {
+		if (instance == null)
+			instance = new Client(host, port);
+		
+		return instance;
+	}
+	
+	public static Client getInstance()  {		
+		return instance;
+	}
+	
+	private Client(String host, int port) throws UnknownHostException, IOException {
 		this.socket = new Socket(host, port);
 		
 		this.out = new ObjectOutputStream(socket.getOutputStream());
@@ -28,8 +41,7 @@ public class Client extends Observable {
 	
 	public void receive() throws ClassNotFoundException, IOException {
 		Message m;
-		m = (Message) in.readObject();
-			
+		m = (Message) in.readObject();;
 		notifyChangement(m);
 	}
 	
@@ -44,14 +56,7 @@ public class Client extends Observable {
 	*/
 	
 	public void start() {
-		while (true) {
-
-			try {
-				receive();
-			} catch (ClassNotFoundException | IOException e) {
-				e.printStackTrace();
-			}
-		}
+		
 	}
 	
 	/* MVC - SERVER IS MODEL AND SO IS AN OBSERVABLE OBJECT */
@@ -67,5 +72,18 @@ public class Client extends Observable {
 	
 	public void deleteAnObserver(Observer obs) {
 		deleteObserver(obs);
+	}
+
+	@Override
+	public void run() {
+		while (true) {
+
+			try {
+				receive();
+			} catch (ClassNotFoundException | IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
 	}
 }

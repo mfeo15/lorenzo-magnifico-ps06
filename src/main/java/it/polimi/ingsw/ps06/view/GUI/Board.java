@@ -1,5 +1,8 @@
 package it.polimi.ingsw.ps06.view.GUI;
 
+import java.io.IOException;
+import java.util.Observer;
+
 import it.polimi.ingsw.ps06.model.Types.Action;
 
 public interface Board {
@@ -43,5 +46,9 @@ public interface Board {
 	void notifyLeaderPlacement(int index);
 	
 	void notifyTimesUp();
+	
+	void show() throws IOException;
+	
+	void addNewObserver(Observer o);
 	
 }

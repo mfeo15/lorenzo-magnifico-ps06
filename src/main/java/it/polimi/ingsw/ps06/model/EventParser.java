@@ -1,16 +1,12 @@
 package it.polimi.ingsw.ps06.model;
 
+import java.io.IOException;
+
 import it.polimi.ingsw.ps06.Client;
 import it.polimi.ingsw.ps06.controller.BoardController;
 import it.polimi.ingsw.ps06.controller.RoomController;
 
 public class EventParser implements EventVisitor {
-	
-	private Client client;
-	
-	public EventParser(Client client) {
-		this.client = client;
-	}
 
 	@Override
 	public void visit(MemberPlaced memberPlaced) {
@@ -88,18 +84,21 @@ public class EventParser implements EventVisitor {
 	@Override
 	public void visit(StoryBoard2Room storyboard) {
 		
-		RoomController controller = new RoomController(client, storyboard.view);
+		RoomController controller = new RoomController(storyboard.view);
 		
-		client.addNewObserver(controller);
+		Client.getInstance().addNewObserver(controller);
 		storyboard.view.addNewObserver(controller);
+		try {storyboard.view.show();} catch (IOException e) {e.printStackTrace();}
 	}
 
 	@Override
 	public void visit(StoryBoard2Board storyboard) {
 		
-		BoardController controller = new BoardController(client, storyboard.view);
+		BoardController controller = new BoardController(storyboard.view);
 		
-		client.addNewObserver(controller);
+		Client.getInstance().addNewObserver(controller);
 		storyboard.view.addNewObserver(controller);
+		try {storyboard.view.show();} catch (IOException e) {e.printStackTrace();}
+		
 	}
 }

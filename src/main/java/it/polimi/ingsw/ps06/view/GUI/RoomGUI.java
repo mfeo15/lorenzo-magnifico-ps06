@@ -22,6 +22,7 @@ import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import it.polimi.ingsw.ps06.model.EventClose;
 import it.polimi.ingsw.ps06.model.StoryBoard2Board;
 import it.polimi.ingsw.ps06.model.StoryBoard2Room;
 import javafx.scene.media.AudioClip;
@@ -39,7 +40,8 @@ public class RoomGUI extends Observable implements Room {
 	private int width;
 	private int height;
 		
-	public RoomGUI() throws IOException
+	@Override
+	public void show() throws IOException
 	{
 		exit = new JButton();
 		f = new JFrame();
@@ -199,7 +201,7 @@ public class RoomGUI extends Observable implements Room {
         f.add(player[3]);
         
         player[4] = new JTextField();
-        player[4].setLocation(width*59/100,height*47/100);
+        player[4].setLocation(width*59/100,height*53/100);
         player[4].setSize(width*30/100,height*4/100);
         player[4].setOpaque(false);
         player[4].setEditable(false);
@@ -263,8 +265,9 @@ public class RoomGUI extends Observable implements Room {
             {
             	MediaPlayer mediaPlayer3 = new MediaPlayer(music1);
         		mediaPlayer3.play();
+        		notifyExit();
                 f.dispose();
-                System.exit(0);
+
             }
             
         });
@@ -340,10 +343,8 @@ public class RoomGUI extends Observable implements Room {
 		setChanged();
 		StoryBoard2Board storyBoard;
 		
-		try {
-			storyBoard = new StoryBoard2Board(new BoardGUI());
-			notifyObservers(storyBoard);
-		} catch (IOException e) {e.printStackTrace();}
+		storyBoard = new StoryBoard2Board(new BoardGUI());
+		notifyObservers(storyBoard);
 			
 	}
 
@@ -363,7 +364,7 @@ public class RoomGUI extends Observable implements Room {
 		addObserver(o);
 		
 	}
-
+	
 
 	@Override
 	public void notifyExit() {
