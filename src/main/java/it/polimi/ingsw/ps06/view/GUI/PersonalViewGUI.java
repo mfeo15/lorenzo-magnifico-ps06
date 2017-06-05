@@ -9,21 +9,19 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Observable;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
-public class PersonalViewGUI implements PersonalView {
+public class PersonalViewGUI extends Observable implements PersonalView {
 	private int playerCode;
 	private int width, height;
 	private JFrame f = new JFrame();

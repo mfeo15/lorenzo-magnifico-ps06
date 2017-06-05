@@ -11,6 +11,8 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -20,14 +22,17 @@ import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import it.polimi.ingsw.ps06.model.StoryBoard2Board;
+import it.polimi.ingsw.ps06.model.StoryBoard2Room;
 import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
-public class RoomGUI extends JFrame implements Room {
+public class RoomGUI extends Observable implements Room {
 	private JButton exit;
 	private JFrame f;
-	private JTextField username, stat1, stat2, stat3, stat4, logged, player1, player2, player3, player4;
+	private JTextField username, stat1, stat2, stat3, stat4, logged;
+	private JTextField[] player = new JTextField[5];
 	private JPasswordField password;
 	private JButton login, start, ready;
 	private Font font,font2;
@@ -153,45 +158,55 @@ public class RoomGUI extends JFrame implements Room {
         logged.setForeground(Color.BLACK);
         f.add(logged);
         
-        player1 = new JTextField();
-        player1.setLocation(width*59/100,height*29/100);
-        player1.setSize(width*30/100,height*4/100);
-        player1.setOpaque(false);
-        player1.setEditable(false);
-        //player1.setBorder(null);
-        player1.setFont(font2);
-        player1.setForeground(Color.BLACK);
-        f.add(player1);
+        player[0] = new JTextField();
+        player[0].setLocation(width*59/100,height*29/100);
+        player[0].setSize(width*30/100,height*4/100);
+        player[0].setOpaque(false);
+        player[0].setEditable(false);
+        // player[0].setBorder(null);
+        player[0].setFont(font2);
+        player[0].setForeground(Color.BLACK);
+        f.add( player[0]);
         
-        player2 = new JTextField();
-        player2.setLocation(width*59/100,height*35/100);
-        player2.setSize(width*30/100,height*4/100);
-        player2.setOpaque(false);
-        player2.setEditable(false);
-        //player2.setBorder(null);
-        player2.setFont(font2);
-        player2.setForeground(Color.BLACK);
-        f.add(player2);
+        player[1] = new JTextField();
+        player[1].setLocation(width*59/100,height*35/100);
+        player[1].setSize(width*30/100,height*4/100);
+        player[1].setOpaque(false);
+        player[1].setEditable(false);
+        //player[1].setBorder(null);
+        player[1].setFont(font2);
+        player[1].setForeground(Color.BLACK);
+        f.add(player[1]);
         
-        player3 = new JTextField();
-        player3.setLocation(width*59/100,height*41/100);
-        player3.setSize(width*30/100,height*4/100);
-        player3.setOpaque(false);
-        player3.setEditable(false);
-        //player3.setBorder(null);
-        player3.setFont(font2);
-        player3.setForeground(Color.BLACK);
-        f.add(player3);
+        player[2] = new JTextField();
+        player[2].setLocation(width*59/100,height*41/100);
+        player[2].setSize(width*30/100,height*4/100);
+        player[2].setOpaque(false);
+        player[2].setEditable(false);
+        //player[2].setBorder(null);
+        player[2].setFont(font2);
+        player[2].setForeground(Color.BLACK);
+        f.add(player[2]);
         
-        player4 = new JTextField();
-        player4.setLocation(width*59/100,height*47/100);
-        player4.setSize(width*30/100,height*4/100);
-        player4.setOpaque(false);
-        player4.setEditable(false);
-        //player4.setBorder(null);
-        player4.setFont(font2);
-        player4.setForeground(Color.BLACK);
-        f.add(player4);
+        player[3] = new JTextField();
+        player[3].setLocation(width*59/100,height*47/100);
+        player[3].setSize(width*30/100,height*4/100);
+        player[3].setOpaque(false);
+        player[3].setEditable(false);
+        //player[3].setBorder(null);
+        player[3].setFont(font2);
+        player[3].setForeground(Color.BLACK);
+        f.add(player[3]);
+        
+        player[4] = new JTextField();
+        player[4].setLocation(width*59/100,height*47/100);
+        player[4].setSize(width*30/100,height*4/100);
+        player[4].setOpaque(false);
+        player[4].setEditable(false);
+        //player[4].setBorder(null);
+        player[4].setFont(font2);
+        player[4].setForeground(Color.BLACK);
+        f.add(player[4]);
         
         login = new JButton("Login");
         login.setLocation(width*31/100,height*32/100);
@@ -260,7 +275,7 @@ public class RoomGUI extends JFrame implements Room {
             {
             	MediaPlayer mediaPlayer3 = new MediaPlayer(hit2);
         		mediaPlayer3.play();
-        		try {   new BoardGUI();   } catch (IOException e) {e.printStackTrace();}
+        		startGame();
         		mediaPlayer4.stop();
 				f.dispose();
 				
@@ -304,8 +319,8 @@ public class RoomGUI extends JFrame implements Room {
 	
 	@Override
 	public void setPlayer(String name, int index) {
-		// TODO Auto-generated method stub
 		
+		player[index].setText(name);
 	}
 
 	@Override
@@ -322,14 +337,39 @@ public class RoomGUI extends JFrame implements Room {
 
 	@Override
 	public void startGame() {
-		// TODO Auto-generated method stub
+		setChanged();
+		StoryBoard2Board storyBoard;
+		
+		try {
+			storyBoard = new StoryBoard2Board(new BoardGUI());
+			notifyObservers(storyBoard);
+		} catch (IOException e) {e.printStackTrace();}
+			
+	}
+
+
+	@Override
+	public void clearPlayers() {
+		
+		for(int j=0; j<5; j++){
+			player[j].setText("");
+		}
+		
+	}
+
+
+	@Override
+	public void addNewObserver(Observer o) {
+		addObserver(o);
 		
 	}
 
 
 	@Override
 	public void notifyExit() {
-		// TODO Auto-generated method stub
+		setChanged();
+		EventClose close = new EventClose();
+		notifyObservers(close);
 		
 	}
 	

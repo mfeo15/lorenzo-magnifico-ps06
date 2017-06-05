@@ -1,15 +1,21 @@
 package it.polimi.ingsw.ps06.view.GUI;
 
+import java.util.Observer;
+
 public interface Room {
 	
-	public void setPlayer(String name, int index);
+	void setPlayer(String name, int index);
 	
-	public void giveCredentials(String username, String password);
+	void clearPlayers(); 
 	
-	public boolean checkLogin();
+	void giveCredentials(String username, String password);
 	
-	public void startGame();
+	boolean checkLogin();
 	
-	public void notifyExit();
+	void addNewObserver(Observer o);
+	
+	void startGame();
+	
+	void notifyExit();
 
 }

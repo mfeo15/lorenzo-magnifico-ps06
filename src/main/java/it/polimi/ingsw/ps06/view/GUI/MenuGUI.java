@@ -2,7 +2,6 @@ package it.polimi.ingsw.ps06.view.GUI;
 
 
 import java.awt.Dimension;
-import javafx.scene.media.AudioClip;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -11,6 +10,8 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -18,12 +19,14 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import it.polimi.ingsw.ps06.model.StoryBoard2Board;
+import it.polimi.ingsw.ps06.model.StoryBoard2Room;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
 
-public class MenuGUI extends JFrame implements Menu {
+public class MenuGUI extends Observable implements Menu {
 	
 	private Image backgroundImage;
 	private JButton play;
@@ -179,7 +182,39 @@ public class MenuGUI extends JFrame implements Menu {
     }   
         
     
-    public static void main(String[] args) throws IOException
+	
+    @Override
+	public void addNewObserver(Observer o) {
+    	addObserver(o);
+		
+	}
+
+
+
+	@Override
+	public void startGame() {
+		setChanged();
+		StoryBoard2Room storyBoard;
+		try {
+			storyBoard = new StoryBoard2Room(new RoomGUI());
+			notifyObservers(storyBoard);
+		} catch (IOException e) {e.printStackTrace();}
+		
+	}
+
+
+
+	@Override
+	public void notifyExit() {
+		setChanged();
+		EventClose close = new EventClose();
+		notifyObservers(close);
+		
+	}
+
+
+
+	public static void main(String[] args) throws IOException
     {   
         new MenuGUI();  
     }   

@@ -1,5 +1,7 @@
 package it.polimi.ingsw.ps06.model;
 
+import it.polimi.ingsw.ps06.view.GUI.Board;
+
 public class StoryBoard2Board extends Event {
 
 	public Board view;

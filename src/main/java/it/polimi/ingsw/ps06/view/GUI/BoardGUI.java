@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Observable;
 import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
@@ -60,7 +61,7 @@ import javafx.scene.media.MediaPlayer;
 
 
 @SuppressWarnings("restriction")
-public class BoardGUI extends JFrame implements Board {
+public class BoardGUI extends Observable implements Board {
 	
 	private int width, escWidth;
 	private int height, escHeight;
@@ -308,7 +309,6 @@ public class BoardGUI extends JFrame implements Board {
 		        super.paintComponent(g);
                 g.drawImage(desktopImage, 0, 0, null);
 		    }};
-	    setContentPane(desktop);
         
 	    
         //Caricamento suoni del gioco
@@ -386,6 +386,7 @@ public class BoardGUI extends JFrame implements Board {
         scrollOthers.setOpaque(false);
         scrollOthers.setContentAreaFilled(false);
         scrollOthers.setFocusPainted(false);
+        scrollOthers.setDisabledIcon( scrollOthers.getIcon() );
         scrollOthers.setIcon(new ImageIcon(ImageIO.read(new File("resources/backRight.png"))));
         //scrollOthers.setBorderPainted(false);
         
@@ -413,7 +414,7 @@ public class BoardGUI extends JFrame implements Board {
         scrollTowers.setOpaque(false);
         scrollTowers.setContentAreaFilled(false);
         scrollTowers.setFocusPainted(false);
-        scrollTowers.setIcon(setImageScreen("resources/backLeft.png",2,(int)(2*ratio)).getIcon());
+        scrollTowers.setDisabledIcon( scrollTowers.getIcon() );
         scrollTowers.setIcon(new ImageIcon(ImageIO.read(new File("resources/backLeft.png"))));
         //scrollTowers.setBorderPainted(false);
    
@@ -505,6 +506,8 @@ public class BoardGUI extends JFrame implements Board {
     	JButton[] playersInfo = new JButton[5];
     	JButton[] excommunications = new JButton[3];
     	JButton[] excommStones = new JButton[12];
+    	
+    	JButton[] privileges = new JButton[5];
         
         
     	members = initializeButtons(members);
@@ -525,6 +528,7 @@ public class BoardGUI extends JFrame implements Board {
         playersInfo = initializeButtons(playersInfo);
         excommunications = initializeButtons(excommunications);
         excommStones = initializeButtons(excommStones);
+        privileges = initializeButtons(privileges);
         leaders = initializeButtons(leaders);
         
         
@@ -541,6 +545,7 @@ public class BoardGUI extends JFrame implements Board {
         playersInfo = locatePlayersInfo(playersInfo);
         excommunications = locateExcommunications(excommunications);
         excommStones = locateExcommStones(excommStones);
+        privileges = locatePrivileges(privileges);
         leaders = locateLeaders(leaders);
         
         
@@ -575,6 +580,7 @@ public class BoardGUI extends JFrame implements Board {
         productions = set(productions);
         harvests = set(harvests);
         placements = set(placements);
+        privileges = set(privileges);
         
         cards = setLabels(cards);
         councils = setLabels(councils);
@@ -649,6 +655,7 @@ public class BoardGUI extends JFrame implements Board {
         for(int j=0; j<orders.length;j++){ others.add(orders[j]); }
         for(int j=0; j<playersInfo.length;j++){ desktop.add(playersInfo[j]); }
         for(int j=0; j<excommunications.length;j++){ others.add(excommunications[j]); }
+        for(int j=0; j<privileges.length;j++){ others.add(privileges[j]); }
         for(int j=0; j<leaders.length;j++){ 
         	desktop.add(leaders[j]); 
         	leaders[j].addMouseListener(new PopClickListener(j));
@@ -800,13 +807,14 @@ public class BoardGUI extends JFrame implements Board {
 	    desktopFrame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
 	    desktopFrame.getRootPane().putClientProperty("apple.awt.fullscreenable", Boolean.valueOf(true));
 	    desktopFrame.add(desktop);
-	    desktopFrame.setSize((int)screenSize.getWidth(), (int)screenSize.getHeight());
 	    desktopFrame.setLocationRelativeTo(null);
 	    desktopFrame.setUndecorated(true);
 	    desktopFrame.setVisible(true);
 	    
 		enableOSXFullscreen(desktopFrame);
 		requestOSXFullscreen(desktopFrame);
+		
+	    desktopFrame.setSize((int)screenSize.getWidth(), (int)screenSize.getHeight());
 	    
 	    centerJIF(others);
 	    centerJIF(towers);
@@ -1215,6 +1223,18 @@ public class BoardGUI extends JFrame implements Board {
 		return btns;
 	}
 	
+	private JButton[] locatePrivileges(JButton[] btns){
+		double x=58.5;
+		double y=25;
+		
+		for(int j=0;j<btns.length;j++){
+			btns[j].setLocation((int)(width*x/100),(int)(height*y/100));
+			btns[j].setSize((int)(width*3/100),(int)(height*4.5/100));
+			x=x+3.25;		
+		}
+		return btns;		
+	}
+	
 	private JButton[] locatePlayers(JButton[] btns){
 		double x=7;
 		double y=14;
@@ -1594,6 +1614,141 @@ public class BoardGUI extends JFrame implements Board {
         }
     }
     
+    
+    
+	@Override
+	public void setHarvestIndex(int value) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void setProductionIndex(int value) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void setCouncilIndex(int value) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void setPeriodRound(int period, int round) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void setPlayerColor(String s) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void setPlayerName(String s) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void setCurrentPlayerName(String s) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void setActionLog(String s) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void setDices(int black, int white, int orange) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void setExcommunicationTiles(int code1, int code2, int code3) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void activateLeaders() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void setLeaders(int code1, int code2, int code3, int code4) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void setPersonalResources(int coin, int wood, int stone, int servant) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public boolean checkActionLegality() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public void notifyExit() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void notifyAction(it.polimi.ingsw.ps06.model.Types.Action chosenAction, int memberIndex) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void notifyLeaderDiscard(int index) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void notifyLeaderPlacement(int index) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void notifyTimesUp() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
 	private void setBoard(){
 	    
 		player = "null";

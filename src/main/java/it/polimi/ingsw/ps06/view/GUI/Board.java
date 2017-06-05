@@ -4,44 +4,44 @@ import it.polimi.ingsw.ps06.model.Types.Action;
 
 public interface Board {
 	
-	public void setHarvestIndex(int value);
+	void setHarvestIndex(int value);
 	
-	public void setProductionIndex(int value);
+	void setProductionIndex(int value);
 	
-	public void setCouncilIndex(int value);
+	void setCouncilIndex(int value);
 	
-	public void setPeriodRound(int period, int round);
+	void setPeriodRound(int period, int round);
 	
-	public void setPlayerColor(String s);
+	void setPlayerColor(String s);
 	
-	public void setPlayerName(String s);
+	void setPlayerName(String s);
 	
-	public void setCurrentPlayerName(String s);
+	void setCurrentPlayerName(String s);
 	
-	public void setActionLog(String s);
+	void setActionLog(String s);
 	
-	public void setDices(int black, int white, int orange);
+	void setDices(int black, int white, int orange);
 	
-	public void setExcommunicationTiles(int code1, int code2, int code3);
+	void setExcommunicationTiles(int code1, int code2, int code3);
 	
-	public void activateLeaders();
+	void activateLeaders();
 	
-	public void setLeaders(int code1, int code2, int code3, int code4);
+	void setLeaders(int code1, int code2, int code3, int code4);
 	
-	public void setPersonalResources(int coin, int wood, int stone, int servant);
+	void setPersonalResources(int coin, int wood, int stone, int servant);
 	
-	public boolean checkActionLegality();
+	boolean checkActionLegality();
 	
-	public void startTimer();
+	void startTimer();
 	
-	public void notifyExit();
+	void notifyExit();
 	
-	public void notifyAction(Action chosenAction, int memberIndex);
+	void notifyAction(Action chosenAction, int memberIndex);
 	
-	public void notifyLeaderDiscard(int index);
+	void notifyLeaderDiscard(int index);
 	
-	public void notifyLeaderPlacement(int index);
+	void notifyLeaderPlacement(int index);
 	
-	public void notifyTimesUp();
+	void notifyTimesUp();
 	
 }
