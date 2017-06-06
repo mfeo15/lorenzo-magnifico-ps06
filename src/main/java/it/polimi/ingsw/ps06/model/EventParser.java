@@ -84,21 +84,20 @@ public class EventParser implements EventVisitor {
 	@Override
 	public void visit(StoryBoard2Room storyboard) {
 		
-		RoomController controller = new RoomController(storyboard.view);
+		RoomController controller = new RoomController(storyboard.getView());
 		
 		Client.getInstance().addNewObserver(controller);
-		storyboard.view.addNewObserver(controller);
-		try {storyboard.view.show();} catch (IOException e) {e.printStackTrace();}
+		storyboard.getView().addNewObserver(controller);
+		try {storyboard.getView().show();} catch (IOException e) {e.printStackTrace();}
 	}
 
 	@Override
 	public void visit(StoryBoard2Board storyboard) {
 		
-		BoardController controller = new BoardController(storyboard.view);
+		BoardController controller = new BoardController(storyboard.getView());
 		
 		Client.getInstance().addNewObserver(controller);
-		storyboard.view.addNewObserver(controller);
-		try {storyboard.view.show();} catch (IOException e) {e.printStackTrace();}
-		
+		storyboard.getView().addNewObserver(controller);
+		try {storyboard.getView().show();} catch (IOException e) {e.printStackTrace();}	
 	}
 }

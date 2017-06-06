@@ -19,6 +19,8 @@ import java.util.concurrent.Executors;
 */
 public class SocketServer implements Server, Observer {
 	
+	private static SocketServer instance = null;
+	
 	private static final int PORT = 12345;
 	
 	private ServerSocket serverSocket;
@@ -109,12 +111,13 @@ public class SocketServer implements Server, Observer {
 			player1.addObserver(controller);
 			player2.addObserver(controller);
 			*/
-			try {
-				MatchSet match = new MatchSet();
-				match.add( (ArrayList<Connection>) waitingConnection);
-				waitingConnection.clear();
 			
+			try {
+				MatchSet match = new MatchSet(waitingConnection);
+				match.createGame();
 				playingConnection.add(match);
+				
+				waitingConnection.clear();
 			} catch (Exception e) {
 				
 			}
@@ -128,6 +131,13 @@ public class SocketServer implements Server, Observer {
 		System.out.println("Lorenzo Server : ON");
 		
 		this.serverSocket = new ServerSocket(PORT);
+	}
+	
+	public static SocketServer getInstance() throws IOException {
+		if (instance == null)
+			instance = new SocketServer();
+		
+		return instance;
 	}
 	
 	/**
@@ -145,7 +155,7 @@ public class SocketServer implements Server, Observer {
 				System.out.println();
 				System.out.println("[ ] New Client IP Address : " + connectionSocket.getInetAddress() + "\n");
 				
-				Connection connection = new Connection(connectionSocket, this);
+				Connection connection = new Connection(connectionSocket);
 				registerConnection(connection);
 				
 				executor.submit(connection);//Equivalente a new Thread(c).start();				

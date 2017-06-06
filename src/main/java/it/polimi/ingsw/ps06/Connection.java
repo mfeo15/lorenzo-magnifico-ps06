@@ -21,7 +21,6 @@ import java.util.Scanner;
 public class Connection implements Runnable {
 	
 	private Socket socket;
-	private SocketServer connectedToServer;
 	
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
@@ -37,9 +36,8 @@ public class Connection implements Runnable {
 	 * @throws UnknownHostException
 	 * @throws IOException
 	 */
-	public Connection(Socket socket, SocketServer connectedToServer) throws UnknownHostException, IOException {
+	public Connection(Socket socket) throws UnknownHostException, IOException {
 		this.socket = socket;
-		this.connectedToServer = connectedToServer;
 		
 		this.out = new ObjectOutputStream(socket.getOutputStream());
 		this.in = new ObjectInputStream(socket.getInputStream());
@@ -52,7 +50,7 @@ public class Connection implements Runnable {
 	@Override
 	public void run() {
 		try {
-			connectedToServer.rednezvous(this);
+			SocketServer.getInstance().rednezvous(this);
 			
 			String read;
 			while(isActive()){
@@ -62,7 +60,8 @@ public class Connection implements Runnable {
 				//out.println("I'm a Computer! I'am a Computery Guy!");
 			}			
 		} catch ( NoSuchElementException e) {
-			System.err.println("Errore!");
+			e.printStackTrace();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}finally{
 			close();

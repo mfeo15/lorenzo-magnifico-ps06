@@ -1,5 +1,6 @@
 package it.polimi.ingsw.ps06.controller;
 
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -12,7 +13,8 @@ import it.polimi.ingsw.ps06.view.GUI.Room;
 public class RoomController implements Observer {
 	
 	private Room theView;
-	private Client theClient;
+	
+	private ArrayList<String> players;
 	
 	public RoomController(Room roomView) {
 		this.theView = roomView;
@@ -20,16 +22,19 @@ public class RoomController implements Observer {
 
 	@Override
 	public void update(Observable o, Object arg) {
-
+		if (!(arg instanceof Event && arg instanceof Message))
+			return;
+		
 		//Smista le comunicazioni provenienti dal Client
 		if ( o.getClass().isInstance(Client.getInstance()) ) {
 	
 			theView.clearPlayers();
 			
 			Message m = (Message) arg;
+			players = m.getMessage();
 			
-			for (String s : m.getMessage()) {
-				theView.setPlayer(s, m.getMessage().indexOf(s));
+			for (String s : players) {
+				theView.setPlayer(s, players.indexOf(s));
 			}
 		}
 		
