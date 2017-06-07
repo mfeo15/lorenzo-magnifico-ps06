@@ -219,7 +219,8 @@ public class MenuGUI extends Observable implements Menu {
 
 	public static void main(String[] args) throws IOException
     {   
-        new MenuGUI();  
+        MenuGUI a = new MenuGUI();  
+        a.show();
     } 
     
  }  
