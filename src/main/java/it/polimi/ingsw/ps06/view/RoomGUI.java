@@ -23,6 +23,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import it.polimi.ingsw.ps06.model.messages.EventClose;
+import it.polimi.ingsw.ps06.model.messages.MessageUser;
 import it.polimi.ingsw.ps06.model.messages.StoryBoard2Board;
 import it.polimi.ingsw.ps06.model.messages.StoryBoard2Room;
 import javafx.scene.media.AudioClip;
@@ -303,6 +304,8 @@ public class RoomGUI extends Observable implements Room {
             {
             	MediaPlayer mediaPlayer3 = new MediaPlayer(hit2);
         		mediaPlayer3.play();
+        		giveCredentials(username.getText(),String.valueOf(password.getPassword()));
+        		if(checkLogin()){logged.setText("Now logged in: "+username.getText());}
         		
             }
             
@@ -328,7 +331,11 @@ public class RoomGUI extends Observable implements Room {
 
 	@Override
 	public void giveCredentials(String username, String password) {
-		// TODO Auto-generated method stub
+		setChanged();
+		MessageUser userMessage;
+		
+		userMessage = new MessageUser(username);
+		notifyObservers(userMessage);
 		
 	}
 

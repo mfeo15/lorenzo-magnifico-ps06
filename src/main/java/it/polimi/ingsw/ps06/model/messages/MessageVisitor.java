@@ -9,8 +9,15 @@ public interface MessageVisitor {
 	
 	public void visit(StoryBoard2Room storyboard);
 	public void visit(StoryBoard2Board storyboard);
+	public void visit(StoryBoard2PersonalView storyboard);
 	
 	//public void visit(Trouble v);
-	public void visit(MemberPlaced memberPlaced);
-	public void visit(LeaderDiscarded leaderDiscarded);
+	public void visit(EventMemberPlaced memberPlaced);
+	public void visit(EventLeaderDiscarded leaderDiscarded);
+	public void visit(EventLeaderActivated leaderActivated);
+	public void visit(EventLeaderPlayed leaderPlayed);
+	
+	public void visit(MessageUser userMessage);
+	
+	public void visit(MessageConnectionStart startConnection);
 }
