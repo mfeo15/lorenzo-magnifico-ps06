@@ -92,12 +92,8 @@ public class SocketServer implements Server, Observer {
 		waitingConnection.add(c);		
 		System.out.println("[ ] Connection " + c.getInetAddress() + " in Waiting Room \n");
 		
-		
-		ArrayList<String> a = new ArrayList<String>();
-		waitingConnection.forEach(connection -> a.add(connection.getUsername()));		
-		sendToConnections(waitingConnection, new MessageWaitingRoomConnections(a) );
+		sendWaitingConnectionsStats();
 
-		
 		if (waitingConnection.size() == 4)
 		{
 			/*
@@ -170,6 +166,12 @@ public class SocketServer implements Server, Observer {
 	
 	public void sendToConnections(ArrayList<Connection> cs, Message m) {
 		cs.forEach(connection -> connection.asyncSend(m));
+	}
+	
+	public void sendWaitingConnectionsStats() {
+		ArrayList<String> a = new ArrayList<String>();
+		waitingConnection.forEach(connection -> a.add(connection.getUsername()));		
+		sendToConnections(waitingConnection, new MessageWaitingRoomConnections(a) );
 	}
 	
 	

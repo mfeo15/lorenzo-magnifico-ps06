@@ -40,7 +40,13 @@ public class MessageParser implements MessageVisitor {
 	
 	@Override
 	public void visit(MessageConnectionStart startConnection) {
-		Client.getInstance().start();
+		try {
+			Client.getInstance().init();
+			(new Thread(Client.getInstance())).start();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override

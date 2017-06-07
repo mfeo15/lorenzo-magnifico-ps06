@@ -5,10 +5,12 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 
 import it.polimi.ingsw.ps06.model.messages.Message;
 import it.polimi.ingsw.ps06.model.messages.MessageConnection;
 import it.polimi.ingsw.ps06.model.messages.MessageParser;
+import it.polimi.ingsw.ps06.model.messages.MessageWaitingRoomConnections;
 
 /**
 * Classe per la gestione delle singole connessioni al Server.
@@ -44,7 +46,7 @@ public class Connection implements Runnable {
 		this.out = new ObjectOutputStream(socket.getOutputStream());
 		this.in = new ObjectInputStream(socket.getInputStream());
 		
-		this.username = "Guest" + (int)(Math.random() * (99 - 1) + 1);
+		this.username = "Guest" + (int)(Math.random() * (9999 - 1) + 1);
 	}
 	
 	private synchronized boolean isActive(){
@@ -65,8 +67,6 @@ public class Connection implements Runnable {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}finally{
-			close();
 		}		
 	}
 	
@@ -74,7 +74,11 @@ public class Connection implements Runnable {
 		MessageConnection m;
 		m = (MessageConnection) in.readObject();
 		
+		System.out.println("[ ] Message received from " + getInetAddress() + " (" + getUsername() + "): " + m);
+		
 		this.username = m.accept(new MessageParser());
+		
+		SocketServer.getInstance().sendWaitingConnectionsStats();
 	}
 	
 	/**
@@ -124,7 +128,7 @@ public class Connection implements Runnable {
 	}
 
 	public String getUsername() {
-		return socket.getInetAddress().toString();
+		return username;
 	}
 	
 	public void setUsername(String username) {

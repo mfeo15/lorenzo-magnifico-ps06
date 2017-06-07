@@ -41,8 +41,6 @@ public class App
     		String host = s.nextLine();
     		Client.getInstance().setupParameters(host, 12345);
     		
-    		Client.getInstance().start();
-    		
     		System.out.print("Press 1 for CLI or 2 for GUI > ");
     		Menu menuView = ( Integer.parseInt(s.nextLine()) == 1 ) ? new MenuCLI(s) : new MenuGUI();
 				

@@ -8,9 +8,10 @@ import java.net.UnknownHostException;
 import java.util.Observable;
 import java.util.Observer;
 
+import it.polimi.ingsw.ps06.model.messages.Client2Server;
 import it.polimi.ingsw.ps06.model.messages.Message;
 
-public class Client extends Observable implements Observer {
+public class Client extends Observable implements Runnable, Observer {
 	
 	private static Client instance = null;
 
@@ -24,17 +25,13 @@ public class Client extends Observable implements Observer {
 	
 	public static Client getInstance() {
 		if (instance == null)
-			try {
 				instance = new Client();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		
 		return instance;
 	}
 	
-	private Client() throws UnknownHostException, IOException {
+	public void init() throws UnknownHostException, IOException {
+		this.socket = new Socket(host, port);
 		
 		this.out = new ObjectOutputStream(socket.getOutputStream());
 		this.in = new ObjectInputStream(socket.getInputStream());
@@ -55,6 +52,7 @@ public class Client extends Observable implements Observer {
 	private void send(Message message) throws IOException{
 		
 		out.writeObject(message);
+		out.flush();
 		
 		System.out.println("Client sent: "+ message);
 	}
@@ -68,33 +66,6 @@ public class Client extends Observable implements Observer {
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}				
-			}
-		}).start();
-	}
-
-	
-	
-	public void start() {
-		
-		try {
-			this.socket = new Socket(host, port);
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-		new Thread(new Runnable() {			
-			@Override
-			public void run() 
-			{
-				while (true) {
-
-					try {
-						receive();
-					} catch (ClassNotFoundException | IOException e) {
-						e.printStackTrace();
-					}
 				}				
 			}
 		}).start();
@@ -118,7 +89,19 @@ public class Client extends Observable implements Observer {
 	/* MVC - SERVER IS MODEL AND SO IS AN OBSERVER OBJECT */
 	@Override
 	public void update(Observable o, Object arg) {
-		// TODO Auto-generated method stub
 		
+		Client.getInstance().asyncSend((Message) arg);
+	}
+
+	@Override
+	public void run() {
+		while (true) {
+
+			try {
+				receive();
+			} catch (ClassNotFoundException | IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }
