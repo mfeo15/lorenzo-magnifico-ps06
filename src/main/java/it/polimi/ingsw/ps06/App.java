@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.util.Scanner;
 
 import it.polimi.ingsw.ps06.controller.MenuController;
-import it.polimi.ingsw.ps06.view.GUI.Menu;
-import it.polimi.ingsw.ps06.view.GUI.MenuCLI;
-import it.polimi.ingsw.ps06.view.GUI.MenuGUI;
+import it.polimi.ingsw.ps06.view.Menu;
+import it.polimi.ingsw.ps06.view.MenuCLI;
+import it.polimi.ingsw.ps06.view.MenuGUI;
 
 
 public class App 

@@ -1,6 +1,6 @@
 package it.polimi.ingsw.ps06.model;
 
-import it.polimi.ingsw.ps06.view.GUI.Room;
+import it.polimi.ingsw.ps06.view.Room;
 
 public class StoryBoard2Room extends Event {
 

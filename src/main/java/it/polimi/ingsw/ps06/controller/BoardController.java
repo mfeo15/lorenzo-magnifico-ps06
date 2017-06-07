@@ -7,7 +7,7 @@ import it.polimi.ingsw.ps06.Client;
 import it.polimi.ingsw.ps06.Message;
 import it.polimi.ingsw.ps06.model.Event;
 import it.polimi.ingsw.ps06.model.EventParser;
-import it.polimi.ingsw.ps06.view.GUI.Board;
+import it.polimi.ingsw.ps06.view.Board;
 
 public class BoardController implements Observer {
 	

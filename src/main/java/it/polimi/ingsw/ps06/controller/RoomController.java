@@ -8,7 +8,7 @@ import it.polimi.ingsw.ps06.Client;
 import it.polimi.ingsw.ps06.Message;
 import it.polimi.ingsw.ps06.model.Event;
 import it.polimi.ingsw.ps06.model.EventParser;
-import it.polimi.ingsw.ps06.view.GUI.Room;
+import it.polimi.ingsw.ps06.view.Room;
 
 public class RoomController implements Observer {
 	
