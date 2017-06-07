@@ -1,11 +1,6 @@
 package it.polimi.ingsw.ps06.model.messages;
 
-public class MessageConnection extends Message {
+public abstract class MessageConnection extends Message implements MessageConnectionVisitable {
 
-	@Override
-	public void accept(MessageVisitor visitor) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	//public abstract <T> T getMessage();
 }

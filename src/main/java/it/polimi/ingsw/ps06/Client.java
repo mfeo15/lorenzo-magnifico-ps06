@@ -1,42 +1,48 @@
 package it.polimi.ingsw.ps06;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Scanner;
 
-public class Client extends Observable implements Observer, Runnable {
+import it.polimi.ingsw.ps06.model.messages.Message;
+
+public class Client extends Observable implements Observer {
 	
 	private static Client instance = null;
 
 	private Socket socket;
 	
+	private String host;
+	private int	port;
+	
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
 	
-	public static Client getInstance(String host, int port) throws UnknownHostException, IOException {
+	public static Client getInstance() {
 		if (instance == null)
-			instance = new Client(host, port);
+			try {
+				instance = new Client();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		
 		return instance;
 	}
 	
-	public static Client getInstance()  {		
-		return instance;
-	}
-	
-	private Client(String host, int port) throws UnknownHostException, IOException {
-		this.socket = new Socket(host, port);
+	private Client() throws UnknownHostException, IOException {
 		
 		this.out = new ObjectOutputStream(socket.getOutputStream());
 		this.in = new ObjectInputStream(socket.getInputStream());
+	}
+	
+	public void setupParameters(String host, int port) {
+		this.host = host;
+		this.port = port;
 	}
 	
 	public void receive() throws ClassNotFoundException, IOException {
@@ -45,18 +51,53 @@ public class Client extends Observable implements Observer, Runnable {
 		notifyChangement(m);
 	}
 	
-	/*
-	public void send() throws IOException {
+	
+	private void send(Message message) throws IOException{
 		
-		String message = tastiera.readLine();
+		out.writeObject(message);
 		
-		out.println(message);
 		System.out.println("Client sent: "+ message);
 	}
-	*/
+	
+	public void asyncSend(final Message message){
+		new Thread(new Runnable() {			
+			@Override
+			public void run() {
+				try {
+					send(message);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}				
+			}
+		}).start();
+	}
+
+	
 	
 	public void start() {
 		
+		try {
+			this.socket = new Socket(host, port);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		new Thread(new Runnable() {			
+			@Override
+			public void run() 
+			{
+				while (true) {
+
+					try {
+						receive();
+					} catch (ClassNotFoundException | IOException e) {
+						e.printStackTrace();
+					}
+				}				
+			}
+		}).start();
 	}
 	
 	/* MVC - SERVER IS MODEL AND SO IS AN OBSERVABLE OBJECT */
@@ -72,19 +113,6 @@ public class Client extends Observable implements Observer, Runnable {
 	
 	public void deleteAnObserver(Observer obs) {
 		deleteObserver(obs);
-	}
-
-	@Override
-	public void run() {
-		while (true) {
-
-			try {
-				receive();
-			} catch (ClassNotFoundException | IOException e) {
-				e.printStackTrace();
-			}
-		}
-		
 	}
 
 	/* MVC - SERVER IS MODEL AND SO IS AN OBSERVER OBJECT */

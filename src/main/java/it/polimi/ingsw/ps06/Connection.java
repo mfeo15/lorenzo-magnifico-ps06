@@ -3,12 +3,12 @@ package it.polimi.ingsw.ps06;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintStream;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
+
+import it.polimi.ingsw.ps06.model.messages.Message;
+import it.polimi.ingsw.ps06.model.messages.MessageConnection;
+import it.polimi.ingsw.ps06.model.messages.MessageParser;
 
 /**
 * Classe per la gestione delle singole connessioni al Server.
@@ -21,6 +21,8 @@ import java.util.Scanner;
 public class Connection implements Runnable {
 	
 	private Socket socket;
+	
+	private String username;
 	
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
@@ -41,6 +43,8 @@ public class Connection implements Runnable {
 		
 		this.out = new ObjectOutputStream(socket.getOutputStream());
 		this.in = new ObjectInputStream(socket.getInputStream());
+		
+		this.username = "Guest" + (int)(Math.random() * (99 - 1) + 1);
 	}
 	
 	private synchronized boolean isActive(){
@@ -52,20 +56,25 @@ public class Connection implements Runnable {
 		try {
 			SocketServer.getInstance().rednezvous(this);
 			
-			String read;
-			while(isActive()){
-				//read = in.nextLine();				
-				//System.out.println("Client said: " + read);
-				
-				//out.println("I'm a Computer! I'am a Computery Guy!");
-			}			
-		} catch ( NoSuchElementException e) {
+			while(isActive())
+				receive();
+						
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally{
 			close();
 		}		
+	}
+	
+	public void receive() throws ClassNotFoundException, IOException {
+		MessageConnection m;
+		m = (MessageConnection) in.readObject();
+		
+		this.username = m.accept(new MessageParser());
 	}
 	
 	/**
@@ -114,7 +123,15 @@ public class Connection implements Runnable {
 		//server.deregisterConnection(this);
 	}
 
-	public String ID() {
+	public String getUsername() {
+		return socket.getInetAddress().toString();
+	}
+	
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	
+	public String getInetAddress() {
 		return socket.getInetAddress().toString();
 	}
 }

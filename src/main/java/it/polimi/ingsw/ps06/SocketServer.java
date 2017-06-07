@@ -4,11 +4,13 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import it.polimi.ingsw.ps06.model.messages.Message;
+import it.polimi.ingsw.ps06.model.messages.MessageWaitingRoomConnections;
 
 /**
 * Classe implementativa dell'interfaccia Server per il protocollo Socket
@@ -45,7 +47,7 @@ public class SocketServer implements Server, Observer {
 	public synchronized void registerConnection(Connection c) {
 		
 		connections.add(c);
-		System.out.println("[ ] Connection " + c.ID() + " registered \n");
+		System.out.println("[ ] Connection " + c.getInetAddress() + " registered \n");
 	}
 	
 	/**
@@ -88,12 +90,12 @@ public class SocketServer implements Server, Observer {
 	public synchronized void rednezvous(Connection c) {
 		
 		waitingConnection.add(c);		
-		System.out.println("[ ] Connection " + c.ID() + " in Waiting Room \n");
+		System.out.println("[ ] Connection " + c.getInetAddress() + " in Waiting Room \n");
 		
 		
 		ArrayList<String> a = new ArrayList<String>();
-		waitingConnection.forEach(connection -> a.add(connection.ID()));		
-		sendToConnections(waitingConnection, new Message(a) );
+		waitingConnection.forEach(connection -> a.add(connection.getUsername()));		
+		sendToConnections(waitingConnection, new MessageWaitingRoomConnections(a) );
 
 		
 		if (waitingConnection.size() == 4)

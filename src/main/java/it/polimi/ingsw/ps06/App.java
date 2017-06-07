@@ -39,9 +39,9 @@ public class App
     		System.out.print("Insert the Server IP > ");
     		
     		String host = s.nextLine();
-    		Client client = Client.getInstance(host, 12345);
+    		Client.getInstance().setupParameters(host, 12345);
     		
-    		(new Thread(client)).start();
+    		Client.getInstance().start();
     		
     		System.out.print("Press 1 for CLI or 2 for GUI > ");
     		Menu menuView = ( Integer.parseInt(s.nextLine()) == 1 ) ? new MenuCLI(s) : new MenuGUI();
@@ -49,7 +49,6 @@ public class App
 			MenuController controller = new MenuController(menuView);
 			menuView.addNewObserver(controller);
 			menuView.show();
-
       }
     }
 }

@@ -1,5 +1,5 @@
 package it.polimi.ingsw.ps06.model.messages;
 
-public abstract class EventMessage extends Message {
+public abstract class EventMessage extends Message implements EventMessageVisitable {
 	
 }

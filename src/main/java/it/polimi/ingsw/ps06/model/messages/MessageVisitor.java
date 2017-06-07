@@ -1,7 +1,6 @@
 package it.polimi.ingsw.ps06.model.messages;
 
-import it.polimi.ingsw.ps06.model.LeaderDiscarded;
-import it.polimi.ingsw.ps06.model.MemberPlaced;
+import java.util.ArrayList;
 
 public interface MessageVisitor {
 
@@ -17,7 +16,8 @@ public interface MessageVisitor {
 	public void visit(EventLeaderActivated leaderActivated);
 	public void visit(EventLeaderPlayed leaderPlayed);
 	
-	public void visit(MessageUser userMessage);
+	public String visit(MessageUser userMessage);
+	public ArrayList<String> visit(MessageWaitingRoomConnections waitingConnections);
 	
 	public void visit(MessageConnectionStart startConnection);
 }
