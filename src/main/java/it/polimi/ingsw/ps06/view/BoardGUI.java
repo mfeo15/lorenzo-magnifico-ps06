@@ -55,8 +55,9 @@ import javax.swing.TransferHandler;
 import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 
-import it.polimi.ingsw.ps06.model.EventClose;
-import it.polimi.ingsw.ps06.model.StoryBoard2Room;
+
+import it.polimi.ingsw.ps06.model.messages.EventClose;
+import it.polimi.ingsw.ps06.model.messages.StoryBoard2Room;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -1392,8 +1393,7 @@ public class BoardGUI extends Observable implements Board {
 	
 	public static void main(String[] args) throws IOException
     {   
-        BoardGUI a = new BoardGUI();  
-        a.show();
+        (new BoardGUI()).show();  
     }   
 
 

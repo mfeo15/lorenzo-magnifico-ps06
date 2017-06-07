@@ -1,6 +1,9 @@
-package it.polimi.ingsw.ps06.model;
+package it.polimi.ingsw.ps06.model.messages;
 
-public interface EventVisitor {
+import it.polimi.ingsw.ps06.model.LeaderDiscarded;
+import it.polimi.ingsw.ps06.model.MemberPlaced;
+
+public interface MessageVisitor {
 
 	public void visit(EventClose eventClose);
 	

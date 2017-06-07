@@ -1,8 +1,8 @@
-package it.polimi.ingsw.ps06.model;
+package it.polimi.ingsw.ps06.model.messages;
 
 import it.polimi.ingsw.ps06.view.Board;
 
-public class StoryBoard2Board extends Event {
+public class StoryBoard2Board extends StoryBoard {
 
 	private Board view;
 	
@@ -20,7 +20,7 @@ public class StoryBoard2Board extends Event {
 	}
 	
 	@Override
-	public void accept(EventVisitor visitor) {
+	public void accept(MessageVisitor visitor) {
 		visitor.visit(this);
 	}
 }

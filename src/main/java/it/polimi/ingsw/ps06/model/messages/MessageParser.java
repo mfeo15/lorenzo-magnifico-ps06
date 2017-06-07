@@ -1,12 +1,14 @@
-package it.polimi.ingsw.ps06.model;
+package it.polimi.ingsw.ps06.model.messages;
 
 import java.io.IOException;
 
 import it.polimi.ingsw.ps06.Client;
 import it.polimi.ingsw.ps06.controller.BoardController;
 import it.polimi.ingsw.ps06.controller.RoomController;
+import it.polimi.ingsw.ps06.model.LeaderDiscarded;
+import it.polimi.ingsw.ps06.model.MemberPlaced;
 
-public class EventParser implements EventVisitor {
+public class MessageParser implements MessageVisitor {
 
 	@Override
 	public void visit(MemberPlaced memberPlaced) {
@@ -87,6 +89,7 @@ public class EventParser implements EventVisitor {
 		RoomController controller = new RoomController(storyboard.getView());
 		
 		Client.getInstance().addNewObserver(controller);
+		controller.addNewObserver(Client.getInstance());
 		storyboard.getView().addNewObserver(controller);
 		try {storyboard.getView().show();} catch (IOException e) {e.printStackTrace();}
 	}
@@ -97,6 +100,7 @@ public class EventParser implements EventVisitor {
 		BoardController controller = new BoardController(storyboard.getView());
 		
 		Client.getInstance().addNewObserver(controller);
+		controller.addNewObserver(Client.getInstance());
 		storyboard.getView().addNewObserver(controller);
 		try {storyboard.getView().show();} catch (IOException e) {e.printStackTrace();}	
 	}

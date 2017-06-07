@@ -12,7 +12,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Scanner;
 
-public class Client extends Observable implements Runnable {
+public class Client extends Observable implements Observer, Runnable {
 	
 	private static Client instance = null;
 
@@ -84,6 +84,13 @@ public class Client extends Observable implements Runnable {
 				e.printStackTrace();
 			}
 		}
+		
+	}
+
+	/* MVC - SERVER IS MODEL AND SO IS AN OBSERVER OBJECT */
+	@Override
+	public void update(Observable o, Object arg) {
+		// TODO Auto-generated method stub
 		
 	}
 }

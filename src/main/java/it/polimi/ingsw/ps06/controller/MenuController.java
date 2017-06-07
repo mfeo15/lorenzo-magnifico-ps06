@@ -4,9 +4,15 @@ import java.util.Observable;
 import java.util.Observer;
 
 import it.polimi.ingsw.ps06.Client;
+<<<<<<< Updated upstream
 import it.polimi.ingsw.ps06.model.Event;
 import it.polimi.ingsw.ps06.model.EventParser;
 import it.polimi.ingsw.ps06.view.Menu;
+=======
+import it.polimi.ingsw.ps06.model.messages.EventMessage;
+import it.polimi.ingsw.ps06.model.messages.MessageParser;
+import it.polimi.ingsw.ps06.view.GUI.Menu;
+>>>>>>> Stashed changes
 
 public class MenuController extends Observable implements Observer {
 	
@@ -19,7 +25,7 @@ public class MenuController extends Observable implements Observer {
 	
 	@Override
 	public void update(Observable o, Object arg) {
-		if (!(arg instanceof Event))
+		if (!(arg instanceof EventMessage))
 			return;
 		
 		//Smista le comunicazioni provenienti dal Client
@@ -30,8 +36,8 @@ public class MenuController extends Observable implements Observer {
 		//Smista le comunicazioni provenienti dalla View
 		if ( o.getClass().isInstance(theView) ) {
 					
-			EventParser parser = new EventParser();
-			((Event) arg).accept(parser);
+			MessageParser parser = new MessageParser();
+			((EventMessage) arg).accept(parser);
 		}
 	}
 }

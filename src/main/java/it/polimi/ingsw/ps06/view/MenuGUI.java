@@ -19,9 +19,9 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import it.polimi.ingsw.ps06.model.EventClose;
-import it.polimi.ingsw.ps06.model.StoryBoard2Board;
-import it.polimi.ingsw.ps06.model.StoryBoard2Room;
+import it.polimi.ingsw.ps06.model.messages.EventClose;
+import it.polimi.ingsw.ps06.model.messages.StoryBoard2Board;
+import it.polimi.ingsw.ps06.model.messages.StoryBoard2Room;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;

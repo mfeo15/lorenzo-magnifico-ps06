@@ -6,11 +6,18 @@ import java.util.Observer;
 
 import it.polimi.ingsw.ps06.Client;
 import it.polimi.ingsw.ps06.Message;
+<<<<<<< Updated upstream
 import it.polimi.ingsw.ps06.model.Event;
 import it.polimi.ingsw.ps06.model.EventParser;
 import it.polimi.ingsw.ps06.view.Room;
+=======
+import it.polimi.ingsw.ps06.model.messages.EventMessage;
+import it.polimi.ingsw.ps06.model.messages.MessageParser;
+import it.polimi.ingsw.ps06.model.messages.StoryBoard;
+import it.polimi.ingsw.ps06.view.GUI.Room;
+>>>>>>> Stashed changes
 
-public class RoomController implements Observer {
+public class RoomController extends Observable implements Observer {
 	
 	private Room theView;
 	
@@ -19,10 +26,19 @@ public class RoomController implements Observer {
 	public RoomController(Room roomView) {
 		this.theView = roomView;
 	}
+	
+	public void addNewObserver(Observer o) {
+		addObserver(o);
+	}
+	
+	public void notifyChangement(Object o) {
+		setChanged();
+		notifyObservers(o);
+	} 
 
 	@Override
 	public void update(Observable o, Object arg) {
-		if (!(arg instanceof Event && arg instanceof Message))
+		if (!(arg instanceof EventMessage && arg instanceof Message))
 			return;
 		
 		//Smista le comunicazioni provenienti dal Client
@@ -41,8 +57,12 @@ public class RoomController implements Observer {
 		//Smista le comunicazioni provenienti dalla View
 		if ( o.getClass().isInstance(theView) ) {
 			
-			EventParser parser = new EventParser();
-			((Event) arg).accept(parser);
+			if ( arg instanceof StoryBoard) {
+				MessageParser parser = new MessageParser();
+				((StoryBoard) arg).accept(parser);
+			} else {
+				notifyChangement(arg);
+			}
 		}
 	}
 }
