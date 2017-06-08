@@ -1,6 +1,7 @@
 package it.polimi.ingsw.ps06;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import it.polimi.ingsw.ps06.model.messages.Message;
+import it.polimi.ingsw.ps06.model.messages.MessageGameHasStarted;
 import it.polimi.ingsw.ps06.model.messages.MessageWaitingRoomConnections;
 
 /**
@@ -110,15 +112,7 @@ public class SocketServer implements Server, Observer {
 			player2.addObserver(controller);
 			*/
 			
-			try {
-				MatchSet match = new MatchSet(waitingConnection);
-				match.createGame();
-				playingConnection.add(match);
-				
-				waitingConnection.clear();
-			} catch (Exception e) {
-				
-			}
+			startNewGame();
 		}
 	}
 	
@@ -126,7 +120,8 @@ public class SocketServer implements Server, Observer {
 		
 		System.out.println();
 		System.out.println();
-		System.out.println("Lorenzo Server : ON");
+		System.out.println("Lorenzo Server : ON \n");
+		System.out.println("[] Server Socket inizialiazed : " + InetAddress.getLocalHost() + " \n");
 		
 		this.serverSocket = new ServerSocket(PORT);
 	}
@@ -174,6 +169,19 @@ public class SocketServer implements Server, Observer {
 		sendToConnections(waitingConnection, new MessageWaitingRoomConnections(a) );
 	}
 	
+	public void startNewGame() {
+		
+		try {
+			MatchSet match = new MatchSet(waitingConnection);
+			match.createGame();
+			playingConnection.add(match);
+			
+			sendToConnections(waitingConnection, new MessageGameHasStarted() );
+			waitingConnection.clear();
+		} catch (Exception e) {
+			
+		}
+	}
 	
 	/**
 	 * Metodo invocato per concludere la normale attività del Server. 

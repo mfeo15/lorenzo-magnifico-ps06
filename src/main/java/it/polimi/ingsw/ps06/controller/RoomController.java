@@ -5,12 +5,14 @@ import java.util.Observable;
 import java.util.Observer;
 
 import it.polimi.ingsw.ps06.Client;
+import it.polimi.ingsw.ps06.model.events.Event;
+import it.polimi.ingsw.ps06.model.events.EventParser;
+import it.polimi.ingsw.ps06.model.events.StoryBoard;
 import it.polimi.ingsw.ps06.model.messages.Client2Server;
+import it.polimi.ingsw.ps06.model.messages.EventMessage;
 import it.polimi.ingsw.ps06.model.messages.Message;
-import it.polimi.ingsw.ps06.model.messages.MessageConnection;
-import it.polimi.ingsw.ps06.model.messages.MessageConnectionStart;
 import it.polimi.ingsw.ps06.model.messages.MessageParser;
-import it.polimi.ingsw.ps06.model.messages.StoryBoard;
+import it.polimi.ingsw.ps06.model.messages.Server2Client;
 import it.polimi.ingsw.ps06.view.Room;
 
 public class RoomController extends Observable implements Observer {
@@ -36,55 +38,57 @@ public class RoomController extends Observable implements Observer {
 
 	@Override
 	public void update(Observable o, Object arg) {
+		/*
 		if (!( arg instanceof Message))
 			return;
+		*/
 		
 		//Smista le comunicazioni provenienti dal Client
 		if ( o.getClass().isInstance(theModel) ) {
-			handleModelFlux( (Message) arg );
+			handleMessage( (Message) arg );
 			return;
 		}
 		
 		//Smista le comunicazioni provenienti dalla View
 		if ( o.getClass().isInstance(theView) ) {
-			handleViewFlux( (Message) arg );
-			return;
-		}
-	}
-	
-	private void handleModelFlux(Message m) {
-		
-		if (m instanceof MessageConnection) {
 			
-			if (m instanceof Client2Server) {
-				//This is a normal CLIENT -> SERVER message (needs to be sent)
-				notifyChangement(m);
+			if (arg instanceof Message) {
+				handleMessage( (Message) arg );
+				return;
 			}
-			else
-			{
-				//This is a normal SERVER -> CLIENT message (just received, needs to be parsed)
-				MessageParser parser = new MessageParser();
-				players = ((MessageConnection) m).accept(parser);
-				
-				theView.clearPlayers();
-				for (String s : players) {
-					theView.setPlayer(s, players.indexOf(s));
-				}
+			
+			if (arg instanceof Event) {
+				handleEvent( (Event) arg );
+				return;
 			}
 		}
 	}
 	
-	private void handleViewFlux(Message m) {
+	private void handleMessage(Message m) {
 		
-		if ( m instanceof StoryBoard) 
+		if (m instanceof Server2Client) {
+			//This is a normal SERVER -> CLIENT message 
+			((Server2Client) m).accept(new MessageParser(theView));
+			return;
+		}	
+		
+		if (m instanceof Client2Server) {
+			notifyChangement(m);
+		}
+	}
+	
+	private void handleEvent(Event e) {
+		
+		if ( e instanceof StoryBoard) 
 		{
 			//Let the controller handle this, it's just a StoryBoard Event (new View)
-			MessageParser parser = new MessageParser();
-			((StoryBoard) m).accept(parser);
+			EventParser parser = new EventParser();
+			((StoryBoard) e).accept(parser);
 		} 
 		else 
 		{
 			//Event to let the model handle
+			EventMessage m = new EventMessage(e);
 			notifyChangement(m);
 		}
 	}

@@ -8,7 +8,6 @@ import java.net.UnknownHostException;
 import java.util.Observable;
 import java.util.Observer;
 
-import it.polimi.ingsw.ps06.model.messages.Client2Server;
 import it.polimi.ingsw.ps06.model.messages.Message;
 
 public class Client extends Observable implements Runnable, Observer {

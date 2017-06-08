@@ -6,8 +6,8 @@ import java.util.Observer;
 import java.util.Scanner;
 
 import it.polimi.ingsw.ps06.controller.MenuController;
-import it.polimi.ingsw.ps06.model.messages.EventClose;
-import it.polimi.ingsw.ps06.model.messages.StoryBoard2Room;
+import it.polimi.ingsw.ps06.model.events.EventClose;
+import it.polimi.ingsw.ps06.model.events.StoryBoard2Room;
 
 public class MenuCLI extends Observable implements Menu {
 	

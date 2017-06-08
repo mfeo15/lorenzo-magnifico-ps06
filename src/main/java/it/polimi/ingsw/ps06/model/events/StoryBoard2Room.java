@@ -1,4 +1,4 @@
-package it.polimi.ingsw.ps06.model.messages;
+package it.polimi.ingsw.ps06.model.events;
 
 import it.polimi.ingsw.ps06.view.Room;
 
@@ -19,7 +19,7 @@ public class StoryBoard2Room extends StoryBoard {
 	}
 	
 	@Override
-	public void accept(MessageVisitor visitor) {
+	public void accept(EventVisitor visitor) {
 		visitor.visit(this);
 	}
 }

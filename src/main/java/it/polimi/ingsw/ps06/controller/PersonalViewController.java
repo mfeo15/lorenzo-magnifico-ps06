@@ -6,9 +6,9 @@ import java.util.Observer;
 
 import it.polimi.ingsw.ps06.Client;
 import it.polimi.ingsw.ps06.Message;
-import it.polimi.ingsw.ps06.model.messages.EventMessage;
+import it.polimi.ingsw.ps06.model.events.Event;
+import it.polimi.ingsw.ps06.model.events.StoryBoard;
 import it.polimi.ingsw.ps06.model.messages.MessageParser;
-import it.polimi.ingsw.ps06.model.messages.StoryBoard;
 import it.polimi.ingsw.ps06.view.PersonalView;
 import it.polimi.ingsw.ps06.view.Room;
 
@@ -33,14 +33,14 @@ private PersonalView theView;
 
 	@Override
 	public void update(Observable o, Object arg) {
-		if (!(arg instanceof EventMessage))
+		if (!(arg instanceof Event))
 			return;
 					
 		//Smista le comunicazioni provenienti dalla View
 		if ( o.getClass().isInstance(theView) ) {
 					
 			MessageParser parser = new MessageParser();
-			((EventMessage) arg).accept(parser);
+			((Event) arg).accept(parser);
 		}
 	}
 

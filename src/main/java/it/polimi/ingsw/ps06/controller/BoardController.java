@@ -4,12 +4,15 @@ import java.util.Observable;
 import java.util.Observer;
 
 import it.polimi.ingsw.ps06.Client;
-import it.polimi.ingsw.ps06.model.messages.Client2Server;
+import it.polimi.ingsw.ps06.model.events.Event;
+import it.polimi.ingsw.ps06.model.events.EventParser;
+import it.polimi.ingsw.ps06.model.events.Model2View;
+import it.polimi.ingsw.ps06.model.events.StoryBoard;
 import it.polimi.ingsw.ps06.model.messages.EventMessage;
 import it.polimi.ingsw.ps06.model.messages.Message;
-import it.polimi.ingsw.ps06.model.messages.MessageConnection;
+import it.polimi.ingsw.ps06.model.messages.MessageBoardSetupDice;
 import it.polimi.ingsw.ps06.model.messages.MessageParser;
-import it.polimi.ingsw.ps06.model.messages.StoryBoard;
+import it.polimi.ingsw.ps06.model.messages.Server2Client;
 import it.polimi.ingsw.ps06.view.Board;
 
 public class BoardController extends Observable implements Observer {
@@ -26,9 +29,9 @@ public class BoardController extends Observable implements Observer {
 		addObserver(o);
 	}
 	
-	public void notifyChangement(Object o) {
+	public void notifyChangement(Message m) {
 		setChanged();
-		notifyObservers(o);
+		notifyObservers(m);
 	} 
 	
 	@Override
@@ -38,43 +41,44 @@ public class BoardController extends Observable implements Observer {
 		
 		//Smista le comunicazioni provenienti dal Client
 		if ( o.getClass().isInstance(theModel) ) {
-			handleModelFlux( (Message) arg );
+			handleMessage( (Message) arg );
 			return;
 		}
 		
 		//Smista le comunicazioni provenienti dalla View
 		if ( o.getClass().isInstance(theView) ) {
-			handleViewFlux( (Message) arg );
+			handleEvent( (Event) arg );
 			return;
 		}
 	}
 	
-	private void handleModelFlux(Message m) {
+	private void handleMessage(Message m) {
 		
-		if (m instanceof MessageConnection) {
+		
+		if (m instanceof Server2Client) {
+			//This is a normal CLIENT -> SERVER message (needs to be sent)
 			
-			if (m instanceof Client2Server) {
-				//This is a normal CLIENT -> SERVER message (needs to be sent)
-				Client.getInstance().asyncSend((Client2Server) m);
+			if (m instanceof MessageBoardSetupDice) {
+				((Server2Client) m).accept(new MessageParser(theView));
 			}
-			else
-			{
-				//This is a normal SERVER -> CLIENT message (just received, needs to be parsed)
-			}
+			
+			return;
 		}
+			
 	}
 	
-	private void handleViewFlux(Message m) {
+	private void handleEvent(Event e) {
 		
-		if ( m instanceof StoryBoard) 
+		if ( e instanceof StoryBoard) 
 		{
 			//Let the controller handle this, it's just a StoryBoard Event (new View)
-			MessageParser parser = new MessageParser();
-			((StoryBoard) m).accept(parser);
+			EventParser parser = new EventParser();
+			((StoryBoard) e).accept(parser);
 		} 
 		else 
 		{
 			//Event to let the model handle
+			EventMessage m = new EventMessage(e);
 			notifyChangement(m);
 		}
 	}

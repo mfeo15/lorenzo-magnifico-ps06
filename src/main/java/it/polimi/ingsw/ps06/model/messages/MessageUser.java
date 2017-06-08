@@ -3,7 +3,7 @@ package it.polimi.ingsw.ps06.model.messages;
 import it.polimi.ingsw.ps06.model.Types.Action;
 import it.polimi.ingsw.ps06.model.Types.ColorPalette;
 
-public class MessageUser extends Server2Client {
+public class MessageUser extends Client2Server {
 	
 	private String username;
 	
@@ -20,8 +20,8 @@ public class MessageUser extends Server2Client {
 	}
 	
 	@Override
-	public String accept(MessageVisitor visitor) {
-		return (visitor.visit(this));
+	public void accept(MessageVisitor visitor) {
+		 visitor.visit(this);
 	}
 
 }

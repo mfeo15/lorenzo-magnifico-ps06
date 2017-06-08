@@ -19,8 +19,8 @@ public class MessageWaitingRoomConnections extends Server2Client {
 	}
 	
 	@Override
-	public ArrayList<String> accept(MessageVisitor visitor) {
-		return visitor.visit(this);
+	public void accept(MessageVisitor visitor) {
+		visitor.visit(this);
 	}
 
 }

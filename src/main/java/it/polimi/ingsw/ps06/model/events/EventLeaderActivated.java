@@ -1,4 +1,4 @@
-package it.polimi.ingsw.ps06.model.messages;
+package it.polimi.ingsw.ps06.model.events;
 
 public class EventLeaderActivated extends EventLeader {
 	
@@ -7,7 +7,7 @@ public class EventLeaderActivated extends EventLeader {
 	}
 
 	@Override
-	public void accept(MessageVisitor visitor) {
+	public void accept(EventVisitor visitor) {
 		visitor.visit(this);
 	}
 

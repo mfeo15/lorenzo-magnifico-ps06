@@ -1,4 +1,4 @@
-package it.polimi.ingsw.ps06.model.messages;
+package it.polimi.ingsw.ps06.model.events;
 
 import it.polimi.ingsw.ps06.model.Types.Action;
 import it.polimi.ingsw.ps06.model.Types.ColorPalette;

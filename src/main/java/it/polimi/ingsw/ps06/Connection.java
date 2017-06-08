@@ -5,12 +5,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 
+import it.polimi.ingsw.ps06.model.messages.EventMessage;
 import it.polimi.ingsw.ps06.model.messages.Message;
-import it.polimi.ingsw.ps06.model.messages.MessageConnection;
 import it.polimi.ingsw.ps06.model.messages.MessageParser;
-import it.polimi.ingsw.ps06.model.messages.MessageWaitingRoomConnections;
 
 /**
 * Classe per la gestione delle singole connessioni al Server.
@@ -71,14 +69,19 @@ public class Connection implements Runnable {
 	}
 	
 	public void receive() throws ClassNotFoundException, IOException {
-		MessageConnection m;
-		m = (MessageConnection) in.readObject();
+		Message m = (Message) in.readObject();
 		
 		System.out.println("[ ] Message received from " + getInetAddress() + " (" + getUsername() + "): " + m);
 		
-		this.username = m.accept(new MessageParser());
+		if ( m instanceof EventMessage ) {
+			// THIS IS AN EVENT OF GAME
+			return;
+		}
 		
-		SocketServer.getInstance().sendWaitingConnectionsStats();
+		if ( m instanceof Message ) {
+			
+			((Message) m).accept(new MessageParser(this));
+		}
 	}
 	
 	/**
