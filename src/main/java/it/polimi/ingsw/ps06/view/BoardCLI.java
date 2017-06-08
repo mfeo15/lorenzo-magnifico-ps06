@@ -193,6 +193,14 @@ public class BoardCLI extends Observable implements Board {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void setPlayerNumber(int number) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
 	
 	
 }

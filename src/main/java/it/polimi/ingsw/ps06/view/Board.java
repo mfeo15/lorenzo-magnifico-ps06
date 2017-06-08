@@ -35,6 +35,8 @@ public interface Board {
 	
 	void setPersonalResources(int coin, int wood, int stone, int servant);
 	
+	void setPlayerNumber(int number);
+	
 	boolean checkActionLegality();
 	
 	void startTimer();

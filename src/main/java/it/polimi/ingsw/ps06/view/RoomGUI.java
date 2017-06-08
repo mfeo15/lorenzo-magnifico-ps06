@@ -21,8 +21,11 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
 
 import it.polimi.ingsw.ps06.model.messages.EventClose;
+import it.polimi.ingsw.ps06.model.messages.MessageConnectionStart;
+import it.polimi.ingsw.ps06.model.messages.MessageParser;
 import it.polimi.ingsw.ps06.model.messages.MessageUser;
 import it.polimi.ingsw.ps06.model.messages.StoryBoard2Board;
 import it.polimi.ingsw.ps06.model.messages.StoryBoard2Room;
@@ -44,6 +47,10 @@ public class RoomGUI extends Observable implements Room {
 	@Override
 	public void show() throws IOException
 	{
+		try {
+		    UIManager.setLookAndFeel( UIManager.getCrossPlatformLookAndFeelClassName() );
+		 } catch (Exception e) { e.printStackTrace();}
+		
 		exit = new JButton();
 		f = new JFrame();
 		
@@ -54,7 +61,7 @@ public class RoomGUI extends Observable implements Room {
 		width = (int)((screenSize.getWidth()*70/100)*(1.5 / ratio));
 		height = (int)(screenSize.getHeight()*70/100);
 		
-		font = new Font("Lucida Handwriting",Font.PLAIN,12);
+		font = new Font("Lucida Handwriting",Font.PLAIN,(int)(12*(screenSize.getHeight()/1080)));
 		font2 = new Font("Lucida Handwriting",Font.PLAIN,(int)(18*(screenSize.getHeight()/1080)));
 	    
 		
@@ -102,14 +109,14 @@ public class RoomGUI extends Observable implements Room {
        
         
         username = new JTextField();
-        username.setLocation(width*29/100,(int)(height*16.6/100));
+        username.setLocation(width*29/100,(int)(height*16.2/100));
         username.setSize(width*13/100,(int)(height*3.5/100));
         username.setOpaque(false);
         username.setFont(font);
         f.add(username);
         
         password = new JPasswordField();
-        password.setLocation(width*29/100,(int)(height*24/100));
+        password.setLocation(width*29/100,(int)(height*23.6/100));
         password.setSize(width*13/100,(int)(height*3.5/100));
         password.setOpaque(false);
         f.add(password);
@@ -320,6 +327,9 @@ public class RoomGUI extends Observable implements Room {
         f.setResizable(false);
         f.setLocationRelativeTo(null);
         f.setVisible(true);   
+        
+        MessageConnectionStart cs = new MessageConnectionStart();
+        cs.accept(new MessageParser());
 	}
 
 	

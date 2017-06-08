@@ -19,5 +19,7 @@ public interface MessageVisitor {
 	public String visit(MessageUser userMessage);
 	public ArrayList<String> visit(MessageWaitingRoomConnections waitingConnections);
 	
+	public void visit(MessageGameStart gameStart);
+	public void visit(MessageGameHasStarted hasStarted);
 	public void visit(MessageConnectionStart startConnection);
 }

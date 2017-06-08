@@ -169,7 +169,6 @@ public class BoardGUI extends Observable implements Board {
 		    UIManager.setLookAndFeel( UIManager.getCrossPlatformLookAndFeelClassName() );
 		 } catch (Exception e) { e.printStackTrace();}
 		
-		
 		setBoard();
 		
 		JFrame escFrame = new JFrame();
@@ -410,7 +409,7 @@ public class BoardGUI extends Observable implements Board {
         scrollOthers.setContentAreaFilled(false);
         scrollOthers.setFocusPainted(false);
         scrollOthers.setDisabledIcon( scrollOthers.getIcon() );
-        scrollOthers.setIcon(new ImageIcon(ImageIO.read(new File("resources/backRight.png"))));
+        scrollOthers.setIcon(setImageScreen("resources/backRight.png",2,(int)(2*ratio)).getIcon());
         //scrollOthers.setBorderPainted(false);
         
         scrollOthers.addActionListener(new ActionListener() {
@@ -438,7 +437,7 @@ public class BoardGUI extends Observable implements Board {
         scrollTowers.setContentAreaFilled(false);
         scrollTowers.setFocusPainted(false);
         scrollTowers.setDisabledIcon( scrollTowers.getIcon() );
-        scrollTowers.setIcon(new ImageIcon(ImageIO.read(new File("resources/backLeft.png"))));
+        scrollTowers.setIcon(setImageScreen("resources/backLeft.png",2,(int)(2*ratio)).getIcon());
         //scrollTowers.setBorderPainted(false);
    
         
@@ -1679,6 +1678,13 @@ public class BoardGUI extends Observable implements Board {
 		this.periodNumber=period;
 		this.roundNumber=period;
 		
+	}
+
+	
+
+	@Override
+	public void setPlayerNumber(int number) {
+		this.playerNumber=number;
 	}
 
 
