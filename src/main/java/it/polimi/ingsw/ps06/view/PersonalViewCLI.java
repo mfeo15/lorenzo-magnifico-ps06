@@ -44,12 +44,6 @@ public class PersonalViewCLI extends Observable implements PersonalView {
 	}
 
 	@Override
-	public void setCard(int id, int index) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void addNewObserver(Observer o) {
 		// TODO Auto-generated method stub
 		
@@ -60,6 +54,20 @@ public class PersonalViewCLI extends Observable implements PersonalView {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void setTerritoryCard(int id, int index) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setBuildingCard(int id, int index) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
 	
 	
 

@@ -23,7 +23,7 @@ public class TestTower {
 	@Test
 	public void testPlaceMember() {
 		FamilyMember m = new FamilyMember();
-		PlaceMember(m,Action.MARKET_1)
+		PlaceMember(m,Action.MARKET_1);
 	}
 
 	/**

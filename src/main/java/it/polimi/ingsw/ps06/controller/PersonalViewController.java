@@ -5,7 +5,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import it.polimi.ingsw.ps06.Client;
-import it.polimi.ingsw.ps06.Message;
+import it.polimi.ingsw.ps06.model.messages.Message;
 import it.polimi.ingsw.ps06.model.events.Event;
 import it.polimi.ingsw.ps06.model.events.StoryBoard;
 import it.polimi.ingsw.ps06.model.messages.MessageParser;

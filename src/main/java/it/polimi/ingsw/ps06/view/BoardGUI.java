@@ -5,11 +5,9 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Insets;
-import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.datatransfer.DataFlavor;
@@ -55,17 +53,16 @@ import javax.swing.TransferHandler;
 import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 
-import it.polimi.ingsw.ps06.model.Types.ColorPalette;
-import it.polimi.ingsw.ps06.model.messages.EventClose;
-import it.polimi.ingsw.ps06.model.messages.EventLeaderActivated;
-import it.polimi.ingsw.ps06.model.messages.EventLeaderDiscarded;
-import it.polimi.ingsw.ps06.model.messages.EventLeaderPlayed;
-import it.polimi.ingsw.ps06.model.messages.EventMemberPlaced;
-import it.polimi.ingsw.ps06.model.messages.StoryBoard2Room;
+import it.polimi.ingsw.ps06.model.Types.*;
+import it.polimi.ingsw.ps06.model.events.EventClose;
+import it.polimi.ingsw.ps06.model.events.EventLeaderActivated;
+import it.polimi.ingsw.ps06.model.events.EventLeaderDiscarded;
+import it.polimi.ingsw.ps06.model.events.EventLeaderPlayed;
+import it.polimi.ingsw.ps06.model.events.EventMemberPlaced;
+import it.polimi.ingsw.ps06.model.events.StoryBoard2Room;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-
 
 
 @SuppressWarnings("restriction")
@@ -395,7 +392,7 @@ public class BoardGUI extends Observable implements Board {
         scrollOthers.setContentAreaFilled(false);
         scrollOthers.setFocusPainted(false);
         scrollOthers.setDisabledIcon( scrollOthers.getIcon() );
-        scrollOthers.setIcon(ImageHandler.setImageScreen("resources/backRight.png",2,(int)(2*ratio),width,height).getIcon());
+        scrollOthers.setIcon(ImageHandler.setImage("resources/backRight.png",4,(int)(3*ratio),width,height).getIcon());
         //scrollOthers.setBorderPainted(false);
         
         scrollOthers.addActionListener(new ActionListener() {
@@ -423,8 +420,7 @@ public class BoardGUI extends Observable implements Board {
         scrollTowers.setContentAreaFilled(false);
         scrollTowers.setFocusPainted(false);
         scrollTowers.setDisabledIcon( scrollTowers.getIcon() );
-        scrollTowers.setIcon(ImageHandler.setImageScreen("resources/backLeft.png",2,(int)(2*ratio),width,height).getIcon());
-        //scrollTowers.setBorderPainted(false);
+        scrollTowers.setIcon(ImageHandler.setImage("resources/backLeft.png",4,(int)(3*ratio),width,height).getIcon());
    
         
         scrollTowers.addActionListener(new ActionListener() {
@@ -820,11 +816,21 @@ public class BoardGUI extends Observable implements Board {
 
 		desktopFrame.setSize((int)screenSize.getWidth(), (int)screenSize.getHeight());
 		
-		Animations.startAnimation(towers, others, Direction.RIGHT,towers.getX(),towers.getY() );
-		Animations.startAnimation(others, towers, Direction.LEFT,others.getX(),others.getY() );
-		
 	    centerJIF(others);
 	    centerJIF(towers);
+	    
+	    scrollTowers.setEnabled(false);
+	    scrollOthers.setEnabled(false);
+	    
+	    new java.util.Timer().schedule( 
+    	        new java.util.TimerTask() {
+    	            @Override
+    	            public void run() {
+    	            	scrollTowers.setEnabled(true);
+                		scrollOthers.setEnabled(true);
+    	            }}, 4000 );
+	    
+		Animations.startAnimation(towers, others, Direction.RIGHT,towers.getX(),towers.getY() );
 	    
 	    try {
 		    UIManager.setLookAndFeel( UIManager.getCrossPlatformLookAndFeelClassName() );
@@ -841,7 +847,6 @@ public class BoardGUI extends Observable implements Board {
 		Dimension desktopSize = desktopFrame.getSize();
 	    Dimension jInternalFrameSize = jif.getSize();
 	    int width = (desktopSize.width - jInternalFrameSize.width) / 2;
-	    //int height = ((desktopSize.height - jInternalFrameSize.height) / 2)-desktopSize.height*8/100;
 	    int height=desktopSize.height*12/100;
 	    jif.setLocation(width, height);
 	    jif.setVisible(true);
@@ -912,8 +917,8 @@ public class BoardGUI extends Observable implements Board {
 			for(int z=0;z<=3;z++){
 				
 				btns[i].setLocation((int)(width*x/100),(int)(height*y/100));
-				btns[i].setSize(width*12/100,height*22/100);
-				y=y+24.3;
+				btns[i].setSize(width*12/100,(int)(height*21.7/100));
+				y=y+24;
 				i++;
 			}	
 			x=x+21.9;		
@@ -1195,7 +1200,7 @@ public class BoardGUI extends Observable implements Board {
 		
 		for (int j=0;j<btns.length;j++) {
 			
-			btns[j].setIcon((ImageHandler.setImageScreen("resources/cards/devcards_f_en_c_"+(cardsCodes[j]+1)+".png",9,(int)(13*ratio),width,height)).getIcon());
+			btns[j].setIcon((ImageHandler.setImage("resources/cards/devcards_f_en_c_"+(cardsCodes[j]+1)+".png",14,(int)(14.5*ratio),width,height)).getIcon());
 			btns[j].setDisabledIcon( btns[j].getIcon());
 		}
 		
@@ -1275,8 +1280,11 @@ public class BoardGUI extends Observable implements Board {
 	                Transferable t = support.getTransferable();
 	                Object value = t.getTransferData(SUPPORTED_DATE_FLAVOR);
 	                if (value instanceof String) {
+	                	
 	                    Component component = support.getComponent();
+	                    notifyAction(identifySpot(component),Integer.parseInt(value.toString()));
 	                    //Chiedi per un check 
+	                    
 	                    if (check && component instanceof JButton && component.isEnabled() && ((JButton) component).getIcon()==null && members[Integer.parseInt(value.toString())].isEnabled()) {
 	                        
 	                    	if(((JButton) component)==council[0]){
@@ -1295,8 +1303,6 @@ public class BoardGUI extends Observable implements Board {
 	                		Media hit = new Media(new File(hoverSound).toURI().toString());
 	                		MediaPlayer mediaPlayer1 = new MediaPlayer(hit);
 	        				mediaPlayer1.play();
-	                        
-	                        
 	                        
 	                        accept = true;
 	                    }
@@ -1478,7 +1484,41 @@ public class BoardGUI extends Observable implements Board {
         }
     }
     
-    
+    public it.polimi.ingsw.ps06.model.Types.Action identifySpot(Component c){
+    	
+    	if( ( (JButton) c) == council[0] ) return it.polimi.ingsw.ps06.model.Types.Action.CONCIL_SPACE;
+    	if( ( (JButton) c) == harvest[0] ) return it.polimi.ingsw.ps06.model.Types.Action.HARVEST_2;
+    	if( ( (JButton) c) == production[0] ) return it.polimi.ingsw.ps06.model.Types.Action.PRODUCTION_2;
+    	if( ( (JButton) c) == productions[0] ) return it.polimi.ingsw.ps06.model.Types.Action.PRODUCTION_1;
+    	if( ( (JButton) c) == harvests[0] ) return it.polimi.ingsw.ps06.model.Types.Action.HARVEST_1;
+    	if( ( (JButton) c) == markets[1] ) return it.polimi.ingsw.ps06.model.Types.Action.MARKET_1;
+    	if( ( (JButton) c) == markets[2] ) return it.polimi.ingsw.ps06.model.Types.Action.MARKET_2;
+    	if( ( (JButton) c) == markets[3] ) return it.polimi.ingsw.ps06.model.Types.Action.MARKET_3;
+    	if( ( (JButton) c) == markets[4] ) return it.polimi.ingsw.ps06.model.Types.Action.MARKET_4;
+    	
+    	if( ( (JButton) c) == placements[0] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_GREEN_1;
+    	if( ( (JButton) c) == placements[1] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_GREEN_2;
+    	if( ( (JButton) c) == placements[2] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_GREEN_3;
+    	if( ( (JButton) c) == placements[3] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_GREEN_4;
+    	
+    	if( ( (JButton) c) == placements[4] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_BLUE_1;
+    	if( ( (JButton) c) == placements[5] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_BLUE_2;
+    	if( ( (JButton) c) == placements[6] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_BLUE_3;
+    	if( ( (JButton) c) == placements[7] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_BLUE_4;
+    	
+    	if( ( (JButton) c) == placements[8] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_YELLOW_1;
+    	if( ( (JButton) c) == placements[9] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_YELLOW_2;
+    	if( ( (JButton) c) == placements[10] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_YELLOW_3;
+    	if( ( (JButton) c) == placements[11] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_YELLOW_4;
+    	
+    	if( ( (JButton) c) == placements[12] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_PURPLE_1;
+    	if( ( (JButton) c) == placements[13] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_PURPLE_2;
+    	if( ( (JButton) c) == placements[14] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_PURPLE_3;
+    	if( ( (JButton) c) == placements[15] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_PURPLE_4;
+    	
+    	return null;
+    	
+    }
     
 	@Override
 	public void setHarvestIndex(int value) {

@@ -5,10 +5,10 @@ import java.util.Observer;
 import java.util.Scanner;
 
 import it.polimi.ingsw.ps06.controller.RoomController;
-import it.polimi.ingsw.ps06.model.messages.EventClose;
+import it.polimi.ingsw.ps06.model.events.EventClose;
 import it.polimi.ingsw.ps06.model.messages.MessageUser;
-import it.polimi.ingsw.ps06.model.messages.StoryBoard2Board;
-import it.polimi.ingsw.ps06.model.messages.StoryBoard2Room;
+import it.polimi.ingsw.ps06.model.events.StoryBoard2Board;
+import it.polimi.ingsw.ps06.model.events.StoryBoard2Room;
 
 public class RoomCLI extends Observable implements Room {
 	

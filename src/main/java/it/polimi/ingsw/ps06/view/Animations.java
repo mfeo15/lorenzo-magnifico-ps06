@@ -171,7 +171,7 @@ public class Animations {
                 } catch (Exception ex) {
                 }
                 
-                runTime = 500;
+                runTime = 700;
         		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         		distance = 2.2*((screenSize.getHeight()/1080));
         		smooth = 1 * ((screenSize.getHeight()/1080));
@@ -191,6 +191,9 @@ public class Animations {
                         
                         Point location = f1.getLocation();
                         Point to = new Point(location);
+                        
+                        Point location2 = f2.getLocation();
+                        Point to2 = new Point(location2);
                         
                         if (dif > runTime && phase ==1) {
                         	dif=0;
@@ -221,13 +224,15 @@ public class Animations {
                         if(direction==Direction.RIGHT){
                         	if(phase==1 || phase==4){
 	                        	to.x = f1.getX() + (int)Math.round(smooth * progress);
-	                            to.y = f1.getY();
+	                            to2.x = f2.getX() - (int)Math.round(smooth * progress);
 	                            f1.setLocation(to);
+	                            f2.setLocation(to2);
 	                        }
 	                        if(phase==2 || phase ==3){
 	                        	to.x = f1.getX() - (int)Math.round(smooth * progress);
-	                            to.y = f1.getY();
+	                        	to2.x = f2.getX() + (int)Math.round(smooth * progress);
 	                            f1.setLocation(to);
+	                            f2.setLocation(to2);
 	                        }
                     
                         }
@@ -235,18 +240,21 @@ public class Animations {
                         if(direction==Direction.LEFT){
 	                        if(phase==1 || phase ==4){
 	                        	to.x = f1.getX() - (int)Math.round(smooth * progress);
-	                            to.y = f1.getY();
+	                        	to2.x = f2.getX() + (int)Math.round(smooth * progress);
 	                            f1.setLocation(to);
+	                            f2.setLocation(to2);
 	                        }
 	                        if(phase==2 || phase==3 ){
 	                        	to.x = f1.getX() + (int)Math.round(smooth * progress);
-	                            to.y = f1.getY();
+	                        	to2.x = f2.getX() - (int)Math.round(smooth * progress);
 	                            f1.setLocation(to);
+	                            f2.setLocation(to2);
 	                        }
                         }
                         
                         if(phase==5){
                         	f1.setLocation(savex,savey);
+                        	f2.setLocation(savex,savey);
                     	    phase=6;
                         }
                         
