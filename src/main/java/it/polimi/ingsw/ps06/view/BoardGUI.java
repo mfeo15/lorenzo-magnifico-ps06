@@ -55,8 +55,12 @@ import javax.swing.TransferHandler;
 import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 
-
+import it.polimi.ingsw.ps06.model.Types.ColorPalette;
 import it.polimi.ingsw.ps06.model.messages.EventClose;
+import it.polimi.ingsw.ps06.model.messages.EventLeaderActivated;
+import it.polimi.ingsw.ps06.model.messages.EventLeaderDiscarded;
+import it.polimi.ingsw.ps06.model.messages.EventLeaderPlayed;
+import it.polimi.ingsw.ps06.model.messages.EventMemberPlaced;
 import it.polimi.ingsw.ps06.model.messages.StoryBoard2Room;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.media.Media;
@@ -89,15 +93,7 @@ public class BoardGUI extends Observable implements Board {
 	private JButton escMenu2;
 	private Timer timer = createTimer(1000);
 	
-	private int phase=1;
-	private boolean change=true;
 	private Direction direction;
-	
-	private double distance;
-	private int runTime = 1000;
-    private long startTime = -1;
-    private double smooth;
-    private boolean ok=true;
     
     private String playerName;
     
@@ -131,6 +127,12 @@ public class BoardGUI extends Observable implements Board {
     private JButton[] members = new JButton[4];
     private double ratio;
     
+    private JLabel dicesLabel[] = new JLabel[3];
+    private JLabel excommunicationsLabel[] = new JLabel[5];
+    private JLabel playersLabel[] = new JLabel[5];
+    private JLabel leadersLabel[] = new JLabel[4];
+    private JLabel leadersLabelFade[] = new JLabel[4];
+    
     
     private String player="";
     private String playerColor="G";
@@ -155,7 +157,7 @@ public class BoardGUI extends Observable implements Board {
     PersonalViewGUI view=null;
 	private JFXPanel fxPanel = new JFXPanel();
 	
-    private enum Direction {
+    public enum Direction {
 		LEFT,
 		RIGHT,
 		BOTTOM,
@@ -180,10 +182,6 @@ public class BoardGUI extends Observable implements Board {
 		
 		screenWidth = screenSize.getWidth();
 		screenHeight = screenSize.getHeight();
-		
-		try{
-			//com.apple.eawt.Application.getApplication().requestToggleFullScreen(desktopFrame);
-		} catch(Exception e){e.printStackTrace();}
 		
 	    //Due frame interni al desktop per la parte delle torri e la sezione rimanente
 		JInternalFrame towers = new JInternalFrame("frame", false, false, false, false);
@@ -222,9 +220,7 @@ public class BoardGUI extends Observable implements Board {
 		
 		escWidth=(int)(width*60/100);
         escHeight=(int)(height*80/100);
-		
-		distance = 9 * ((screenSize.getHeight()/1080)*2);
-		smooth = 10 * ((screenSize.getHeight()/1080));
+	
 		
 		fontMEDIUM = new Font("Lucida Handwriting",Font.PLAIN,(int)(15*(screenSize.getHeight()/1080)) );
 		fontMEDIUM = new Font("Lucida Handwriting",Font.PLAIN,(int)(25*(screenSize.getHeight()/1080)) );
@@ -237,11 +233,11 @@ public class BoardGUI extends Observable implements Board {
 		BufferedImage image3 = ImageIO.read(new File("resources/stanzaVuota.png")); 
 		BufferedImage image4 = ImageIO.read(new File("resources/desktop.jpg")); 
 		
-		BufferedImage board1 = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-		BufferedImage board2 = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+		BufferedImage board1 = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage board2 = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		BufferedImage board3 = new BufferedImage(escWidth, escHeight, BufferedImage.TYPE_INT_ARGB);
-		BufferedImage desktopImage = new BufferedImage((int)screenSize.getWidth(), (int)screenSize.getHeight(), BufferedImage.TYPE_INT_RGB);
-		BufferedImage pbImage = new BufferedImage( (int)(screenSize.getWidth()), (int)(screenSize.getHeight()*0.18), BufferedImage.TYPE_INT_RGB);
+		BufferedImage desktopImage = new BufferedImage((int)screenSize.getWidth(), (int)screenSize.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		BufferedImage pbImage = new BufferedImage( (int)(screenSize.getWidth()), (int)(screenSize.getHeight()*0.18), BufferedImage.TYPE_INT_ARGB);
 		
 		Graphics g1 = board1.createGraphics();
         g1.drawImage(image1, 0, 0, width, height, null);
@@ -266,66 +262,56 @@ public class BoardGUI extends Observable implements Board {
         JLabel pbLabel = new JLabel(new ImageIcon(pbImage));
         
         
-        membersLabel[0] = setImage("resources/member/"+playerColor+"N.png",5,7);
-        membersLabel[1] = setImage("resources/member/"+playerColor+"A.png",5,7);
-        membersLabel[2] = setImage("resources/member/"+playerColor+"B.png",5,7);
-        membersLabel[3] = setImage("resources/member/"+playerColor+"E.png",5,7);
+        membersLabel[0] = ImageHandler.setImage("resources/member/"+playerColor+"N.png",5,7,width,height);
+        membersLabel[1] = ImageHandler.setImage("resources/member/"+playerColor+"A.png",5,7,width,height);
+        membersLabel[2] = ImageHandler.setImage("resources/member/"+playerColor+"B.png",5,7,width,height);
+        membersLabel[3] = ImageHandler.setImage("resources/member/"+playerColor+"E.png",5,7,width,height);
         
+        dicesLabel[0] = ImageHandler.setImage("resources/dice/N"+blackValue+".png",6,8,width,height);
+        dicesLabel[1] = ImageHandler.setImage("resources/dice/B"+whiteValue+".png",6,8,width,height);
+        dicesLabel[2] = ImageHandler.setImage("resources/dice/A"+orangeValue+".png",6,8,width,height);
         
-        JLabel dicesLabel[] = new JLabel[3];
-        dicesLabel[0] = setImage("resources/dice/N"+blackValue+".png",6,8);
-        dicesLabel[1] = setImage("resources/dice/B"+whiteValue+".png",6,8);
-        dicesLabel[2] = setImage("resources/dice/A"+orangeValue+".png",6,8);
+        playersLabel[0] = ImageHandler.setImage("resources/player/avatar1.jpg",7,9,width,height);
+        playersLabel[1] = ImageHandler.setImage("resources/player/avatar2.jpg",7,9,width,height);
+        playersLabel[2] = ImageHandler.setImage("resources/player/avatar3.jpg",7,9,width,height);
+        playersLabel[3] = ImageHandler.setImage("resources/player/avatar4.jpg",7,9,width,height);
+        playersLabel[4] = ImageHandler.setImage("resources/player/avatar5.jpg",7,9,width,height);
         
-        JLabel playersLabel[] = new JLabel[5];
+        excommunicationsLabel[0] = ImageHandler.setImage("resources/excomm/"+ex1+".png",9,23,width,height);
+        excommunicationsLabel[1] = ImageHandler.setImage("resources/excomm/"+ex2+".png",9,22,width,height);
+        excommunicationsLabel[2] = ImageHandler.setImage("resources/excomm/"+ex3+".png",9,23,width,height);
         
-        playersLabel[0] = setImage("resources/player/avatar1.jpg",7,9);
-        playersLabel[1] = setImage("resources/player/avatar2.jpg",7,9);
-        playersLabel[2] = setImage("resources/player/avatar3.jpg",7,9);
-        playersLabel[3] = setImage("resources/player/avatar4.jpg",7,9);
-        playersLabel[4] = setImage("resources/player/avatar5.jpg",7,9);
-        
-        JLabel excommunicationsLabel[] = new JLabel[5];
-        
-        excommunicationsLabel[0] = setImage("resources/excomm/"+ex1+".png",9,23);
-        excommunicationsLabel[1] = setImage("resources/excomm/"+ex2+".png",9,22);
-        excommunicationsLabel[2] = setImage("resources/excomm/"+ex3+".png",9,23);
-        
-        JLabel marketCover1 = setImage("resources/cover/cover1.png",10,12);
-        JLabel marketCover2 = setImage("resources/cover/cover3.png",10,12);
-        JLabel productionCover = setImage("resources/cover/cover2.png",25,13);
-        JLabel harvestCover = setImage("resources/cover/cover4.png",25,15);
-        
-        JLabel leadersLabel[] = new JLabel[4];
+        JLabel marketCover1 = ImageHandler.setImage("resources/cover/cover1.png",10,12,width,height);
+        JLabel marketCover2 = ImageHandler.setImage("resources/cover/cover3.png",10,12,width,height);
+        JLabel productionCover = ImageHandler.setImage("resources/cover/cover2.png",25,13,width,height);
+        JLabel harvestCover = ImageHandler.setImage("resources/cover/cover4.png",25,15,width,height);
         
         leadersLabel[0] = new JLabel();
         leadersLabel[1] = new JLabel();
         leadersLabel[2] = new JLabel();
         leadersLabel[3] = new JLabel();
         
-        leadersLabel[0] = setImageScreen("resources/leader/leader"+lead1+".jpg",9,(int)(13.23*ratio));
-        leadersLabel[1] = setImageScreen("resources/leader/leader"+lead2+".jpg",9,(int)(13.23*ratio));
-        leadersLabel[2] = setImageScreen("resources/leader/leader"+lead3+".jpg",9,(int)(13.23*ratio));
-        leadersLabel[3] = setImageScreen("resources/leader/leader"+lead4+".jpg",9,(int)(13.23*ratio));
-        
-        JLabel leadersLabelFade[] = new JLabel[4];
+        leadersLabel[0] = ImageHandler.setImageScreen("resources/leader/leader"+lead1+".jpg",9,(int)(13.23*ratio),width,height);
+        leadersLabel[1] = ImageHandler.setImageScreen("resources/leader/leader"+lead2+".jpg",9,(int)(13.23*ratio),width,height);
+        leadersLabel[2] = ImageHandler.setImageScreen("resources/leader/leader"+lead3+".jpg",9,(int)(13.23*ratio),width,height);
+        leadersLabel[3] = ImageHandler.setImageScreen("resources/leader/leader"+lead4+".jpg",9,(int)(13.23*ratio),width,height);
         
         leadersLabelFade[0] = new JLabel();
         leadersLabelFade[1] = new JLabel();
         leadersLabelFade[2] = new JLabel();
         leadersLabelFade[3] = new JLabel();
         
-        leadersLabelFade[0] = setImageScreen("resources/leader/leader"+lead1+"fade.png",9,(int)(13.23*ratio));
-        leadersLabelFade[1] = setImageScreen("resources/leader/leader"+lead2+"fade.png",9,(int)(13.23*ratio));
-        leadersLabelFade[2] = setImageScreen("resources/leader/leader"+lead3+"fade.png",9,(int)(13.23*ratio));
-        leadersLabelFade[3] = setImageScreen("resources/leader/leader"+lead4+"fade.png",9,(int)(13.23*ratio));
+        leadersLabelFade[0] = ImageHandler.setImageScreen("resources/leader/leader"+lead1+"fade.png",9,(int)(13.23*ratio),width,height);
+        leadersLabelFade[1] = ImageHandler.setImageScreen("resources/leader/leader"+lead2+"fade.png",9,(int)(13.23*ratio),width,height);
+        leadersLabelFade[2] = ImageHandler.setImageScreen("resources/leader/leader"+lead3+"fade.png",9,(int)(13.23*ratio),width,height);
+        leadersLabelFade[3] = ImageHandler.setImageScreen("resources/leader/leader"+lead4+"fade.png",9,(int)(13.23*ratio),width,height);
         
         leaderBack = new JLabel();
-        leaderBack = setImageScreen("resources/leader/leaderBack.jpg", 9,(int)(13.23*ratio));
+        leaderBack = ImageHandler.setImageScreen("resources/leader/leaderBack.jpg", 9,(int)(13.23*ratio),width,height);
         
         
         
-        //JLabel stone = setImage("resources/"+color+",3,3);
+        //JLabel stone = ImageHandler.setImage("resources/"+color+",3,3,width,height);
         		
         //Creazione DesktopPane con Background
         desktop = new JDesktopPane(){
@@ -409,14 +395,14 @@ public class BoardGUI extends Observable implements Board {
         scrollOthers.setContentAreaFilled(false);
         scrollOthers.setFocusPainted(false);
         scrollOthers.setDisabledIcon( scrollOthers.getIcon() );
-        scrollOthers.setIcon(setImageScreen("resources/backRight.png",2,(int)(2*ratio)).getIcon());
+        scrollOthers.setIcon(ImageHandler.setImageScreen("resources/backRight.png",2,(int)(2*ratio),width,height).getIcon());
         //scrollOthers.setBorderPainted(false);
         
         scrollOthers.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
             	MediaPlayer mediaPlayer1 = new MediaPlayer(slideSound);
 				mediaPlayer1.play();
-            	Animation(others ,towers,Direction.RIGHT);
+            	Animations.Animation(others ,towers,Direction.RIGHT);
             	
             	scrollTowers.setEnabled(false);
             	scrollOthers.setEnabled(false);
@@ -437,7 +423,7 @@ public class BoardGUI extends Observable implements Board {
         scrollTowers.setContentAreaFilled(false);
         scrollTowers.setFocusPainted(false);
         scrollTowers.setDisabledIcon( scrollTowers.getIcon() );
-        scrollTowers.setIcon(setImageScreen("resources/backLeft.png",2,(int)(2*ratio)).getIcon());
+        scrollTowers.setIcon(ImageHandler.setImageScreen("resources/backLeft.png",2,(int)(2*ratio),width,height).getIcon());
         //scrollTowers.setBorderPainted(false);
    
         
@@ -447,7 +433,7 @@ public class BoardGUI extends Observable implements Board {
             	
             	MediaPlayer mediaPlayer2 = new MediaPlayer(slideSound);
 				mediaPlayer2.play();
-            	Animation(towers ,others,Direction.LEFT);
+            	Animations.Animation(towers ,others,Direction.LEFT);
             	
             	scrollTowers.setEnabled(false);
             	scrollOthers.setEnabled(false);
@@ -833,142 +819,15 @@ public class BoardGUI extends Observable implements Board {
 		requestOSXFullscreen(desktopFrame);
 
 		desktopFrame.setSize((int)screenSize.getWidth(), (int)screenSize.getHeight());
-	    
+		
+		Animations.startAnimation(towers, others, Direction.RIGHT );
+		Animations.startAnimation(others, towers, Direction.LEFT );
+		Animations.startAnimation(towers, others, Direction.TOP );
+		Animations.startAnimation(others, towers, Direction.BOTTOM );
+		
 	    centerJIF(others);
 	    centerJIF(towers);
-
 	}
-	
-	
-	/**
-	 * Animazione tra due frame in base alla direzione scelta
-	 * 
-	 * @param f1
-	 * @param f2
-	 * @param direction
-	 */
-	private void Animation(JInternalFrame f1, JInternalFrame f2, Direction direction){
-		
-		EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-                } catch (Exception ex) {
-                }
-
-                ok = false;
-                
-                Timer timer = new Timer(40, new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-
-                        if (startTime < 0) {
-                            startTime = System.currentTimeMillis();
-                        }
-
-                        long now = System.currentTimeMillis();
-                        long dif = now - startTime;
-                        
-                        if (dif > runTime && phase ==1) {
-                        	dif=0;
-                        	startTime=now;
-                        	phase=2;
-                        }
-                         
-                        if (dif > runTime && phase ==2) {
-                        	dif=runTime; 
-                        	((Timer)e.getSource()).stop();
-                        }
-                        
-                        double progress = ((double)dif / (double)runTime)*distance;
-
-                        Point location = f1.getLocation();
-                        Point to = new Point(location);
-                        
-                        Point location2 = f2.getLocation();
-                        
-                        if(phase==2 && change){
-                        	change=false;
-                        	f2.toFront();
-                        }
-
-                        if(direction==Direction.TOP){
-	                        if(phase==1){
-	                        	to.x = f1.getX();
-	                            to.y = f1.getY() - (int)Math.round(smooth * progress);
-	                        }
-	                        else{
-	                        	to.x = f1.getX();
-	                            to.y = f1.getY() + (int)Math.round(smooth * progress);
-	                        }
-	                        
-	                        if(to.y>location2.y) f1.setLocation(f2.getLocation());
-	                        else f1.setLocation(to);
-                        }
-                        
-                        if(direction==Direction.RIGHT){
-	                        if(phase==1){
-	                        	to.x = f1.getX() + (int)Math.round(smooth * progress);
-	                            to.y = f1.getY();
-	                        }
-	                        else{
-	                        	to.x = f1.getX() - (int)Math.round(smooth * progress);
-	                            to.y = f1.getY();
-	                        }
-	                        if(to.x<location2.x) f1.setLocation(f2.getLocation());
-	                        else f1.setLocation(to);   
-	                        
-                        }
-                        
-                        if(direction==Direction.LEFT){
-	                        if(phase==1){
-	                        	to.x = f1.getX() - (int)Math.round(smooth * progress);
-	                            to.y = f1.getY();
-	                        }
-	                        else{
-	                        	to.x = f1.getX() + (int)Math.round(smooth * progress);
-	                            to.y = f1.getY();
-	                        }
-	                        if(to.x>location2.x) f1.setLocation(f2.getLocation());
-	                        else f1.setLocation(to);   
-                        }
-                        
-                        if(direction==Direction.BOTTOM){
-                        	if(phase==1){
-	                        	to.x = f1.getX();
-	                            to.y = f1.getY() + (int)Math.round(smooth * progress);
-	                        }
-	                        else{
-	                        	to.x = f1.getX();
-	                            to.y = f1.getY() - (int)Math.round(smooth * progress);
-	                        }
-	                        
-	                        if(to.y<location2.y) f1.setLocation(f2.getLocation());
-	                        else f1.setLocation(to);
-	                        
-	                        
-                        }
-                        
-                        //f2.setLocation(to);
-                    }
-                });
-                timer.setRepeats(true);
-                timer.setCoalesce(true);
-                timer.start();
-                
-            }
-            
-        });
-		
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		phase=1;
-		change=true;	
-		distance = 9;
-		runTime = 1000;
-	    startTime = -1;
-	    
-    }
 
 	/**
 	 * Metodo per centrare un JInternalFrame generico
@@ -1334,7 +1193,7 @@ public class BoardGUI extends Observable implements Board {
 		
 		for (int j=0;j<btns.length;j++) {
 			
-			btns[j].setIcon((setImageScreen("resources/cards/devcards_f_en_c_"+(cardsCodes[j]+1)+".png",9,(int)(13*ratio))).getIcon());
+			btns[j].setIcon((ImageHandler.setImageScreen("resources/cards/devcards_f_en_c_"+(cardsCodes[j]+1)+".png",9,(int)(13*ratio),width,height)).getIcon());
 			btns[j].setDisabledIcon( btns[j].getIcon());
 		}
 		
@@ -1351,39 +1210,6 @@ public class BoardGUI extends Observable implements Board {
 		for (JButton btn : btns) {
 	        btn.setEnabled(false);
 	    }
-	}
-	
-	private JLabel setImage(String s,int xMod, int yMod) throws IOException{
-		
-		BufferedImage image = ImageIO.read(new File(s)); 
-		
-		BufferedImage board = new BufferedImage(width*xMod/100, height*yMod/100, BufferedImage.TYPE_INT_ARGB);
-		
-		Graphics g = board.createGraphics();
-        g.drawImage(image, 0, 0, width*xMod/100, height*yMod/100, null);
-        g.dispose();
-        
-        JLabel label = new JLabel(new ImageIcon(board)); 
-        
-        return label;
-		
-	}
-	
-	private JLabel setImageScreen(String s,int xMod, int yMod) throws IOException{
-		
-		BufferedImage image = ImageIO.read(new File(s)); 
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		
-		BufferedImage board = new BufferedImage((int)(screenSize.getWidth())*xMod/100, (int)(screenSize.getHeight())*yMod/100, BufferedImage.TYPE_INT_ARGB);
-		
-		Graphics g = board.createGraphics();
-        g.drawImage(image, 0, 0, (int)(screenSize.getWidth())*xMod/100, (int)(screenSize.getHeight())*yMod/100, null);
-        g.dispose();
-        
-        JLabel label = new JLabel(new ImageIcon(board)); 
-        
-        return label;
-		
 	}
 	
 	private void fillStones(int index){
@@ -1722,6 +1548,12 @@ public class BoardGUI extends Observable implements Board {
 		this.whiteValue=white;
 		this.orangeValue=orange;
 		
+		try {
+			refresh();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 
@@ -1736,19 +1568,22 @@ public class BoardGUI extends Observable implements Board {
 
 	@Override
 	public void activateLeaders() {
-		// TODO Auto-generated method stub
-		
+		leaders = fillLeaders(leaders,leadersLabel,leadersLabelFade);
 	}
 
 
 	@Override
-	public void setLeaders(int code1, int code2, int code3, int code4) {
+	public void setLeaders(int code1, int code2, int code3, int code4){
 		this.lead1=code1;
 		this.lead2=code2;
 		this.lead3=code3;
 		this.lead4=code4;
 		
-		
+		try {
+			refresh();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 
@@ -1759,6 +1594,8 @@ public class BoardGUI extends Observable implements Board {
 		this.woodV=wood;
 		this.stoneV=wood;
 		this.servantV=servant;
+		
+		resourcesInfo.setText(coinV+" Coin   "+woodV+" Wood   "+stoneV+" Wood   "+servantV+" Servant");
 		
 	}
 
@@ -1781,21 +1618,58 @@ public class BoardGUI extends Observable implements Board {
 
 	@Override
 	public void notifyAction(it.polimi.ingsw.ps06.model.Types.Action chosenAction, int memberIndex) {
-		// TODO Auto-generated method stub
+		setChanged();
+		EventMemberPlaced memberPlaced;
+		
+		switch(memberIndex){
+		case 0:
+			memberPlaced = new EventMemberPlaced(chosenAction, ColorPalette.DICE_BLACK);
+			break;
+		case 1:
+			memberPlaced = new EventMemberPlaced(chosenAction, ColorPalette.DICE_ORANGE);
+			break;
+		case 2:
+			memberPlaced = new EventMemberPlaced(chosenAction, ColorPalette.DICE_WHITE);
+			break;
+		case 3:
+			memberPlaced = new EventMemberPlaced(chosenAction, ColorPalette.UNCOLORED);
+			break;
+		default:
+			memberPlaced=null;
+		}
+		
+		notifyObservers(memberPlaced);
 		
 	}
 
 
 	@Override
 	public void notifyLeaderDiscard(int index) {
-		// TODO Auto-generated method stub
+		setChanged();
+		EventLeaderDiscarded leaderDiscarded;
+		leaderDiscarded = new EventLeaderDiscarded(index);
+		notifyObservers(leaderDiscarded);
+		
+	}
+
+	
+
+	@Override
+	public void notifyLeaderActivation(int index) {
+		setChanged();
+		EventLeaderActivated leaderActivated;
+		leaderActivated = new EventLeaderActivated(index);
+		notifyObservers(leaderActivated);
 		
 	}
 
 
 	@Override
 	public void notifyLeaderPlacement(int index) {
-		// TODO Auto-generated method stub
+		setChanged();
+		EventLeaderPlayed leaderPlayed;
+		leaderPlayed = new EventLeaderPlayed(index);
+		notifyObservers(leaderPlayed);
 		
 	}
 
@@ -1829,8 +1703,19 @@ public class BoardGUI extends Observable implements Board {
 	public void setCards(int[] cards) {
 		this.cardsCodes=cards;
 		
+		try {
+			refresh();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
+	public void refresh() throws IOException{
+		
+        dices = fillLabels(dices,dicesLabel);
+        leaders = fillLeaders(leaders,leadersLabel,leadersLabelFade);
+        cards = fillCards(cards);
+	}
 
 	private void setBoard(){
 	    
@@ -1853,6 +1738,8 @@ public class BoardGUI extends Observable implements Board {
 	    servantV=5;
 	    playerName="Gigi Scarfani";
 	    roundPlayer="Gigi Scarfani";
+	    roundNumber=1;
+	    periodNumber=1;
 	    
 	    for(int j=0;j<cardsCodes.length;j++){cardsCodes[j]=j;}
 	    

@@ -111,6 +111,13 @@ public class RoomCLI extends Observable implements Room {
 		notifyObservers(close);
 		
 	}
+
+	@Override
+	public void hasStarted() {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	
 	
 }

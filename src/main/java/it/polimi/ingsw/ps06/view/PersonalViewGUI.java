@@ -30,6 +30,11 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 	private JTextField coins, woods, stones, servants, victory, military, faith;
 	private Font font;
 	
+    
+    private JButton[] territories = new JButton[6];
+    private JButton[] buildings = new JButton[6];
+	
+    private double ratio;
 	private int code1, code2, code3, code4;
 	private int btCode;
 
@@ -44,7 +49,7 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 			
 			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 			
-			double ratio= (screenSize.getWidth()/screenSize.getHeight());
+			ratio= (screenSize.getWidth()/screenSize.getHeight());
 			
 			font = new Font("Lucida Handwriting",Font.PLAIN,(int)(18*(screenSize.getHeight()/1080)));
 			
@@ -164,9 +169,6 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 	        faith.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 	        f.add(faith);
 	        
-	        JButton[] territories = new JButton[6];
-	        JButton[] buildings = new JButton[6];
-	        
 	        territories = initializeButtons(territories);
 	        buildings = initializeButtons(buildings);
 
@@ -185,7 +187,7 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 	        
 	        
 	        JLabel bonusTileLabel = new JLabel();       
-	        bonusTileLabel = setImage("resources/tile/pb"+btCode+".png",5.8,73.1);
+	        bonusTileLabel = ImageHandler.setImage("resources/tile/pb"+btCode+".png",5.8,73.1,width,height);
 	        
 	        bonusTile[0].setIcon(bonusTileLabel.getIcon());
 			bonusTile[0].setDisabledIcon( bonusTile[0].getIcon() );
@@ -279,13 +281,35 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 		
 		@Override
 		public void setResources(int coin, int wood, int stone, int servant, int victory, int military, int faith) {
-			// TODO Auto-generated method stub
+			
+			coins.setText(String.valueOf(coin));
+			woods.setText(String.valueOf(coin));
+			stones.setText(String.valueOf(coin));
+			servants.setText(String.valueOf(coin));
+			this.victory.setText(String.valueOf(coin));
+			this.military.setText(String.valueOf(coin));
+			this.faith.setText(String.valueOf(coin));
 			
 		}
 
 		@Override
-		public void setCard(int id, int index) {
-			// TODO Auto-generated method stub
+		public void setTerritoryCard(int id, int index) {
+			try {
+				territories[index].setIcon((ImageHandler.setImageScreen("resources/cards/devcards_f_en_c_"+id+".png",9,(int)(13*ratio),width,height)).getIcon());
+			} catch (IOException e) {
+				e.printStackTrace();}
+			
+			territories[index].setDisabledIcon( territories[index].getIcon());
+		}
+		
+		@Override
+		public void setBuildingCard(int id, int index) {
+			try {
+				buildings[index].setIcon((ImageHandler.setImageScreen("resources/cards/devcards_f_en_c_"+id+".png",9,(int)(13*ratio),width,height)).getIcon());
+			} catch (IOException e) {
+				e.printStackTrace();}
+			
+			buildings[index].setDisabledIcon( buildings[index].getIcon());
 			
 		}
 		
@@ -296,21 +320,7 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 			
 		}
 
-		private JLabel setImage(String s,double xMod, double yMod) throws IOException{
-			
-			BufferedImage image = ImageIO.read(new File(s)); 
-			
-			BufferedImage board = new BufferedImage((int)(width*xMod/100), (int)(height*yMod/100), BufferedImage.TYPE_INT_ARGB);
-			
-			Graphics g = board.createGraphics();
-	        g.drawImage(image, 0, 0, (int)(width*xMod/100), (int)(height*yMod/100), null);
-	        g.dispose();
-	        
-	        JLabel label = new JLabel(new ImageIcon(board)); 
-	        
-	        return label;
-			
-		}
+		
 		
 
 		

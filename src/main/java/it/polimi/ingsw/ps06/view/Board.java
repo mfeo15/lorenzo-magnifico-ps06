@@ -49,6 +49,8 @@ public interface Board {
 	
 	void notifyLeaderPlacement(int index);
 	
+	void notifyLeaderActivation(int index);
+	
 	void notifyTimesUp();
 	
 	void show() throws IOException;

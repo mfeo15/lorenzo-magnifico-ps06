@@ -7,7 +7,9 @@ public interface PersonalView {
 	
 	void setResources (int coin, int wood, int stone, int servant, int victory, int military, int faith);
 	
-	void setCard(int id, int index);
+	void setTerritoryCard(int id, int index);
+	
+	void setBuildingCard(int id, int index);
 	
 	void addNewObserver(Observer o);
 	

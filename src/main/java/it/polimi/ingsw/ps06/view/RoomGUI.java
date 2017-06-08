@@ -25,6 +25,7 @@ import javax.swing.UIManager;
 
 import it.polimi.ingsw.ps06.model.messages.EventClose;
 import it.polimi.ingsw.ps06.model.messages.MessageConnectionStart;
+import it.polimi.ingsw.ps06.model.messages.MessageGameStart;
 import it.polimi.ingsw.ps06.model.messages.MessageParser;
 import it.polimi.ingsw.ps06.model.messages.MessageUser;
 import it.polimi.ingsw.ps06.model.messages.StoryBoard2Board;
@@ -357,13 +358,21 @@ public class RoomGUI extends Observable implements Room {
 
 	@Override
 	public void startGame() {
-		setChanged();
-		StoryBoard2Board storyBoard;
-		
-		storyBoard = new StoryBoard2Board(new BoardGUI());
-		notifyObservers(storyBoard);
+		setChanged();		
+		MessageGameStart gameStart;
+		gameStart = new MessageGameStart();
+		notifyObservers(gameStart);
 			
 	}
+	
+	@Override
+	public void hasStarted(){
+		setChanged();
+		StoryBoard2Board storyBoard;
+		storyBoard = new StoryBoard2Board(new BoardGUI());
+		notifyObservers(storyBoard);
+	}
+	
 
 
 	@Override

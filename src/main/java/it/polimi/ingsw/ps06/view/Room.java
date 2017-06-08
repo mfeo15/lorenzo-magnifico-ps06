@@ -19,6 +19,8 @@ public interface Room {
 	
 	void notifyExit();
 	
+	void hasStarted();
+	
 	void show() throws IOException;
 
 }

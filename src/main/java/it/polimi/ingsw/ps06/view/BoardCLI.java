@@ -199,6 +199,12 @@ public class BoardCLI extends Observable implements Board {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void notifyLeaderActivation(int index) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 	
