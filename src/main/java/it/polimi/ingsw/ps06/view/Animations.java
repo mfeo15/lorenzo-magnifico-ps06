@@ -23,6 +23,7 @@ public class Animations {
 	private static int phase=1;
 	private static boolean change=true;
 	private static Dimension screenSize;
+    
 		
 	
 	/**
@@ -159,7 +160,7 @@ public class Animations {
 	    startTime = -1;
 	}
 	
-	public static void startAnimation(JInternalFrame f1, JInternalFrame f2, Direction direction){
+	public static void startAnimation(JInternalFrame f1, JInternalFrame f2, Direction direction, int savex, int savey){
 		
 		
 		EventQueue.invokeLater(new Runnable() {
@@ -169,17 +170,18 @@ public class Animations {
                     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
                 } catch (Exception ex) {
                 }
-
-                runTime = 1000;
+                
+                runTime = 500;
         		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         		distance = 2.2*((screenSize.getHeight()/1080));
-        		smooth = 1.3 * ((screenSize.getHeight()/1080));
+        		smooth = 1 * ((screenSize.getHeight()/1080));
                 ok = false;
+                
                 
                 Timer timer = new Timer(40, new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-
+                    	
                         if (startTime < 0) {
                             startTime = System.currentTimeMillis();
                         }
@@ -187,87 +189,70 @@ public class Animations {
                         long now = System.currentTimeMillis();
                         long dif = now - startTime;
                         
+                        Point location = f1.getLocation();
+                        Point to = new Point(location);
+                        
                         if (dif > runTime && phase ==1) {
                         	dif=0;
                         	startTime=now;
                         	phase=2;
                         }
-                         
+                        
                         if (dif > runTime && phase ==2) {
+                        	dif=0;
+                        	startTime=now;
+                        	phase=3;
+                        }
+                        
+                        if (dif > runTime && phase ==3) {
+                        	dif=0;
+                        	startTime=now;
+                        	phase=4;
+                        }
+                         
+                        if (dif > runTime && phase ==4){
                         	dif=runTime; 
-                        	((Timer)e.getSource()).stop();
+                        	phase=5;
                         }
                         
                         double progress = ((double)dif / (double)runTime)*distance;
 
-                        Point location = f1.getLocation();
-                        Point to = new Point(location);
-                        
-                        Point location2 = f2.getLocation();
-                        
-                        if(phase==2 && change){
-                        	change=false;
-                        }
-
                         
                         if(direction==Direction.RIGHT){
-	                        if(phase==1){
+                        	if(phase==1 || phase==4){
 	                        	to.x = f1.getX() + (int)Math.round(smooth * progress);
 	                            to.y = f1.getY();
+	                            f1.setLocation(to);
 	                        }
-	                        else{
+	                        if(phase==2 || phase ==3){
 	                        	to.x = f1.getX() - (int)Math.round(smooth * progress);
 	                            to.y = f1.getY();
+	                            f1.setLocation(to);
 	                        }
-	                        if(to.x<location2.x) f1.setLocation(f2.getLocation());
-	                        else f1.setLocation(to);   
-	                        
+                    
                         }
                         
                         if(direction==Direction.LEFT){
-	                        if(phase==1){
+	                        if(phase==1 || phase ==4){
 	                        	to.x = f1.getX() - (int)Math.round(smooth * progress);
 	                            to.y = f1.getY();
+	                            f1.setLocation(to);
 	                        }
-	                        else{
+	                        if(phase==2 || phase==3 ){
 	                        	to.x = f1.getX() + (int)Math.round(smooth * progress);
 	                            to.y = f1.getY();
+	                            f1.setLocation(to);
 	                        }
-	                        if(to.x>location2.x) f1.setLocation(f2.getLocation());
-	                        else f1.setLocation(to);   
                         }
                         
-                        if(direction==Direction.TOP){
-	                        if(phase==1){
-	                        	to.x = f1.getX();
-	                            to.y = f1.getY() - (int)Math.round(smooth * progress);
-	                        }
-	                        else{
-	                        	to.x = f1.getX();
-	                            to.y = f1.getY() + (int)Math.round(smooth * progress);
-	                        }
-	                        
-	                        if(to.y>location2.y) f1.setLocation(f2.getLocation());
-	                        else f1.setLocation(to);
+                        if(phase==5){
+                        	f1.setLocation(savex,savey);
+                    	    phase=6;
                         }
                         
-                        if(direction==Direction.BOTTOM){
-                        	if(phase==1){
-	                        	to.x = f1.getX();
-	                            to.y = f1.getY() + (int)Math.round(smooth * progress);
-	                        }
-	                        else{
-	                        	to.x = f1.getX();
-	                            to.y = f1.getY() - (int)Math.round(smooth * progress);
-	                        }
-	                        
-	                        if(to.y<location2.y) f1.setLocation(f2.getLocation());
-	                        else f1.setLocation(to);
-	                        
-	                        
+                        if(phase==6){
+                        	((Timer)e.getSource()).stop();
                         }
-                        
-                        //f2.setLocation(to);
                     }
                 });
                 timer.setRepeats(true);
@@ -283,7 +268,6 @@ public class Animations {
 		change=true;	
 		distance = 3;
 		runTime = 500;
-	    startTime = -1;
 
 }
 }

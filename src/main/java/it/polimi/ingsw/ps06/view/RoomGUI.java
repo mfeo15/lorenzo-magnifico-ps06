@@ -23,13 +23,13 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 
-import it.polimi.ingsw.ps06.model.messages.EventClose;
+import it.polimi.ingsw.ps06.model.events.EventClose;
 import it.polimi.ingsw.ps06.model.messages.MessageConnectionStart;
 import it.polimi.ingsw.ps06.model.messages.MessageGameStart;
 import it.polimi.ingsw.ps06.model.messages.MessageParser;
 import it.polimi.ingsw.ps06.model.messages.MessageUser;
-import it.polimi.ingsw.ps06.model.messages.StoryBoard2Board;
-import it.polimi.ingsw.ps06.model.messages.StoryBoard2Room;
+import it.polimi.ingsw.ps06.model.events.StoryBoard2Board;
+import it.polimi.ingsw.ps06.model.events.StoryBoard2Room;
 import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -360,7 +360,7 @@ public class RoomGUI extends Observable implements Room {
 	public void startGame() {
 		setChanged();		
 		MessageGameStart gameStart;
-		gameStart = new MessageGameStart();
+		gameStart = new MessageGameStart(2);
 		notifyObservers(gameStart);
 			
 	}

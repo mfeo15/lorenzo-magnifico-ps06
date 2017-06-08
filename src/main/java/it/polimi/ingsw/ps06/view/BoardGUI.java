@@ -820,13 +820,15 @@ public class BoardGUI extends Observable implements Board {
 
 		desktopFrame.setSize((int)screenSize.getWidth(), (int)screenSize.getHeight());
 		
-		Animations.startAnimation(towers, others, Direction.RIGHT );
-		Animations.startAnimation(others, towers, Direction.LEFT );
-		Animations.startAnimation(towers, others, Direction.TOP );
-		Animations.startAnimation(others, towers, Direction.BOTTOM );
+		Animations.startAnimation(towers, others, Direction.RIGHT,towers.getX(),towers.getY() );
+		Animations.startAnimation(others, towers, Direction.LEFT,others.getX(),others.getY() );
 		
 	    centerJIF(others);
 	    centerJIF(towers);
+	    
+	    try {
+		    UIManager.setLookAndFeel( UIManager.getCrossPlatformLookAndFeelClassName() );
+		 } catch (Exception e) { e.printStackTrace();}
 	}
 
 	/**
