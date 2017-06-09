@@ -1,5 +1,6 @@
 package it.polimi.ingsw.ps06.view;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
@@ -202,6 +203,12 @@ public class BoardCLI extends Observable implements Board {
 
 	@Override
 	public void notifyLeaderActivation(int index) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addMember(Action chosenAction, int memberIndex, int playerIndex) throws IOException {
 		// TODO Auto-generated method stub
 		
 	}

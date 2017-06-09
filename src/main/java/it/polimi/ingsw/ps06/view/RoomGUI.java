@@ -159,7 +159,7 @@ public class RoomGUI extends Observable implements Room {
         stat4.setFont(font);
         f.add(stat4);
         
-        logged = new JTextField("Now logged in:");
+        logged = new JTextField("Welcome: ");
         logged.setLocation(width*3/100,height*42/100);
         logged.setSize(width*30/100,height*4/100);
         logged.setOpaque(false);
@@ -313,7 +313,7 @@ public class RoomGUI extends Observable implements Room {
             	MediaPlayer mediaPlayer3 = new MediaPlayer(hit2);
         		mediaPlayer3.play();
         		giveCredentials(username.getText(),String.valueOf(password.getPassword()));
-        		if(checkLogin()){logged.setText("Now logged in: "+username.getText());}
+        		if(checkLogin()){logged.setText("Welcome: "+username.getText());}
         		
             }
             

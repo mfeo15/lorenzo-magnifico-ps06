@@ -147,7 +147,8 @@ public class BoardGUI extends Observable implements Board {
     private boolean check = true;
     private int lead1, lead2, lead3, lead4;
     private int coinV, woodV, stoneV, servantV;
-    int y;
+    private int y;
+    private int usedMember;
     
     private JFrame personalView;
     
@@ -1200,7 +1201,7 @@ public class BoardGUI extends Observable implements Board {
 		
 		for (int j=0;j<btns.length;j++) {
 			
-			btns[j].setIcon((ImageHandler.setImage("resources/cards/devcards_f_en_c_"+(cardsCodes[j]+1)+".png",14,(int)(14.5*ratio),width,height)).getIcon());
+			btns[j].setIcon((ImageHandler.setImage("resources/cards/devcards_f_en_c_"+(cardsCodes[j]+1)+".png",14,(int)( 14.5 * ratio * (1.77 /ratio) ),width,height)).getIcon());
 			btns[j].setDisabledIcon( btns[j].getIcon());
 		}
 		
@@ -1282,12 +1283,14 @@ public class BoardGUI extends Observable implements Board {
 	                if (value instanceof String) {
 	                	
 	                    Component component = support.getComponent();
-	                    notifyAction(identifySpot(component),Integer.parseInt(value.toString()));
-	                    //Chiedi per un check 
+	                    
 	                    
 	                    if (check && component instanceof JButton && component.isEnabled() && ((JButton) component).getIcon()==null && members[Integer.parseInt(value.toString())].isEnabled()) {
 	                        
-	                    	if(((JButton) component)==council[0]){
+		                    notifyAction(identifySpot(component),Integer.parseInt(value.toString()));
+	                    	
+	                    	/*
+		                    if(((JButton) component)==council[0]){
 	                    		for(int j=0; j<privileges.length; j++){
 	                    			privileges[j].setEnabled(true);
 	                    			privileges[j].setBorderPainted(true);
@@ -1295,15 +1298,17 @@ public class BoardGUI extends Observable implements Board {
 	                    	}
 	                    	
 	                    	((JButton) component).setDisabledIcon(membersLabel[Integer.parseInt(value.toString())].getIcon());
-	                        ((JButton) component).setIcon(membersLabel[Integer.parseInt(value.toString())].getIcon());
-	                        members[Integer.parseInt(value.toString())].setEnabled(false);	                       
-	                        //cambia testo ad actionslog somehow
+	                        ((JButton) component).setIcon(membersLabel[Integer.parseInt(value.toString())].getIcon());                   
 	                        
 	                        String hoverSound = "resources/place.wav";
 	                		Media hit = new Media(new File(hoverSound).toURI().toString());
 	                		MediaPlayer mediaPlayer1 = new MediaPlayer(hit);
 	        				mediaPlayer1.play();
-	                        
+	        				members[Integer.parseInt(value.toString())].setEnabled(false);
+		                    */
+	        				
+		                    usedMember= Integer.parseInt(value.toString());
+		                    
 	                        accept = true;
 	                    }
 	                }
@@ -1487,10 +1492,11 @@ public class BoardGUI extends Observable implements Board {
     public it.polimi.ingsw.ps06.model.Types.Action identifySpot(Component c){
     	
     	if( ( (JButton) c) == council[0] ) return it.polimi.ingsw.ps06.model.Types.Action.CONCIL_SPACE;
-    	if( ( (JButton) c) == harvest[0] ) return it.polimi.ingsw.ps06.model.Types.Action.HARVEST_2;
-    	if( ( (JButton) c) == production[0] ) return it.polimi.ingsw.ps06.model.Types.Action.PRODUCTION_2;
-    	if( ( (JButton) c) == productions[0] ) return it.polimi.ingsw.ps06.model.Types.Action.PRODUCTION_1;
     	if( ( (JButton) c) == harvests[0] ) return it.polimi.ingsw.ps06.model.Types.Action.HARVEST_1;
+    	if( ( (JButton) c) == harvest[0] ) return it.polimi.ingsw.ps06.model.Types.Action.HARVEST_2;
+    	if( ( (JButton) c) == productions[0] ) return it.polimi.ingsw.ps06.model.Types.Action.PRODUCTION_1;
+    	if( ( (JButton) c) == production[0] ) return it.polimi.ingsw.ps06.model.Types.Action.PRODUCTION_2;
+    	
     	if( ( (JButton) c) == markets[1] ) return it.polimi.ingsw.ps06.model.Types.Action.MARKET_1;
     	if( ( (JButton) c) == markets[2] ) return it.polimi.ingsw.ps06.model.Types.Action.MARKET_2;
     	if( ( (JButton) c) == markets[3] ) return it.polimi.ingsw.ps06.model.Types.Action.MARKET_3;
@@ -1518,6 +1524,72 @@ public class BoardGUI extends Observable implements Board {
     	
     	return null;
     	
+    }
+    
+    public JButton identifyComponent(it.polimi.ingsw.ps06.model.Types.Action chosenAction){
+    	
+    	switch(chosenAction){
+    	case CONCIL_SPACE:
+    		return council[0];
+    	case HARVEST_1:
+    		return harvests[0];
+    	case HARVEST_2:
+    		return harvest[0];
+    	case PRODUCTION_1:
+    		return productions[0];
+    	case PRODUCTION_2:
+    		return production[0];
+    		
+    	case MARKET_1:
+    		return markets[0];
+    	case MARKET_2:
+    		return markets[1];
+    	case MARKET_3:
+    		return markets[2];
+    	case MARKET_4:
+    		return markets[3];
+    		
+    	case TOWER_GREEN_1:
+    		return placements[0];
+    	case TOWER_GREEN_2:
+    		return placements[1];
+    	case TOWER_GREEN_3:
+    		return placements[2];
+    	case TOWER_GREEN_4:
+    		return placements[3];
+    		
+    	case TOWER_BLUE_1:
+    		return placements[4];
+    	case TOWER_BLUE_2:
+    		return placements[5];
+    	case TOWER_BLUE_3:
+    		return placements[6];
+    	case TOWER_BLUE_4:
+    		return placements[7];
+    		
+    	case TOWER_YELLOW_1:
+    		return placements[8];
+    	case TOWER_YELLOW_2:
+    		return placements[9];
+    	case TOWER_YELLOW_3:
+    		return placements[10];
+    	case TOWER_YELLOW_4:
+    		return placements[11];
+
+    	case TOWER_PURPLE_1:
+    		return placements[12];
+    	case TOWER_PURPLE_2:
+    		return placements[13];
+    	case TOWER_PURPLE_3:
+    		return placements[14];
+    	case TOWER_PURPLE_4:
+    		return placements[15];
+    		
+    	default:
+    		return null;
+    		
+    		
+    	}
     }
     
 	@Override
@@ -1641,6 +1713,78 @@ public class BoardGUI extends Observable implements Board {
 		
 	}
 
+	
+
+	@Override
+	public void addMember(it.polimi.ingsw.ps06.model.Types.Action chosenAction, int memberIndex, int playerIndex) throws IOException {
+		
+		String pColor="";
+		String fullPColor="";
+		String mColor="";
+		String fullMColor="";
+		
+		switch(memberIndex){
+		case 0:
+			mColor="N";
+			fullMColor="Nero";
+			break;
+		case 1:
+			mColor="B";
+			fullMColor="Bianco";
+			break;
+		case 2:
+			mColor="A";
+			fullMColor="Arancione";
+			break;
+		case 3:
+			mColor="E";
+			fullMColor="Neutro";
+			break;
+		default:
+			break;
+		}
+		
+		switch(playerIndex){
+		case 0:
+			pColor="R";
+			fullPColor="Rosso";
+			break;
+		case 1:
+			pColor="V";
+			fullPColor="Verde";
+			break;
+		case 2:
+			pColor="B";
+			fullPColor="Blu";
+			break;
+		case 3:
+			pColor="G";
+			fullPColor="Giallo";
+			break;
+		default:
+			break;
+		}
+		
+		JButton btn = identifyComponent(chosenAction);
+		
+		btn.setDisabledIcon( btn.getIcon() );
+		btn.setIcon((ImageHandler.setImage("resources/member/"+pColor+mColor+".png",5,7,width,height)).getIcon());
+		
+		if((btn)==council[0]){
+    		for(int j=0; j<privileges.length; j++){
+    			privileges[j].setEnabled(true);
+    			privileges[j].setBorderPainted(true);
+    		}
+    	}
+    	
+        String hoverSound = "resources/place.wav";
+		Media hit = new Media(new File(hoverSound).toURI().toString());
+		MediaPlayer mediaPlayer1 = new MediaPlayer(hit);
+		mediaPlayer1.play();
+		
+		members[usedMember].setEnabled(false);
+		actionsLog.setText("Il giocatore "+fullPColor+" ha piazzato il familiare "+fullMColor+"!");
+	}
 
 	@Override
 	public boolean checkActionLegality() {

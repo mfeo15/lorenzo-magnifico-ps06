@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Observer;
 
 import it.polimi.ingsw.ps06.model.Types.Action;
+import it.polimi.ingsw.ps06.model.Types.ColorPalette;
 
 public interface Board {
 	
@@ -36,6 +37,8 @@ public interface Board {
 	void setPersonalResources(int coin, int wood, int stone, int servant);
 	
 	void setPlayerNumber(int number);
+	
+	void addMember(Action chosenAction, int memberIndex, int playerIndex) throws IOException;
 	
 	boolean checkActionLegality();
 	
