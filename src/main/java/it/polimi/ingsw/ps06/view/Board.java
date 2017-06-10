@@ -22,8 +22,6 @@ public interface Board {
 	
 	void setCurrentPlayerName(String s);
 	
-	void setActionLog(String s);
-	
 	void setDices(int black, int white, int orange);
 	
 	void setExcommunicationTiles(int code1, int code2, int code3);
@@ -39,8 +37,6 @@ public interface Board {
 	void setPlayerNumber(int number);
 	
 	void addMember(Action chosenAction, int memberIndex, int playerIndex) throws IOException;
-	
-	boolean checkActionLegality();
 	
 	void startTimer();
 	

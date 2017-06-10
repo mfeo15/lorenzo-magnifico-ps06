@@ -60,6 +60,7 @@ import it.polimi.ingsw.ps06.model.events.EventLeaderActivated;
 import it.polimi.ingsw.ps06.model.events.EventLeaderDiscarded;
 import it.polimi.ingsw.ps06.model.events.EventLeaderPlayed;
 import it.polimi.ingsw.ps06.model.events.EventMemberPlaced;
+import it.polimi.ingsw.ps06.model.events.StoryBoard2PersonalView;
 import it.polimi.ingsw.ps06.model.events.StoryBoard2Room;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.media.Media;
@@ -141,11 +142,8 @@ public class BoardGUI extends Observable implements Board {
     private int roundNumber;
     private int periodNumber;
     private String roundPlayer;
-    private int ex1;
-    private int ex2;
-    private int ex3;
+    private int ex1, ex2, ex3;
     private int harvestIndex=1, productionIndex=1, councilIndex=0;
-    private boolean check = true;
     private int lead1, lead2, lead3, lead4;
     private int coinV, woodV, stoneV, servantV;
     private int y;
@@ -260,15 +258,12 @@ public class BoardGUI extends Observable implements Board {
         JLabel board3Label = new JLabel(new ImageIcon(board3));
         JLabel pbLabel = new JLabel(new ImageIcon(pbImage));
         
+        getResources();
         
         membersLabel[0] = ImageHandler.setImage("resources/member/"+playerColor+"N.png",5,7,width,height);
-        membersLabel[1] = ImageHandler.setImage("resources/member/"+playerColor+"A.png",5,7,width,height);
-        membersLabel[2] = ImageHandler.setImage("resources/member/"+playerColor+"B.png",5,7,width,height);
+        membersLabel[1] = ImageHandler.setImage("resources/member/"+playerColor+"B.png",5,7,width,height);
+        membersLabel[2] = ImageHandler.setImage("resources/member/"+playerColor+"A.png",5,7,width,height);
         membersLabel[3] = ImageHandler.setImage("resources/member/"+playerColor+"E.png",5,7,width,height);
-        
-        dicesLabel[0] = ImageHandler.setImage("resources/dice/N"+blackValue+".png",6,8,width,height);
-        dicesLabel[1] = ImageHandler.setImage("resources/dice/B"+whiteValue+".png",6,8,width,height);
-        dicesLabel[2] = ImageHandler.setImage("resources/dice/A"+orangeValue+".png",6,8,width,height);
         
         playersLabel[0] = ImageHandler.setImage("resources/player/avatar1.jpg",7,9,width,height);
         playersLabel[1] = ImageHandler.setImage("resources/player/avatar2.jpg",7,9,width,height);
@@ -285,29 +280,8 @@ public class BoardGUI extends Observable implements Board {
         JLabel productionCover = ImageHandler.setImage("resources/cover/cover2.png",25,13,width,height);
         JLabel harvestCover = ImageHandler.setImage("resources/cover/cover4.png",25,15,width,height);
         
-        leadersLabel[0] = new JLabel();
-        leadersLabel[1] = new JLabel();
-        leadersLabel[2] = new JLabel();
-        leadersLabel[3] = new JLabel();
-        
-        leadersLabel[0] = ImageHandler.setImageScreen("resources/leader/leader"+lead1+".jpg",9,(int)(13.23*ratio),width,height);
-        leadersLabel[1] = ImageHandler.setImageScreen("resources/leader/leader"+lead2+".jpg",9,(int)(13.23*ratio),width,height);
-        leadersLabel[2] = ImageHandler.setImageScreen("resources/leader/leader"+lead3+".jpg",9,(int)(13.23*ratio),width,height);
-        leadersLabel[3] = ImageHandler.setImageScreen("resources/leader/leader"+lead4+".jpg",9,(int)(13.23*ratio),width,height);
-        
-        leadersLabelFade[0] = new JLabel();
-        leadersLabelFade[1] = new JLabel();
-        leadersLabelFade[2] = new JLabel();
-        leadersLabelFade[3] = new JLabel();
-        
-        leadersLabelFade[0] = ImageHandler.setImageScreen("resources/leader/leader"+lead1+"fade.png",9,(int)(13.23*ratio),width,height);
-        leadersLabelFade[1] = ImageHandler.setImageScreen("resources/leader/leader"+lead2+"fade.png",9,(int)(13.23*ratio),width,height);
-        leadersLabelFade[2] = ImageHandler.setImageScreen("resources/leader/leader"+lead3+"fade.png",9,(int)(13.23*ratio),width,height);
-        leadersLabelFade[3] = ImageHandler.setImageScreen("resources/leader/leader"+lead4+"fade.png",9,(int)(13.23*ratio),width,height);
-        
         leaderBack = new JLabel();
         leaderBack = ImageHandler.setImageScreen("resources/leader/leaderBack.jpg", 9,(int)(13.23*ratio),width,height);
-        
         
         
         //JLabel stone = ImageHandler.setImage("resources/"+color+",3,3,width,height);
@@ -1288,7 +1262,7 @@ public class BoardGUI extends Observable implements Board {
 	                    Component component = support.getComponent();
 	                    
 	                    
-	                    if (check && component instanceof JButton && component.isEnabled() && ((JButton) component).getIcon()==null && members[Integer.parseInt(value.toString())].isEnabled()) {
+	                    if (component instanceof JButton && component.isEnabled() && ((JButton) component).getIcon()==null && members[Integer.parseInt(value.toString())].isEnabled()) {
 	                        
 		                    notifyAction(identifySpot(component),Integer.parseInt(value.toString()));
 	                    	
@@ -1653,13 +1627,6 @@ public class BoardGUI extends Observable implements Board {
 
 
 	@Override
-	public void setActionLog(String s) {
-		actionsLog.setText(s);
-		
-	}
-
-
-	@Override
 	public void setDices(int black, int white, int orange) {
 		this.blackValue=black;
 		this.whiteValue=white;
@@ -1788,14 +1755,7 @@ public class BoardGUI extends Observable implements Board {
 		members[usedMember].setEnabled(false);
 		actionsLog.setText("Il giocatore "+fullPColor+" ha piazzato il familiare "+fullMColor+"!");
 	}
-
-	@Override
-	public boolean checkActionLegality() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-
+	
 	@Override
 	public void notifyExit() {
 		setChanged();
@@ -1807,6 +1767,7 @@ public class BoardGUI extends Observable implements Board {
 
 	@Override
 	public void notifyAction(it.polimi.ingsw.ps06.model.Types.Action chosenAction, int memberIndex) {
+		
 		setChanged();
 		EventMemberPlaced memberPlaced;
 		
@@ -1881,10 +1842,9 @@ public class BoardGUI extends Observable implements Board {
 	@Override
 	public void startGame() {
 		setChanged();
-		StoryBoard2Room storyBoard;
-		storyBoard = new StoryBoard2Room(new RoomGUI());
+		StoryBoard2PersonalView storyBoard;
+		storyBoard = new StoryBoard2PersonalView(new PersonalViewGUI());
 		notifyObservers(storyBoard);
-		
 	}
 
 
@@ -1900,10 +1860,39 @@ public class BoardGUI extends Observable implements Board {
 	}
 
 	public void refresh() throws IOException{
+		getResources();
 		
         dices = fillLabels(dices,dicesLabel);
         leaders = fillLeaders(leaders,leadersLabel,leadersLabelFade);
         cards = fillCards(cards);
+	}
+	
+	public void getResources() throws IOException{
+
+        
+        dicesLabel[0] = ImageHandler.setImage("resources/dice/N"+blackValue+".png",6,8,width,height);
+        dicesLabel[1] = ImageHandler.setImage("resources/dice/B"+whiteValue+".png",6,8,width,height);
+        dicesLabel[2] = ImageHandler.setImage("resources/dice/A"+orangeValue+".png",6,8,width,height);
+		
+        leadersLabel[0] = new JLabel();
+        leadersLabel[1] = new JLabel();
+        leadersLabel[2] = new JLabel();
+        leadersLabel[3] = new JLabel();
+        
+        leadersLabel[0] = ImageHandler.setImageScreen("resources/leader/leader"+lead1+".jpg",9,(int)(13.23*ratio),width,height);
+        leadersLabel[1] = ImageHandler.setImageScreen("resources/leader/leader"+lead2+".jpg",9,(int)(13.23*ratio),width,height);
+        leadersLabel[2] = ImageHandler.setImageScreen("resources/leader/leader"+lead3+".jpg",9,(int)(13.23*ratio),width,height);
+        leadersLabel[3] = ImageHandler.setImageScreen("resources/leader/leader"+lead4+".jpg",9,(int)(13.23*ratio),width,height);
+        
+        leadersLabelFade[0] = new JLabel();
+        leadersLabelFade[1] = new JLabel();
+        leadersLabelFade[2] = new JLabel();
+        leadersLabelFade[3] = new JLabel();
+        
+        leadersLabelFade[0] = ImageHandler.setImageScreen("resources/leader/leader"+lead1+"fade.png",9,(int)(13.23*ratio),width,height);
+        leadersLabelFade[1] = ImageHandler.setImageScreen("resources/leader/leader"+lead2+"fade.png",9,(int)(13.23*ratio),width,height);
+        leadersLabelFade[2] = ImageHandler.setImageScreen("resources/leader/leader"+lead3+"fade.png",9,(int)(13.23*ratio),width,height);
+        leadersLabelFade[3] = ImageHandler.setImageScreen("resources/leader/leader"+lead4+"fade.png",9,(int)(13.23*ratio),width,height);
 	}
 
 	private void setBoard(){

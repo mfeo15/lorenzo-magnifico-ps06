@@ -9,10 +9,36 @@ import java.util.Scanner;
 import it.polimi.ingsw.ps06.controller.BoardController;
 import it.polimi.ingsw.ps06.model.DevelopementCard;
 import it.polimi.ingsw.ps06.model.Types.Action;
+import it.polimi.ingsw.ps06.model.Types.ColorPalette;
+import it.polimi.ingsw.ps06.model.events.BoardHasLoaded;
+import it.polimi.ingsw.ps06.model.events.EventClose;
+import it.polimi.ingsw.ps06.model.events.EventLeaderActivated;
+import it.polimi.ingsw.ps06.model.events.EventLeaderDiscarded;
+import it.polimi.ingsw.ps06.model.events.EventLeaderPlayed;
+import it.polimi.ingsw.ps06.model.events.EventMemberPlaced;
+import it.polimi.ingsw.ps06.model.events.StoryBoard2PersonalView;
 
 public class BoardCLI extends Observable implements Board {
 	
 	private Scanner input;
+	
+	private String player="";
+    private String playerColor="G";
+    private int blackValue;
+    private int orangeValue;
+    private int whiteValue;
+    private int playerNumber;
+    private int roundNumber;
+    private int periodNumber;
+    private String roundPlayer;
+    private int ex1;
+    private int ex2;
+    private int ex3;
+    private int harvestIndex=1, productionIndex=1, councilIndex=0;
+    private int lead1, lead2, lead3, lead4;
+    private int coinV, woodV, stoneV, servantV;
+    private int usedMember;
+    private int leaderState1, leaderState2, leaderState3, leaderState4;
 	
 	public BoardCLI(Scanner input) {
 		
@@ -33,8 +59,75 @@ public class BoardCLI extends Observable implements Board {
 		printTowerASCII();
 		printTowerASCII();
 		printTowerASCII();
+		System.out.println();
+		System.out.println(" --- Firenze, 1500. Benvenuto in questa magnifica città. --- ");
+		System.out.println();
+		System.out.println(" Per ottenere una lista dei comandi possibili premi \"?\".");
+		
+		while(true) readInput();
+		
 	}
 	
+	public void readInput() {
+		String s = input.nextLine();
+		
+		if(s.equals("spots")) giveSpots();
+		if(s.equals("actions")) giveActions();
+		if(s.equals("?")) giveInfo();
+		if(s.equals("exit")) notifyExit();
+		
+		if(s.equals("Attiva1")) notifyLeaderActivation(1);
+		if(s.equals("Attiva2")) notifyLeaderActivation(2);
+		if(s.equals("Attiva3")) notifyLeaderActivation(3);
+		if(s.equals("Attiva4")) notifyLeaderActivation(4);
+		
+		if(s.equals("Scarta1")) notifyLeaderDiscard(1);
+		if(s.equals("Scarta2")) notifyLeaderDiscard(2);
+		if(s.equals("Scarta3")) notifyLeaderDiscard(3);
+		if(s.equals("Scarta4")) notifyLeaderDiscard(4);
+		
+		if(s.equals("Piazza1")) notifyLeaderPlacement(1);
+		if(s.equals("Piazza2")) notifyLeaderPlacement(2);
+		if(s.equals("Piazza3")) notifyLeaderPlacement(3);
+		if(s.equals("Piazza4")) notifyLeaderPlacement(4);
+		
+	}
+
+	public void giveInfo() {
+		System.out.println("----- LISTA COMANDI -----");
+		System.out.println();
+		System.out.println("Per eseguire un azione digita un comando composto nel seguente modo: \"membro1 mercato1\"");
+		System.out.println("Ricorda che l'ordine dei colori è: Nero(1) Bianco(2) Arancio(3) Neutro(4)");
+		System.out.println("Per una lista delle posizioni del gioco digita \"spots\"");
+		System.out.println("Per una lista di azioni extra digita: \"actions\"");
+		System.out.println();
+		System.out.print(" > ");
+
+		while(true) readInput();
+	}
+	
+	public void giveSpots() {
+		System.out.println("----- LISTA POSIZIONI -----");
+		System.out.println();
+		System.out.println("Mercato1 ~ Mercato4 | Palazzo | Produzione1 | Produzione2 | Raccolto1 | Raccolto2 | Torre1 ~ Torre16");
+		System.out.println("Ricorda che i posti della torre vanno da sinistra a destra e dal basso in alto!");
+		System.out.println();
+		System.out.print(" > ");
+
+		while(true) readInput();
+	}
+	
+	public void giveActions() {
+		System.out.println("----- LISTA AZIONI EXTRA -----");
+		System.out.println();
+		System.out.println("--LEADER-- Scarta1 ~ Scarta4 (Leader) | Attiva1 ~ Attiva4 (Leader) | Piazza1 ~ Piazza4 ");
+		System.out.println("--ALTRO-- Info1 ~ Info5 (Per controllare carte e risorse di un avversario)");
+		System.out.println("Se non conosci il tuo codice giocatore puoi usare semplicemente il comando Info !");
+		System.out.println();
+		System.out.print(" > ");
+
+		while(true) readInput();
+	}
 	
 	private void printTowerASCII() {
 		System.out.println("      |>>>");
@@ -59,61 +152,60 @@ public class BoardCLI extends Observable implements Board {
 
 	@Override
 	public void setHarvestIndex(int value) {
-		// TODO Auto-generated method stub
+		this.harvestIndex=value;
 		
 	}
 
 	@Override
 	public void setProductionIndex(int value) {
-		// TODO Auto-generated method stub
+		this.productionIndex=value;
 		
 	}
 
 	@Override
 	public void setCouncilIndex(int value) {
-		// TODO Auto-generated method stub
+		this.councilIndex=value;
 		
 	}
 
 	@Override
 	public void setPeriodRound(int period, int round) {
-		// TODO Auto-generated method stub
+		this.periodNumber=period;
+		this.roundNumber=round;
 		
 	}
 
 	@Override
 	public void setPlayerColor(String s) {
-		// TODO Auto-generated method stub
+		this.playerColor=s;
 		
 	}
 
 	@Override
 	public void setPlayerName(String s) {
-		// TODO Auto-generated method stub
+		this.player=s;
 		
 	}
 
 	@Override
 	public void setCurrentPlayerName(String s) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void setActionLog(String s) {
-		// TODO Auto-generated method stub
+		this.roundPlayer=s;
 		
 	}
 
 	@Override
 	public void setDices(int black, int white, int orange) {
-		// TODO Auto-generated method stub
+		this.blackValue=black;
+		this.whiteValue=white;
+		this.orangeValue=orange;
 		
 	}
 
 	@Override
 	public void setExcommunicationTiles(int code1, int code2, int code3) {
-		// TODO Auto-generated method stub
+		this.ex1=code1;
+		this.ex2=code2;
+		this.ex3=code3;
 		
 	}
 
@@ -125,26 +217,29 @@ public class BoardCLI extends Observable implements Board {
 
 	@Override
 	public void activateLeaders() {
-		// TODO Auto-generated method stub
+		leaderState1=2;
+		leaderState2=2;
+		leaderState3=2;
+		leaderState4=2;
 		
 	}
 
 	@Override
 	public void setLeaders(int code1, int code2, int code3, int code4) {
-		// TODO Auto-generated method stub
+		this.lead1=code1;
+		this.lead2=code2;
+		this.lead3=code3;
+		this.lead4=code4;
 		
 	}
 
 	@Override
 	public void setPersonalResources(int coin, int wood, int stone, int servant) {
-		// TODO Auto-generated method stub
+		this.coinV=coin;
+		this.woodV=wood;
+		this.stoneV=stone;
+		this.servantV=servant;
 		
-	}
-
-	@Override
-	public boolean checkActionLegality() {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	@Override
@@ -155,61 +250,89 @@ public class BoardCLI extends Observable implements Board {
 
 	@Override
 	public void notifyExit() {
-		// TODO Auto-generated method stub
+		setChanged();
+		EventClose close = new EventClose();
+		notifyObservers(close);
 		
 	}
 
 	@Override
 	public void notifyAction(Action chosenAction, int memberIndex) {
-		// TODO Auto-generated method stub
+		setChanged();
+		EventMemberPlaced memberPlaced;
+		ColorPalette color=null;
+		memberPlaced = new EventMemberPlaced(chosenAction,color);
+		notifyObservers(memberPlaced);
 		
 	}
 
 	@Override
 	public void notifyLeaderDiscard(int index) {
-		// TODO Auto-generated method stub
+		setChanged();
+		EventLeaderDiscarded leaderDiscarded;
+		leaderDiscarded = new EventLeaderDiscarded(index);
+		notifyObservers(leaderDiscarded);
 		
 	}
 
 	@Override
 	public void notifyLeaderPlacement(int index) {
-		// TODO Auto-generated method stub
+		setChanged();
+		EventLeaderPlayed leaderPlayed;
+		leaderPlayed = new EventLeaderPlayed(index);
+		notifyObservers(leaderPlayed);
+		
+	}
+	
+
+	@Override
+	public void notifyLeaderActivation(int index) {
+		setChanged();
+		EventLeaderActivated leaderActivated;
+		leaderActivated = new EventLeaderActivated(index);
+		notifyObservers(leaderActivated);
 		
 	}
 
 	@Override
 	public void notifyTimesUp() {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void addNewObserver(Observer o) {
-		// TODO Auto-generated method stub
+		addObserver(o);
 		
 	}
 
 	@Override
 	public void startGame() {
-		// TODO Auto-generated method stub
+		setChanged();
+		StoryBoard2PersonalView storyBoard;
+		storyBoard = new StoryBoard2PersonalView(new PersonalViewGUI());
+		notifyObservers(storyBoard);
 		
 	}
 
 	@Override
 	public void setPlayerNumber(int number) {
-		// TODO Auto-generated method stub
+		this.playerNumber=number;
 		
 	}
 
-	@Override
-	public void notifyLeaderActivation(int index) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void addMember(Action chosenAction, int memberIndex, int playerIndex) throws IOException {
 		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void hasLoaded() {
+		setChanged();
+		BoardHasLoaded roomLoaded = new BoardHasLoaded();
+		notifyObservers(roomLoaded);
 		
 	}
 	

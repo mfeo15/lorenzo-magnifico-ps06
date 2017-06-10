@@ -5,7 +5,9 @@ import java.util.Observer;
 import java.util.Scanner;
 
 import it.polimi.ingsw.ps06.controller.RoomController;
+import it.polimi.ingsw.ps06.model.events.BoardHasLoaded;
 import it.polimi.ingsw.ps06.model.events.EventClose;
+import it.polimi.ingsw.ps06.model.events.RoomHasLoaded;
 import it.polimi.ingsw.ps06.model.messages.MessageUser;
 import it.polimi.ingsw.ps06.model.events.StoryBoard2Board;
 import it.polimi.ingsw.ps06.model.events.StoryBoard2Room;
@@ -28,6 +30,7 @@ public class RoomCLI extends Observable implements Room {
 	}
 	
 	public void show() {
+		System.out.println();
 		System.out.println("----- THE ROOM -----");
 		System.out.println();
 		System.out.println(" Inserisci il comando. Scrivi \"?\" per più informazioni");
@@ -40,13 +43,13 @@ public class RoomCLI extends Observable implements Room {
 	public void readInput() {
 		String s = input.nextLine();
 		
-		if(s=="start") startGame();
-		if(s=="?") giveInfo();
-		if(s=="exit") notifyExit();
-		if(s=="login"){
-			System.out.println(" > ");
+		if(s.equals("start")) startGame();
+		if(s.equals("?")) giveInfo();
+		if(s.equals("exit")) notifyExit();
+		if(s.equals("login")){
+			System.out.print(" > ");
 			String s1 = String.valueOf(input.nextLine());
-			System.out.println(" > ");
+			System.out.print(" > ");
 			String s2 = String.valueOf(input.nextLine());
 			giveCredentials(s1,s2);
 		}
@@ -59,6 +62,7 @@ public class RoomCLI extends Observable implements Room {
 		System.out.println(" Usa il comando \"exit\" per uscire");
 		System.out.println(" Usa il comando \"login Username Password\" per fare il login");
 		System.out.println();
+		System.out.print(" > ");
 
 		while(true) readInput();
 	}
@@ -66,17 +70,24 @@ public class RoomCLI extends Observable implements Room {
 	@Override
 	public void setPlayer(String name, int index) {
 		System.out.println("--> "+name+" Si è connesso alla stanza!");
+		System.out.println();
+		System.out.print(" > ");
 		
 	}
 
 	@Override
 	public void clearPlayers() {
 		System.out.println("--> La stanza è ora vuota!");
+		System.out.println();
+		System.out.print(" > ");
 		
 	}
 
 	@Override
 	public void giveCredentials(String username, String password) {
+		System.out.println("--> Login Effettuato!");
+		System.out.println();
+		System.out.print(" > ");
 		setChanged();
 		MessageUser userMessage;
 		
@@ -98,7 +109,8 @@ public class RoomCLI extends Observable implements Room {
 
 	@Override
 	public void startGame() {
-		System.out.println("gg");
+		(new BoardCLI(input)).show();  
+		
 		setChanged();
 		StoryBoard2Board storyBoard;
 		storyBoard = new StoryBoard2Board(new BoardCLI(input));
@@ -120,6 +132,16 @@ public class RoomCLI extends Observable implements Room {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void hasLoaded() {
+		setChanged();
+		RoomHasLoaded roomLoaded = new RoomHasLoaded();
+		notifyObservers(roomLoaded);
+		
+	}
+	
+	
 	
 	
 	

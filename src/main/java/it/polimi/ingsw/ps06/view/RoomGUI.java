@@ -157,7 +157,7 @@ public class RoomGUI extends Observable implements Room {
         stat4.setFont(font);
         f.add(stat4);
         
-        logged = new JTextField("Welcome: ");
+        logged = new JTextField("");
         logged.setLocation(width*3/100,height*42/100);
         logged.setSize(width*30/100,height*4/100);
         logged.setOpaque(false);

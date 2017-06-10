@@ -16,8 +16,6 @@ public class MenuCLI extends Observable implements Menu {
 	public MenuCLI(Scanner input) {
 		
 		this.input = input;
-		
-		show();
 	}
 	
 	public Scanner getScanner() {
