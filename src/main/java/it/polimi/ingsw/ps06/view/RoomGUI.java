@@ -360,7 +360,7 @@ public class RoomGUI extends Observable implements Room {
 	public void startGame() {
 		setChanged();		
 		MessageGameStart gameStart;
-		gameStart = new MessageGameStart(2);
+		gameStart = new MessageGameStart();
 		notifyObservers(gameStart);
 			
 	}

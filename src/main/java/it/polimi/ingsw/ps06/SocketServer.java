@@ -171,12 +171,14 @@ public class SocketServer implements Server, Observer {
 	
 	public void startNewGame() {
 		
+		sendToConnections(waitingConnection, new MessageGameHasStarted() );
+		
 		try {
 			MatchSet match = new MatchSet(waitingConnection);
 			match.createGame();
 			playingConnection.add(match);
 			
-			sendToConnections(waitingConnection, new MessageGameHasStarted() );
+			//sendToConnections(waitingConnection, new MessageGameHasStarted() );
 			waitingConnection.clear();
 		} catch (Exception e) {
 			

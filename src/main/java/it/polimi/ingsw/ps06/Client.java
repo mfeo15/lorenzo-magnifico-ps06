@@ -41,9 +41,12 @@ public class Client extends Observable implements Runnable, Observer {
 		this.port = port;
 	}
 	
-	public void receive() throws ClassNotFoundException, IOException {
+	private void receive() throws ClassNotFoundException, IOException {
 		Message m;
 		m = (Message) in.readObject();;
+		
+		System.out.println("[ ] Message received : " + m);
+		
 		notifyChangement(m);
 	}
 	
@@ -53,7 +56,7 @@ public class Client extends Observable implements Runnable, Observer {
 		out.writeObject(message);
 		out.flush();
 		
-		System.out.println("Client sent: "+ message);
+		System.out.println("[ ] Message sent : " + message);
 	}
 	
 	public void asyncSend(final Message message){

@@ -92,6 +92,8 @@ public class Connection implements Runnable {
 	private void send(Message message) throws IOException {		
 		out.writeObject(message);
 		out.flush();
+		
+		System.out.println("[ ] Message sent : " + message );
 	}
 	
 	
