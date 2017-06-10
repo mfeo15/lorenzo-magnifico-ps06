@@ -152,7 +152,7 @@ public class BoardGUI extends Observable implements Board {
     
     private JFrame personalView;
     
-    PersonalViewGUI view=null;
+    PersonalViewGUI view= new PersonalViewGUI();
 	private JFXPanel fxPanel = new JFXPanel();
 	
     public enum Direction {
@@ -170,7 +170,7 @@ public class BoardGUI extends Observable implements Board {
 		 } catch (Exception e) { e.printStackTrace();}
 		
 		setBoard();
-		
+			
 		JFrame escFrame = new JFrame();
 		
 		desktopFrame = new JFrame();
@@ -393,7 +393,7 @@ public class BoardGUI extends Observable implements Board {
         scrollOthers.setContentAreaFilled(false);
         scrollOthers.setFocusPainted(false);
         scrollOthers.setDisabledIcon( scrollOthers.getIcon() );
-        scrollOthers.setIcon(ImageHandler.setImage("resources/backRight.png",4,(int)(3*ratio),width,height).getIcon());
+        scrollOthers.setIcon(ImageHandler.setImage("resources/backRight.png",(int)3.7,(int)(3*ratio),width,height).getIcon());
         //scrollOthers.setBorderPainted(false);
         
         scrollOthers.addActionListener(new ActionListener() {
@@ -421,7 +421,7 @@ public class BoardGUI extends Observable implements Board {
         scrollTowers.setContentAreaFilled(false);
         scrollTowers.setFocusPainted(false);
         scrollTowers.setDisabledIcon( scrollTowers.getIcon() );
-        scrollTowers.setIcon(ImageHandler.setImage("resources/backLeft.png",4,(int)(3*ratio),width,height).getIcon());
+        scrollTowers.setIcon(ImageHandler.setImage("resources/backLeft.png",(int)3.7,(int)(3*ratio),width,height).getIcon());
    
         
         scrollTowers.addActionListener(new ActionListener() {
@@ -672,8 +672,8 @@ public class BoardGUI extends Observable implements Board {
 		            {
 		            	MediaPlayer mediaPlayer3 = new MediaPlayer(hit2);
 		        		mediaPlayer3.play();
-		        		if(view!=null) view.close();
-						try {(new PersonalViewGUI()).show(y);} catch (IOException e) {e.printStackTrace();}}
+		        		view.close();
+						try { view = new PersonalViewGUI(); view.show(y);} catch (IOException e) {e.printStackTrace();}}
 	            
 	        	});
         	}

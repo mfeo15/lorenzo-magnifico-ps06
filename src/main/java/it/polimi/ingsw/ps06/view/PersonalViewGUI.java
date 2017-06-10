@@ -45,7 +45,6 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 			setPersonalView();
 			
 			exit = new JButton();
-			f = new JFrame();
 			
 			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 			

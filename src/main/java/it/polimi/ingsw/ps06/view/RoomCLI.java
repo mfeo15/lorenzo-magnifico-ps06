@@ -31,12 +31,14 @@ public class RoomCLI extends Observable implements Room {
 		System.out.println("----- THE ROOM -----");
 		System.out.println();
 		System.out.println(" Inserisci il comando. Scrivi \"?\" per più informazioni");
+		System.out.println();
+		System.out.print(" > ");
 
 		while(true) readInput();
 	}
 	
 	public void readInput() {
-		String s = String.valueOf(input.nextLine());
+		String s = input.nextLine();
 		
 		if(s=="start") startGame();
 		if(s=="?") giveInfo();
@@ -96,6 +98,7 @@ public class RoomCLI extends Observable implements Room {
 
 	@Override
 	public void startGame() {
+		System.out.println("gg");
 		setChanged();
 		StoryBoard2Board storyBoard;
 		storyBoard = new StoryBoard2Board(new BoardCLI(input));
