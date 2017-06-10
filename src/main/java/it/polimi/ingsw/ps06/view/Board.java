@@ -58,6 +58,8 @@ public interface Board {
 	
 	void show() throws IOException;
 	
+	void hasLoaded();
+	
 	void addNewObserver(Observer o);
 	
 	void startGame();

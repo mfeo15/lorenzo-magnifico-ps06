@@ -1,13 +1,18 @@
 package it.polimi.ingsw.ps06.model.messages;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import it.polimi.ingsw.ps06.model.Types.ColorPalette;
 
-public class MessageBoardSetupDice extends Client2Server {
+public class MessageBoardSetupDice extends Server2Client {
 
-	private HashMap<ColorPalette, Integer> diceValues;
+	//private HashMap<ColorPalette, Integer> diceValues;
+	
+	private EnumMap<ColorPalette, Integer> diceValues;
 	
 	public MessageBoardSetupDice(int black, int white, int orange) {
+		
+		this.diceValues = new EnumMap<ColorPalette, Integer>(ColorPalette.class);
+		
 		this.diceValues.put(ColorPalette.DICE_BLACK, black);
 		this.diceValues.put(ColorPalette.DICE_WHITE, white);
 		this.diceValues.put(ColorPalette.DICE_ORANGE, orange);
@@ -37,7 +42,7 @@ public class MessageBoardSetupDice extends Client2Server {
 		return this.diceValues.get(ColorPalette.DICE_ORANGE);
 	}
 	
-	public HashMap<ColorPalette, Integer> getDiceValues() {
+	public EnumMap<ColorPalette, Integer> getDiceValues() {
 		return this.diceValues;
 	}
 	

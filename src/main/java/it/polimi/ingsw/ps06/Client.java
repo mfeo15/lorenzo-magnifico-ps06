@@ -5,8 +5,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Queue;
 
 import it.polimi.ingsw.ps06.model.messages.Message;
 
@@ -15,6 +17,8 @@ public class Client extends Observable implements Runnable, Observer {
 	private static Client instance = null;
 
 	private Socket socket;
+	
+	private Queue<Message> queuedMessages = new LinkedList<Message>();
 	
 	private String host;
 	private int	port;
@@ -45,7 +49,7 @@ public class Client extends Observable implements Runnable, Observer {
 		Message m;
 		m = (Message) in.readObject();;
 		
-		System.out.println("[ ] Message received : " + m);
+		System.out.println("[ ] Message received : " + m + "\n");
 		
 		notifyChangement(m);
 	}
@@ -56,7 +60,7 @@ public class Client extends Observable implements Runnable, Observer {
 		out.writeObject(message);
 		out.flush();
 		
-		System.out.println("[ ] Message sent : " + message);
+		System.out.println("[ ] Message sent : " + message + "\n");
 	}
 	
 	public void asyncSend(final Message message){
@@ -76,23 +80,42 @@ public class Client extends Observable implements Runnable, Observer {
 	/* MVC - SERVER IS MODEL AND SO IS AN OBSERVABLE OBJECT */
 	
 	public void notifyChangement(Object o) {
+		
+		System.out.println("OBSERVERS: " + countObservers() );
+		
+		if ( countObservers() == 0 ) {
+			System.out.println("QUED");
+			queuedMessages.add((Message) o);
+			return;
+		}
+		
 		setChanged();
 		notifyObservers(o);
 	}
 	
 	public void addNewObserver(Observer obs) {
 		addObserver(obs);
+		
+		for (Message m : queuedMessages)
+			notifyChangement(m);
 	}
 	
 	public void deleteAnObserver(Observer obs) {
 		deleteObserver(obs);
+	}
+	
+	public void deleteAllObservers() {
+		deleteObservers();
 	}
 
 	/* MVC - SERVER IS MODEL AND SO IS AN OBSERVER OBJECT */
 	@Override
 	public void update(Observable o, Object arg) {
 		
-		Client.getInstance().asyncSend((Message) arg);
+		if (!(arg instanceof Message))
+			return;
+		
+		asyncSend((Message) arg);
 	}
 
 	@Override

@@ -22,5 +22,7 @@ public interface Room {
 	void hasStarted();
 	
 	void show() throws IOException;
+	
+	void hasLoaded();
 
 }

@@ -21,19 +21,11 @@ public interface EventVisitor {
 	public void visit(StoryBoard2Board storyboard);
 	public void visit(StoryBoard2PersonalView storyboard);
 	
+	public void visit(RoomHasLoaded roomHasLoaded);
+	public void visit(BoardHasLoaded boardHasLoaded);
+	
 	public void visit(EventMemberPlaced memberPlaced);
 	public void visit(EventLeaderDiscarded leaderDiscarded);
 	public void visit(EventLeaderActivated leaderActivated);
 	public void visit(EventLeaderPlayed leaderPlayed);
-	
-	/*
-	public String visit(MessageUser userMessage);
-	public ArrayList<String> visit(MessageWaitingRoomConnections waitingConnections);
-	
-	public int visit(MessageGameStart gameStart);
-	public int visit(MessageGameHasStarted hasStarted);
-	public void visit(MessageConnectionStart startConnection);
-	
-	public HashMap<ColorPalette, Integer> visit(MessageBoardSetupDice boardSetupDice);
-	*/
 }

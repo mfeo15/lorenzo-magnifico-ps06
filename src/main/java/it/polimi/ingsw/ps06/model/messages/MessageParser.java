@@ -22,13 +22,7 @@ public class MessageParser implements MessageVisitor {
 	
 	@Override
 	public void visit(MessageConnectionStart startConnection) {
-		try {
-			Client.getInstance().init();
-			(new Thread(Client.getInstance())).start();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 	}
 
 	@Override
@@ -72,5 +66,16 @@ public class MessageParser implements MessageVisitor {
 	public void visit(MessageBoardSetupDice boardSetupDice) {
 		Board b = ((Board) supporter);
 		b.setDices(boardSetupDice.getBlackDiceValue(), boardSetupDice.getWhiteDiceValue(), boardSetupDice.getOrangeDiceValue());;
+	}
+
+	@Override
+	public void visit(BoardReady br) {
+		Connection c = ((Connection) supporter);
+		
+		try {
+			SocketServer.getInstance().retrieveGame(c).setupRound();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

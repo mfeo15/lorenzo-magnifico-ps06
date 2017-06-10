@@ -5,6 +5,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Observable;
+import java.util.Observer;
 
 import it.polimi.ingsw.ps06.model.messages.EventMessage;
 import it.polimi.ingsw.ps06.model.messages.Message;
@@ -18,7 +20,7 @@ import it.polimi.ingsw.ps06.model.messages.MessageParser;
 * @version 1.0
 * @since   2017-06-03 
 */
-public class Connection implements Runnable {
+public class Connection implements Runnable, Observer {
 	
 	private Socket socket;
 	
@@ -71,7 +73,7 @@ public class Connection implements Runnable {
 	public void receive() throws ClassNotFoundException, IOException {
 		Message m = (Message) in.readObject();
 		
-		System.out.println("[ ] Message received from " + getInetAddress() + " (" + getUsername() + "): " + m);
+		System.out.println("[ ] Message received from " + getInetAddress() + " (" + getUsername() + "): " + m +"\n");
 		
 		if ( m instanceof EventMessage ) {
 			// THIS IS AN EVENT OF GAME
@@ -93,7 +95,7 @@ public class Connection implements Runnable {
 		out.writeObject(message);
 		out.flush();
 		
-		System.out.println("[ ] Message sent : " + message );
+		System.out.println("[ ] Message sent : " + message + "\n");
 	}
 	
 	
@@ -142,5 +144,15 @@ public class Connection implements Runnable {
 	
 	public String getInetAddress() {
 		return socket.getInetAddress().toString();
+	}
+
+	
+	@Override
+	public void update(Observable o, Object arg) {
+		
+		if (!(arg instanceof Message))
+			return;
+		
+		asyncSend((Message) arg);
 	}
 }

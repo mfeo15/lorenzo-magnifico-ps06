@@ -1,8 +1,10 @@
 package it.polimi.ingsw.ps06;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import it.polimi.ingsw.ps06.model.Game;
+import it.polimi.ingsw.ps06.model.Player;
 
 /**
 * Classe rappresentante un insieme di connessioni impegnate in una singola partita
@@ -21,6 +23,8 @@ public class MatchSet {
 	private final int MAX_SIZE = 4;
 	
 	private ArrayList<Connection> participants;
+	
+	private HashMap<Player, Connection> p;
 	
 	private Game game;
 	
@@ -52,8 +56,16 @@ public class MatchSet {
 	 * Viene utilizzata la dimensione del set di connessioni per creare una partita adeguata
 	 */
 	public void createGame() {
-		if (game == null)
-			game = new Game( participants.size() );
+		if (game != null) 
+			return;
+
+		game = new Game( participants.size() );
+		
+		participants.forEach(c -> game.addNewObserver(c));
+	}
+	
+	public Game getGame() {
+		return this.game;
 	}
 	
 	/**

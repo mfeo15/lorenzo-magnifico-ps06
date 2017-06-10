@@ -24,12 +24,10 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 
 import it.polimi.ingsw.ps06.model.events.EventClose;
-import it.polimi.ingsw.ps06.model.messages.MessageConnectionStart;
-import it.polimi.ingsw.ps06.model.messages.MessageGameStart;
-import it.polimi.ingsw.ps06.model.messages.MessageParser;
-import it.polimi.ingsw.ps06.model.messages.MessageUser;
+import it.polimi.ingsw.ps06.model.events.RoomHasLoaded;
 import it.polimi.ingsw.ps06.model.events.StoryBoard2Board;
-import it.polimi.ingsw.ps06.model.events.StoryBoard2Room;
+import it.polimi.ingsw.ps06.model.messages.MessageGameStart;
+import it.polimi.ingsw.ps06.model.messages.MessageUser;
 import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -329,8 +327,7 @@ public class RoomGUI extends Observable implements Room {
         f.setLocationRelativeTo(null);
         f.setVisible(true);   
         
-        MessageConnectionStart cs = new MessageConnectionStart();
-        cs.accept(new MessageParser());
+        hasLoaded();
 	}
 
 	
@@ -398,6 +395,14 @@ public class RoomGUI extends Observable implements Room {
 		EventClose close = new EventClose();
 		notifyObservers(close);
 		
+	}
+
+
+	@Override
+	public void hasLoaded() {
+		setChanged();
+		RoomHasLoaded roomLoaded = new RoomHasLoaded();
+		notifyObservers(roomLoaded);
 	}
 	
 		

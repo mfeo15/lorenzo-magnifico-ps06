@@ -8,6 +8,7 @@ import it.polimi.ingsw.ps06.model.events.Event;
 import it.polimi.ingsw.ps06.model.events.EventParser;
 import it.polimi.ingsw.ps06.model.events.Model2View;
 import it.polimi.ingsw.ps06.model.events.StoryBoard;
+import it.polimi.ingsw.ps06.model.messages.Client2Server;
 import it.polimi.ingsw.ps06.model.messages.EventMessage;
 import it.polimi.ingsw.ps06.model.messages.Message;
 import it.polimi.ingsw.ps06.model.messages.MessageBoardSetupDice;
@@ -36,8 +37,10 @@ public class BoardController extends Observable implements Observer {
 	
 	@Override
 	public void update(Observable o, Object arg) {
+		/*
 		if (!( arg instanceof Message))
 			return;
+		*/
 		
 		//Smista le comunicazioni provenienti dal Client
 		if ( o.getClass().isInstance(theModel) ) {
@@ -47,8 +50,16 @@ public class BoardController extends Observable implements Observer {
 		
 		//Smista le comunicazioni provenienti dalla View
 		if ( o.getClass().isInstance(theView) ) {
-			handleEvent( (Event) arg );
-			return;
+			
+			if (arg instanceof Message) {
+				handleMessage( (Message) arg );
+				return;
+			}
+			
+			if (arg instanceof Event) {
+				handleEvent( (Event) arg );
+				return;
+			}
 		}
 	}
 	
@@ -56,15 +67,15 @@ public class BoardController extends Observable implements Observer {
 		
 		
 		if (m instanceof Server2Client) {
-			//This is a normal CLIENT -> SERVER message (needs to be sent)
-			
-			if (m instanceof MessageBoardSetupDice) {
-				((Server2Client) m).accept(new MessageParser(theView));
-			}
-			
+			//This is a normal SERVER -> CLIENT message (time to parse it)
+			((Server2Client) m).accept(new MessageParser(theView));
 			return;
-		}
-			
+		}	
+		
+		if (m instanceof Client2Server) {
+			//This is a normal CLIENT -> SERVER message (let someone else handle it)
+			notifyChangement(m);
+		}	
 	}
 	
 	private void handleEvent(Event e) {

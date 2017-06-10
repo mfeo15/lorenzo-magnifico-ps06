@@ -53,7 +53,8 @@ import javax.swing.TransferHandler;
 import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 
-import it.polimi.ingsw.ps06.model.Types.*;
+import it.polimi.ingsw.ps06.model.Types.ColorPalette;
+import it.polimi.ingsw.ps06.model.events.BoardHasLoaded;
 import it.polimi.ingsw.ps06.model.events.EventClose;
 import it.polimi.ingsw.ps06.model.events.EventLeaderActivated;
 import it.polimi.ingsw.ps06.model.events.EventLeaderDiscarded;
@@ -836,6 +837,8 @@ public class BoardGUI extends Observable implements Board {
 	    try {
 		    UIManager.setLookAndFeel( UIManager.getCrossPlatformLookAndFeelClassName() );
 		 } catch (Exception e) { e.printStackTrace();}
+	    
+	    hasLoaded();
 	}
 
 	/**
@@ -1931,5 +1934,12 @@ public class BoardGUI extends Observable implements Board {
 	    
         startTimer();
 
+	}
+
+	@Override
+	public void hasLoaded() {
+		setChanged();
+		BoardHasLoaded roomLoaded = new BoardHasLoaded();
+		notifyObservers(roomLoaded);
 	}
 }

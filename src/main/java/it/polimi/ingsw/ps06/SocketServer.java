@@ -5,11 +5,11 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.Iterator;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import it.polimi.ingsw.ps06.model.Game;
 import it.polimi.ingsw.ps06.model.messages.Message;
 import it.polimi.ingsw.ps06.model.messages.MessageGameHasStarted;
 import it.polimi.ingsw.ps06.model.messages.MessageWaitingRoomConnections;
@@ -21,7 +21,7 @@ import it.polimi.ingsw.ps06.model.messages.MessageWaitingRoomConnections;
 * @version 1.0
 * @since   2017-06-03 
 */
-public class SocketServer implements Server, Observer {
+public class SocketServer implements Server {
 	
 	private static SocketServer instance = null;
 	
@@ -36,7 +36,7 @@ public class SocketServer implements Server, Observer {
 	
 	private ArrayList<Connection> waitingConnection = new ArrayList<Connection>();
 	
-	private ArrayList< MatchSet > playingConnection;
+	private ArrayList< MatchSet > playingConnection = new ArrayList< MatchSet >();;
 	
 	/**
 	 * Metodo invocato ogni qualvolta una nuova connessione viene instaurata. 
@@ -177,12 +177,23 @@ public class SocketServer implements Server, Observer {
 			MatchSet match = new MatchSet(waitingConnection);
 			match.createGame();
 			playingConnection.add(match);
-			
-			//sendToConnections(waitingConnection, new MessageGameHasStarted() );
+
 			waitingConnection.clear();
 		} catch (Exception e) {
-			
+			e.printStackTrace();
 		}
+	}
+	
+	public Game retrieveGame(Connection c) {
+		Iterator<MatchSet> i = playingConnection.iterator();
+		
+		while ( i.hasNext() ) {
+			MatchSet m = i.next();
+			if (m.contains(c)) 
+				return m.getGame();
+		}
+		
+		return null;
 	}
 	
 	/**
@@ -196,14 +207,5 @@ public class SocketServer implements Server, Observer {
 		serverSocket.close();
 		
 		connections.forEach( c -> c.closeConnection() );
-	}
-
-	
-	/* MVC - SERVER IS MODEL AND SO IS AN OBSERVER OBJECT */
-
-	@Override
-	public void update(Observable o, Object arg) {
-		// TODO Auto-generated method stub
-		
 	}
 }

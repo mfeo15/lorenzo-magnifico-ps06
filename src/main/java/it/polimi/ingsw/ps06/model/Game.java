@@ -3,8 +3,11 @@ package it.polimi.ingsw.ps06.model;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Observable;
+import java.util.Observer;
 
 import it.polimi.ingsw.ps06.model.Types.ColorPalette;
+import it.polimi.ingsw.ps06.model.messages.MessageBoardSetupDice;
+import it.polimi.ingsw.ps06.model.messages.MessageWaitingRoomConnections;
 
 /**
 * Classe che modellizza una partita tra n giocatori
@@ -42,13 +45,15 @@ public class Game extends Observable {
 	*/
 	public Game(int numberPlayers) {
 		
+		System.out.println("NEW GAME OF " + numberPlayers + " PLAYERS CREATED");
+		
 		this.numberPlayers = numberPlayers;
 		
 		diceBlack = new Dice(ColorPalette.DICE_BLACK);
 		diceWhite = new Dice(ColorPalette.DICE_WHITE);
 		diceOrange = new Dice(ColorPalette.DICE_ORANGE);
 		
-		board = new Board(numberPlayers);
+		//board = new Board(numberPlayers);
 		
 		players = new ArrayList<Player>();
 	}
@@ -66,11 +71,24 @@ public class Game extends Observable {
 	*/
 	public void setupRound() 
 	{
-		reorderPlayers();
+		//reorderPlayers();
 		
-		board.setupRound();
+		rollDices();
+		
+		//board.setupRound();
 	}
 	
+	public void rollDices() {
+		diceBlack.roll();
+		diceWhite.roll();
+		diceOrange.roll();
+		
+		MessageBoardSetupDice messageDice = new MessageBoardSetupDice(diceBlack.getValue(), diceWhite.getValue(), diceOrange.getValue() );
+		
+		//MessageWaitingRoomConnections c = new MessageWaitingRoomConnections( new ArrayList<String>() );
+		
+		notifyChangement(messageDice);
+	}
 	
 	/**
 	* Metodo invocato per la gestione della fase Vatican Report.
@@ -178,4 +196,19 @@ public class Game extends Observable {
 		
 		return winnerPlayer;
 	}
+
+
+	public void notifyChangement(Object o) {
+		setChanged();
+		notifyObservers(o);
+	}
+	
+	public void addNewObserver(Observer obs) {
+		addObserver(obs);
+	}
+	
+	public void deleteAnObserver(Observer obs) {
+		deleteObserver(obs);
+	}
+	
 }
