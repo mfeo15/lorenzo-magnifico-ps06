@@ -36,7 +36,7 @@ public class SocketServer implements Server {
 	
 	private ArrayList<Connection> waitingConnection = new ArrayList<Connection>();
 	
-	private ArrayList< MatchSet > playingConnection = new ArrayList< MatchSet >();;
+	private ArrayList< MatchSet > playingConnection = new ArrayList< MatchSet >();
 	
 	/**
 	 * Metodo invocato ogni qualvolta una nuova connessione viene instaurata. 

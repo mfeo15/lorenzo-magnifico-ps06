@@ -7,6 +7,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Random;
 
 import it.polimi.ingsw.ps06.model.messages.EventMessage;
 import it.polimi.ingsw.ps06.model.messages.Message;
@@ -46,7 +47,7 @@ public class Connection implements Runnable, Observer {
 		this.out = new ObjectOutputStream(socket.getOutputStream());
 		this.in = new ObjectInputStream(socket.getInputStream());
 		
-		this.username = "Guest" + (int)(Math.random() * (9999 - 1) + 1);
+		this.username = "Guest" + (new Random()).nextInt(9999);
 	}
 	
 	private synchronized boolean isActive(){
@@ -79,11 +80,8 @@ public class Connection implements Runnable, Observer {
 			// THIS IS AN EVENT OF GAME
 			return;
 		}
-		
-		if ( m instanceof Message ) {
 			
-			((Message) m).accept(new MessageParser(this));
-		}
+		((Message) m).accept(new MessageParser(this));
 	}
 	
 	/**

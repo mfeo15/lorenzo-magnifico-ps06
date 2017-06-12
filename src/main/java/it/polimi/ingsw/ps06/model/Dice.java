@@ -2,6 +2,8 @@ package it.polimi.ingsw.ps06.model;
 
 import static it.polimi.ingsw.ps06.model.Types.ColorPalette;
 
+import java.util.Random;
+
 /**
 * Classe per la gestione dei dadi
 *
@@ -29,7 +31,7 @@ public class Dice {
 	}
 	
 	public void roll() {
-		value = (int) ( Math.random() * 6 + 1 );
+		value = 1 + (new Random()).nextInt(6);
 	}
 	
 }

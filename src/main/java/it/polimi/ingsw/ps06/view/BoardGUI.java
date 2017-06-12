@@ -296,8 +296,8 @@ public class BoardGUI extends Observable implements Board {
         
 	    
         //Caricamento suoni del gioco
-        String hoverSound = "resources/menuhover.wav";
-		Media hit = new Media(new File(hoverSound).toURI().toString());
+        //String hoverSound = "resources/menuhover.wav";
+		//Media hit = new Media(new File(hoverSound).toURI().toString());
 		
 		String selectSound = "resources/menuselect.wav";
 		Media hit2 = new Media(new File(selectSound).toURI().toString());
@@ -458,11 +458,9 @@ public class BoardGUI extends Observable implements Board {
         {
             public void mousePressed(MouseEvent evt)
             {
-            	
             	MediaPlayer mediaPlayer6 = new MediaPlayer(exitSound);
         		mediaPlayer6.play();
-        		System.exit(0);
-				
+        		notifyExit();
             }
             
         });
@@ -587,9 +585,6 @@ public class BoardGUI extends Observable implements Board {
        
         case 4:
         	players[4].setEnabled(false);
-        
-        case 5:
-        	break;
         
         default: 
         	break;
@@ -932,8 +927,6 @@ public class BoardGUI extends Observable implements Board {
 		double x=7;
 		double y=100;
 		
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		
 		for(int j=0;j<2;j++){
 			btns[j].setLocation((int)(width*x/100),(int)(height*y/100));
 			btns[j].setSize((int)width*6/100,(int)width*6/100);
@@ -965,7 +958,7 @@ public class BoardGUI extends Observable implements Board {
 				x=x+2;		
 			}
 			
-			x=x-4;;
+			x=x-4;
 			y=y+2;
 			
 			for(int j=2;j<4;j++){
@@ -1056,6 +1049,7 @@ public class BoardGUI extends Observable implements Board {
 		if(first){
 			btns[0].setLocation((int)(width*3.5/100),(int)(height*65/100));
 			btns[0].setSize(width*7/100,height*9/100);
+			first=false;
 		}
 		
 		for(int j=1;j<btns.length;j++){
@@ -1076,6 +1070,7 @@ public class BoardGUI extends Observable implements Board {
 		if(first){
 			btns[0].setLocation((int)(width*3.5/100),(int)(height*83/100));
 			btns[0].setSize(width*7/100,height*9/100);
+			first=false;
 		}
 		
 		for(int j=1;j<btns.length;j++){
@@ -1416,7 +1411,7 @@ public class BoardGUI extends Observable implements Board {
                     ((Timer)e.getSource()).stop();
                     timerInfo.setText("Times up!");
                 } else {
-                    timerInfo.setText("" + counter.getTime());
+                    timerInfo.setText("" + Integer.toString(counter.getTime()));
                     counter.decTime();
                 }
             }
@@ -1616,8 +1611,8 @@ public class BoardGUI extends Observable implements Board {
 
 
 	@Override
-	public void setPlayerName(String s) {
-		this.playerName=s;
+	public void setPlayersNames(String s, int index) {
+		playersInfo[index].setText(s);
 		
 	}
 

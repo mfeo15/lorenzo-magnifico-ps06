@@ -68,9 +68,6 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 	        String hoverSound = "resources/menuhover.wav";
 			Media hit = new Media(new File(hoverSound).toURI().toString());
 			
-			String selectSound = "resources/menuselect.wav";
-			Media hit2 = new Media(new File(selectSound).toURI().toString());
-			
 			String exitSound = "resources/exit.wav";
 			Media music1 = new Media(new File(exitSound).toURI().toString());
 			

@@ -43,7 +43,7 @@ public class MessageParser implements MessageVisitor {
 		Room r = ((Room) supporter);
 		
 		for (String s : waitingConnections.getWaitingConnections())
-			((Room) supporter).setPlayer(s, waitingConnections.getWaitingConnections().indexOf(s));
+			r.setPlayer(s, waitingConnections.getWaitingConnections().indexOf(s));
 	}
 	
 	@Override
@@ -65,7 +65,7 @@ public class MessageParser implements MessageVisitor {
 	@Override
 	public void visit(MessageBoardSetupDice boardSetupDice) {
 		Board b = ((Board) supporter);
-		b.setDices(boardSetupDice.getBlackDiceValue(), boardSetupDice.getWhiteDiceValue(), boardSetupDice.getOrangeDiceValue());;
+		b.setDices(boardSetupDice.getBlackDiceValue(), boardSetupDice.getWhiteDiceValue(), boardSetupDice.getOrangeDiceValue());
 	}
 
 	@Override

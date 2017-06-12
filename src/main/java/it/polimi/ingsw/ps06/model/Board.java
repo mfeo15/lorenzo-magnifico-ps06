@@ -1,6 +1,7 @@
 package it.polimi.ingsw.ps06.model;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
 * Classe per la gestione del tabellone
@@ -53,9 +54,9 @@ public class Board {
 	* @return 		order	ordine dei familiari
 	*/ 
 	private void drawExcommunicationTiles() {
-		random1 = (int)(Math.random() * 8);
-		random2 = 7 + (int)(Math.random() * 8);
-		random3 = 14 + (int)(Math.random() * 8);
+		random1 = (new Random()).nextInt(8);
+		random2 = 7 + (new Random()).nextInt(8);
+		random3 = 14 + (new Random()).nextInt(8);
 	}
 	
 	public ExcommunicationTile getTiles(int period){

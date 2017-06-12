@@ -2,7 +2,7 @@ package it.polimi.ingsw.ps06.model.events;
 
 import it.polimi.ingsw.ps06.model.messages.MessageVisitor;
 
-public class EventClose extends Event {
+public class EventClose extends StoryBoard {
 
 	@Override
 	public void accept(EventVisitor v) {

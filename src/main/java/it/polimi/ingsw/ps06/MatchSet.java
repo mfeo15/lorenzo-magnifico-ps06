@@ -149,6 +149,12 @@ public class MatchSet {
 	@Override
 	public boolean equals(Object obj) {
 		
-		return ((MatchSet) obj).participants.equals(this.participants);
+		try {
+			return ((MatchSet) obj).participants.equals(this.participants);
+		} catch (NullPointerException e) {
+		
+		}
+		
+		return false;
 	}
 }

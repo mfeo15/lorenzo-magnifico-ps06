@@ -22,7 +22,7 @@ public class BoardCLI extends Observable implements Board {
 	
 	private Scanner input;
 	
-	private String player="";
+	private String[] player = new String[5];
     private String playerColor="G";
     private int blackValue;
     private int orangeValue;
@@ -74,35 +74,35 @@ public class BoardCLI extends Observable implements Board {
 		
 		Action chosenAction;
 		
-		if(s.equals("spots")) giveSpots();
-		if(s.equals("actions")) giveActions();
-		if(s.equals("?")) giveInfo();
-		if(s.equals("exit")) notifyExit();
+		if(("spots").equals(s)) giveSpots();
+		if(("actions").equals(s)) giveActions();
+		if(("?").equals(s)) giveInfo();
+		if(("exit").equals(s)) notifyExit();
 		
-		if(s.equals("info")) printPoints(0);
-		if(s.equals("info1")) printPoints(1);
-		if(s.equals("info2")) printPoints(2);
-		if(s.equals("info3")) printPoints(3);
-		if(s.equals("info4")) printPoints(4);
-		if(s.equals("info5")) printPoints(5);
+		if(("info").equals(s)) printPoints(0);
+		if(("info1").equals(s)) printPoints(1);
+		if(("info2").equals(s)) printPoints(2);
+		if(("info3").equals(s)) printPoints(3);
+		if(("info4").equals(s)) printPoints(4);
+		if(("info5").equals(s)) printPoints(5);
 		
-		if(s.equals("Attiva1")) notifyLeaderActivation(1);
-		if(s.equals("Attiva2")) notifyLeaderActivation(2);
-		if(s.equals("Attiva3")) notifyLeaderActivation(3);
-		if(s.equals("Attiva4")) notifyLeaderActivation(4);
+		if(("attiva1").equals(s)) notifyLeaderActivation(1);
+		if(("attiva2").equals(s)) notifyLeaderActivation(2);
+		if(("attiva3").equals(s)) notifyLeaderActivation(3);
+		if(("attiva4").equals(s)) notifyLeaderActivation(4);
 		
-		if(s.equals("Scarta1")) notifyLeaderDiscard(1);
-		if(s.equals("Scarta2")) notifyLeaderDiscard(2);
-		if(s.equals("Scarta3")) notifyLeaderDiscard(3);
-		if(s.equals("Scarta4")) notifyLeaderDiscard(4);
+		if(("scarta1").equals(s)) notifyLeaderDiscard(1);
+		if(("scarta2").equals(s)) notifyLeaderDiscard(2);
+		if(("scarta3").equals(s)) notifyLeaderDiscard(3);
+		if(("scarta4").equals(s)) notifyLeaderDiscard(4);
 		
-		if(s.equals("Piazza1")) notifyLeaderPlacement(1);
-		if(s.equals("Piazza2")) notifyLeaderPlacement(2);
-		if(s.equals("Piazza3")) notifyLeaderPlacement(3);
-		if(s.equals("Piazza4")) notifyLeaderPlacement(4);
+		if(("piazza1").equals(s)) notifyLeaderPlacement(1);
+		if(("piazza2").equals(s)) notifyLeaderPlacement(2);
+		if(("piazza3").equals(s)) notifyLeaderPlacement(3);
+		if(("piazza4").equals(s)) notifyLeaderPlacement(4);
 		
 		for(int j=0; j<25; j++)
-		if( s.equals( ((Action.getAction(j)).toString()).toLowerCase() ) ){
+		if( s.equalsIgnoreCase(( ((Action.getAction(j)).toString())) )){
 			System.out.print(" > ");
 			String s1 = String.valueOf(input.nextLine());
 			int index = Integer.parseInt(s1.replaceAll("[\\D]", ""));
@@ -204,8 +204,8 @@ public class BoardCLI extends Observable implements Board {
 	}
 
 	@Override
-	public void setPlayerName(String s) {
-		this.player=s;
+	public void setPlayersNames(String s, int index) {
+		this.player[index]=s;
 		
 	}
 
@@ -283,7 +283,6 @@ public class BoardCLI extends Observable implements Board {
 		System.out.println("--> Evento registrato: familiare "+memberIndex+" in "+chosenAction.toString());
 		setChanged();
 		EventMemberPlaced memberPlaced=null;
-		ColorPalette color;
 		
 		switch(memberIndex){
 		case 0:
@@ -298,8 +297,6 @@ public class BoardCLI extends Observable implements Board {
 		case 3:
 			memberPlaced = new EventMemberPlaced(chosenAction,ColorPalette.UNCOLORED);
 			break;
-		default:
-			color=null;
 		}
 		
 		notifyObservers(memberPlaced);

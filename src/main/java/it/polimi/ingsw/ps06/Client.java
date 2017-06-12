@@ -47,7 +47,7 @@ public class Client extends Observable implements Runnable, Observer {
 	
 	private void receive() throws ClassNotFoundException, IOException {
 		Message m;
-		m = (Message) in.readObject();;
+		m = (Message) in.readObject();
 		
 		System.out.println("[ ] Message received : " + m + "\n");
 		
@@ -70,7 +70,6 @@ public class Client extends Observable implements Runnable, Observer {
 				try {
 					send(message);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}				
 			}

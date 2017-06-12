@@ -44,10 +44,10 @@ public class RoomCLI extends Observable implements Room {
 	public void readInput() {
 		String s = input.nextLine();
 		
-		if(s.equals("start")) startGame();
-		if(s.equals("?")) giveInfo();
-		if(s.equals("exit")) notifyExit();
-		if(s.equals("login")){
+		if(("start").equals(s)) startGame();
+		if(("?").equals(s)) giveInfo();
+		if(("exit").equals(s)) notifyExit();
+		if(("login").equals(s)){
 			System.out.print(" > ");
 			String s1 = String.valueOf(input.nextLine());
 			System.out.print(" > ");

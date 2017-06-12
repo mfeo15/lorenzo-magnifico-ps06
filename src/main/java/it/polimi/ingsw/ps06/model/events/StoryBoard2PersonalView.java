@@ -3,7 +3,7 @@ package it.polimi.ingsw.ps06.model.events;
 import it.polimi.ingsw.ps06.view.PersonalView;
 
 public class StoryBoard2PersonalView extends StoryBoard{
-	private PersonalView view;
+	private transient PersonalView view;
 	
 	public StoryBoard2PersonalView(PersonalView view) {
 		this.view = view;

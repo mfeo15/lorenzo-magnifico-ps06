@@ -36,7 +36,7 @@ public class PersonalViewCLI extends Observable implements PersonalView {
 	public void readInput() {
 		String s = input.nextLine();
 		
-		if(s.equals("exit")) notifyExit();
+		if(("exit").equals(s)) notifyExit();
 	}
 	
 	@Override

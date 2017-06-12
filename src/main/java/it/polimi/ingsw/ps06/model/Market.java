@@ -35,7 +35,7 @@ public class Market implements PlaceSpace {
 		int marketIndex = Action.valueOf("MARKET_1").ordinal();
 		int actionIndex = chosenAction.ordinal();
 		int relativeIndex = actionIndex - marketIndex;
-		int errorCode = 0;
+		int errorCode;
 		
 		// Gestire carta scomunica del mercato if(EffectsActive.checkNoMarket == true) handle();
 		
