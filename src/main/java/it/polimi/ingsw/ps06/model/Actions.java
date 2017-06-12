@@ -9,13 +9,12 @@ import java.util.Observable;
 * @version 1.0
 * @since   2017-05-16
 */
-public abstract class Actions {
+public abstract class Actions extends Observable {
 
 	/**
 	* Metodo di attivazione dell'azione
 	*
-	* @param 	p		Giocatore a cui attivare l'azione
 	* @return 	
 	*/
-	public abstract void activate(Player p);
+	public abstract void activate();
 }

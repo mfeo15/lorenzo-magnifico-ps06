@@ -3,6 +3,8 @@ package it.polimi.ingsw.ps06.model;
 import java.util.ArrayList;
 
 import it.polimi.ingsw.ps06.model.Types.Action;
+import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
+import it.polimi.ingsw.ps06.model.Types.PointsKind;
 
 /**
 * Classe per la gestione delle torri
@@ -61,9 +63,9 @@ public class Towers implements PlaceSpace {
 		card = deck.get(deckIndex + relativeIndex);
 		
 		// Si può piazzare solo se la carta è ancora presente, se c'è sono sicuro che non c'è un familiare
-		if( (card != null) && value){
+		if( (card != null) && value) {
 		
-			acquire = new CardAcquisition(card);
+			acquire = new CardAcquisition(card, member.getAssociatedPlayer());
 				
 				checkWhichTower(chosenAction);
 				arrayIndex=range1;
@@ -87,12 +89,13 @@ public class Towers implements PlaceSpace {
 				// Caso in cui il familiare può essere piazzato
 				if(!colorRule)handle(errorCode);
 				else {
-					boolean satisfied1 = acquire.checkCosts(member.getPlayer(), chosenAction, extraCost);
-					boolean satisfied2 = acquire.checkRequirements(member.getPlayer(), chosenAction);
+					boolean satisfied1 = acquire.checkCosts(chosenAction, extraCost);
+					boolean satisfied2 = acquire.checkRequirements(chosenAction);
 					
 					if(satisfied1 && satisfied2){
+						giveBonus(chosenAction, member.getAssociatedPlayer());
 						memberSpaces.add(relativeIndex, member); 
-						getCard(member.getPlayer());
+						acquire.activate();
 						deck.add(deckIndex + relativeIndex, null);
 					}
 				}
@@ -192,16 +195,25 @@ private void checkRequirement(Action chosenAction){
 			
 	}
 	
-	/**
-	* Metodo per il posizionamento delle 16 carte sulle varie torri
-	*
-	* @param 	Unused
-	* @return 	Nothing
-	*/
-	private void getCard(Player player){
+	private void giveBonus(Action chosenAction, Player p){
 		
-		acquire = new CardAcquisition(card);
-		acquire.activate(player);
+		EffectsResources er = null;
+		
+		if(chosenAction==Action.TOWER_GREEN_4) er = new EffectsResources(new Resources(MaterialsKind.WOOD,2));
+		if(chosenAction==Action.TOWER_GREEN_3) er = new EffectsResources(new Resources(MaterialsKind.WOOD,1));
+		
+		if(chosenAction==Action.TOWER_BLUE_4) er = new EffectsResources(new Resources(MaterialsKind.STONE,2));
+		if(chosenAction==Action.TOWER_BLUE_3) er = new EffectsResources(new Resources(MaterialsKind.STONE,1));
+		
+		if(chosenAction==Action.TOWER_YELLOW_4) er = new EffectsResources(new Resources(PointsKind.MILITARY_POINTS,2));
+		if(chosenAction==Action.TOWER_YELLOW_3) er = new EffectsResources(new Resources(PointsKind.MILITARY_POINTS,1));
+		
+		if(chosenAction==Action.TOWER_PURPLE_4) er = new EffectsResources(new Resources(MaterialsKind.COIN,2));
+		if(chosenAction==Action.TOWER_PURPLE_3) er = new EffectsResources(new Resources(MaterialsKind.COIN,1));
+		
+		er.activate(p);
+		
+
 	}
 	
 	/**

@@ -10,30 +10,24 @@ import java.util.ArrayList;
 * @since   2017-05-11
 */
 public class Venture extends DevelopementCard {
-	private EffectsResources finaleffect;
 	private ArrayList<Resources> requirement;
 
-
-	/**
-	* Metodo per la gestione degli effetti finali di aggiunta punti vittoria
-	* 
-	* @param 	player			Giocatore interessato
-	* @return 					Nothing
-	*/
 	
-	public void finalEffect(Player player){	
-		this.activateEffect(player);
+	/**Metodo per aggiungere i requisiti delle carte impresa
+	 * 
+	 * @param res	requisito di tipo risorsa per prendere la carta
+	 */
+	public void setRequirement(Resources res){
+		requirement.add(res);
+		return;
 	}
+
+	/**Metodo che restituisce i	requisiti delle carte impresa
+	 * 
+	 * @param res	requisito di tipo risorsa per prendere la carta
+	 */
 	
-	/**
-	* Metodo per l'attivazione dell'effetto
-	* 
-	* @param 	player			Giocatore interessato
-	* 
-	* @return 					Nothing
-	*/
-	
-	public void activateEffect(Player player){
-		finaleffect.activate(player);
+	public ArrayList<Resources> getRequirements(){
+		return requirement;
 	}
 }

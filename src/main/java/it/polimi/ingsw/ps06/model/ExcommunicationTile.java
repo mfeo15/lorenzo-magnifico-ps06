@@ -10,9 +10,4 @@ package it.polimi.ingsw.ps06.model;
 
 public class ExcommunicationTile extends Card {
 	
-	private int code;
-	private String title;
-	private EffectsActive effect;
-	
-	
 }

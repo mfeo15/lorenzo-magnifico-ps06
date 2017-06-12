@@ -1,5 +1,4 @@
 package it.polimi.ingsw.ps06.model;
-import it.polimi.ingsw.ps06.model.Effect;
 
 /**
  * classe per la definizione e gestione delle carte leader
@@ -12,21 +11,8 @@ import it.polimi.ingsw.ps06.model.Effect;
 public class Leader extends Card {
 		
 	//private Requirement leaderInGame;
-	private Effect effect;
 	private boolean used=false;
 	private boolean active=false;
-	
-	/**
-	* costruttore delle carte leader
-	* 
-	* @param 	none
-	* 
-	* @return 	Nothing
-	*/
-	
-	public Leader(){
-		//da implementare il costruttore
-	}
 	
 	 
 	/**
@@ -79,18 +65,5 @@ public class Leader extends Card {
 		return active;
 	}
 
-	/**
-	* metodo per attivare l'effetto della carta leader
-	* 
-	* @param 	player	giocatore che utilizza la carta 
-	* 
-	* @return 	Nothing
-	*/
-	
-	public void activateEffect(Player player){
-		effect.activate(player);
-		return;
-	}
-	
 	
 }

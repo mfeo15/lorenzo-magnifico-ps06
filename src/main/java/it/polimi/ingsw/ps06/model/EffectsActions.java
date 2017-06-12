@@ -17,7 +17,7 @@ public class EffectsActions extends Effect
 	@Override
 	public void activate(Player p) 
 	{	
-		action.activate(p);
+		action.activate();
 	}
 	
 	public EffectsActions(Actions action) {

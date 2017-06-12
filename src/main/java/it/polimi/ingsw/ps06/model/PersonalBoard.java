@@ -111,6 +111,29 @@ public class PersonalBoard {
 	}	
 	
 	/**
+	* Metodo che restituisce le imprese presenti sulla plancia giocatore
+	*
+	* @param 	none
+	* 
+	* @return 	ventures	imprese sulla plancia
+	*/
+	
+	public ArrayList<Venture> getVentures(){
+		return ventures;
+	}	
+	
+	/**
+	* Metodo che restituisce i personaggi presenti sulla plancia giocatore
+	*
+	* @param 	none
+	* 
+	* @return 	characters	personaggi sulla plancia
+	*/
+	
+	public ArrayList<Character> getCharacters(){
+		return characters;
+	}	
+	/**
 	* Metodo che permette di aggiungere materiali al warehouse
 	*
 	* @param 	kind		Tipo di materiale a cui applicare l'operazione

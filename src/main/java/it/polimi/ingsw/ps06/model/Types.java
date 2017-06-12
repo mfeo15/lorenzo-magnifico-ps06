@@ -26,7 +26,7 @@ public class Types {
 		TOWER_PURPLE_3(15),
 		TOWER_PURPLE_4(16),
 
-		CONCIL_SPACE(17),
+		COUNCIL_SPACE(17),
 		
 		HARVEST_1(18),
 		HARVEST_2(19),
@@ -68,7 +68,6 @@ public class Types {
 		 DICE_ORANGE,
 		 DICE_BLACK,
 		 DICE_WHITE
-		
 	}
 	
 	public enum PointsKind 
@@ -101,7 +100,6 @@ public class Types {
 		CHARACTER,
 		VENTURE,
 		EXCOMMUNICATIONTILE
-		
 	}
 	
 	public enum CouncilPrivilege {

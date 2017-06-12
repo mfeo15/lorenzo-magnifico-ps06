@@ -13,13 +13,21 @@ import it.polimi.ingsw.ps06.model.Types.Action;
 */
 
 
-public class Gathering extends Actions{
+public class Gathering extends Actions {
+	
 	private int value;
-	private int malus;
 	private boolean production;
-	private ArrayList <Territory> territories;
-	private ArrayList <Building> buildings;
 	Action chosenAction;
+	
+	private Player p;
+	
+	public void setValue(int value) {
+		this.value = value;
+	}
+	
+	public int getValue() {
+		return (this.value);
+	}
 	
 	/**
 	* Costruttore della classe
@@ -28,12 +36,14 @@ public class Gathering extends Actions{
 	* @param 	chosenAction	Codice dell'azione da eseguire	
 	* @return 					Nothing
 	*/
-	public Gathering (Action chosenAction, int value){
+	public Gathering (Action chosenAction, int value, Player p) {
 		
 		this.chosenAction=chosenAction;
 		this.value=value;
 		checkIfProduction();
 		
+		setChanged();
+        notifyObservers(p);
 	}
 	
 	/**
@@ -67,8 +77,10 @@ public class Gathering extends Actions{
 	*
 	* @param 	p		Giocatore a cui attivare l'azione
 	* @return 			Nothing
+	* 
+	* @throws InterruptedException 
 	*/
-	private void checkGatheringBonus (Player p){
+	private void checkGatheringBonus (Player p) {
 		// malus = EffectsActive.gatheringBonus(p);
 		// value = value + malus;
 	}
@@ -80,25 +92,18 @@ public class Gathering extends Actions{
 	* @return 			Nothing
 	*/
 	@Override
-	public void activate(Player p) {
+	public void activate() {
 		checkGatheringBonus(p);
 		
-		if(production==true){
-			
-			buildings = p.getPersonalBoard().getBuildings();
-			
-			for (Building b : buildings){
-				b.activateProduction(p);
-			}
+		if(production==true)
+		{
+			for (Building b : p.getPersonalBoard().getBuildings())
+				b.activateEffect(p);
 		}
-		
-		else{
-			
-			territories = p.getPersonalBoard().getTerritories();
-			
-			for (Territory t : territories){
-				t.activateHarvest(p);
-			}
+		else
+		{	
+			for (Territory t : p.getPersonalBoard().getTerritories())
+				t.activateEffect(p);
 		}
 		
 		

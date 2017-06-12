@@ -13,7 +13,7 @@ import java.util.Observer;
 */
 public abstract class EffectsActive extends Effect implements Observer {
 	
-	private Player owner;
+	protected Player owner;
 	protected Observable toStalk;
 	
 	/**
@@ -27,8 +27,7 @@ public abstract class EffectsActive extends Effect implements Observer {
 	}
 	
 	@Override
-	public void activate(Player p) {
-		
+	public void activate(Player p) {	
 		owner = p;
 		toStalk.addObserver(this);
 	}

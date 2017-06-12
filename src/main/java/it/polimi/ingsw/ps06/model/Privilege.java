@@ -38,9 +38,10 @@ public class Privilege extends Actions{
 	* @return 	
 	*/
 	@Override
-	public void activate(Player p) {
+	public void activate() {
 		// TODO Auto-generated method stub
 		
 	}
+
 
 }
