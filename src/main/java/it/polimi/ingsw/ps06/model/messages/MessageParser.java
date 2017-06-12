@@ -51,6 +51,8 @@ public class MessageParser implements MessageVisitor {
 	public void visit(MessagePlayingConnections playingConnections) {
 		Board b = ((Board) supporter);
 		
+		b.setPlayerNumber( playingConnections.getWaitingConnections().size() );
+		
 		for (String s : playingConnections.getWaitingConnections())
 			b.setPlayersNames(s, playingConnections.getWaitingConnections().indexOf(s));
 	}
