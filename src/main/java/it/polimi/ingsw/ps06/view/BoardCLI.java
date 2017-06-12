@@ -64,6 +64,7 @@ public class BoardCLI extends Observable implements Board {
 		System.out.println();
 		System.out.print(" > ");
 		
+		hasLoaded();
 		while(true) readInput();
 		
 	}
@@ -281,9 +282,26 @@ public class BoardCLI extends Observable implements Board {
 	public void notifyAction(Action chosenAction, int memberIndex) {
 		System.out.println("--> Evento registrato: familiare "+memberIndex+" in "+chosenAction.toString());
 		setChanged();
-		EventMemberPlaced memberPlaced;
-		ColorPalette color=null;
-		memberPlaced = new EventMemberPlaced(chosenAction,color);
+		EventMemberPlaced memberPlaced=null;
+		ColorPalette color;
+		
+		switch(memberIndex){
+		case 0:
+			memberPlaced = new EventMemberPlaced(chosenAction,ColorPalette.DICE_BLACK);
+			break;
+		case 1:
+			memberPlaced = new EventMemberPlaced(chosenAction,ColorPalette.DICE_WHITE);
+			break;
+		case 2:
+			memberPlaced = new EventMemberPlaced(chosenAction,ColorPalette.DICE_ORANGE);
+			break;
+		case 3:
+			memberPlaced = new EventMemberPlaced(chosenAction,ColorPalette.UNCOLORED);
+			break;
+		default:
+			color=null;
+		}
+		
 		notifyObservers(memberPlaced);
 		
 	}

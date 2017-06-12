@@ -59,7 +59,7 @@ public class MenuCLI extends Observable implements Menu {
 
 	@Override
 	public void startGame() {
-		(new RoomCLI(input)).show();  
+		//(new RoomCLI(input)).show();  
 		setChanged();
 		StoryBoard2Room storyBoard;
 		storyBoard = new StoryBoard2Room(new RoomCLI(input));

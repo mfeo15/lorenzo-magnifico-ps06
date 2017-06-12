@@ -36,7 +36,8 @@ public class RoomCLI extends Observable implements Room {
 		System.out.println(" Inserisci il comando. Scrivi \"?\" per più informazioni");
 		System.out.println();
 		System.out.print(" > ");
-
+		
+		hasLoaded();
 		while(true) readInput();
 	}
 	
@@ -109,7 +110,7 @@ public class RoomCLI extends Observable implements Room {
 
 	@Override
 	public void startGame() {
-		(new BoardCLI(input)).show();  
+		//(new BoardCLI(input)).show();  
 		
 		setChanged();
 		StoryBoard2Board storyBoard;
