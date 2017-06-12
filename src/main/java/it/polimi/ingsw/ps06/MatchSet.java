@@ -145,6 +145,10 @@ public class MatchSet {
 	public void remove(Connection c) {
 		participants.remove(c);
 	}
+	
+	public ArrayList<Connection> getAll() {
+		return participants;
+	}
 
 	@Override
 	public boolean equals(Object obj) {

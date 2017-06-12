@@ -1,9 +1,10 @@
 package it.polimi.ingsw.ps06.model.messages;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
-import it.polimi.ingsw.ps06.Client;
 import it.polimi.ingsw.ps06.Connection;
+import it.polimi.ingsw.ps06.MatchSet;
 import it.polimi.ingsw.ps06.SocketServer;
 import it.polimi.ingsw.ps06.view.Board;
 import it.polimi.ingsw.ps06.view.Room;
@@ -47,6 +48,14 @@ public class MessageParser implements MessageVisitor {
 	}
 	
 	@Override
+	public void visit(MessagePlayingConnections playingConnections) {
+		Board b = ((Board) supporter);
+		
+		for (String s : playingConnections.getWaitingConnections())
+			b.setPlayersNames(s, playingConnections.getWaitingConnections().indexOf(s));
+	}
+	
+	@Override
 	public void visit(MessageGameHasStarted hasStarted) {
 		Room r = ((Room) supporter);
 		r.hasStarted();
@@ -73,7 +82,16 @@ public class MessageParser implements MessageVisitor {
 		Connection c = ((Connection) supporter);
 		
 		try {
-			SocketServer.getInstance().retrieveGame(c).setupRound();
+			
+			MatchSet match = SocketServer.getInstance().retrieveMatch(c);
+			
+			ArrayList<String> a = new ArrayList<String>();
+			match.getAll().forEach(connection -> a.add(connection.getUsername()));		
+			MessagePlayingConnections message = new MessagePlayingConnections( a );
+			SocketServer.getInstance().sendToConnections(match.getAll(), message);
+			
+			match.getGame().setupRound();
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

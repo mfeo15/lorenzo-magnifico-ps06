@@ -179,18 +179,21 @@ public class SocketServer implements Server {
 			playingConnection.add(match);
 
 			waitingConnection.clear();
+			
+			
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public Game retrieveGame(Connection c) {
+	public MatchSet retrieveMatch(Connection c) {
 		Iterator<MatchSet> i = playingConnection.iterator();
 		
 		while ( i.hasNext() ) {
 			MatchSet m = i.next();
 			if (m.contains(c)) 
-				return m.getGame();
+				return m;
 		}
 		
 		return null;

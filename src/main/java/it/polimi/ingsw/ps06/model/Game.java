@@ -54,7 +54,7 @@ public class Game extends Observable {
 		diceWhite = new Dice(ColorPalette.DICE_WHITE);
 		diceOrange = new Dice(ColorPalette.DICE_ORANGE);
 		
-		//board = new Board(numberPlayers);
+		board = new Board(numberPlayers);
 		
 		players = new ArrayList<Player>();
 	}
@@ -72,7 +72,7 @@ public class Game extends Observable {
 	*/
 	public void setupRound() 
 	{
-		//reorderPlayers();
+		reorderPlayers();
 		
 		rollDices();
 		
@@ -85,8 +85,6 @@ public class Game extends Observable {
 		diceOrange.roll();
 		
 		MessageBoardSetupDice messageDice = new MessageBoardSetupDice(diceBlack.getValue(), diceWhite.getValue(), diceOrange.getValue() );
-		
-		//MessageWaitingRoomConnections c = new MessageWaitingRoomConnections( new ArrayList<String>() );
 		
 		notifyChangement(messageDice);
 	}
@@ -140,6 +138,9 @@ public class Game extends Observable {
 	private void reorderPlayers() 
 	{
 		ArrayList<Player> councilPlayers = board.getOrder();
+		if (councilPlayers == null)
+			return;
+		
 		ArrayList<Player> newOrderPlayers = new ArrayList<Player>();
 		
 		Iterator<Player> councilIterator = councilPlayers.iterator();
