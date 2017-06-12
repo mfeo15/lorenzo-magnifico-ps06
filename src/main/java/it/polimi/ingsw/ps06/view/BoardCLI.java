@@ -360,8 +360,27 @@ public class BoardCLI extends Observable implements Board {
 
 
 	@Override
-	public void addMember(Action chosenAction, int memberIndex, int playerIndex) throws IOException {
-		System.out.println("--> Il membro"+memberIndex+" è stato piazzato dal giocatore"+playerIndex+" in "+chosenAction.toString()+" con successo!");
+	public void addMember(Action chosenAction, ColorPalette color, int playerIndex) throws IOException {
+		
+	int memberIndex=0;
+	
+		switch(color){
+			case DICE_BLACK:
+				memberIndex=1;
+				break;
+			case DICE_WHITE:
+				memberIndex=2;
+				break;
+			case DICE_ORANGE:
+				memberIndex=3;
+				break;
+			case UNCOLORED:
+				memberIndex=4;
+				break;
+		}
+		
+		
+		System.out.println("--> Il familiare"+memberIndex+" è stato piazzato dal giocatore"+playerIndex+" in "+chosenAction.toString()+" con successo!");
 		System.out.println("");
 		
 	}

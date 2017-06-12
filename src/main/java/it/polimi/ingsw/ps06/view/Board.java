@@ -36,7 +36,7 @@ public interface Board {
 	
 	void setPlayerNumber(int number);
 	
-	void addMember(Action chosenAction, int memberIndex, int playerIndex) throws IOException;
+	void addMember(Action chosenAction, ColorPalette color, int playerIndex) throws IOException;
 	
 	void startTimer();
 	

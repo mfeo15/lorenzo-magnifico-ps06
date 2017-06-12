@@ -1668,27 +1668,27 @@ public class BoardGUI extends Observable implements Board {
 	
 
 	@Override
-	public void addMember(it.polimi.ingsw.ps06.model.Types.Action chosenAction, int memberIndex, int playerIndex) throws IOException {
+	public void addMember(it.polimi.ingsw.ps06.model.Types.Action chosenAction, ColorPalette color, int playerIndex) throws IOException {
 		
 		String pColor="";
 		String fullPColor="";
 		String mColor="";
 		String fullMColor="";
 		
-		switch(memberIndex){
-		case 0:
+		switch(color){
+		case DICE_BLACK:
 			mColor="N";
 			fullMColor="Nero";
 			break;
-		case 1:
+		case DICE_WHITE:
 			mColor="B";
 			fullMColor="Bianco";
 			break;
-		case 2:
+		case DICE_ORANGE:
 			mColor="A";
 			fullMColor="Arancione";
 			break;
-		case 3:
+		case UNCOLORED:
 			mColor="E";
 			fullMColor="Neutro";
 			break;
