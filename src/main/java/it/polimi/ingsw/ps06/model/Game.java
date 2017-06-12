@@ -2,13 +2,13 @@ package it.polimi.ingsw.ps06.model;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Observable;
 import java.util.Observer;
 
 import it.polimi.ingsw.ps06.model.Types.ColorPalette;
-import it.polimi.ingsw.ps06.model.messages.MessageBoardSetupDice;
-import it.polimi.ingsw.ps06.model.messages.MessageWaitingRoomConnections;
 import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
+import it.polimi.ingsw.ps06.model.messages.MessageBoardSetupDice;
 
 /**
 * Classe che modellizza una partita tra n giocatori

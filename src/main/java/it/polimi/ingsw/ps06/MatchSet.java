@@ -61,7 +61,13 @@ public class MatchSet {
 
 		game = new Game( participants.size() + 1 );
 		
-		participants.forEach(c -> game.addNewObserver(c));
+		for (Connection c : participants) {
+			game.addNewObserver(c);
+			
+			Player p = new Player( participants.indexOf(c) );
+			c.setPlayer(p);
+			game.addPlayer(p);
+		}
 	}
 	
 	public Game getGame() {

@@ -3,11 +3,24 @@ package it.polimi.ingsw.ps06.model.events;
 import java.io.IOException;
 
 import it.polimi.ingsw.ps06.Client;
+import it.polimi.ingsw.ps06.Connection;
+import it.polimi.ingsw.ps06.SocketServer;
 import it.polimi.ingsw.ps06.controller.BoardController;
 import it.polimi.ingsw.ps06.controller.RoomController;
 import it.polimi.ingsw.ps06.model.messages.BoardReady;
+import it.polimi.ingsw.ps06.model.messages.MessageBoardAddMember;
 
 public class EventParser implements EventVisitor {
+	
+	private Object theModel;
+	
+	public EventParser() {
+		
+	}
+	
+	public EventParser(Object model) {
+		this.theModel = model;
+	}
 	
 	@Override
 	public void visit(EventClose eventClose) {
@@ -49,8 +62,15 @@ public class EventParser implements EventVisitor {
 
 	@Override
 	public void visit(EventMemberPlaced memberPlaced) {
-		// TODO Auto-generated method stub
-		
+		Connection c = ((Connection) theModel);
+ 		
+		MessageBoardAddMember newMember = new MessageBoardAddMember(memberPlaced.getAction(), memberPlaced.getColor(), c.getPlayer().getID());
+		try {
+			SocketServer.getInstance().sendToPlayingConnections(c, newMember);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override

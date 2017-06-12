@@ -12,8 +12,7 @@ import it.polimi.ingsw.ps06.model.Types.ColorPalette;
 */
 public class Player {
 	
-	private String name;
-	private ColorPalette color;
+	private int ID;
 	
 	private ArrayList<Leader> leaders;
 	
@@ -30,11 +29,9 @@ public class Player {
 	* @param name	nome del giocatore
 	* @param color	colore del giocatore
 	*/
-	public Player(String name, ColorPalette color) {
-		super();
+	public Player(int ID) {
 		
-		this.name = name;
-		this.color = color;
+		this.ID = ID;
 		
 		memberBlack = new FamilyMember(this, ColorPalette.DICE_BLACK);
 		memberWhite = new FamilyMember(this, ColorPalette.DICE_WHITE);
@@ -44,12 +41,12 @@ public class Player {
 		this.personalBoard = new PersonalBoard();
 	}
 	
-	public void setName(String name) {
-		this.name = name;
+	public void setID(int ID) {
+		this.ID = ID;
 	}
 	
-	public void setColor(ColorPalette color) {
-		this.color = color;
+	public int getID() {
+		return ID;
 	}
 	
 	public ArrayList<Leader> getLeaders() {

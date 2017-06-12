@@ -10,9 +10,17 @@ public class EventMessage extends Message {
 		this.e = e;
 	}
 	
+	public Event getEvent() {
+		return e;
+	}
+	
+	public void setEvent(Event e) {
+		this.e = e;
+	}
+	
 	@Override
 	public void accept(MessageVisitor visitor) {
-		// TODO Auto-generated method stub
+		visitor.visit(this);
 	}
 
 }

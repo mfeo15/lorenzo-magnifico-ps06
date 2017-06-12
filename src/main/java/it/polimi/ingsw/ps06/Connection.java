@@ -9,6 +9,9 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Random;
 
+import it.polimi.ingsw.ps06.model.Player;
+import it.polimi.ingsw.ps06.model.events.Event;
+import it.polimi.ingsw.ps06.model.events.EventParser;
 import it.polimi.ingsw.ps06.model.messages.EventMessage;
 import it.polimi.ingsw.ps06.model.messages.Message;
 import it.polimi.ingsw.ps06.model.messages.MessageParser;
@@ -24,6 +27,8 @@ import it.polimi.ingsw.ps06.model.messages.MessageParser;
 public class Connection implements Runnable, Observer {
 	
 	private Socket socket;
+	
+	private Player player;
 	
 	private String username;
 	
@@ -54,6 +59,14 @@ public class Connection implements Runnable, Observer {
 		return active;
 	}
 	
+	public void setPlayer(Player player) {
+		this.player = player;
+	}
+	
+	public Player getPlayer() {
+		return this.player;
+	}
+	
 	@Override
 	public void run() {
 		try {
@@ -77,7 +90,8 @@ public class Connection implements Runnable, Observer {
 		System.out.println("[ ] Message received from " + getInetAddress() + " (" + getUsername() + "): " + m +"\n");
 		
 		if ( m instanceof EventMessage ) {
-			// THIS IS AN EVENT OF GAME
+			
+			((EventMessage) m).accept(new MessageParser( this ));
 			return;
 		}
 			

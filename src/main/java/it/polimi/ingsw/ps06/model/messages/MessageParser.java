@@ -1,11 +1,14 @@
 package it.polimi.ingsw.ps06.model.messages;
 
 import java.io.IOException;
+import java.net.Socket;
 import java.util.ArrayList;
 
 import it.polimi.ingsw.ps06.Connection;
 import it.polimi.ingsw.ps06.MatchSet;
 import it.polimi.ingsw.ps06.SocketServer;
+import it.polimi.ingsw.ps06.model.Game;
+import it.polimi.ingsw.ps06.model.events.EventParser;
 import it.polimi.ingsw.ps06.view.Board;
 import it.polimi.ingsw.ps06.view.Room;
 
@@ -17,7 +20,7 @@ public class MessageParser implements MessageVisitor {
 		
 	}
 	
-	public MessageParser(Object supporter/*, Class<T> supporterClass*/) {
+	public MessageParser(Object supporter) {
 		this.supporter = supporter;
 	}
 	
@@ -85,6 +88,9 @@ public class MessageParser implements MessageVisitor {
 		
 		try {
 			
+			MessagePlayerID messageID = new MessagePlayerID(c.getPlayer().getID());
+			c.asyncSend(messageID);
+			
 			MatchSet match = SocketServer.getInstance().retrieveMatch(c);
 			
 			ArrayList<String> a = new ArrayList<String>();
@@ -97,5 +103,28 @@ public class MessageParser implements MessageVisitor {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void visit(EventMessage event) {
+		
+		event.getEvent().accept( new EventParser(supporter) );
+	}
+
+	@Override
+	public void visit(MessageBoardAddMember newMember) {
+		Board b = ((Board) supporter);
+		
+		try {
+			b.addMember(newMember.getActionExecuted(), newMember.getColor(), newMember.getPlayerIndex());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void visit(MessagePlayerID messageID) {
+		Board b = ((Board) supporter);
+		b.setOwnerPlayerIndex( messageID.getID() );
 	}
 }

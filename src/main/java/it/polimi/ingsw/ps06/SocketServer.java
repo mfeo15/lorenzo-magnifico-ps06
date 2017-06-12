@@ -12,6 +12,7 @@ import java.util.concurrent.Executors;
 import it.polimi.ingsw.ps06.model.Game;
 import it.polimi.ingsw.ps06.model.messages.Message;
 import it.polimi.ingsw.ps06.model.messages.MessageGameHasStarted;
+import it.polimi.ingsw.ps06.model.messages.MessagePlayingConnections;
 import it.polimi.ingsw.ps06.model.messages.MessageWaitingRoomConnections;
 
 /**
@@ -161,6 +162,10 @@ public class SocketServer implements Server {
 	
 	public void sendToConnections(ArrayList<Connection> cs, Message m) {
 		cs.forEach(connection -> connection.asyncSend(m));
+	}
+	
+	public void sendToPlayingConnections(Connection c, Message m) {	
+		retrieveMatch(c).getAll().forEach(connection -> connection.asyncSend(m));
 	}
 	
 	public void sendWaitingConnectionsStats() {
