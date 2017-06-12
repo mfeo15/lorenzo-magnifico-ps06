@@ -1453,10 +1453,10 @@ public class BoardGUI extends Observable implements Board {
     	if( ( (JButton) c) == productions[0] ) return it.polimi.ingsw.ps06.model.Types.Action.PRODUCTION_1;
     	if( ( (JButton) c) == production[0] ) return it.polimi.ingsw.ps06.model.Types.Action.PRODUCTION_2;
     	
-    	if( ( (JButton) c) == markets[1] ) return it.polimi.ingsw.ps06.model.Types.Action.MARKET_1;
-    	if( ( (JButton) c) == markets[2] ) return it.polimi.ingsw.ps06.model.Types.Action.MARKET_2;
-    	if( ( (JButton) c) == markets[3] ) return it.polimi.ingsw.ps06.model.Types.Action.MARKET_3;
-    	if( ( (JButton) c) == markets[4] ) return it.polimi.ingsw.ps06.model.Types.Action.MARKET_4;
+    	if( ( (JButton) c) == markets[0] ) return it.polimi.ingsw.ps06.model.Types.Action.MARKET_1;
+    	if( ( (JButton) c) == markets[1] ) return it.polimi.ingsw.ps06.model.Types.Action.MARKET_2;
+    	if( ( (JButton) c) == markets[2] ) return it.polimi.ingsw.ps06.model.Types.Action.MARKET_3;
+    	if( ( (JButton) c) == markets[3] ) return it.polimi.ingsw.ps06.model.Types.Action.MARKET_4;
     	
     	if( ( (JButton) c) == placements[0] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_GREEN_1;
     	if( ( (JButton) c) == placements[1] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_GREEN_2;
@@ -1580,7 +1580,6 @@ public class BoardGUI extends Observable implements Board {
 
 	@Override
 	public void setPlayerNumber(int number) {
-		System.out.print("ciao");
 		this.playerNumber=number;
 		
 		setBoardPlayers();
@@ -1758,10 +1757,10 @@ public class BoardGUI extends Observable implements Board {
 			memberPlaced = new EventMemberPlaced(chosenAction, ColorPalette.DICE_BLACK);
 			break;
 		case 1:
-			memberPlaced = new EventMemberPlaced(chosenAction, ColorPalette.DICE_ORANGE);
+			memberPlaced = new EventMemberPlaced(chosenAction, ColorPalette.DICE_WHITE);
 			break;
 		case 2:
-			memberPlaced = new EventMemberPlaced(chosenAction, ColorPalette.DICE_WHITE);
+			memberPlaced = new EventMemberPlaced(chosenAction, ColorPalette.DICE_ORANGE);
 			break;
 		case 3:
 			memberPlaced = new EventMemberPlaced(chosenAction, ColorPalette.UNCOLORED);
@@ -1839,6 +1838,28 @@ public class BoardGUI extends Observable implements Board {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	
+	
+	@Override
+	public void setOwnerPlayerIndex(int index) {
+		
+		switch (index){
+		case 0:
+			playerColor="R";
+			break;
+		case 1:
+			playerColor="V";
+			break;
+		case 2:
+			playerColor="B";
+			break;
+		case 3:
+			playerColor="G";
+			break;
+		}
+		
 	}
 
 	public void refresh() throws IOException{
@@ -1933,10 +1954,10 @@ public class BoardGUI extends Observable implements Board {
 	private void setBoard(){
 	    
 		player = "null";
-		playerColor="G";
 	    blackValue=1;
 	    orangeValue=1;
 	    whiteValue=1;
+		playerColor="G";
 	    playerNumber=2;
 	    ex1=5;
 	    ex2=9;

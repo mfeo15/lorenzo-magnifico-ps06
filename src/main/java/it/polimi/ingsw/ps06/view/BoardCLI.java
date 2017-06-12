@@ -384,6 +384,14 @@ public class BoardCLI extends Observable implements Board {
 		System.out.println("");
 		
 	}
+	
+	
+
+	@Override
+	public void setOwnerPlayerIndex(int index) {
+		// TODO Auto-generated method stub
+		
+	}
 
 	@Override
 	public void hasLoaded() {

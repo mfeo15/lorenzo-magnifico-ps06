@@ -18,6 +18,8 @@ public interface Board {
 	
 	void setPlayerColor(String s);
 	
+	void setOwnerPlayerIndex(int index);
+	
 	void setPlayersNames(String s, int index);
 	
 	void setCurrentPlayerName(String s);
