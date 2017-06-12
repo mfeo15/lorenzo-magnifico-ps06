@@ -114,7 +114,6 @@ public class Market implements PlaceSpace {
 		default:
 			throw new IllegalArgumentException("Il numero di giocatori non è accettato");
 		}
-	
 	}
 	
 	/**
