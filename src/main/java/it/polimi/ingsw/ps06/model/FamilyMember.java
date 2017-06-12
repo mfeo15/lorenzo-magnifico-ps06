@@ -70,4 +70,8 @@ public class FamilyMember {
 		return ownerPlayer;
 	}
 	
+	public Player getAssociatedPlayer() {
+		
+		return ownerPlayer;
+	}
 }

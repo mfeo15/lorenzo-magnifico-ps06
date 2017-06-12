@@ -10,10 +10,13 @@ import it.polimi.ingsw.ps06.model.Types.Action;
 * @since   2017-05-16
 */
 public class CardAcquisition extends Actions {
+
 	private DevelopementCard card;
+	private Player p;
 	
-	public CardAcquisition(){
-		
+	public CardAcquisition(DevelopementCard card, Player p){
+		this.card = card;
+		this.p = p;
 	}
 
 	/**
@@ -23,8 +26,9 @@ public class CardAcquisition extends Actions {
 	* @param 	chosenAction	Codice dell'azione da eseguire	
 	* @return 	
 	*/
-	public void checkCosts(Player player, Action chosenAction){
+	public boolean checkCosts(Action chosenAction, Boolean extraCost) {
 		//chiama risorse
+		return true;
 	}
 	
 	/**
@@ -34,13 +38,37 @@ public class CardAcquisition extends Actions {
 	* @param 	chosenAction	Codice dell'azione da eseguire	
 	* @return 	
 	*/
-	public void checkRequirements(Player player, Action chosenAction){
+	public boolean checkRequirements(Action chosenAction){
 		//chiama risorse
+		return true;
 	}
+	
 
+	/**
+	* Metodo per assegnare la carta ad un giocatore
+	*
+	* @param 	player			Giocatore su cui fare la verifica della disponibilità di risorse
+	* @return 	
+	*/
 	@Override
-	public void activate(Player p) {
-		// TODO Auto-generated method stub
+	public void activate() {
+		
+		if(card instanceof Territory){
+			p.getPersonalBoard().addTerritory( (Territory) card);
+		}
+		
+		if(card instanceof Building){
+			p.getPersonalBoard().addBuilding( (Building) card);
+		}
+		
+		if(card instanceof Character){
+			p.getPersonalBoard().addCharacter( (Character) card);
+		}
+		
+		if(card instanceof Venture){
+			p.getPersonalBoard().addVenture( (Venture) card);
+		}
 		
 	}
+
 }

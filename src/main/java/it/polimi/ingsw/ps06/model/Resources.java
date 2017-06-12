@@ -175,4 +175,47 @@ public class Resources {
 		
         return flag;
 	}
+	
+	/**
+	 * Metodo che permette di ridurre una certa risorse di tipo materiale di alcune unità
+	 * 
+	 * @param kind	tipo di materiale al quale applicare il metodo
+	 * @param x	quantità di unità da togliere
+	 * @return	nothing
+	 */
+	
+	public void decreaseResourceValue(MaterialsKind kind, int x){
+		int currentvalue = materials.get(kind);
+		materials.put(kind, currentvalue - x);
+		return;
+	}
+	
+	/**
+	 * Metodo che permette di ridurre una certa risorse di tipo punti di alcune unità
+	 * 
+	 * @param kind	tipo di punti al quale applicare il metodo
+	 * @param x	quantità di unità da togliere
+	 * @return	nothing
+	 */
+	
+	public void decreaseResourceValue(PointsKind kind, int x){
+		int currentvalue = points.get(kind);
+		points.put(kind, currentvalue - x);
+		return;
+	}
+	
+	/**
+	 * Metodo che permette di ridurre le risorse di un tipo risorsa
+	 * 
+	 * @param r	risorse da togliere
+	 * @return	nothing
+	 */
+	
+	public void decreaseResources(Resources r){
+		Set<MaterialsKind> materialsSet = materials.keySet();
+		for (MaterialsKind currentmaterial : materialsSet) decreaseResourceValue(currentmaterial, r.getResourceValue(currentmaterial));
+		
+		Set<PointsKind> pointsSet = points.keySet();
+		for (PointsKind currentpoint : pointsSet) decreaseResourceValue(currentpoint, r.getResourceValue(currentpoint));
+	}
 }

@@ -8,15 +8,29 @@ package it.polimi.ingsw.ps06.model;
 * @since   2017-05-11
 */
 public class Character extends DevelopementCard {
+	private Resources requirement;
 	
+	
+	/**Metodo per settare i requisiti della carta
+	 * 
+	 * @param	requirement		requisiti della carta
+	 * @return	nothing
+	 */
+	 
+	public void setRequirement(Resources requirement){
+		this.requirement=requirement;
+	 	return;
+	}	
+	 
 	/**
 	* Metodo per la gestione degli effetti per quanto riguarda la singola carta
 	* 
 	* @param 	player			Giocatore interessato
 	* @return 					Nothing
 	*/
-	public void activateEffect(Player player){
-		
+	
+	public Resources getRequirement(){
+		return requirement;
 	}
 
 }

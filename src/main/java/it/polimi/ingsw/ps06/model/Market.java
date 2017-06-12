@@ -10,16 +10,17 @@ import it.polimi.ingsw.ps06.model.Types.PointsKind;
 * Classe per la gestione dello spazio di mercato
 *
 * @author  ps06
-* @version 1.1
+* @version 1.2
 * @since   2017-05-10 
 */
 
 public class Market implements PlaceSpace {
 	private ArrayList<FamilyMember> memberSpaces;
 	private ArrayList<Effect> bonus;
-	EffectsActive attivi; // da modificare in listener
-	int openedWindows;
-	boolean check;
+	private Effect e;
+	private EffectsActive attivi; // da modificare in listener
+	private int openedWindows;
+	private boolean check;
 	
 	/**
 	* Metodo per il piazzamento di un familiare nel mercato, include controlli di posizionamento
@@ -30,11 +31,13 @@ public class Market implements PlaceSpace {
 	*/
 	@Override
 	public void placeMember(FamilyMember member, Action chosenAction) throws IllegalArgumentException {
-		boolean multi = attivi.getMulti();
+		boolean multi = true; //attivi.getMulti();
 		int marketIndex = Action.valueOf("MARKET_1").ordinal();
 		int actionIndex = chosenAction.ordinal();
 		int relativeIndex = actionIndex - marketIndex;
 		int errorCode = 0;
+		
+		// Gestire carta scomunica del mercato if(EffectsActive.checkNoMarket == true) handle();
 		
 		// Gestione condizione di selezione sbagliata
 		if ( (relativeIndex > openedWindows) || (member.getValue()<1) ) {errorCode=1; handle(errorCode);}
@@ -71,7 +74,7 @@ public class Market implements PlaceSpace {
 	*/
 	public Market(int numberPlayers) {
 		
-		attivi = new EffectsActive();
+		//attivi = new EffectsActive();
 		bonus = new ArrayList();
 		setSpaces(numberPlayers);
 		initBonus(numberPlayers);
@@ -134,7 +137,7 @@ public class Market implements PlaceSpace {
 			bonus.add(new EffectsResources(r));
 			
 			//Creazione del quarto bonus del market
-			bonus.add(new EffectsActions()); //privilegi
+			//bonus.add(new EffectsActions(new Privilege())); //privilegi
 			
 			if(numberPlayers>4) { 
 				//Creazione del quinto bonus del market
@@ -153,18 +156,36 @@ public class Market implements PlaceSpace {
 	* @return 	Nothing
 	*/
 	private void giveBonus(Player player, int index){
-		bonus.get(index); //activate
+		e = bonus.get(index);
+		e.activate(player);
+		if(index==3) e.activate(player);
 	}
 	
 	/**
-	* Metodo per reimpostare i familiari alla loro posizione di partenza
+	* Metodo per rimuovere i familiari dagli spazi
 	*
-	* @author  ps06
-	* @version 1.0
-	* @since   2017-05-11 
+	* @return 	Nothing
 	*/
 	public void cleanMarket() {
 		memberSpaces.clear();
+	}
+	
+	/**
+	* Metodo per ritornare l'arraylist di familiari
+	*
+	* @return 	memberSpaces	ArrayList familiari
+	*/
+	public ArrayList<FamilyMember> getFamilyList(){
+		return memberSpaces;
+	}
+	
+	/**
+	* Metodo per ritornare l'arraylist di bonus
+	*
+	* @return 	memberSpaces	ArrayList bonus
+	*/
+	public ArrayList<Effect> getBonuses(){
+		return bonus;
 	}
 	
 	

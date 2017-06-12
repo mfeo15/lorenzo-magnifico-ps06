@@ -8,6 +8,7 @@ import java.util.Observer;
 import it.polimi.ingsw.ps06.model.Types.ColorPalette;
 import it.polimi.ingsw.ps06.model.messages.MessageBoardSetupDice;
 import it.polimi.ingsw.ps06.model.messages.MessageWaitingRoomConnections;
+import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
 
 /**
 * Classe che modellizza una partita tra n giocatori
@@ -25,6 +26,8 @@ public class Game extends Observable {
 	private final int VATICAN_REQUIREMENT_PERIOD_1 = 3;
 	private final int VATICAN_REQUIREMENT_PERIOD_2 = 4;
 	private final int VATICAN_REQUIREMENT_PERIOD_3 = 5;
+	
+	private final int STANDARD_AMOUNT_COINS_FIRST_PLAYER = 5;
 	
 	private int numberPlayers;
 	private ArrayList<Player> players;
@@ -44,8 +47,6 @@ public class Game extends Observable {
 	* 
 	*/
 	public Game(int numberPlayers) {
-		
-		System.out.println("NEW GAME OF " + numberPlayers + " PLAYERS CREATED");
 		
 		this.numberPlayers = numberPlayers;
 		
@@ -106,7 +107,7 @@ public class Game extends Observable {
 			//Get the Player Faith points, p ==> player_faith = p.getFaith();
 			
 			if (player_faith < VaticanRequirementOnPeriod(period)) {
-				//board.getTiles(period).activate(p);  // <== Mancano implementazioni di metodi
+				//board.getTiles(period).activate(p);   <== Mancano implementazioni di metodi
 			}
 
 		}
@@ -159,6 +160,13 @@ public class Game extends Observable {
 	*/
 	public void start() 
 	{
+		//Bad placement, temporary
+		//Assegnamento dei vari coin ad ogni singolo giocatore ad inizio partita in relazione alla posizione di turno
+		for (int i=0; i < players.size(); i++) {
+			Player p = players.get(i);
+			p.getPersonalBoard().addMaterials(MaterialsKind.COIN, STANDARD_AMOUNT_COINS_FIRST_PLAYER + i);
+		}
+		
 		for(int period = 0; period < NUMBER_OF_PERIODS; period++) 
 		{
 			for(int round = 0; round < NUMBER_OF_ROUNDS; round++) 
@@ -168,12 +176,15 @@ public class Game extends Observable {
 					switch (phase) {
 						case 1:
 							setupRound();
+							break;
 						case 2: 
 							for( Player p : players) {
 								
 							}
+							break;
 						case 3: 
 							if (round == 2 || round == 4 || round == 6) vaticanReport(period);
+							break;
 					}
 				}
 			}
