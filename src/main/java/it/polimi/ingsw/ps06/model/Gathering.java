@@ -98,12 +98,12 @@ public class Gathering extends Actions {
 		if(production==true)
 		{
 			for (Building b : p.getPersonalBoard().getBuildings())
-				b.activateProduction(p);
+				b.activateEffect(p);
 		}
 		else
 		{	
 			for (Territory t : p.getPersonalBoard().getTerritories())
-				t.activateHarvest(p);
+				t.activateEffect(p);
 		}
 		
 		

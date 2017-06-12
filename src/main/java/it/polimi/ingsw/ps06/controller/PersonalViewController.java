@@ -36,12 +36,6 @@ private PersonalView theView;
 		if (!(arg instanceof Event))
 			return;
 					
-		//Smista le comunicazioni provenienti dalla View
-		if ( o.getClass().isInstance(theView) ) {
-					
-			MessageParser parser = new MessageParser();
-			((Event) arg).accept(parser);
-		}
 	}
 
 }

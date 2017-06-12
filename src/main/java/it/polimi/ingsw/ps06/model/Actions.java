@@ -14,7 +14,6 @@ public abstract class Actions extends Observable {
 	/**
 	* Metodo di attivazione dell'azione
 	*
-	* @param 	p		Giocatore a cui attivare l'azione
 	* @return 	
 	*/
 	public abstract void activate();
