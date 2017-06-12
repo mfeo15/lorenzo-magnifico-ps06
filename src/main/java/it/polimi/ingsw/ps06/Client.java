@@ -18,7 +18,7 @@ public class Client extends Observable implements Runnable, Observer {
 
 	private Socket socket;
 	
-	private Queue<Message> queuedMessages = new LinkedList<Message>();
+	//private Queue<Message> queuedMessages = new LinkedList<Message>();
 	
 	private String host;
 	private int	port;
@@ -81,13 +81,12 @@ public class Client extends Observable implements Runnable, Observer {
 	
 	public void notifyChangement(Object o) {
 		
-		System.out.println("OBSERVERS: " + countObservers() );
-		
+		/*
 		if ( countObservers() == 0 ) {
-			System.out.println("QUED");
 			queuedMessages.add((Message) o);
 			return;
 		}
+		*/
 		
 		setChanged();
 		notifyObservers(o);
@@ -96,8 +95,10 @@ public class Client extends Observable implements Runnable, Observer {
 	public void addNewObserver(Observer obs) {
 		addObserver(obs);
 		
+		/*
 		for (Message m : queuedMessages)
 			notifyChangement(m);
+		*/
 	}
 	
 	public void deleteAnObserver(Observer obs) {
