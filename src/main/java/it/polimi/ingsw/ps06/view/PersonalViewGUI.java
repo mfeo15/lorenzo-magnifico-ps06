@@ -19,6 +19,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import it.polimi.ingsw.ps06.model.events.EventClose;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
@@ -39,8 +40,7 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 	private int btCode;
 
 	@Override
-	public void show(int code) throws IOException {
-			this.playerCode=code;
+	public void show() throws IOException{
 			
 			setPersonalView();
 			
@@ -273,6 +273,7 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 		}
 		
 		public void close(){
+			notifyExit();
 			f.dispose();
 		}
 		
@@ -319,8 +320,11 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 			
 		}
 
-		
-		
-
-		
+		@Override
+		public void notifyExit() {
+			setChanged();
+			EventClose close = new EventClose();
+			notifyObservers(close);
+			
+		}	
 }

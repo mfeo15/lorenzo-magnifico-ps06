@@ -13,6 +13,8 @@ public interface PersonalView {
 	
 	void addNewObserver(Observer o);
 	
-	void show(int code) throws IOException;
+	void show() throws IOException;
+	
+	void notifyExit();
 
 }

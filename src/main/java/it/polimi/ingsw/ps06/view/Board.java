@@ -58,6 +58,6 @@ public interface Board {
 	
 	void addNewObserver(Observer o);
 	
-	void startGame();
+	void startGame(int index);
 	
 }

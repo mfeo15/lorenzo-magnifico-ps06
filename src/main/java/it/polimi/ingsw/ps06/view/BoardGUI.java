@@ -648,7 +648,10 @@ public class BoardGUI extends Observable implements Board {
 		            	MediaPlayer mediaPlayer3 = new MediaPlayer(hit2);
 		        		mediaPlayer3.play();
 		        		view.close();
-						try { view = new PersonalViewGUI(); view.show(y);} catch (IOException e) {e.printStackTrace();}}
+		        		startGame(y);
+						view = new PersonalViewGUI(); try {
+							view.show();
+						} catch (IOException e) {e.printStackTrace();}}
 	            
 	        	});
         	}
@@ -1468,7 +1471,7 @@ public class BoardGUI extends Observable implements Board {
     
     public it.polimi.ingsw.ps06.model.Types.Action identifySpot(Component c){
     	
-    	if( ( (JButton) c) == council[0] ) return it.polimi.ingsw.ps06.model.Types.Action.CONCIL_SPACE;
+    	if( ( (JButton) c) == council[0] ) return it.polimi.ingsw.ps06.model.Types.Action.COUNCIL_SPACE;
     	if( ( (JButton) c) == harvests[0] ) return it.polimi.ingsw.ps06.model.Types.Action.HARVEST_1;
     	if( ( (JButton) c) == harvest[0] ) return it.polimi.ingsw.ps06.model.Types.Action.HARVEST_2;
     	if( ( (JButton) c) == productions[0] ) return it.polimi.ingsw.ps06.model.Types.Action.PRODUCTION_1;
@@ -1506,7 +1509,7 @@ public class BoardGUI extends Observable implements Board {
     public JButton identifyComponent(it.polimi.ingsw.ps06.model.Types.Action chosenAction){
     	
     	switch(chosenAction){
-    	case CONCIL_SPACE:
+    	case COUNCIL_SPACE:
     		return council[0];
     	case HARVEST_1:
     		return harvests[0];
@@ -1840,7 +1843,7 @@ public class BoardGUI extends Observable implements Board {
 	
 	
 	@Override
-	public void startGame() {
+	public void startGame(int index) {
 		setChanged();
 		StoryBoard2PersonalView storyBoard;
 		storyBoard = new StoryBoard2PersonalView(new PersonalViewGUI());

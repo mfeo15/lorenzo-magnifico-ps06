@@ -55,14 +55,14 @@ public class BoardCLI extends Observable implements Board {
 	}
 	
 	public void show() {
-		printTowerASCII();
-		printTowerASCII();
-		printTowerASCII();
+		
 		printTowerASCII();
 		System.out.println();
 		System.out.println(" --- Firenze, 1500. Benvenuto in questa magnifica città. --- ");
 		System.out.println();
 		System.out.println(" Per ottenere una lista dei comandi possibili premi \"?\".");
+		System.out.println();
+		System.out.print(" > ");
 		
 		while(true) readInput();
 		
@@ -71,10 +71,19 @@ public class BoardCLI extends Observable implements Board {
 	public void readInput() {
 		String s = input.nextLine();
 		
+		Action chosenAction;
+		
 		if(s.equals("spots")) giveSpots();
 		if(s.equals("actions")) giveActions();
 		if(s.equals("?")) giveInfo();
 		if(s.equals("exit")) notifyExit();
+		
+		if(s.equals("info")) printPoints(0);
+		if(s.equals("info1")) printPoints(1);
+		if(s.equals("info2")) printPoints(2);
+		if(s.equals("info3")) printPoints(3);
+		if(s.equals("info4")) printPoints(4);
+		if(s.equals("info5")) printPoints(5);
 		
 		if(s.equals("Attiva1")) notifyLeaderActivation(1);
 		if(s.equals("Attiva2")) notifyLeaderActivation(2);
@@ -91,12 +100,20 @@ public class BoardCLI extends Observable implements Board {
 		if(s.equals("Piazza3")) notifyLeaderPlacement(3);
 		if(s.equals("Piazza4")) notifyLeaderPlacement(4);
 		
+		for(int j=0; j<25; j++)
+		if( s.equals( ((Action.getAction(j)).toString()).toLowerCase() ) ){
+			System.out.print(" > ");
+			String s1 = String.valueOf(input.nextLine());
+			int index = Integer.parseInt(s1.replaceAll("[\\D]", ""));
+			notifyAction(Action.valueOf(s.toUpperCase()),index);
+		}
+		
 	}
 
 	public void giveInfo() {
 		System.out.println("----- LISTA COMANDI -----");
 		System.out.println();
-		System.out.println("Per eseguire un azione digita un comando composto nel seguente modo: \"membro1 mercato1\"");
+		System.out.println("Per eseguire un azione digita un comando composto nel seguente modo: \"market_1 familiare1\"");
 		System.out.println("Ricorda che l'ordine dei colori è: Nero(1) Bianco(2) Arancio(3) Neutro(4)");
 		System.out.println("Per una lista delle posizioni del gioco digita \"spots\"");
 		System.out.println("Per una lista di azioni extra digita: \"actions\"");
@@ -109,8 +126,8 @@ public class BoardCLI extends Observable implements Board {
 	public void giveSpots() {
 		System.out.println("----- LISTA POSIZIONI -----");
 		System.out.println();
-		System.out.println("Mercato1 ~ Mercato4 | Palazzo | Produzione1 | Produzione2 | Raccolto1 | Raccolto2 | Torre1 ~ Torre16");
-		System.out.println("Ricorda che i posti della torre vanno da sinistra a destra e dal basso in alto!");
+		System.out.println("market_1 ~ market_4 | council_space | production_1 ~ production_2 | harvest_1 ~ harvest_2 | tower_green1 ~ tower_purple_4");
+		System.out.println("Ricorda che i posti della torre vanno da sinistra a destra nel seguente ordine: green-blue-yellow-purple; dal basso verso l'alto!");
 		System.out.println();
 		System.out.print(" > ");
 
@@ -130,24 +147,28 @@ public class BoardCLI extends Observable implements Board {
 	}
 	
 	private void printTowerASCII() {
-		System.out.println("      |>>>");
-		System.out.println("      |");
-		System.out.println(" |;|_|;|_|;|");
-		System.out.println(" \\.    .  /");
-		System.out.println("  \\:  .  /");
-		System.out.println("   ||:   |");
-		System.out.println("   ||:.  |");
-		System.out.println("   ||:  .|");
-		System.out.println("   ||:   |");
-		System.out.println("   ||: , |");
-		System.out.println("   ||:   |");
-		System.out.println("   ||: . |");
-		System.out.println("  _||_   |");
-		System.out.println("-~    ~`--");
+		
+		System.out.println("");
+		System.out.print("                                ");
+		System.out.println("      |>>>		"); 	 System.out.print("      |>>>	"); 	System.out.print("      |>>>	");
+		System.out.println("      |			");		 System.out.print("      |		"); 	System.out.print("      |		");
+		System.out.println(" |;|_|;|_|;|	");	 	 System.out.print(" |;|_|;|_|;|	");		System.out.print(" |;|_|;|_|;|	");
+		System.out.println(" \\.    .  /	"); 	 System.out.print(" \\.    .  /	");		System.out.print(" \\.    .  /	");
+		System.out.println("  \\:  .  /		"); 	 System.out.print("  \\:  .  /	"); 	System.out.print("  \\:  .  /	");
+		System.out.println("   ||:   |		"); 	 System.out.print("   ||:   |	");		System.out.print("   ||:   |	");
+		System.out.println("   ||:.  |		");	 	 System.out.print("   ||:.  |	");		System.out.print("   ||:.  |	");
+		System.out.println("   ||:  .|		");		 System.out.print("   ||:  .|	");		System.out.print("   ||:  .|	");
+		System.out.println("   ||:   |		");	 	 System.out.print("   ||:   |	");		System.out.print("   ||:   |	");
+		System.out.println("   ||: , |		");	 	 System.out.print("   ||: , |	");		System.out.print("   ||: , |	");
+		System.out.println("   ||:   |		");		 System.out.print("   ||:   |	");		System.out.print("   ||:   |	");
+		System.out.println("   ||: . |		");	 	 System.out.print("   ||: . |	");		System.out.print("   ||: . |	");
+		System.out.println("  _||_   |		");	 	 System.out.print("  _||_   |	");		System.out.print("  _||_   |	");
+		System.out.println("-~    ~`--		");	 	 System.out.print("-~    ~`--	");		System.out.print("-~    ~`--	");
 	}
 	
-	public void printPoints() {
-		
+	public void printPoints(int index) {
+		if (index==0) System.out.println("--> Coin: "+coinV+" Wood: "+woodV+" Stone: "+stoneV+" Servant:"+servantV);
+		startGame(index);
 	}
 
 	@Override
@@ -258,6 +279,7 @@ public class BoardCLI extends Observable implements Board {
 
 	@Override
 	public void notifyAction(Action chosenAction, int memberIndex) {
+		System.out.println("--> Evento registrato: familiare "+memberIndex+" in "+chosenAction.toString());
 		setChanged();
 		EventMemberPlaced memberPlaced;
 		ColorPalette color=null;
@@ -307,7 +329,7 @@ public class BoardCLI extends Observable implements Board {
 	}
 
 	@Override
-	public void startGame() {
+	public void startGame(int index) {
 		setChanged();
 		StoryBoard2PersonalView storyBoard;
 		storyBoard = new StoryBoard2PersonalView(new PersonalViewGUI());
@@ -324,7 +346,8 @@ public class BoardCLI extends Observable implements Board {
 
 	@Override
 	public void addMember(Action chosenAction, int memberIndex, int playerIndex) throws IOException {
-		// TODO Auto-generated method stub
+		System.out.println("--> Il membro"+memberIndex+" è stato piazzato dal giocatore"+playerIndex+" in "+chosenAction.toString()+" con successo!");
+		System.out.println("");
 		
 	}
 

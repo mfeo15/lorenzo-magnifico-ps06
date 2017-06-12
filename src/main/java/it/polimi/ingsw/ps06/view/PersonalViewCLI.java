@@ -6,6 +6,8 @@ import java.util.Observer;
 import java.util.Scanner;
 
 import it.polimi.ingsw.ps06.controller.PersonalViewController;
+import it.polimi.ingsw.ps06.model.Types.Action;
+import it.polimi.ingsw.ps06.model.events.EventClose;
 
 public class PersonalViewCLI extends Observable implements PersonalView {
 
@@ -25,45 +27,47 @@ public class PersonalViewCLI extends Observable implements PersonalView {
 	}
 	
 	public void show() {
-		System.out.println("ROOM");
+		System.out.println("--- PERSONAL VIEW ---");
+		System.out.println("Digita \"exit\" per uscire");
 		
-		//readInput();
+		while(true) readInput();
 	}
 	
 	public void readInput() {
-		int i = Integer.parseInt(input.nextLine());
+		String s = input.nextLine();
 		
-		setChanged();
-		notifyObservers(i);
+		if(s.equals("exit")) notifyExit();
 	}
 	
 	@Override
 	public void setResources(int coin, int wood, int stone, int servant, int victory, int military, int faith) {
-		// TODO Auto-generated method stub
+		System.out.println("--> Il giocatore ha coin: "+coin+" wood: "+wood+" stone: "+stone+" servant: "+servant+" victory: "+victory+" military: "+military+" faith: "+faith);
 		
 	}
 
 	@Override
 	public void addNewObserver(Observer o) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void show(int code) throws IOException {
-		// TODO Auto-generated method stub
+		addObserver(o);
 		
 	}
 
 	@Override
 	public void setTerritoryCard(int id, int index) {
-		// TODO Auto-generated method stub
+		System.out.println("--> Il giocatore ha la carta con ID: "+id+" è la sua carta territorio numero "+index);
 		
 	}
 
 	@Override
 	public void setBuildingCard(int id, int index) {
-		// TODO Auto-generated method stub
+		System.out.println("--> Il giocatore ha la carta con ID: "+id+" è la sua carta edificio numero "+index);
+		
+	}
+
+	@Override
+	public void notifyExit() {
+		setChanged();
+		EventClose close = new EventClose();
+		notifyObservers(close);
 		
 	}
 	
