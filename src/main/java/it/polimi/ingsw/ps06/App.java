@@ -23,7 +23,7 @@ public class App
     	
     	System.out.print("Press 1 for Server or 2 for Client > ");
     	if ( Integer.parseInt(s.nextLine()) == 1 ) 
-    	{		
+    	{
     		try {
     			SocketServer.getInstance().start();
     			

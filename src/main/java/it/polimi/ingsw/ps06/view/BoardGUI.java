@@ -113,7 +113,7 @@ public class BoardGUI extends Observable implements Board {
     private JButton[] councils = new JButton[16];
     private JButton[] dices = new JButton[3];
     private JButton[] orders = new JButton[5];
-    private JButton[] playersInfo = new JButton[5];
+    private JTextField[] playersInfo = new JTextField[5];
     private JButton[] excommunications = new JButton[3];
     private JButton[] excommStones = new JButton[12];
 	
@@ -131,6 +131,11 @@ public class BoardGUI extends Observable implements Board {
     private JLabel playersLabel[] = new JLabel[5];
     private JLabel leadersLabel[] = new JLabel[4];
     private JLabel leadersLabelFade[] = new JLabel[4];
+    
+    private JLabel marketCover1;
+    private JLabel marketCover2;
+    private JLabel productionCover;
+    private JLabel harvestCover;
     
     
     private String player="";
@@ -275,10 +280,10 @@ public class BoardGUI extends Observable implements Board {
         excommunicationsLabel[1] = ImageHandler.setImage("resources/excomm/"+ex2+".png",9,22,width,height);
         excommunicationsLabel[2] = ImageHandler.setImage("resources/excomm/"+ex3+".png",9,23,width,height);
         
-        JLabel marketCover1 = ImageHandler.setImage("resources/cover/cover1.png",10,12,width,height);
-        JLabel marketCover2 = ImageHandler.setImage("resources/cover/cover3.png",10,12,width,height);
-        JLabel productionCover = ImageHandler.setImage("resources/cover/cover2.png",25,13,width,height);
-        JLabel harvestCover = ImageHandler.setImage("resources/cover/cover4.png",25,15,width,height);
+        marketCover1 = ImageHandler.setImage("resources/cover/cover1.png",10,12,width,height);
+        marketCover2 = ImageHandler.setImage("resources/cover/cover3.png",10,12,width,height);
+        productionCover = ImageHandler.setImage("resources/cover/cover2.png",25,13,width,height);
+        harvestCover = ImageHandler.setImage("resources/cover/cover4.png",25,15,width,height);
         
         leaderBack = new JLabel();
         leaderBack = ImageHandler.setImageScreen("resources/leader/leaderBack.jpg", 9,(int)(13.23*ratio),width,height);
@@ -477,12 +482,12 @@ public class BoardGUI extends Observable implements Board {
         council = initializeButtons(council);
         harvest = initializeButtons(harvest);
         production = initializeButtons(production);
+        playersInfo = initialize(playersInfo);
         
         
         councils = initializeButtons(councils);
         dices = initializeButtons(dices);
         orders = initializeButtons(orders);
-        playersInfo = initializeButtons(playersInfo);
         excommunications = initializeButtons(excommunications);
         excommStones = initializeButtons(excommStones);
         privileges = initializeButtons(privileges);
@@ -543,10 +548,11 @@ public class BoardGUI extends Observable implements Board {
         councils = setLabels(councils);
         dices = setLabels(dices);
         orders = setLabels(orders);
-        playersInfo = setLabels(playersInfo);
 		excommunications = setLabels(excommunications);
 		excommStones = setLabels(excommStones);
 		leaders = setLabels(leaders);
+		
+		playersInfo = setFont(playersInfo);
         
         members = fillButtons(members,membersLabel);
         dices = fillLabels(dices,dicesLabel);
@@ -555,40 +561,7 @@ public class BoardGUI extends Observable implements Board {
         leaders = fillLeaders(leaders,leadersLabel,leadersLabelFade);
         cards = fillCards(cards);
         
-        switch(playerNumber){
         
-        case 2:
-        	players[2].setEnabled(false);
-        	
-        	harvest[0].setDisabledIcon(harvestCover.getIcon());
-        	harvest[0].setIcon(harvestCover.getIcon());
-        	harvest[0].setBorderPainted(false);
-        	harvest[0].setEnabled(false);
-        	
-        	production[0].setDisabledIcon(productionCover.getIcon());
-        	production[0].setIcon(productionCover.getIcon());
-        	production[0].setBorderPainted(false);
-        	production[0].setEnabled(false);
-        	
-        case 3:
-        	players[3].setEnabled(false);
-        	
-        	markets[2].setDisabledIcon(marketCover1.getIcon());
-        	markets[2].setIcon(marketCover1.getIcon());
-        	markets[2].setBorderPainted(false);
-        	markets[2].setEnabled(false);
-        	
-        	markets[3].setDisabledIcon(marketCover2.getIcon());
-        	markets[3].setIcon(marketCover2.getIcon());
-        	markets[3].setBorderPainted(false);
-        	markets[3].setEnabled(false);
-       
-        case 4:
-        	players[4].setEnabled(false);
-        
-        default: 
-        	break;
-        }
         
         others.add(production[0]);
         others.add(harvest[0]);
@@ -729,7 +702,7 @@ public class BoardGUI extends Observable implements Board {
         inputMap5.put(stroke, "OPEN");
         desktopPanel.getActionMap().put("OPEN", esc);
         
-        
+        setBoardPlayers();
         
         //Inizializzazione dei Frame 
         escFrame.getContentPane().add(board3Label);
@@ -849,6 +822,14 @@ public class BoardGUI extends Observable implements Board {
 		
 		for (int j=0;j<btns.length;j++) {
 	        btns[j]=new JButton();
+	    }
+		return btns;
+	}
+	
+	private JTextField[] initialize(JTextField...btns){
+		
+		for (int j=0;j<btns.length;j++) {
+	        btns[j]=new JTextField();
 	    }
 		return btns;
 	}
@@ -1126,7 +1107,7 @@ public class BoardGUI extends Observable implements Board {
 	}
 	
 	
-	private JButton[] locatePlayersInfo(JButton[] tfs){
+	private JTextField[] locatePlayersInfo(JTextField[] tfs){
 		double x=1;
 		double y=24;
 		
@@ -1599,7 +1580,10 @@ public class BoardGUI extends Observable implements Board {
 
 	@Override
 	public void setPlayerNumber(int number) {
+		System.out.print("ciao");
 		this.playerNumber=number;
+		
+		setBoardPlayers();
 	}
 
 
@@ -1893,6 +1877,59 @@ public class BoardGUI extends Observable implements Board {
         leadersLabelFade[3] = ImageHandler.setImageScreen("resources/leader/leader"+lead4+"fade.png",9,(int)(13.23*ratio),width,height);
 	}
 
+	private JTextField[] setFont(JTextField[] btns){
+		
+		for (JTextField btn : btns) {
+			btn.setOpaque(false);
+			btn.setEditable(false);
+			btn.setBorder(null);
+			btn.setFont(fontMEDIUM);
+			btn.setForeground(Color.BLACK);
+			btn.setHorizontalAlignment(JTextField.CENTER);
+		}
+		
+		return btns;
+	}
+	
+	private void setBoardPlayers(){
+		
+		switch(playerNumber){
+		
+        case 2:
+        	players[2].setEnabled(false);
+        	
+        	harvest[0].setDisabledIcon(harvestCover.getIcon());
+        	harvest[0].setIcon(harvestCover.getIcon());
+        	harvest[0].setBorderPainted(false);
+        	harvest[0].setEnabled(false);
+        	
+        	production[0].setDisabledIcon(productionCover.getIcon());
+        	production[0].setIcon(productionCover.getIcon());
+        	production[0].setBorderPainted(false);
+        	production[0].setEnabled(false);
+        	
+        case 3:
+        	players[3].setEnabled(false);
+        	
+        	markets[2].setDisabledIcon(marketCover1.getIcon());
+        	markets[2].setIcon(marketCover1.getIcon());
+        	markets[2].setBorderPainted(false);
+        	markets[2].setEnabled(false);
+        	
+        	markets[3].setDisabledIcon(marketCover2.getIcon());
+        	markets[3].setIcon(marketCover2.getIcon());
+        	markets[3].setBorderPainted(false);
+        	markets[3].setEnabled(false);
+       
+        case 4:
+        	players[4].setEnabled(false);
+        
+        default: 
+        	break;
+        }
+		
+	}
+	
 	private void setBoard(){
 	    
 		player = "null";

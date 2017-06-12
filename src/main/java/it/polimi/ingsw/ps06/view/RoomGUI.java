@@ -287,7 +287,6 @@ public class RoomGUI extends Observable implements Room {
         		mediaPlayer3.play();
         		startGame();
         		mediaPlayer4.stop();
-				f.dispose();
 				
             }
             
@@ -364,6 +363,7 @@ public class RoomGUI extends Observable implements Room {
 	
 	@Override
 	public void hasStarted(){
+		f.dispose();
 		setChanged();
 		StoryBoard2Board storyBoard;
 		storyBoard = new StoryBoard2Board(new BoardGUI());
