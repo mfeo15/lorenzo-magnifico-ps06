@@ -137,7 +137,13 @@ public class BoardGUI extends Observable implements Board {
     private JLabel productionCover;
     private JLabel harvestCover;
     
+    private JInternalFrame towers;
+    private JInternalFrame others;
     
+    private JButton protectionShield;
+    
+    private int playerID=0;
+    private int currentPlayerID=0;
     private String player="";
     private String playerColor="G";
     private int blackValue;
@@ -186,11 +192,11 @@ public class BoardGUI extends Observable implements Board {
 		screenHeight = screenSize.getHeight();
 		
 	    //Due frame interni al desktop per la parte delle torri e la sezione rimanente
-		JInternalFrame towers = new JInternalFrame("frame", false, false, false, false);
+		towers = new JInternalFrame("frame", false, false, false, false);
 	    towers.putClientProperty("JInternalFrame.isPalette", Boolean.TRUE);
 	    towers.getRootPane().setWindowDecorationStyle(JRootPane.NONE);
 	    
-	    JInternalFrame others = new JInternalFrame("frame", false, false, false, false);
+	    others = new JInternalFrame("frame", false, false, false, false);
 	    others.putClientProperty("JInternalFrame.isPalette", Boolean.TRUE);
 	    others.getRootPane().setWindowDecorationStyle(JRootPane.NONE);
 	    
@@ -223,7 +229,7 @@ public class BoardGUI extends Observable implements Board {
 		escWidth=(int)(width*60/100);
         escHeight=(int)(height*80/100);
 	
-		
+        fontSMALL = new Font("Lucida Handwriting",Font.PLAIN,(int)(12*(screenSize.getHeight()/1080)) );
 		fontMEDIUM = new Font("Lucida Handwriting",Font.PLAIN,(int)(15*(screenSize.getHeight()/1080)) );
 		fontMEDIUM = new Font("Lucida Handwriting",Font.PLAIN,(int)(25*(screenSize.getHeight()/1080)) );
 		fontBIG = new Font("Lucida Handwriting",Font.PLAIN,(int)(40*(screenSize.getHeight()/1080)) );
@@ -264,11 +270,6 @@ public class BoardGUI extends Observable implements Board {
         JLabel pbLabel = new JLabel(new ImageIcon(pbImage));
         
         getResources();
-        
-        membersLabel[0] = ImageHandler.setImage("resources/member/"+playerColor+"N.png",5,7,width,height);
-        membersLabel[1] = ImageHandler.setImage("resources/member/"+playerColor+"B.png",5,7,width,height);
-        membersLabel[2] = ImageHandler.setImage("resources/member/"+playerColor+"A.png",5,7,width,height);
-        membersLabel[3] = ImageHandler.setImage("resources/member/"+playerColor+"E.png",5,7,width,height);
         
         playersLabel[0] = ImageHandler.setImage("resources/player/avatar1.jpg",7,9,width,height);
         playersLabel[1] = ImageHandler.setImage("resources/player/avatar2.jpg",7,9,width,height);
@@ -375,6 +376,12 @@ public class BoardGUI extends Observable implements Board {
         scrollOthers.setDisabledIcon( scrollOthers.getIcon() );
         scrollOthers.setIcon(ImageHandler.setImage("resources/backRight.png",(int)3.7,(int)(3*ratio),width,height).getIcon());
         //scrollOthers.setBorderPainted(false);
+        
+        protectionShield = new JButton();
+        protectionShield.setLocation(0,0);
+        protectionShield.setSize(width,height);
+        protectionShield.setOpaque(false);
+        protectionShield.setEnabled(false);
         
         scrollOthers.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
@@ -712,13 +719,14 @@ public class BoardGUI extends Observable implements Board {
    	 	escFrame.setResizable(false);
    	 	escFrame.setLocationRelativeTo(null);
         
-        
+        towers.add(protectionShield);
         towers.add(scrollTowers);
         towers.getContentPane().add(board2Label);
         towers.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         towers.setSize(width, height);
           
         
+        others.add(protectionShield);
         others.add(scrollOthers);
         others.getContentPane().add(board1Label);
         others.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -1108,13 +1116,13 @@ public class BoardGUI extends Observable implements Board {
 	
 	
 	private JTextField[] locatePlayersInfo(JTextField[] tfs){
-		double x=1;
+		double x=0.5;
 		double y=24;
 		
 		
 		for(int j=0;j<tfs.length;j++){
 			tfs[j].setLocation((int)(width*x/100),(int)(height*y/100));
-			tfs[j].setSize(width*20/100,height*3/100);
+			tfs[j].setSize(width*20/100,height*4/100);
 			y=y+16;	
 		}
 		return tfs;
@@ -1601,10 +1609,21 @@ public class BoardGUI extends Observable implements Board {
 
 
 	@Override
-	public void setCurrentPlayerName(String s) {
-		this.roundPlayer=s;
+	public void setCurrentPlayerID(int id) {
+		this.currentPlayerID=id;
+		
+		if(currentPlayerID != playerID){
+			towers.add(protectionShield);
+			others.add(protectionShield);
+		}
+		
+		if(currentPlayerID == playerID){
+			towers.remove(protectionShield);
+			others.remove(protectionShield);
+		}
 		
 	}
+
 
 
 	@Override
@@ -1844,6 +1863,7 @@ public class BoardGUI extends Observable implements Board {
 	
 	@Override
 	public void setOwnerPlayerIndex(int index) {
+		playerID=index;
 		
 		switch (index){
 		case 0:
@@ -1859,6 +1879,11 @@ public class BoardGUI extends Observable implements Board {
 			playerColor="G";
 			break;
 		}
+		
+		try {
+			refresh();
+		} catch (IOException e) {
+			e.printStackTrace();}
 		
 	}
 
@@ -1896,6 +1921,12 @@ public class BoardGUI extends Observable implements Board {
         leadersLabelFade[1] = ImageHandler.setImageScreen("resources/leader/leader"+lead2+"fade.png",9,(int)(13.23*ratio),width,height);
         leadersLabelFade[2] = ImageHandler.setImageScreen("resources/leader/leader"+lead3+"fade.png",9,(int)(13.23*ratio),width,height);
         leadersLabelFade[3] = ImageHandler.setImageScreen("resources/leader/leader"+lead4+"fade.png",9,(int)(13.23*ratio),width,height);
+        
+        membersLabel[0] = ImageHandler.setImage("resources/member/"+playerColor+"N.png",5,7,width,height);
+        membersLabel[1] = ImageHandler.setImage("resources/member/"+playerColor+"B.png",5,7,width,height);
+        membersLabel[2] = ImageHandler.setImage("resources/member/"+playerColor+"A.png",5,7,width,height);
+        membersLabel[3] = ImageHandler.setImage("resources/member/"+playerColor+"E.png",5,7,width,height);
+        
 	}
 
 	private JTextField[] setFont(JTextField[] btns){

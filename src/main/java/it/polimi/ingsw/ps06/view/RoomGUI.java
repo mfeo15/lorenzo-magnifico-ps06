@@ -42,6 +42,7 @@ public class RoomGUI extends Observable implements Room {
 	private Font font,font2;
 	private int width;
 	private int height;
+	private AudioClip mediaPlayer4;
 		
 	@Override
 	public void show() throws IOException
@@ -88,7 +89,7 @@ public class RoomGUI extends Observable implements Room {
 		String menu = "resources/music1.mp3";
 		Media menuMusic = new Media(new File(menu).toURI().toString());
 		
-		AudioClip mediaPlayer4 = new AudioClip(menuMusic.getSource());
+		mediaPlayer4 = new AudioClip(menuMusic.getSource());
 		mediaPlayer4.setVolume(0.3);
        	mediaPlayer4.play();
 		
@@ -363,6 +364,8 @@ public class RoomGUI extends Observable implements Room {
 	
 	@Override
 	public void hasStarted(){
+		
+		mediaPlayer4.stop();
 		f.dispose();
 		setChanged();
 		StoryBoard2Board storyBoard;

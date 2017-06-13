@@ -22,7 +22,7 @@ public interface Board {
 	
 	void setPlayersNames(String s, int index);
 	
-	void setCurrentPlayerName(String s);
+	void setCurrentPlayerID(int id);
 	
 	void setDices(int black, int white, int orange);
 	
