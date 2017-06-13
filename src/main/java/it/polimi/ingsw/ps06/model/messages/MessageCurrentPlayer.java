@@ -1,15 +1,14 @@
 package it.polimi.ingsw.ps06.model.messages;
 
-public class MessagePlayerID extends Server2Client {
+public class MessageCurrentPlayer extends Server2Client {
 	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 3674128584424983916L;
-	
+	private static final long serialVersionUID = -2031171721562878041L;
 	private int ID;
 	
-	public MessagePlayerID(int ID) {
+	public MessageCurrentPlayer(int ID) {
 		this.ID = ID;
 	}
 	
@@ -25,4 +24,5 @@ public class MessagePlayerID extends Server2Client {
 	public void accept(MessageVisitor visitor) {
 		visitor.visit(this);
 	}
+
 }

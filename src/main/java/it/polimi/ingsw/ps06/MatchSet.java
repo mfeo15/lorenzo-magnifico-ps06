@@ -19,6 +19,8 @@ import it.polimi.ingsw.ps06.model.Player;
  *
  */
 public class MatchSet {
+	
+	private final boolean ALLOW_SAME_MACHINE_GAME = true;
 
 	private final int MAX_SIZE = 4;
 	
@@ -60,6 +62,7 @@ public class MatchSet {
 			return;
 
 		game = new Game( participants.size() + 1 );
+		game.setupRound();
 		
 		for (Connection c : participants) {
 			game.addNewObserver(c);
@@ -84,8 +87,9 @@ public class MatchSet {
 	 */
 	public void add(Connection c) throws Exception {
 		
-		if ( contains(c) )
-			return;
+		if (ALLOW_SAME_MACHINE_GAME)
+			if ( contains(c) )
+				return;
 		
 		if ( ! isFull() ) {
 			participants.add(c);
@@ -104,7 +108,7 @@ public class MatchSet {
 	 */
 	public void add(ArrayList<Connection> a) throws Exception {
 	
-		a.removeIf( c -> contains(c) );
+		if (ALLOW_SAME_MACHINE_GAME) a.removeIf( c -> contains(c) );
 		
 		if (a.size() + participants.size() > MAX_SIZE )
 			throw new Exception("Paramater array makes MatchSet out of bound");

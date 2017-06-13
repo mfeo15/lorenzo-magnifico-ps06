@@ -87,7 +87,7 @@ public class Connection implements Runnable, Observer {
 	public void receive() throws ClassNotFoundException, IOException {
 		Message m = (Message) in.readObject();
 		
-		System.out.println("[ ] Message received from " + getInetAddress() + " (" + getUsername() + "): " + m +"\n");
+		System.out.println("[ SERVER ] Message received from " + getInetAddress() + " (" + getUsername() + "): " + m +"\n");
 		
 		if ( m instanceof EventMessage ) {
 			
@@ -107,7 +107,7 @@ public class Connection implements Runnable, Observer {
 		out.writeObject(message);
 		out.flush();
 		
-		System.out.println("[ ] Message sent : " + message + "\n");
+		System.out.println("[ SERVER ] Message sent to " + getInetAddress() + " (" + getUsername() + "): " + message +"\n");
 	}
 	
 	
@@ -122,10 +122,10 @@ public class Connection implements Runnable, Observer {
 			public void run() {
 				try {
 					send(message);
+					
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}				
+				}
 			}
 		}).start();
 	}

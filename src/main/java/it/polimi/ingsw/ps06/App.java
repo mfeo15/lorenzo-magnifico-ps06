@@ -21,7 +21,7 @@ public class App
     public static void setup() throws IOException {
     	Scanner s = new Scanner(System.in);
     	
-    	System.out.print("Press 1 for Server or 2 for Client > ");
+    	System.out.print("\n" + "Press 1 for Server or 2 for Client > ");
     	if ( Integer.parseInt(s.nextLine()) == 1 ) 
     	{
     		try {
@@ -41,8 +41,10 @@ public class App
     		String host = s.nextLine();
     		Client.getInstance().setupParameters(host, 12345);
     		
-    		System.out.print("Press 1 for CLI or 2 for GUI > ");
+    		System.out.print("\n" + "Press 1 for CLI or 2 for GUI > ");
     		Menu menuView = ( Integer.parseInt(s.nextLine()) == 1 ) ? new MenuCLI(s) : new MenuGUI();
+    		
+    		System.out.println("\n" + "\n");
 				
 			MenuController controller = new MenuController(menuView);
 			menuView.addNewObserver(controller);

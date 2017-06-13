@@ -4,8 +4,11 @@ import java.util.EnumMap;
 import it.polimi.ingsw.ps06.model.Types.ColorPalette;
 
 public class MessageBoardSetupDice extends Server2Client {
-
-	//private HashMap<ColorPalette, Integer> diceValues;
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6736709067770491733L;
 	
 	private EnumMap<ColorPalette, Integer> diceValues;
 	

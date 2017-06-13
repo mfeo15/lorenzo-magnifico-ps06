@@ -1,9 +1,11 @@
 package it.polimi.ingsw.ps06.model.messages;
 
-import it.polimi.ingsw.ps06.model.Types.Action;
-import it.polimi.ingsw.ps06.model.Types.ColorPalette;
-
 public class MessageUser extends Client2Server {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -886537323937702140L;
 	
 	private String username;
 	

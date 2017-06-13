@@ -1597,7 +1597,7 @@ public class BoardGUI extends Observable implements Board {
 	public void setCurrentPlayerID(int id) {
 		
 		playerInfo.setText("Turno del giocatore: "+playersName[id]);
-
+		
 		if(id != playerID){
 			blockedStatus();
 		}

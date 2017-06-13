@@ -1,13 +1,11 @@
 package it.polimi.ingsw.ps06.model.messages;
 
 import java.io.IOException;
-import java.net.Socket;
 import java.util.ArrayList;
 
 import it.polimi.ingsw.ps06.Connection;
 import it.polimi.ingsw.ps06.MatchSet;
 import it.polimi.ingsw.ps06.SocketServer;
-import it.polimi.ingsw.ps06.model.Game;
 import it.polimi.ingsw.ps06.model.events.EventParser;
 import it.polimi.ingsw.ps06.view.Board;
 import it.polimi.ingsw.ps06.view.Room;
@@ -86,23 +84,37 @@ public class MessageParser implements MessageVisitor {
 	public void visit(BoardReady br) {
 		Connection c = ((Connection) supporter);
 		
+		MessagePlayerID messageID = new MessagePlayerID(c.getPlayer().getID());
+		c.asyncSend(messageID);
+		
+		try { Thread.sleep(100); } catch (InterruptedException e1) { e1.printStackTrace(); } 
+		
 		try {
-			
-			MessagePlayerID messageID = new MessagePlayerID(c.getPlayer().getID());
-			c.asyncSend(messageID);
 			
 			MatchSet match = SocketServer.getInstance().retrieveMatch(c);
 			
 			ArrayList<String> a = new ArrayList<String>();
 			match.getAll().forEach(connection -> a.add(connection.getUsername()));		
-			MessagePlayingConnections message = new MessagePlayingConnections( a );
-			SocketServer.getInstance().sendToConnections(match.getAll(), message);
+			MessagePlayingConnections messagePlayingCs = new MessagePlayingConnections( a );
+			c.asyncSend(messagePlayingCs);
 			
-			match.getGame().setupRound();
+			try { Thread.sleep(100); } catch (InterruptedException e1) { e1.printStackTrace(); } 
+			
+			int diceB = match.getGame().getDiceBlack().getValue();
+			int diceW = match.getGame().getDiceWhite().getValue();
+			int diceO = match.getGame().getDiceOrange().getValue();
+			MessageBoardSetupDice messageDice = new MessageBoardSetupDice(diceB, diceW, diceO );
+			c.asyncSend(messageDice);
+			
+			try { Thread.sleep(100); } catch (InterruptedException e1) { e1.printStackTrace(); } 
+			
+			MessageCurrentPlayer messageCurrentP = new MessageCurrentPlayer( match.getGame().getCurrentPlayer().getID() );
+			c.asyncSend(messageCurrentP);
 			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
 	}
 
 	@Override
@@ -126,5 +138,11 @@ public class MessageParser implements MessageVisitor {
 	public void visit(MessagePlayerID messageID) {
 		Board b = ((Board) supporter);
 		b.setOwnerPlayerIndex( messageID.getID() );
+	}
+
+	@Override
+	public void visit(MessageCurrentPlayer currentPlayer) {
+		Board b = ((Board) supporter);
+		b.setCurrentPlayerID( currentPlayer.getID() );
 	}
 }

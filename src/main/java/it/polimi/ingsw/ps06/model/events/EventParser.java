@@ -64,9 +64,10 @@ public class EventParser implements EventVisitor {
 	public void visit(EventMemberPlaced memberPlaced) {
 		Connection c = ((Connection) theModel);
  		
-		MessageBoardAddMember newMember = new MessageBoardAddMember(memberPlaced.getAction(), memberPlaced.getColor(), c.getPlayer().getID());
 		try {
+			MessageBoardAddMember newMember = new MessageBoardAddMember(memberPlaced.getAction(), memberPlaced.getColor(), c.getPlayer().getID());
 			SocketServer.getInstance().sendToPlayingConnections(c, newMember);
+			SocketServer.getInstance().retrieveMatch(c).getGame().advanceCurrentPlayer();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

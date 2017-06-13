@@ -4,6 +4,11 @@ import java.util.ArrayList;
 
 public class MessagePlayingConnections extends Server2Client {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3664380926756621120L;
+	
 	private ArrayList<String> playingConnections;
 	
 	public MessagePlayingConnections(ArrayList<String> a) {

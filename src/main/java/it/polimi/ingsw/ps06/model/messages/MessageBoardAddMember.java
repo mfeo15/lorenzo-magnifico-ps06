@@ -5,6 +5,11 @@ import it.polimi.ingsw.ps06.model.Types.ColorPalette;
 
 public class MessageBoardAddMember extends Server2Client {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7371310162612584402L;
+	
 	private Action actionExecuted;
 	private ColorPalette color;
 	private int playerIndex;

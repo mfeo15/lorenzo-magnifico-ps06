@@ -4,6 +4,11 @@ import java.util.ArrayList;
 
 public class MessageWaitingRoomConnections extends Server2Client {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3225347956617979294L;
+	
 	private ArrayList<String> waitingConnections;
 	
 	public MessageWaitingRoomConnections(ArrayList<String> a) {

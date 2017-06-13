@@ -9,6 +9,7 @@ import java.util.Observer;
 import it.polimi.ingsw.ps06.model.Types.ColorPalette;
 import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
 import it.polimi.ingsw.ps06.model.messages.MessageBoardSetupDice;
+import it.polimi.ingsw.ps06.model.messages.MessageCurrentPlayer;
 
 /**
 * Classe che modellizza una partita tra n giocatori
@@ -38,6 +39,11 @@ public class Game extends Observable {
 	private Dice diceWhite;
 	private Dice diceOrange;
 	
+	private int currentPlayerIndex;
+	
+	private int round;
+	private int period;
+	
 	
 	/**
 	* Costruttore di una partita. 
@@ -57,12 +63,99 @@ public class Game extends Observable {
 		board = new Board(numberPlayers);
 		
 		players = new ArrayList<Player>();
+		
+		period = 1;
+		round = 1;
+		
+		currentPlayerIndex = 0;
 	}
 	
 	public void addPlayer(Player newPlayer) {
 		players.add(newPlayer);
 	}
 	
+	public Player getCurrentPlayer() {
+		return players.get(currentPlayerIndex);
+	}
+	
+	public void advanceCurrentPlayer() {
+		
+		if (players.size() == currentPlayerIndex) {
+			advanceRound();
+			return;
+		}
+		
+		currentPlayerIndex++;
+		
+		System.out.println("NEW CURRENT: " + currentPlayerIndex );
+		
+		MessageCurrentPlayer messageCurrentP = new MessageCurrentPlayer( getCurrentPlayer().getID() );
+		notifyChangement(messageCurrentP);
+	}
+	
+	public void advanceRound() {
+		
+		if (round + 1 > NUMBER_OF_ROUNDS) {
+			advancePeriod();
+			return;
+		}
+		
+		round++;
+	}
+	
+	public void advancePeriod() {
+		
+		if (period + 1 > NUMBER_OF_PERIODS) {
+			end();
+			return;
+		}
+		
+		period++;	
+		vaticanReport(period);
+	}
+	
+	/**
+	 * @return the diceBlack
+	 */
+	public Dice getDiceBlack() {
+		return diceBlack;
+	}
+
+	/**
+	 * @param diceBlack the diceBlack to set
+	 */
+	public void setDiceBlack(Dice diceBlack) {
+		this.diceBlack = diceBlack;
+	}
+
+	/**
+	 * @return the diceWhite
+	 */
+	public Dice getDiceWhite() {
+		return diceWhite;
+	}
+
+	/**
+	 * @param diceWhite the diceWhite to set
+	 */
+	public void setDiceWhite(Dice diceWhite) {
+		this.diceWhite = diceWhite;
+	}
+
+	/**
+	 * @return the diceOrange
+	 */
+	public Dice getDiceOrange() {
+		return diceOrange;
+	}
+
+	/**
+	 * @param diceOrange the diceOrange to set
+	 */
+	public void setDiceOrange(Dice diceOrange) {
+		this.diceOrange = diceOrange;
+	}
+
 	/**
 	* Metodo invocato per il setup di ogni singolo nuovo round. 
 	* Si occupa di far partire la gestione del turno giocatore ed il setup
@@ -83,10 +176,6 @@ public class Game extends Observable {
 		diceBlack.roll();
 		diceWhite.roll();
 		diceOrange.roll();
-		
-		MessageBoardSetupDice messageDice = new MessageBoardSetupDice(diceBlack.getValue(), diceWhite.getValue(), diceOrange.getValue() );
-		
-		notifyChangement(messageDice);
 	}
 	
 	/**
@@ -151,6 +240,8 @@ public class Game extends Observable {
 		
 		players.removeAll(newOrderPlayers);
 		players.addAll(0, newOrderPlayers);
+		
+		currentPlayerIndex = 0;
 	}
 	
 	/**
