@@ -140,8 +140,7 @@ public class BoardGUI extends Observable implements Board {
     private JInternalFrame towers;
     private JInternalFrame others;
     
-    private JButton protectionShield;
-    
+    private boolean[] member = new boolean[4];
     private int playerID=0;
     private int currentPlayerID=0;
     private String player="";
@@ -229,8 +228,7 @@ public class BoardGUI extends Observable implements Board {
 		escWidth=(int)(width*60/100);
         escHeight=(int)(height*80/100);
 	
-        fontSMALL = new Font("Lucida Handwriting",Font.PLAIN,(int)(12*(screenSize.getHeight()/1080)) );
-		fontMEDIUM = new Font("Lucida Handwriting",Font.PLAIN,(int)(15*(screenSize.getHeight()/1080)) );
+        fontSMALL = new Font("Lucida Handwriting",Font.PLAIN,(int)(20*(screenSize.getHeight()/1080)) );
 		fontMEDIUM = new Font("Lucida Handwriting",Font.PLAIN,(int)(25*(screenSize.getHeight()/1080)) );
 		fontBIG = new Font("Lucida Handwriting",Font.PLAIN,(int)(40*(screenSize.getHeight()/1080)) );
 		fontbig = new Font("Lucida Handwriting",Font.PLAIN,(int)(33*(screenSize.getHeight()/1080)) );
@@ -360,7 +358,7 @@ public class BoardGUI extends Observable implements Board {
 		resourcesInfo.setHorizontalAlignment(JTextField.CENTER);
 		
 		actionsLog.setLocation((int)screenSize.getWidth()*25/100,(int)(screenSize.getHeight()*86/100));
-		actionsLog.setSize((int)screenSize.getWidth()*50/100,(int)screenSize.getHeight()*4/100);
+		actionsLog.setSize((int)screenSize.getWidth()*50/100,(int)screenSize.getHeight()*5/100);
 		actionsLog.setOpaque(false);
 		actionsLog.setEditable(false);
 		actionsLog.setBorder(null);
@@ -376,12 +374,6 @@ public class BoardGUI extends Observable implements Board {
         scrollOthers.setDisabledIcon( scrollOthers.getIcon() );
         scrollOthers.setIcon(ImageHandler.setImage("resources/backRight.png",(int)3.7,(int)(3*ratio),width,height).getIcon());
         //scrollOthers.setBorderPainted(false);
-        
-        protectionShield = new JButton();
-        protectionShield.setLocation(0,0);
-        protectionShield.setSize(width,height);
-        protectionShield.setOpaque(false);
-        protectionShield.setEnabled(false);
         
         scrollOthers.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
@@ -561,7 +553,6 @@ public class BoardGUI extends Observable implements Board {
 		
 		playersInfo = setFont(playersInfo);
         
-        members = fillButtons(members,membersLabel);
         dices = fillLabels(dices,dicesLabel);
         excommunications = fillLabels(excommunications, excommunicationsLabel);
         players = fillButtons(players,playersLabel);
@@ -717,28 +708,13 @@ public class BoardGUI extends Observable implements Board {
    	 	escFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
    	 	escFrame.setSize(escWidth, escHeight);
    	 	escFrame.setResizable(false);
-   	 	escFrame.setLocationRelativeTo(null);
-        
-        towers.add(protectionShield);
-        towers.add(scrollTowers);
-        towers.getContentPane().add(board2Label);
-        towers.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        towers.setSize(width, height);
-          
-        
-        others.add(protectionShield);
-        others.add(scrollOthers);
-        others.getContentPane().add(board1Label);
-        others.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        others.setSize(width, height);
-        
+   	 	escFrame.setLocationRelativeTo(null);        
        
         personalBoard.getContentPane().add(pbLabel);
         personalBoard.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         personalBoard.setSize((int)screenSize.getWidth(), (int)(screenSize.getHeight()*18/100));
         personalBoard.setLocation(0, (int)screenSize.getHeight()*82/100);
-        
-        
+        		
         towers.setResizable(false);
         towers.setVisible(true); 
         
@@ -1253,24 +1229,7 @@ public class BoardGUI extends Observable implements Board {
 	                        
 		                    notifyAction(identifySpot(component),Integer.parseInt(value.toString()));
 	                    	
-	                    	/*
-		                    if(((JButton) component)==council[0]){
-	                    		for(int j=0; j<privileges.length; j++){
-	                    			privileges[j].setEnabled(true);
-	                    			privileges[j].setBorderPainted(true);
-	                    		}
-	                    	}
-	                    	
-	                    	((JButton) component).setDisabledIcon(membersLabel[Integer.parseInt(value.toString())].getIcon());
-	                        ((JButton) component).setIcon(membersLabel[Integer.parseInt(value.toString())].getIcon());                   
-	                        
-	                        String hoverSound = "resources/place.wav";
-	                		Media hit = new Media(new File(hoverSound).toURI().toString());
-	                		MediaPlayer mediaPlayer1 = new MediaPlayer(hit);
-	        				mediaPlayer1.play();
-	        				members[Integer.parseInt(value.toString())].setEnabled(false);
-		                    */
-	        				
+		                    member[Integer.parseInt(value.toString())] = false;
 		                    usedMember= Integer.parseInt(value.toString());
 		                    
 	                        accept = true;
@@ -1320,6 +1279,10 @@ public class BoardGUI extends Observable implements Board {
 	    JMenuItem scarta;
 	    JMenuItem attiva;
 	    
+	    public desktopPopUp(){
+	    	
+	    }
+	    
 	    public desktopPopUp(int value){
 	    	
 	        gioca = new JMenuItem("Gioca!");
@@ -1363,6 +1326,37 @@ public class BoardGUI extends Observable implements Board {
 	        add(gioca);
 	        add(scarta);
 	    }
+	    
+	    public void add(int index){
+	    	
+	    	switch(index){
+	    	case 0:
+	    		add(attiva);
+	    		break;
+	    	case 1:
+	    		add(gioca);
+	    		break;
+	    	case 2:
+	    		add(scarta);
+	    		break;
+	    	}
+	    }
+	    
+	    public void remove(int index){
+	    	
+	    	switch(index){
+	    	case 0:
+	    		remove(attiva);
+	    		break;
+	    	case 1:
+	    		remove(gioca);
+	    		break;
+	    	case 2:
+	    		remove(scarta);
+	    		break;
+	    	}
+	    }
+	    
 	}
 	
 	class PopClickListener extends MouseAdapter {
@@ -1611,15 +1605,14 @@ public class BoardGUI extends Observable implements Board {
 	@Override
 	public void setCurrentPlayerID(int id) {
 		this.currentPlayerID=id;
-		
+
 		if(currentPlayerID != playerID){
-			towers.add(protectionShield);
-			others.add(protectionShield);
+			blockedStatus();
 		}
 		
 		if(currentPlayerID == playerID){
-			towers.remove(protectionShield);
-			others.remove(protectionShield);
+			boolean ok = allowedStatus();
+		
 		}
 		
 	}
@@ -1890,6 +1883,7 @@ public class BoardGUI extends Observable implements Board {
 	public void refresh() throws IOException{
 		getResources();
 		
+        members = fillButtons(members,membersLabel);
         dices = fillLabels(dices,dicesLabel);
         leaders = fillLeaders(leaders,leadersLabel,leadersLabelFade);
         cards = fillCards(cards);
@@ -1984,6 +1978,10 @@ public class BoardGUI extends Observable implements Board {
 	
 	private void setBoard(){
 	    
+		for(int j=0 ; j<member.length ; j++){
+			member[j]=true;
+		}
+		
 		player = "null";
 	    blackValue=1;
 	    orangeValue=1;
@@ -2010,6 +2008,40 @@ public class BoardGUI extends Observable implements Board {
 	    
         startTimer();
 
+	}
+	
+	private void blockedStatus(){
+		desktopPopUp popup = new desktopPopUp();
+		popup.remove(1);
+		popup.remove(2);
+		
+		for (int j=0; j<members.length ; j++){
+			members[j].setEnabled(false);
+		}
+	}
+	
+	private boolean allowedStatus(){
+		desktopPopUp popup = new desktopPopUp();
+		popup.add(1);
+		popup.add(2);
+		
+		if(member[0]) members[0].setEnabled(true);
+		if(member[1]) members[1].setEnabled(true);
+		if(member[2]) members[2].setEnabled(true);
+		if(member[3]) members[3].setEnabled(true);
+		
+		return true;
+	}
+	
+	
+	
+	@Override
+	public void setRound() {
+
+		for (int j=0; j<member.length ; j++){
+			member[j] = true;
+		}
+		
 	}
 
 	@Override

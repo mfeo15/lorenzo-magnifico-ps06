@@ -30,7 +30,7 @@ public class BoardCLI extends Observable implements Board {
     private int playerNumber;
     private int roundNumber;
     private int periodNumber;
-    private String roundPlayer;
+    private int roundPlayerID;
     private int ex1;
     private int ex2;
     private int ex3;
@@ -210,8 +210,8 @@ public class BoardCLI extends Observable implements Board {
 	}
 
 	@Override
-	public void setCurrentPlayerName(String s) {
-		this.roundPlayer=s;
+	public void setCurrentPlayerID(int id) {
+		this.roundPlayerID=id;
 		
 	}
 

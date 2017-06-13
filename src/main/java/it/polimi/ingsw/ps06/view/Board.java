@@ -62,4 +62,6 @@ public interface Board {
 	
 	void startGame(int index);
 	
+	void setRound();
+	
 }

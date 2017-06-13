@@ -48,9 +48,9 @@ public class RoomCLI extends Observable implements Room {
 		if(("?").equals(s)) giveInfo();
 		if(("exit").equals(s)) notifyExit();
 		if(("login").equals(s)){
-			System.out.print(" > ");
+			System.out.print(" Username > ");
 			String s1 = String.valueOf(input.nextLine());
-			System.out.print(" > ");
+			System.out.print(" Password > ");
 			String s2 = String.valueOf(input.nextLine());
 			giveCredentials(s1,s2);
 		}
@@ -61,7 +61,7 @@ public class RoomCLI extends Observable implements Room {
 		System.out.println();
 		System.out.println(" Usa il comando \"start\" per partire");
 		System.out.println(" Usa il comando \"exit\" per uscire");
-		System.out.println(" Usa il comando \"login Username Password\" per fare il login");
+		System.out.println(" Usa il comando \"login\" per fare il login");
 		System.out.println();
 		System.out.print(" > ");
 
