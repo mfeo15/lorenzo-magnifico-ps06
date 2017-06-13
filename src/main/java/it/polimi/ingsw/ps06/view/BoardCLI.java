@@ -393,6 +393,14 @@ public class BoardCLI extends Observable implements Board {
 		
 	}
 
+	
+	
+	@Override
+	public void setRound() {
+		// TODO Auto-generated method stub
+		
+	}
+
 	@Override
 	public void hasLoaded() {
 		setChanged();

@@ -137,12 +137,13 @@ public class BoardGUI extends Observable implements Board {
     private JLabel productionCover;
     private JLabel harvestCover;
     
+    private String[] playersName = new String[5]; 
+    
     private JInternalFrame towers;
     private JInternalFrame others;
     
     private boolean[] member = new boolean[4];
     private int playerID=0;
-    private int currentPlayerID=0;
     private String player="";
     private String playerColor="G";
     private int blackValue;
@@ -151,15 +152,12 @@ public class BoardGUI extends Observable implements Board {
     private int playerNumber;
     private int roundNumber;
     private int periodNumber;
-    private String roundPlayer;
     private int ex1, ex2, ex3;
     private int harvestIndex=1, productionIndex=1, councilIndex=0;
     private int lead1, lead2, lead3, lead4;
     private int coinV, woodV, stoneV, servantV;
     private int y;
     private int usedMember;
-    
-    private JFrame personalView;
     
     PersonalViewGUI view= new PersonalViewGUI();
 	private JFXPanel fxPanel = new JFXPanel();
@@ -215,12 +213,6 @@ public class BoardGUI extends Observable implements Board {
 	    BasicInternalFrameUI bi2 = (BasicInternalFrameUI)others.getUI();
 	    bi2.setNorthPane(null);
 	    
-	    personalBoard.putClientProperty("JInternalFrame.isPalette", Boolean.TRUE);
-	    personalBoard.setBorder(null);
-	    BasicInternalFrameUI bi3 = (BasicInternalFrameUI)personalBoard.getUI();
-	    bi3.setNorthPane(null);
-	    
-	    
 	    //Scalabilità delle immagini su vari schermi
 		width = (int)((screenSize.getWidth()*75/100)*(1.377 / ratio));
 		height = (int)(screenSize.getHeight()*75/100);
@@ -243,7 +235,7 @@ public class BoardGUI extends Observable implements Board {
 		BufferedImage board2 = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		BufferedImage board3 = new BufferedImage(escWidth, escHeight, BufferedImage.TYPE_INT_ARGB);
 		BufferedImage desktopImage = new BufferedImage((int)screenSize.getWidth(), (int)screenSize.getHeight(), BufferedImage.TYPE_INT_ARGB);
-		BufferedImage pbImage = new BufferedImage( (int)(screenSize.getWidth()), (int)(screenSize.getHeight()*0.18), BufferedImage.TYPE_INT_ARGB);
+	
 		
 		Graphics g1 = board1.createGraphics();
         g1.drawImage(image1, 0, 0, width, height, null);
@@ -265,7 +257,6 @@ public class BoardGUI extends Observable implements Board {
         JLabel board1Label = new JLabel(new ImageIcon(board1)); 
         JLabel board2Label = new JLabel(new ImageIcon(board2));
         JLabel board3Label = new JLabel(new ImageIcon(board3));
-        JLabel pbLabel = new JLabel(new ImageIcon(pbImage));
         
         getResources();
         
@@ -315,8 +306,6 @@ public class BoardGUI extends Observable implements Board {
 		String switchsound = "resources/effect1.mp3";
 		Media switchSound = new Media(new File(switchsound).toURI().toString());
         
-          
- 
         //Inizializzazione dei componenti
 		
 		playerInfo = new JTextField("Turno del giocatore: "+player);
@@ -559,8 +548,6 @@ public class BoardGUI extends Observable implements Board {
         leaders = fillLeaders(leaders,leadersLabel,leadersLabelFade);
         cards = fillCards(cards);
         
-        
-        
         others.add(production[0]);
         others.add(harvest[0]);
         others.add(council[0]);
@@ -709,12 +696,17 @@ public class BoardGUI extends Observable implements Board {
    	 	escFrame.setSize(escWidth, escHeight);
    	 	escFrame.setResizable(false);
    	 	escFrame.setLocationRelativeTo(null);        
-       
-        personalBoard.getContentPane().add(pbLabel);
-        personalBoard.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        personalBoard.setSize((int)screenSize.getWidth(), (int)(screenSize.getHeight()*18/100));
-        personalBoard.setLocation(0, (int)screenSize.getHeight()*82/100);
         		
+   	 	towers.add(scrollTowers);
+   	 	towers.getContentPane().add(board2Label);
+   	 	towers.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+   	 	towers.setSize(width, height);
+   	 	
+   		others.add(scrollOthers);
+   	 	others.getContentPane().add(board1Label);
+   	 	others.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+   	 	others.setSize(width, height);
+   	 	
         towers.setResizable(false);
         towers.setVisible(true); 
         
@@ -727,7 +719,6 @@ public class BoardGUI extends Observable implements Board {
         desktop.add(actionsLog);
         desktop.add(others);
         desktop.add(towers);
-        //desktop.add(personalBoard);
 	    desktop.setVisible(true);
 	    
 	    desktopFrame.add(timerInfo);
@@ -1223,8 +1214,7 @@ public class BoardGUI extends Observable implements Board {
 	                if (value instanceof String) {
 	                	
 	                    Component component = support.getComponent();
-	                    
-	                    
+	                                 
 	                    if (component instanceof JButton && component.isEnabled() && ((JButton) component).getIcon()==null && members[Integer.parseInt(value.toString())].isEnabled()) {
 	                        
 		                    notifyAction(identifySpot(component),Integer.parseInt(value.toString()));
@@ -1597,6 +1587,7 @@ public class BoardGUI extends Observable implements Board {
 
 	@Override
 	public void setPlayersNames(String s, int index) {
+		playersName[index]=s;
 		playersInfo[index].setText(s);
 		
 	}
@@ -1604,15 +1595,15 @@ public class BoardGUI extends Observable implements Board {
 
 	@Override
 	public void setCurrentPlayerID(int id) {
-		this.currentPlayerID=id;
+		
+		playerInfo.setText("Turno del giocatore: "+playersName[id]);
 
-		if(currentPlayerID != playerID){
+		if(id != playerID){
 			blockedStatus();
 		}
 		
-		if(currentPlayerID == playerID){
-			boolean ok = allowedStatus();
-		
+		if(id == playerID){
+			allowedStatus();
 		}
 		
 	}
@@ -1977,11 +1968,7 @@ public class BoardGUI extends Observable implements Board {
 	}
 	
 	private void setBoard(){
-	    
-		for(int j=0 ; j<member.length ; j++){
-			member[j]=true;
-		}
-		
+	   		
 		player = "null";
 	    blackValue=1;
 	    orangeValue=1;
@@ -2000,7 +1987,6 @@ public class BoardGUI extends Observable implements Board {
 	    stoneV=5;
 	    servantV=5;
 	    playerName="Gigi Scarfani";
-	    roundPlayer="Gigi Scarfani";
 	    roundNumber=1;
 	    periodNumber=1;
 	    
@@ -2020,7 +2006,7 @@ public class BoardGUI extends Observable implements Board {
 		}
 	}
 	
-	private boolean allowedStatus(){
+	private void allowedStatus(){
 		desktopPopUp popup = new desktopPopUp();
 		popup.add(1);
 		popup.add(2);
@@ -2029,8 +2015,6 @@ public class BoardGUI extends Observable implements Board {
 		if(member[1]) members[1].setEnabled(true);
 		if(member[2]) members[2].setEnabled(true);
 		if(member[3]) members[3].setEnabled(true);
-		
-		return true;
 	}
 	
 	
