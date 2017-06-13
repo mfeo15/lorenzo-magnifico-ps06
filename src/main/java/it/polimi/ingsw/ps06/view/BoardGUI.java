@@ -176,8 +176,8 @@ public class BoardGUI extends Observable implements Board {
 		    UIManager.setLookAndFeel( UIManager.getCrossPlatformLookAndFeelClassName() );
 		 } catch (Exception e) { e.printStackTrace();}
 		
-		setBoard();
-			
+		setBoard();	
+		
 		JFrame escFrame = new JFrame();
 		
 		desktopFrame = new JFrame();

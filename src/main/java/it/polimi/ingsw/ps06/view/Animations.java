@@ -7,7 +7,9 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.UIManager;
 
@@ -276,6 +278,119 @@ public class Animations {
 		change=true;	
 		distance = 3;
 		runTime = 500;
-
 }
+	
+	
+	public static void AnimationPV(JFrame f1){	
+		
+		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		distance = 17 * ((screenSize.getHeight()/1080)*2);
+		smooth = 5 * ((screenSize.getHeight()/1080));
+		startTime=-1;
+		runTime=600;
+		
+		SwingUtilities.invokeLater(new Runnable(){
+            @Override
+            public void run() {
+                try {
+                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                } catch (Exception ex) {
+                }
+                
+                Timer timer = new Timer(40, new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+
+                        if (startTime < 0) {
+                            startTime = System.currentTimeMillis();
+                        }
+
+                        long now = System.currentTimeMillis();
+                        long dif = now - startTime;
+                         
+                        if (dif > runTime) {
+                        	dif=runTime; 
+                        	((Timer)e.getSource()).stop();
+                        }
+                        
+                        double progress = ((double)dif / (double)runTime)*distance;
+
+                        Point location = f1.getLocation();
+                        Point to = new Point(location);
+                        
+	                    to.y = f1.getY() + (int)Math.round(smooth * progress);
+	                    
+	                    if(to.y > ( (int)( ((screenSize.getHeight()-f1.getHeight())/2) - ((int)(screenSize.getHeight()/(300))) ) )){
+	                    	((Timer)e.getSource()).stop();
+	                    	f1.setLocation((int)((screenSize.getWidth()-f1.getWidth())/2), (int)((screenSize.getHeight()-f1.getHeight())/2)- (int)(screenSize.getHeight()/300));
+	                    }
+	                    else f1.setLocation(to);
+	                             
+                    }
+                });
+                timer.setRepeats(true);
+                timer.setCoalesce(true);
+                timer.start();
+                
+            }
+            
+        });	
+	}
+	
+public static void AnimationPV2(JFrame f1){	
+		
+		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		distance = 17 * ((screenSize.getHeight()/1080)*2);
+		smooth = 5 * ((screenSize.getHeight()/1080));
+		startTime=-1;
+		runTime=600;
+		
+		SwingUtilities.invokeLater(new Runnable(){
+            @Override
+            public void run() {
+                try {
+                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                } catch (Exception ex) {
+                }
+                
+                Timer timer = new Timer(40, new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+
+                        if (startTime < 0) {
+                            startTime = System.currentTimeMillis();
+                        }
+
+                        long now = System.currentTimeMillis();
+                        long dif = now - startTime;
+                         
+                        if (dif > runTime) {
+                        	dif=runTime; 
+                        	((Timer)e.getSource()).stop();
+                        }
+                        
+                        double progress = ((double)dif / (double)runTime)*distance;
+
+                        Point location = f1.getLocation();
+                        Point to = new Point(location);
+                        
+	                    to.y = f1.getY() + (int)Math.round(smooth * progress);
+	                    
+	                    if(to.y > (int)(screenSize.getHeight() )){
+	                    	((Timer)e.getSource()).stop();
+	                    	f1.dispose();
+	                    }
+	                    else f1.setLocation(to);
+	                             
+                    }
+                });
+                timer.setRepeats(true);
+                timer.setCoalesce(true);
+                timer.start();
+                
+            }
+            
+        });	
+	}
+	
 }

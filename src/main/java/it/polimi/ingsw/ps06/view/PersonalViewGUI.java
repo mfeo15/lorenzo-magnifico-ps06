@@ -38,6 +38,7 @@ public class PersonalViewGUI extends Observable implements PersonalView {
     private double ratio;
 	private int code1, code2, code3, code4;
 	private int btCode;
+	private Dimension screenSize;
 
 	@Override
 	public void show() throws IOException{
@@ -46,7 +47,7 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 			
 			exit = new JButton();
 			
-			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+			screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 			
 			ratio= (screenSize.getWidth()/screenSize.getHeight());
 			
@@ -104,7 +105,7 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 	            {
 	            	MediaPlayer mediaPlayer3 = new MediaPlayer(music1);
 	        		mediaPlayer3.play();
-	                f.dispose();
+	                close();
 	            }
 	            
 	        });
@@ -199,13 +200,17 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 	        f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	        
 	        f.setSize(width, height);
-			f.setLocation((int)((screenSize.getWidth()-f.getWidth())/2), (int)((screenSize.getHeight()-f.getHeight())/2)- (int)(screenSize.getHeight()/182.4));
+			
+	        //new Thread(() ->Animations.AnimationPV(f));
+	        
+	        //f.setLocation((int)((screenSize.getWidth()-f.getWidth())/2), (int)((screenSize.getHeight()-f.getHeight())/2)- (int)(screenSize.getHeight()/182.4));
 	        
 	        f.setResizable(false);
 	        //f.setLocationRelativeTo(null);
 	        f.setVisible(true);  
 	        
-	        
+	        f.setLocation((int)((screenSize.getWidth()-f.getWidth())/2), -height);
+	        Animations.AnimationPV(f);
 		}
 		
 		public void setPersonalView(){
@@ -270,8 +275,11 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 		}
 		
 		public void close(){
+			
+			//f.setLocation((int)((screenSize.getWidth()-f.getWidth())/2), (int)((screenSize.getHeight()-f.getHeight())/2)- (int)(screenSize.getHeight()/182.4));
+			Animations.AnimationPV2(f);
+			
 			notifyExit();
-			f.dispose();
 		}
 		
 		
