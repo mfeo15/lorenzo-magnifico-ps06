@@ -171,6 +171,12 @@ public class HarvestProduction implements PlaceSpace {
 	* @return 	Nothing
 	*/
 	public HarvestProduction(int numberPlayers) {
+		
+		harvestSpaces1 = new ArrayList<FamilyMember>();
+		harvestSpaces2 = new ArrayList<FamilyMember>();
+		productionSpaces1 = new ArrayList<FamilyMember>();
+		productionSpaces2 = new ArrayList<FamilyMember>();
+		
 		this.numberPlayers=numberPlayers;
 	}
 	

@@ -3,6 +3,8 @@ package it.polimi.ingsw.ps06.model;
 import java.util.ArrayList;
 import java.util.Random;
 
+import it.polimi.ingsw.ps06.model.Types.Action;
+
 /**
 * Classe per la gestione del tabellone
 *
@@ -22,7 +24,6 @@ public class Board {
 	
 	private ExcommunicationTile excommunicationTiles[];
 	
-	private int random1, random2, random3;
 	private ArrayList<DevelopementCard> deck;
 	
 	
@@ -54,14 +55,13 @@ public class Board {
 	* @return 		order	ordine dei familiari
 	*/ 
 	private void drawExcommunicationTiles() {
-		random1 = (new Random()).nextInt(8);
-		random2 = 7 + (new Random()).nextInt(8);
-		random3 = 14 + (new Random()).nextInt(8);
+		int random1 = (new Random()).nextInt(8);
+		int random2 = 7 + (new Random()).nextInt(8);
+		int random3 = 14 + (new Random()).nextInt(8);
 	}
 	
 	public ExcommunicationTile getTiles(int period){
-		int param = period - 1;
-		return excommunicationTiles[param];
+		return excommunicationTiles[period - 1];
 	}
 	
 	/**
@@ -97,6 +97,50 @@ public class Board {
 		harvestProductionZone.cleanZone();
 		order = councilPalaceZone.checkOrder();
 		councilPalaceZone.cleanPalace();
+	}
+	
+	
+	public void placeMember(FamilyMember member, Action chosenAction) {
+		
+		switch (chosenAction) {
+		case COUNCIL_SPACE:
+			councilPalaceZone.placeMember(member, chosenAction);
+			break;
+		case MARKET_1:
+		case MARKET_2:
+		case MARKET_3:
+		case MARKET_4:
+		case MARKET_5:
+			marketZone.placeMember(member, chosenAction);
+			break;
+		case HARVEST_1:
+		case HARVEST_2:
+		case PRODUCTION_1:
+		case PRODUCTION_2:
+			harvestProductionZone.placeMember(member, chosenAction);
+			break;
+		case TOWER_BLUE_1:
+		case TOWER_BLUE_2:
+		case TOWER_BLUE_3:
+		case TOWER_BLUE_4:
+		case TOWER_GREEN_1:
+		case TOWER_GREEN_2:
+		case TOWER_GREEN_3:
+		case TOWER_GREEN_4:
+		case TOWER_PURPLE_1:
+		case TOWER_PURPLE_2:
+		case TOWER_PURPLE_3:
+		case TOWER_PURPLE_4:
+		case TOWER_YELLOW_1:
+		case TOWER_YELLOW_2:
+		case TOWER_YELLOW_3:
+		case TOWER_YELLOW_4:
+			towersZone.placeMember(member, chosenAction);
+			break;
+		default:
+			break;
+		
+		}
 	}
 
 }

@@ -1,6 +1,8 @@
 package it.polimi.ingsw.ps06.model;
 
 import java.util.ArrayList;
+
+import it.polimi.ingsw.ps06.model.Types.Action;
 import it.polimi.ingsw.ps06.model.Types.ColorPalette;
 
 /**
@@ -49,6 +51,16 @@ public class Player {
 		return ID;
 	}
 	
+	public FamilyMember getMember(ColorPalette color) {
+		
+		if (color == ColorPalette.DICE_BLACK) return memberBlack;
+		if (color == ColorPalette.DICE_WHITE) return memberWhite;
+		if (color == ColorPalette.DICE_ORANGE) return memberOrange;
+		if (color == ColorPalette.UNCOLORED) return memberUncolored;
+		
+		return null;
+	}
+	
 	public ArrayList<Leader> getLeaders() {
 		return leaders;
 	}
@@ -72,7 +84,13 @@ public class Player {
 	* @param 	color	colore del familiare usato
 	* @return 	Nothing
 	*/
-	public void doMemberPlacement(int value, ColorPalette color){
+	public void doMemberPlacement(Action action, ColorPalette color){
+		
+		getMember(color);
+		
+		if (action == Action.MARKET_1) {
+			
+		}
 		
 	}
 	

@@ -15,10 +15,9 @@ import it.polimi.ingsw.ps06.model.Types.PointsKind;
 */
 
 public class Market implements PlaceSpace {
-	private ArrayList<FamilyMember> memberSpaces;
-	private ArrayList<Effect> bonus;
+	private ArrayList<FamilyMember> memberSpaces = new ArrayList<FamilyMember>();
+	private ArrayList<Effect> bonus = new ArrayList<Effect>();
 	private Effect e;
-	private EffectsActive attivi; // da modificare in listener
 	private int openedWindows;
 	private boolean check;
 	
@@ -31,7 +30,10 @@ public class Market implements PlaceSpace {
 	*/
 	@Override
 	public void placeMember(FamilyMember member, Action chosenAction) throws IllegalArgumentException {
-		boolean multi = true; //attivi.getMulti();
+		
+		System.out.println("MERCATO");
+		
+		boolean multi = false; //attivi.getMulti();
 		int marketIndex = Action.valueOf("MARKET_1").ordinal();
 		int actionIndex = chosenAction.ordinal();
 		int relativeIndex = actionIndex - marketIndex;
@@ -74,11 +76,11 @@ public class Market implements PlaceSpace {
 	*/
 	public Market(int numberPlayers) {
 		
-		//attivi = new EffectsActive();
-		bonus = new ArrayList();
+		memberSpaces = new ArrayList<FamilyMember>();
+		bonus = new ArrayList<Effect>();
+		
 		setSpaces(numberPlayers);
 		initBonus(numberPlayers);
-		
 	}
 	
 	/**

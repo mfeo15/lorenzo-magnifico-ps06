@@ -2,14 +2,16 @@ package it.polimi.ingsw.ps06.model;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.Observable;
 import java.util.Observer;
 
+import it.polimi.ingsw.ps06.model.Types.Action;
 import it.polimi.ingsw.ps06.model.Types.ColorPalette;
 import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
-import it.polimi.ingsw.ps06.model.messages.MessageBoardSetupDice;
+import it.polimi.ingsw.ps06.model.Types.PointsKind;
 import it.polimi.ingsw.ps06.model.messages.MessageCurrentPlayer;
+import it.polimi.ingsw.ps06.model.messages.MessageGameStatus;
+import it.polimi.ingsw.ps06.model.messages.MessageVaticanReport;
 
 /**
 * Classe che modellizza una partita tra n giocatori
@@ -70,6 +72,15 @@ public class Game extends Observable {
 		currentPlayerIndex = 0;
 	}
 	
+	public void setCurrentPlayerIndex(int currentPlayerIndex) {
+		this.currentPlayerIndex = currentPlayerIndex;
+		
+		System.out.println("NEW CURRENT: " + currentPlayerIndex );
+		
+		MessageCurrentPlayer messageCurrentP = new MessageCurrentPlayer( getCurrentPlayer().getID() );
+		notifyChangement(messageCurrentP);
+	}
+	
 	public void addPlayer(Player newPlayer) {
 		players.add(newPlayer);
 	}
@@ -85,22 +96,22 @@ public class Game extends Observable {
 			return;
 		}
 		
-		currentPlayerIndex++;
-		
-		System.out.println("NEW CURRENT: " + currentPlayerIndex );
-		
-		MessageCurrentPlayer messageCurrentP = new MessageCurrentPlayer( getCurrentPlayer().getID() );
-		notifyChangement(messageCurrentP);
+		setCurrentPlayerIndex(currentPlayerIndex + 1);
 	}
 	
 	public void advanceRound() {
 		
 		if (round + 1 > NUMBER_OF_ROUNDS) {
+			round = 1;
+			setupRound();
 			advancePeriod();
 			return;
 		}
 		
 		round++;
+		setupRound();
+		
+		gameStatusUpdate();
 	}
 	
 	public void advancePeriod() {
@@ -112,6 +123,13 @@ public class Game extends Observable {
 		
 		period++;	
 		vaticanReport(period);
+		
+		gameStatusUpdate();
+	}
+	
+	public void gameStatusUpdate() {
+		MessageGameStatus stat = new MessageGameStatus(period, round);
+		notifyChangement(stat);
 	}
 	
 	/**
@@ -169,7 +187,7 @@ public class Game extends Observable {
 		
 		rollDices();
 		
-		//board.setupRound();
+		board.setupRound();
 	}
 	
 	public void rollDices() {
@@ -187,16 +205,23 @@ public class Game extends Observable {
 	*/
 	public void vaticanReport(int period) 
 	{
-		for (Player p: players) 
-		{
-			int player_faith = 0;
+		ArrayList<Integer> excommunicatedPlayersList = new ArrayList<Integer>();
+		
+		for (Player p: players) {
+			int player_faith = p.getPersonalBoard().getPointsCount(PointsKind.FAITH_POINTS);
 			
-			//Get the Player Faith points, p ==> player_faith = p.getFaith();
-			
-			if (player_faith < VaticanRequirementOnPeriod(period)) {
-				//board.getTiles(period).activate(p);   <== Mancano implementazioni di metodi
+			if (player_faith < VaticanRequirementOnPeriod(period)) {			
+				board.getTiles(period).activateEffect(p);
+				excommunicatedPlayersList.add( p.getID() );
 			}
-
+		}
+		
+		if ( excommunicatedPlayersList.size() > 0) {
+			int[] excommunicatedPlayersArray = new int[excommunicatedPlayersList.size()];
+			
+			for(int j = 0; j < excommunicatedPlayersList.size(); j++ ) excommunicatedPlayersArray[j] = excommunicatedPlayersList.get(j);
+			MessageVaticanReport vaticanRep = new MessageVaticanReport( excommunicatedPlayersArray );
+			notifyChangement(vaticanRep);
 		}
 	}
 	
@@ -241,7 +266,26 @@ public class Game extends Observable {
 		players.removeAll(newOrderPlayers);
 		players.addAll(0, newOrderPlayers);
 		
-		currentPlayerIndex = 0;
+		setCurrentPlayerIndex(0);
+	}
+	
+	/**
+	* Metodo per l'esecuzione di un azione
+	*
+	* @param 	value	valore dell'azione
+	* @param 	color	colore del familiare usato
+	* @return 	Nothing
+	*/
+	public void doMemberPlacement(Player p, Action action, ColorPalette color){
+		
+		if (players.contains(p)) {
+			Player player = players.get( players.indexOf(p) ); // <== BOH
+			
+			FamilyMember m = player.getMember(color);
+
+			board.placeMember(m, action);
+		}
+		
 	}
 	
 	/**
@@ -252,37 +296,14 @@ public class Game extends Observable {
 	*/
 	public void start() 
 	{
-		//Bad placement, temporary
 		//Assegnamento dei vari coin ad ogni singolo giocatore ad inizio partita in relazione alla posizione di turno
 		for (int i=0; i < players.size(); i++) {
 			Player p = players.get(i);
 			p.getPersonalBoard().addMaterials(MaterialsKind.COIN, STANDARD_AMOUNT_COINS_FIRST_PLAYER + i);
 		}
 		
-		for(int period = 0; period < NUMBER_OF_PERIODS; period++) 
-		{
-			for(int round = 0; round < NUMBER_OF_ROUNDS; round++) 
-			{
-				for(int phase = 1; phase < NUMBER_OF_PHASES; phase++) 
-				{
-					switch (phase) {
-						case 1:
-							setupRound();
-							break;
-						case 2: 
-							for( Player p : players) {
-								
-							}
-							break;
-						case 3: 
-							if (round == 2 || round == 4 || round == 6) vaticanReport(period);
-							break;
-					}
-				}
-			}
-		}
-		
-		end();
+		setupRound();
+		gameStatusUpdate();
 	}
 	
 	public void end() {

@@ -110,6 +110,9 @@ public class Towers implements PlaceSpace {
 	* @return 	Nothing
 	*/
 	public Towers(ArrayList<DevelopementCard> deck) {
+		
+		memberSpaces = new ArrayList<FamilyMember>();
+		
 		this.deck=deck;
 	}
 	

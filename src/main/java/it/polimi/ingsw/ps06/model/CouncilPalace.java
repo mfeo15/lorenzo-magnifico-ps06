@@ -49,6 +49,9 @@ public class CouncilPalace implements PlaceSpace {
 	* @return 	Nothing
 	*/
 	public CouncilPalace(){
+		memberSpaces = new ArrayList<FamilyMember>();
+		players = new ArrayList<Player>();
+		
 		initRewards();
 	}
 	
@@ -69,16 +72,12 @@ public class CouncilPalace implements PlaceSpace {
 	*/
 	public ArrayList<Player> checkOrder(){
 		
-		Player player;
-		int index = 0;
-		FamilyMember member = memberSpaces.get(0);
-	
-		while(member!=null)
-			{
-				player = member.getPlayer();
-				players.add(player);
-				member = memberSpaces.get(index);
-			}
+		if (memberSpaces.size() == 0)
+			return null;
+		
+		ArrayList<Player> players = new ArrayList<Player>();
+		
+		memberSpaces.forEach(m -> players.add( m.getAssociatedPlayer() ));
 		return players;
 	}
 	
