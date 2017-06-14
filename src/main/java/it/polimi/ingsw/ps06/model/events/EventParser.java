@@ -72,7 +72,11 @@ public class EventParser implements EventVisitor {
 				
 				game.doMemberPlacement(c.getPlayer(), memberPlaced.getAction(), memberPlaced.getColor());
 				
+				//try { game.advanceCurrentPlayer(); } catch (Exception e) { e.printStackTrace(); }
+				
 				game.advanceCurrentPlayer();
+				
+				try { Thread.sleep(100); } catch (InterruptedException e1) { e1.printStackTrace(); } 
 				
 				MessageBoardAddMember newMember = new MessageBoardAddMember(memberPlaced.getAction(), memberPlaced.getColor(), c.getPlayer().getID());
 				SocketServer.getInstance().sendToPlayingConnections(c, newMember);

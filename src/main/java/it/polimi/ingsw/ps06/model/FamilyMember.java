@@ -22,6 +22,7 @@ public class FamilyMember {
 	public FamilyMember()
 	{
 		this.rappresentativeDiceColor = ColorPalette.UNCOLORED;
+		this.value = 0;
 	}
 	
 	/**
@@ -30,8 +31,9 @@ public class FamilyMember {
 	*/
 	public FamilyMember(Player p)
 	{
-		this();
 		this.ownerPlayer = p;
+		this.rappresentativeDiceColor = ColorPalette.UNCOLORED;
+		this.value = 0;
 	}
 	
 	/**
@@ -42,7 +44,7 @@ public class FamilyMember {
 	   */
 	public FamilyMember(Player p, ColorPalette rappresentativeDice)
 	{
-		super();
+		this(p);
 		this.rappresentativeDiceColor = rappresentativeDice;
 	}
 	

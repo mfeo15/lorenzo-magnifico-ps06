@@ -1,6 +1,7 @@
 package it.polimi.ingsw.ps06.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import it.polimi.ingsw.ps06.model.Types.Action;
 import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
@@ -15,7 +16,7 @@ import it.polimi.ingsw.ps06.model.Types.PointsKind;
 */
 
 public class Market implements PlaceSpace {
-	private ArrayList<FamilyMember> memberSpaces = new ArrayList<FamilyMember>();
+	private FamilyMember[] memberSpaces;
 	private ArrayList<Effect> bonus = new ArrayList<Effect>();
 	private Effect e;
 	private int openedWindows;
@@ -48,18 +49,18 @@ public class Market implements PlaceSpace {
 			
 			
 			// Gestione condizione base in cui il campo è vuoto
-			if(memberSpaces.get(relativeIndex) == null){
-				memberSpaces.add(relativeIndex, member);
+			if(memberSpaces[relativeIndex] == null){
+				memberSpaces[relativeIndex] = member;
 				giveBonus(member.getPlayer(), relativeIndex);
 					
 			} 
 			else  {
 					
 				// Gestione regola del colore in caso di bonus attivo di azione multipla
-				if( multi && (member.getPlayer() != memberSpaces.get(relativeIndex).getPlayer()) ){
+				if( multi && (member.getPlayer() != memberSpaces[relativeIndex].getPlayer()) ){
 							
 					// Solo i familiari non neutri contano al fine di non ripetere familiari dello stesso colore nello stesso spazio
-					if(member.getPlayer()!=null) { memberSpaces.add(relativeIndex, member);}
+					if(member.getPlayer()!=null) { memberSpaces[relativeIndex] = member;}
 					giveBonus(member.getPlayer(), relativeIndex);
 					
 				} else {errorCode=2; handle(errorCode);}
@@ -76,7 +77,7 @@ public class Market implements PlaceSpace {
 	*/
 	public Market(int numberPlayers) {
 		
-		memberSpaces = new ArrayList<FamilyMember>();
+		memberSpaces = new FamilyMember[4];
 		bonus = new ArrayList<Effect>();
 		
 		setSpaces(numberPlayers);
@@ -158,8 +159,24 @@ public class Market implements PlaceSpace {
 	* @return 	Nothing
 	*/
 	private void giveBonus(Player player, int index){
+		
+		System.out.println("Player" + player.getID() + " has"
+				+ "\nCOINS:" + player.getPersonalBoard().getMaterialsCount(MaterialsKind.COIN) 
+				+ "\nWOOD:" + player.getPersonalBoard().getMaterialsCount(MaterialsKind.WOOD)
+				+ "\nSTONE:" + player.getPersonalBoard().getMaterialsCount(MaterialsKind.STONE)
+				+ "\nSERVANTS:" + player.getPersonalBoard().getMaterialsCount(MaterialsKind.SERVANT));
+		
+		System.out.println("ACTIVATE EFFECT!!!!!");
+		
 		e = bonus.get(index);
 		e.activate(player);
+		
+		System.out.println("Player" + player.getID() + " has"
+				+ "\nCOINS:" + player.getPersonalBoard().getMaterialsCount(MaterialsKind.COIN) 
+				+ "\nWOOD:" + player.getPersonalBoard().getMaterialsCount(MaterialsKind.WOOD)
+				+ "\nSTONE:" + player.getPersonalBoard().getMaterialsCount(MaterialsKind.STONE)
+				+ "\nSERVANTS:" + player.getPersonalBoard().getMaterialsCount(MaterialsKind.SERVANT));
+		
 		if(index==3) e.activate(player);
 	}
 	
@@ -169,7 +186,8 @@ public class Market implements PlaceSpace {
 	* @return 	Nothing
 	*/
 	public void cleanMarket() {
-		memberSpaces.clear();
+		//memberSpaces.clear();
+		for (int i=0; i < 4; i++) memberSpaces[i] = null;
 	}
 	
 	/**
@@ -178,7 +196,9 @@ public class Market implements PlaceSpace {
 	* @return 	memberSpaces	ArrayList familiari
 	*/
 	public ArrayList<FamilyMember> getFamilyList(){
-		return memberSpaces;
+		//return memberSpaces;
+		
+		return new ArrayList<FamilyMember>(Arrays.asList(memberSpaces));
 	}
 	
 	/**

@@ -87,7 +87,7 @@ public class MessageParser implements MessageVisitor {
 		MessagePlayerID messageID = new MessagePlayerID(c.getPlayer().getID());
 		c.asyncSend(messageID);
 		
-		try { Thread.sleep(100); } catch (InterruptedException e1) { e1.printStackTrace(); } 
+		try { Thread.sleep(1000); } catch (InterruptedException e1) { e1.printStackTrace(); } 
 		
 		try {
 			
@@ -98,7 +98,7 @@ public class MessageParser implements MessageVisitor {
 			MessagePlayingConnections messagePlayingCs = new MessagePlayingConnections( a );
 			c.asyncSend(messagePlayingCs);
 			
-			try { Thread.sleep(100); } catch (InterruptedException e1) { e1.printStackTrace(); } 
+			try { Thread.sleep(1000); } catch (InterruptedException e1) { e1.printStackTrace(); } 
 			
 			int diceB = match.getGame().getDiceBlack().getValue();
 			int diceW = match.getGame().getDiceWhite().getValue();
@@ -106,7 +106,7 @@ public class MessageParser implements MessageVisitor {
 			MessageBoardSetupDice messageDice = new MessageBoardSetupDice(diceB, diceW, diceO );
 			c.asyncSend(messageDice);
 			
-			try { Thread.sleep(100); } catch (InterruptedException e1) { e1.printStackTrace(); } 
+			try { Thread.sleep(1000); } catch (InterruptedException e1) { e1.printStackTrace(); } 
 			
 			MessageCurrentPlayer messageCurrentP = new MessageCurrentPlayer( match.getGame().getCurrentPlayer().getID() );
 			c.asyncSend(messageCurrentP);
@@ -148,9 +148,8 @@ public class MessageParser implements MessageVisitor {
 
 	@Override
 	public void visit(MessageGameStatus gameStat) {
-		String ANSI_RESET = "\u001B[0m";
-		String ANSI_RED = "\u001B[31m";
-		System.out.println(ANSI_RED + "PERIOD: " + gameStat.getCurrentPeriod() + " ROUND: " + gameStat.getCurrentRound() + ANSI_RESET);
+
+		System.out.println("PERIOD: " + gameStat.getCurrentPeriod() + " ROUND: " + gameStat.getCurrentRound());
 		
 		Board b = ((Board) supporter);
 		b.setPeriodRound(gameStat.getCurrentPeriod(),gameStat.getCurrentRound());

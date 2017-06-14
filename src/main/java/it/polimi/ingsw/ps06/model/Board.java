@@ -81,6 +81,8 @@ public class Board {
 	*/ 
 	public void setupRound() {
 		clean();
+		
+		System.out.println("CLEANED");
 	}
 	
 	
@@ -142,5 +144,4 @@ public class Board {
 		
 		}
 	}
-
 }

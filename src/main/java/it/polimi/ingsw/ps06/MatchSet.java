@@ -62,7 +62,6 @@ public class MatchSet {
 			return;
 
 		game = new Game( participants.size() + 1 );
-		game.start();
 		
 		for (Connection c : participants) {
 			game.addNewObserver(c);
@@ -71,6 +70,8 @@ public class MatchSet {
 			c.setPlayer(p);
 			game.addPlayer(p);
 		}
+		
+		game.start();
 	}
 	
 	public Game getGame() {

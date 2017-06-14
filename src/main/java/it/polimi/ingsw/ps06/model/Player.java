@@ -61,6 +61,12 @@ public class Player {
 		return null;
 	}
 	
+	public void setFamilyMemberValues(int black, int white, int orange) {
+		memberBlack.setValue(black);
+		memberWhite.setValue(white);
+		memberOrange.setValue(orange);
+	}
+	
 	public ArrayList<Leader> getLeaders() {
 		return leaders;
 	}
@@ -75,23 +81,6 @@ public class Player {
 	
 	public PersonalBoard getPersonalBoard() {
 		return personalBoard;
-	}
-	
-	/**
-	* Metodo per l'esecuzione di un azione
-	*
-	* @param 	value	valore dell'azione
-	* @param 	color	colore del familiare usato
-	* @return 	Nothing
-	*/
-	public void doMemberPlacement(Action action, ColorPalette color){
-		
-		getMember(color);
-		
-		if (action == Action.MARKET_1) {
-			
-		}
-		
 	}
 	
 	/**

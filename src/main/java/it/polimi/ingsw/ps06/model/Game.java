@@ -86,12 +86,22 @@ public class Game extends Observable {
 	}
 	
 	public Player getCurrentPlayer() {
+		
+		if (currentPlayerIndex >= 2) {
+			if ( currentPlayerIndex % 2 == 0)
+				return players.get(0);
+			else
+				return players.get(1);
+		}
+		
 		return players.get(currentPlayerIndex);
 	}
 	
 	public void advanceCurrentPlayer() {
 		
-		if (players.size() == currentPlayerIndex) {
+		int total_number_members = players.size() * 4;
+		
+		if (total_number_members - 1 == currentPlayerIndex) {
 			advanceRound();
 			return;
 		}
@@ -194,6 +204,8 @@ public class Game extends Observable {
 		diceBlack.roll();
 		diceWhite.roll();
 		diceOrange.roll();
+		
+		for (Player p : players) p.setFamilyMemberValues(diceBlack.getValue(), diceWhite.getValue(), diceOrange.getValue());
 	}
 	
 	/**
@@ -251,6 +263,8 @@ public class Game extends Observable {
 	*/
 	private void reorderPlayers() 
 	{
+		setCurrentPlayerIndex(0);
+		
 		ArrayList<Player> councilPlayers = board.getOrder();
 		if (councilPlayers == null)
 			return;
@@ -265,8 +279,6 @@ public class Game extends Observable {
 		
 		players.removeAll(newOrderPlayers);
 		players.addAll(0, newOrderPlayers);
-		
-		setCurrentPlayerIndex(0);
 	}
 	
 	/**
