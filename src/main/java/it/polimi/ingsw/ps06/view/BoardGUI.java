@@ -142,6 +142,7 @@ public class BoardGUI extends Observable implements Board {
     private JInternalFrame towers;
     private JInternalFrame others;
     
+    private boolean allowed = true;
     private boolean[] member = new boolean[4];
     private int playerID=0;
     private String player="";
@@ -177,6 +178,7 @@ public class BoardGUI extends Observable implements Board {
 		 } catch (Exception e) { e.printStackTrace();}
 		
 		setBoard();	
+		setRound();
 		
 		JFrame escFrame = new JFrame();
 		
@@ -308,7 +310,7 @@ public class BoardGUI extends Observable implements Board {
         
         //Inizializzazione dei componenti
 		
-		playerInfo = new JTextField("Turno del giocatore: "+player);
+		playerInfo = new JTextField();
 		playerInfo.setLocation((int)(screenSize.getWidth()*3/100),0);
 		playerInfo.setSize((int)screenSize.getWidth()*60/100,(int)screenSize.getHeight()*6/100);
 		playerInfo.setOpaque(false);
@@ -317,7 +319,7 @@ public class BoardGUI extends Observable implements Board {
 		playerInfo.setFont(fontBIG);
 		playerInfo.setForeground(Color.BLACK);
 		
-		roundInfo = new JTextField("Turno: "+roundNumber+"  Periodo: "+periodNumber);
+		roundInfo = new JTextField();
 		roundInfo.setLocation((int)screenSize.getWidth()*60/100,0);
 		roundInfo.setSize((int)screenSize.getWidth()*29/100,(int)screenSize.getHeight()*6/100);
 		roundInfo.setOpaque(false);
@@ -1219,7 +1221,6 @@ public class BoardGUI extends Observable implements Board {
 	                        
 		                    notifyAction(identifySpot(component),Integer.parseInt(value.toString()));
 	                    	
-		                    member[Integer.parseInt(value.toString())] = false;
 		                    usedMember= Integer.parseInt(value.toString());
 		                    
 	                        accept = true;
@@ -1269,82 +1270,54 @@ public class BoardGUI extends Observable implements Board {
 	    JMenuItem scarta;
 	    JMenuItem attiva;
 	    
-	    public desktopPopUp(){
+	    public desktopPopUp(int value, boolean allowed){
 	    	
-	    }
-	    
-	    public desktopPopUp(int value){
-	    	
-	        gioca = new JMenuItem("Gioca!");
-	        
-	        gioca.addActionListener(new ActionListener() {
-	            public void actionPerformed(ActionEvent e) {
-	              leaders[value].setEnabled(true);
-	            }
+	    	if(allowed){
+		        gioca = new JMenuItem("Gioca!");
+		        
+		        gioca.addActionListener(new ActionListener() {
+		            public void actionPerformed(ActionEvent e) {
+		              leaders[value].setEnabled(true);
+		            }
 	          });
+		        
+	    	}
+	    		
+	    	scarta = new JMenuItem("Scarta!");
+		        
+		    scarta.addActionListener(new ActionListener() {
+		    	public void actionPerformed(ActionEvent e) {
+		              
+		          	leaders[value].disable();
+		           	leaders[value].setIcon(null);
+		            	
+		           	MouseListener[] mouseListeners = leaders[value].getMouseListeners();
+		           	for (MouseListener mouseListener : mouseListeners) {
+		           		leaders[value].removeMouseListener(mouseListener);
+		           	}
+		            	
+		        }
+		    });
 	        
-	        scarta = new JMenuItem("Scarta!");
+	    	if(allowed){
+	    		
+		        attiva = new JMenuItem("Attiva!");
+		        
+		        attiva.addActionListener(new ActionListener() {
+		            public void actionPerformed(ActionEvent e) {
+		            
+		            	if(leaders[value].isEnabled()){
+		            		leaders[value].setIcon(leaderBack.getIcon());
+		  	              	leaders[value].setDisabledIcon(leaderBack.getIcon());
+		            	}
+	
+		            }
+		          });
+	    	}
 	        
-	        scarta.addActionListener(new ActionListener() {
-	            public void actionPerformed(ActionEvent e) {
-	              
-	            	leaders[value].disable();
-	            	leaders[value].setIcon(null);
-	            	
-	            	MouseListener[] mouseListeners = leaders[value].getMouseListeners();
-	            	for (MouseListener mouseListener : mouseListeners) {
-	            		leaders[value].removeMouseListener(mouseListener);
-	            	}
-	            	
-	            }
-	          });
-	        
-	        attiva = new JMenuItem("Attiva!");
-	        
-	        attiva.addActionListener(new ActionListener() {
-	            public void actionPerformed(ActionEvent e) {
-	            
-	            	if(leaders[value].isEnabled()){
-	            		leaders[value].setIcon(leaderBack.getIcon());
-	  	              	leaders[value].setDisabledIcon(leaderBack.getIcon());
-	            	}
-
-	            }
-	          });
-	        
-	        add(attiva);
-	        add(gioca);
+	        if(allowed) add(attiva);
+	        if(allowed) add(gioca);
 	        add(scarta);
-	    }
-	    
-	    public void add(int index){
-	    	
-	    	switch(index){
-	    	case 0:
-	    		add(attiva);
-	    		break;
-	    	case 1:
-	    		add(gioca);
-	    		break;
-	    	case 2:
-	    		add(scarta);
-	    		break;
-	    	}
-	    }
-	    
-	    public void remove(int index){
-	    	
-	    	switch(index){
-	    	case 0:
-	    		remove(attiva);
-	    		break;
-	    	case 1:
-	    		remove(gioca);
-	    		break;
-	    	case 2:
-	    		remove(scarta);
-	    		break;
-	    	}
 	    }
 	    
 	}
@@ -1367,7 +1340,7 @@ public class BoardGUI extends Observable implements Board {
 	    }
 
 	    private void doPop(MouseEvent e){
-	        desktopPopUp menu = new desktopPopUp(value);
+	        desktopPopUp menu = new desktopPopUp(value, allowed);
 	        menu.show(e.getComponent(), e.getX(), e.getY());
 	    }
 	}
@@ -1566,6 +1539,10 @@ public class BoardGUI extends Observable implements Board {
 		this.periodNumber=period;
 		this.roundNumber=period;
 		
+		roundInfo.setText("Turno: "+roundNumber+"  Periodo: "+periodNumber);
+		
+		setRound();
+		
 	}
 
 	
@@ -1721,7 +1698,6 @@ public class BoardGUI extends Observable implements Board {
 		
 		JButton btn = identifyComponent(chosenAction);
 		
-		btn.setDisabledIcon( btn.getIcon() );
 		btn.setIcon((ImageHandler.setImage("resources/member/"+pColor+mColor+".png",5,7,width,height)).getIcon());
 		
 		if((btn)==council[0]){
@@ -1736,7 +1712,12 @@ public class BoardGUI extends Observable implements Board {
 		MediaPlayer mediaPlayer1 = new MediaPlayer(hit);
 		mediaPlayer1.play();
 		
-		members[usedMember].setEnabled(false);
+		if(playerIndex==playerID){
+			member[usedMember] = false;
+			members[usedMember].setEnabled(false);
+			
+		}
+		
 		actionsLog.setText("Il giocatore "+fullPColor+" ha piazzato il familiare "+fullMColor+"!");
 	}
 	
@@ -1990,6 +1971,7 @@ public class BoardGUI extends Observable implements Board {
 	    roundNumber=1;
 	    periodNumber=1;
 	    
+	    
 	    for(int j=0;j<cardsCodes.length;j++){cardsCodes[j]=j;}
 	    
         startTimer();
@@ -1997,9 +1979,9 @@ public class BoardGUI extends Observable implements Board {
 	}
 	
 	private void blockedStatus(){
-		desktopPopUp popup = new desktopPopUp();
-		popup.remove(1);
-		popup.remove(2);
+		
+		
+		allowed=false;
 		
 		for (int j=0; j<members.length ; j++){
 			members[j].setEnabled(false);
@@ -2007,9 +1989,8 @@ public class BoardGUI extends Observable implements Board {
 	}
 	
 	private void allowedStatus(){
-		desktopPopUp popup = new desktopPopUp();
-		popup.add(1);
-		popup.add(2);
+		
+		allowed=true;
 		
 		if(member[0]) members[0].setEnabled(true);
 		if(member[1]) members[1].setEnabled(true);

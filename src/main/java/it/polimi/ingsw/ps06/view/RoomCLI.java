@@ -8,6 +8,7 @@ import it.polimi.ingsw.ps06.controller.RoomController;
 import it.polimi.ingsw.ps06.model.events.BoardHasLoaded;
 import it.polimi.ingsw.ps06.model.events.EventClose;
 import it.polimi.ingsw.ps06.model.events.RoomHasLoaded;
+import it.polimi.ingsw.ps06.model.messages.MessageGameStart;
 import it.polimi.ingsw.ps06.model.messages.MessageUser;
 import it.polimi.ingsw.ps06.model.events.StoryBoard2Board;
 import it.polimi.ingsw.ps06.model.events.StoryBoard2Room;
@@ -110,12 +111,11 @@ public class RoomCLI extends Observable implements Room {
 
 	@Override
 	public void startGame() {
-		//(new BoardCLI(input)).show();  
 		
-		setChanged();
-		StoryBoard2Board storyBoard;
-		storyBoard = new StoryBoard2Board(new BoardCLI(input));
-		notifyObservers(storyBoard);
+		setChanged();		
+		MessageGameStart gameStart;
+		gameStart = new MessageGameStart();
+		notifyObservers(gameStart);
 		
 	}
 
@@ -130,8 +130,10 @@ public class RoomCLI extends Observable implements Room {
 
 	@Override
 	public void hasStarted() {
-		// TODO Auto-generated method stub
-		
+		setChanged();
+		StoryBoard2Board storyBoard;
+		storyBoard = new StoryBoard2Board(new BoardCLI(input));
+		notifyObservers(storyBoard);
 	}
 
 	@Override

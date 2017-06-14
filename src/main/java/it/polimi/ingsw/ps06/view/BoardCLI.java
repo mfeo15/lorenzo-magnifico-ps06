@@ -101,6 +101,7 @@ public class BoardCLI extends Observable implements Board {
 		if(("piazza3").equals(s)) notifyLeaderPlacement(3);
 		if(("piazza4").equals(s)) notifyLeaderPlacement(4);
 		
+		
 		for(int j=0; j<25; j++)
 		if( s.equalsIgnoreCase(( ((Action.getAction(j)).toString())) )){
 			System.out.print(" > ");
@@ -108,6 +109,7 @@ public class BoardCLI extends Observable implements Board {
 			int index = Integer.parseInt(s1.replaceAll("[\\D]", ""));
 			notifyAction(Action.valueOf(s.toUpperCase()),index);
 		}
+		
 		
 	}
 
@@ -347,7 +349,7 @@ public class BoardCLI extends Observable implements Board {
 	public void startGame(int index) {
 		setChanged();
 		StoryBoard2PersonalView storyBoard;
-		storyBoard = new StoryBoard2PersonalView(new PersonalViewGUI());
+		storyBoard = new StoryBoard2PersonalView(new PersonalViewCLI(input));
 		notifyObservers(storyBoard);
 		
 	}
