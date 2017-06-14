@@ -145,4 +145,19 @@ public class MessageParser implements MessageVisitor {
 		Board b = ((Board) supporter);
 		b.setCurrentPlayerID( currentPlayer.getID() );
 	}
+
+	@Override
+	public void visit(MessageGameStatus gameStat) {
+		String ANSI_RESET = "\u001B[0m";
+		String ANSI_RED = "\u001B[31m";
+		System.out.println(ANSI_RED + "PERIOD: " + gameStat.getCurrentPeriod() + " ROUND: " + gameStat.getCurrentRound() + ANSI_RESET);
+		
+		Board b = ((Board) supporter);
+		b.setPeriodRound(gameStat.getCurrentPeriod(),gameStat.getCurrentRound());
+	}
+
+	@Override
+	public void visit(MessageVaticanReport vaticanRep) {
+		// TODO Auto-generated method stub
+	}
 }

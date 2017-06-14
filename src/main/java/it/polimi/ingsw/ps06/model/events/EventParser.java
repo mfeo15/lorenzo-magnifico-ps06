@@ -7,6 +7,7 @@ import it.polimi.ingsw.ps06.Connection;
 import it.polimi.ingsw.ps06.SocketServer;
 import it.polimi.ingsw.ps06.controller.BoardController;
 import it.polimi.ingsw.ps06.controller.RoomController;
+import it.polimi.ingsw.ps06.model.Game;
 import it.polimi.ingsw.ps06.model.messages.BoardReady;
 import it.polimi.ingsw.ps06.model.messages.MessageBoardAddMember;
 
@@ -65,9 +66,18 @@ public class EventParser implements EventVisitor {
 		Connection c = ((Connection) theModel);
  		
 		try {
-			MessageBoardAddMember newMember = new MessageBoardAddMember(memberPlaced.getAction(), memberPlaced.getColor(), c.getPlayer().getID());
-			SocketServer.getInstance().sendToPlayingConnections(c, newMember);
-			SocketServer.getInstance().retrieveMatch(c).getGame().advanceCurrentPlayer();
+			Game game = SocketServer.getInstance().retrieveMatch(c).getGame();
+			
+			if (game.getCurrentPlayer().equals(c.getPlayer())) {
+				
+				game.doMemberPlacement(c.getPlayer(), memberPlaced.getAction(), memberPlaced.getColor());
+				
+				game.advanceCurrentPlayer();
+				
+				MessageBoardAddMember newMember = new MessageBoardAddMember(memberPlaced.getAction(), memberPlaced.getColor(), c.getPlayer().getID());
+				SocketServer.getInstance().sendToPlayingConnections(c, newMember);
+			}
+	
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

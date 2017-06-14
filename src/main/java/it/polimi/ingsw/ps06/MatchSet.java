@@ -62,7 +62,7 @@ public class MatchSet {
 			return;
 
 		game = new Game( participants.size() + 1 );
-		game.setupRound();
+		game.start();
 		
 		for (Connection c : participants) {
 			game.addNewObserver(c);

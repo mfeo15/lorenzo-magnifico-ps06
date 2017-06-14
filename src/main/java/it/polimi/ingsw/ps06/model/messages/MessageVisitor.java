@@ -13,7 +13,10 @@ public interface MessageVisitor {
 	
 	public void visit(MessageGameStart gameStart);
 	public void visit(MessageGameHasStarted hasStarted);
+	public void visit(MessageGameStatus gameStat);
 	public void visit(MessageConnectionStart startConnection);
+	
+	public void visit(MessageVaticanReport vaticanRep);
 	
 	public void visit(MessageBoardSetupDice boardSetupDice);
 	public void visit(MessageBoardAddMember newMember);
