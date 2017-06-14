@@ -14,6 +14,47 @@ public class Leader extends Card {
 	private boolean used=false;
 	private boolean active=false;
 	
+	private LeaderState leaderState;
+	
+	private LeaderState inHand;
+	private LeaderState onTableFaceUp;
+	private LeaderState onTableFaceDown;
+	
+	public Leader() {
+		inHand = new LeaderInHand(this);
+		onTableFaceUp = new LeaderOnTableFaceUp(this);
+		onTableFaceDown = new LeaderOnTableFaceDown(this);
+		
+		leaderState = inHand;
+	}
+	
+	public void setLeaderState(LeaderState leaderState) {
+		this.leaderState = leaderState;
+	}
+	
+	public void playLeader() {
+		leaderState.playLeader();
+	}
+	
+	public void activateLeader() {
+		leaderState.activateLeader();
+	}
+
+	public void deactivateLeader() {
+		leaderState.deactivateLeader();
+	}
+	
+	public LeaderState getInHandState() {
+		return inHand;
+	}
+	
+	public LeaderState getActivateLeaderState() {
+		return onTableFaceUp;
+	}
+	
+	public LeaderState getDeactivateLeaderState() {
+		return onTableFaceDown;
+	}
 	 
 	/**
 	* metodo per verificare se il leader è stato già utilizzato o meno in questo turno
@@ -48,7 +89,7 @@ public class Leader extends Card {
 	* @return 	Nothing
 	*/
 	
-	public void activateLeader(){
+	public void activateleader(){
 		//verifica i requistiti da definire
 		active=true;
 	}
