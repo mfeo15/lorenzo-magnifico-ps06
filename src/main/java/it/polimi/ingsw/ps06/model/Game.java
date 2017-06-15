@@ -85,6 +85,15 @@ public class Game extends Observable {
 		players.add(newPlayer);
 	}
 	
+	public Player getPlayer(int ID) {
+		
+		for (Player p : players) 
+			if ( p.getID() == ID ) return p;
+		
+		return null;
+		
+	}
+	
 	public Player getCurrentPlayer() {
 		
 		if (currentPlayerIndex >= 2) {
@@ -291,11 +300,9 @@ public class Game extends Observable {
 	public void doMemberPlacement(Player p, Action action, ColorPalette color){
 		
 		if (players.contains(p)) {
-			Player player = players.get( players.indexOf(p) ); // <== BOH
-			
-			FamilyMember m = player.getMember(color);
+			//Player player = players.get( players.indexOf(p) ); // <== BOH
 
-			board.placeMember(m, action);
+			board.placeMember(p.getMember(color), action);
 		}
 		
 	}
@@ -341,10 +348,11 @@ public class Game extends Observable {
 	
 	public void addNewObserver(Observer obs) {
 		addObserver(obs);
+		
+		board.addNewObserver(obs);
 	}
 	
 	public void deleteAnObserver(Observer obs) {
 		deleteObserver(obs);
 	}
-	
 }

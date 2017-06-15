@@ -1,5 +1,6 @@
 package it.polimi.ingsw.ps06.model;
 
+import java.io.Serializable;
 import java.util.EnumMap;
 import java.util.Iterator;
 import java.util.Set;
@@ -14,7 +15,7 @@ import it.polimi.ingsw.ps06.model.Types.PointsKind;
 * @version 1.1
 * @since   2017-05-13
 */
-public class Resources {
+public class Resources implements Serializable {
 	
 	private EnumMap<MaterialsKind, Integer> materials;
 	private EnumMap<PointsKind, Integer> points;

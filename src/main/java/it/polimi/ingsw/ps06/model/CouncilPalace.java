@@ -1,9 +1,10 @@
 package it.polimi.ingsw.ps06.model;
 
-import static it.polimi.ingsw.ps06.model.Types.Action;
-
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
+import it.polimi.ingsw.ps06.model.Types.Action;
 import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
 
 /**
@@ -14,7 +15,7 @@ import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
 * @since   2017-05-10
 */
 
-public class CouncilPalace implements PlaceSpace {
+public class CouncilPalace extends Observable implements PlaceSpace {
 	private ArrayList<FamilyMember> memberSpaces;
 	private ArrayList<Player> players;
 	private EffectsResources councilReward;
@@ -77,7 +78,7 @@ public class CouncilPalace implements PlaceSpace {
 		
 		ArrayList<Player> players = new ArrayList<Player>();
 		
-		memberSpaces.forEach(m -> players.add( m.getAssociatedPlayer() ));
+		memberSpaces.forEach(m -> players.add( m.getPlayer() ));
 		return players;
 	}
 	
@@ -123,4 +124,17 @@ public class CouncilPalace implements PlaceSpace {
 		return memberSpaces;
 	}
 
+	
+	public void notifyChangement(Object o) {
+		setChanged();
+		notifyObservers(o);
+	}
+	
+	public void addNewObserver(Observer obs) {
+		addObserver(obs);
+	}
+	
+	public void deleteAnObserver(Observer obs) {
+		deleteObserver(obs);
+	}
 }

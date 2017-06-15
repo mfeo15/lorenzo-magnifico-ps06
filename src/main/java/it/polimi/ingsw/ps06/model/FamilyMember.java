@@ -17,15 +17,6 @@ public class FamilyMember {
 	private Player ownerPlayer;
 	
 	/**
-	* Constructor
-	*/
-	public FamilyMember()
-	{
-		this.rappresentativeDiceColor = ColorPalette.UNCOLORED;
-		this.value = 0;
-	}
-	
-	/**
 	* This is the default constructor of the class. The Family Member instanced is by default neutral
 	* @return 	Nothing.
 	*/
@@ -66,14 +57,25 @@ public class FamilyMember {
 		return value;
 	}
 	
-	public Player getPlayer() {
-		if(rappresentativeDiceColor == ColorPalette.UNCOLORED) return null;
-		
-		return ownerPlayer;
+	/**
+	   * Setter for the Dice Color attribute
+	   * @param 	rappresentativeDiceColor	New color associated
+	   * @return 	Nothing.
+	   */
+	public void setColor(ColorPalette rappresentativeDiceColor) {
+		this.rappresentativeDiceColor = rappresentativeDiceColor;
 	}
 	
-	public Player getAssociatedPlayer() {
-		
+	/**
+	   * Getter for the Dice Color attribute
+	   * @param 	Nothing.
+	   * @return 	Current color associated
+	   */
+	public ColorPalette getColor() {
+		return rappresentativeDiceColor;
+	}
+	
+	public Player getPlayer() {
 		return ownerPlayer;
 	}
 }

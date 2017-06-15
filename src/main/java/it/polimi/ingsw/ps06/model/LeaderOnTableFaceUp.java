@@ -10,20 +10,16 @@ public class LeaderOnTableFaceUp implements LeaderState {
 	
 	@Override
 	public void playLeader() {
-		// TODO Auto-generated method stub
-
+		System.out.println("LEADER HAVE ALREADY BEEN PLAYED");
 	}
 
 	@Override
 	public void activateLeader() {
-		// TODO Auto-generated method stub
-
+		System.out.println("LEADER HAS BEEN ACTIVATED");
 	}
 
 	@Override
 	public void deactivateLeader() {
-		// TODO Auto-generated method stub
-
+		System.out.println("LEADER IS ALREADY DEACTIVE, PLEASE ACTIVATE IT");
 	}
-
 }

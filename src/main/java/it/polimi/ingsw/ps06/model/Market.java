@@ -2,10 +2,15 @@ package it.polimi.ingsw.ps06.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Observable;
+import java.util.Observer;
 
+import it.polimi.ingsw.ps06.SocketServer;
 import it.polimi.ingsw.ps06.model.Types.Action;
 import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
 import it.polimi.ingsw.ps06.model.Types.PointsKind;
+import it.polimi.ingsw.ps06.model.messages.MessageBoardMemberHasBeenPlaced;
+import it.polimi.ingsw.ps06.model.messages.MessageModel2ViewNotification;
 
 /**
 * Classe per la gestione dello spazio di mercato
@@ -15,11 +20,12 @@ import it.polimi.ingsw.ps06.model.Types.PointsKind;
 * @since   2017-05-10 
 */
 
-public class Market implements PlaceSpace {
+public class Market extends Observable implements PlaceSpace {
 	private FamilyMember[] memberSpaces;
 	private ArrayList<Effect> bonus = new ArrayList<Effect>();
 	private Effect e;
 	private int openedWindows;
+	private int marketIndex = Action.valueOf("MARKET_1").ordinal();
 	private boolean check;
 	
 	/**
@@ -32,12 +38,8 @@ public class Market implements PlaceSpace {
 	@Override
 	public void placeMember(FamilyMember member, Action chosenAction) throws IllegalArgumentException {
 		
-		System.out.println("MERCATO");
-		
 		boolean multi = false; //attivi.getMulti();
-		int marketIndex = Action.valueOf("MARKET_1").ordinal();
-		int actionIndex = chosenAction.ordinal();
-		int relativeIndex = actionIndex - marketIndex;
+		int relativeIndex = chosenAction.ordinal() - marketIndex;
 		int errorCode;
 		
 		// Gestire carta scomunica del mercato if(EffectsActive.checkNoMarket == true) handle();
@@ -51,7 +53,7 @@ public class Market implements PlaceSpace {
 			// Gestione condizione base in cui il campo è vuoto
 			if(memberSpaces[relativeIndex] == null){
 				memberSpaces[relativeIndex] = member;
-				giveBonus(member.getPlayer(), relativeIndex);
+				giveBonus(member, chosenAction);
 					
 			} 
 			else  {
@@ -61,7 +63,7 @@ public class Market implements PlaceSpace {
 							
 					// Solo i familiari non neutri contano al fine di non ripetere familiari dello stesso colore nello stesso spazio
 					if(member.getPlayer()!=null) { memberSpaces[relativeIndex] = member;}
-					giveBonus(member.getPlayer(), relativeIndex);
+					giveBonus(member, chosenAction);
 					
 				} else {errorCode=2; handle(errorCode);}
 				
@@ -90,8 +92,20 @@ public class Market implements PlaceSpace {
 	* @param	code		codice errore
 	* @return 	Nothing
 	*/
-	private void handle(int code){
+	private void handle(int code) {
 		
+		String notification = "";
+		
+		switch(code) {
+		case 1: notification = "BROKEN MODEL FOR MARKET! THE MEMBER VALUE IS INCORRECT OR THE ACTION INDEX IS NOT COMPATIBLE";
+			break;
+		case 2: notification = "THE CHOSEN ACTION SPACE IS ALREADY OCCUPAYED OR NOT COMPATIBLE WITH THE COLOR RULE";
+			break;
+		default: notification = "UNKNOWN ERROR ON MARKET";
+		}
+		
+		MessageModel2ViewNotification m = new MessageModel2ViewNotification(notification);
+		notifyChangement(m);
 	}
 	
 	/**
@@ -158,7 +172,9 @@ public class Market implements PlaceSpace {
 	* @param 	player		Giocatore a cui dare il bonus
 	* @return 	Nothing
 	*/
-	private void giveBonus(Player player, int index){
+	private void giveBonus(FamilyMember member, Action chosenAction) {
+		
+		Player player = member.getPlayer();
 		
 		System.out.println("Player" + player.getID() + " has"
 				+ "\nCOINS:" + player.getPersonalBoard().getMaterialsCount(MaterialsKind.COIN) 
@@ -168,7 +184,7 @@ public class Market implements PlaceSpace {
 		
 		System.out.println("ACTIVATE EFFECT!!!!!");
 		
-		e = bonus.get(index);
+		e = bonus.get( chosenAction.ordinal() - marketIndex );
 		e.activate(player);
 		
 		System.out.println("Player" + player.getID() + " has"
@@ -177,7 +193,10 @@ public class Market implements PlaceSpace {
 				+ "\nSTONE:" + player.getPersonalBoard().getMaterialsCount(MaterialsKind.STONE)
 				+ "\nSERVANTS:" + player.getPersonalBoard().getMaterialsCount(MaterialsKind.SERVANT));
 		
-		if(index==3) e.activate(player);
+		if( (chosenAction.ordinal() - marketIndex) == 3 ) e.activate(player);
+		
+		MessageBoardMemberHasBeenPlaced newMember = new MessageBoardMemberHasBeenPlaced(chosenAction, member.getColor(), player.getID() );
+		notifyChangement(newMember);
 	}
 	
 	/**
@@ -186,7 +205,6 @@ public class Market implements PlaceSpace {
 	* @return 	Nothing
 	*/
 	public void cleanMarket() {
-		//memberSpaces.clear();
 		for (int i=0; i < 4; i++) memberSpaces[i] = null;
 	}
 	
@@ -211,4 +229,16 @@ public class Market implements PlaceSpace {
 	}
 	
 	
+	public void notifyChangement(Object o) {
+		setChanged();
+		notifyObservers(o);
+	}
+	
+	public void addNewObserver(Observer obs) {
+		addObserver(obs);
+	}
+	
+	public void deleteAnObserver(Observer obs) {
+		deleteObserver(obs);
+	}
 }

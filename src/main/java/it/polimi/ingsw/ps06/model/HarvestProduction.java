@@ -1,6 +1,9 @@
 package it.polimi.ingsw.ps06.model;
 
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
+
 import it.polimi.ingsw.ps06.model.Types.Action;
 
 /**
@@ -11,7 +14,7 @@ import it.polimi.ingsw.ps06.model.Types.Action;
 * @since   2017-05-10
 */
 
-public class HarvestProduction implements PlaceSpace {
+public class HarvestProduction extends Observable implements PlaceSpace {
 	private ArrayList<FamilyMember> harvestSpaces1;
 	private ArrayList<FamilyMember> harvestSpaces2;
 	private ArrayList<FamilyMember> productionSpaces1;
@@ -251,4 +254,17 @@ public class HarvestProduction implements PlaceSpace {
 		return productionSpaces1;
 	}
 	
+	
+	public void notifyChangement(Object o) {
+		setChanged();
+		notifyObservers(o);
+	}
+	
+	public void addNewObserver(Observer obs) {
+		addObserver(obs);
+	}
+	
+	public void deleteAnObserver(Observer obs) {
+		deleteObserver(obs);
+	}
 }

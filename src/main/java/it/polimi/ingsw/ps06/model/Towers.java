@@ -1,6 +1,8 @@
 package it.polimi.ingsw.ps06.model;
 
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
 import it.polimi.ingsw.ps06.model.Types.Action;
 import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
@@ -14,7 +16,7 @@ import it.polimi.ingsw.ps06.model.Types.PointsKind;
 * @since   2017-05-10
 */
 
-public class Towers implements PlaceSpace {
+public class Towers extends Observable implements PlaceSpace {
 	private ArrayList<Territory> territories;
 	private ArrayList<Building> buildings;
 	private ArrayList<Character> characters;
@@ -65,7 +67,7 @@ public class Towers implements PlaceSpace {
 		// Si può piazzare solo se la carta è ancora presente, se c'è sono sicuro che non c'è un familiare
 		if( (card != null) && value) {
 		
-			acquire = new CardAcquisition(card, member.getAssociatedPlayer());
+			acquire = new CardAcquisition(card, member.getPlayer());
 				
 				checkWhichTower(chosenAction);
 				arrayIndex=range1;
@@ -93,7 +95,7 @@ public class Towers implements PlaceSpace {
 					boolean satisfied2 = acquire.checkRequirements(chosenAction);
 					
 					if(satisfied1 && satisfied2){
-						giveBonus(chosenAction, member.getAssociatedPlayer());
+						giveBonus(chosenAction, member.getPlayer());
 						memberSpaces.add(relativeIndex, member); 
 						acquire.activate();
 						deck.add(deckIndex + relativeIndex, null);
@@ -308,4 +310,16 @@ private void checkRequirement(Action chosenAction){
 		return ventures;
 	}
 	
+	public void notifyChangement(Object o) {
+		setChanged();
+		notifyObservers(o);
+	}
+	
+	public void addNewObserver(Observer obs) {
+		addObserver(obs);
+	}
+	
+	public void deleteAnObserver(Observer obs) {
+		deleteObserver(obs);
+	}
 }
