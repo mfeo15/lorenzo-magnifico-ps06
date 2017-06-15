@@ -10,11 +10,11 @@ import java.util.Observer;
 import java.util.Random;
 
 import it.polimi.ingsw.ps06.model.Player;
-import it.polimi.ingsw.ps06.model.events.Event;
-import it.polimi.ingsw.ps06.model.events.EventParser;
+import it.polimi.ingsw.ps06.model.messages.Broadcast;
 import it.polimi.ingsw.ps06.model.messages.EventMessage;
 import it.polimi.ingsw.ps06.model.messages.Message;
 import it.polimi.ingsw.ps06.model.messages.MessageParser;
+import it.polimi.ingsw.ps06.model.messages.Server2Client;
 
 /**
 * Classe per la gestione delle singole connessioni al Server.
@@ -165,6 +165,11 @@ public class Connection implements Runnable, Observer {
 		if (!(arg instanceof Message))
 			return;
 		
-		asyncSend((Message) arg);
+		if (arg instanceof Server2Client)
+			if (arg instanceof Broadcast) {
+				SocketServer.getInstance().sendToPlayingConnections(this,(Message) arg);
+			} else {
+				asyncSend((Message) arg);
+			}
 	}
 }

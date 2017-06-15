@@ -24,12 +24,7 @@ public class App
     	System.out.print("\n" + "Press 1 for Server or 2 for Client > ");
     	if ( Integer.parseInt(s.nextLine()) == 1 ) 
     	{
-    		try {
-    			SocketServer.getInstance().start();
-    			
-    		} catch (IOException e) {
-    			System.err.println("Impossibile inizializzare il server: " + e.getMessage() + "!");
-    		}
+    		SocketServer.getInstance().start();
     
     		s.close();
     		return;

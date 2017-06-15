@@ -18,8 +18,12 @@ public interface MessageVisitor {
 	
 	public void visit(MessageVaticanReport vaticanRep);
 	
-	public void visit(MessageBoardSetupDice boardSetupDice);
-	public void visit(MessageBoardAddMember newMember);
-	
 	public void visit(BoardReady br);
+	public void visit(MessageBoardSetupDice boardSetupDice);
+	public void visit(MessageBoardMemberHasBeenPlaced newMember);
+	
+	public void visit(MessagePersonalBoardStatus pbStatus);
+	public void visit(MessageObtainPersonalBoardStatus obtainPbStatus);
+	
+	public void visit(MessageModel2ViewNotification notification);
 }

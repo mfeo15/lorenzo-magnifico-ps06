@@ -6,8 +6,14 @@ import java.util.ArrayList;
 import it.polimi.ingsw.ps06.Connection;
 import it.polimi.ingsw.ps06.MatchSet;
 import it.polimi.ingsw.ps06.SocketServer;
+import it.polimi.ingsw.ps06.model.Game;
+import it.polimi.ingsw.ps06.model.PersonalBoard;
+import it.polimi.ingsw.ps06.model.Player;
+import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
+import it.polimi.ingsw.ps06.model.Types.PointsKind;
 import it.polimi.ingsw.ps06.model.events.EventParser;
 import it.polimi.ingsw.ps06.view.Board;
+import it.polimi.ingsw.ps06.view.PersonalView;
 import it.polimi.ingsw.ps06.view.Room;
 
 public class MessageParser implements MessageVisitor {
@@ -31,13 +37,8 @@ public class MessageParser implements MessageVisitor {
 	public void visit(MessageUser userMessage) {
 		Connection c = ((Connection) supporter);
 		c.setUsername(userMessage.getUsername());
-		
-		try {
-			SocketServer.getInstance().sendWaitingConnectionsStats();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	
+		SocketServer.getInstance().sendWaitingConnectionsStats();
 	}
 
 	@Override
@@ -66,12 +67,7 @@ public class MessageParser implements MessageVisitor {
 	
 	@Override
 	public void visit(MessageGameStart gameStart) {
-		try {
-			SocketServer.getInstance().startNewGame();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		SocketServer.getInstance().startNewGame();
 	}
 
 	@Override
@@ -88,33 +84,27 @@ public class MessageParser implements MessageVisitor {
 		c.asyncSend(messageID);
 		
 		try { Thread.sleep(1000); } catch (InterruptedException e1) { e1.printStackTrace(); } 
-		
-		try {
+	
 			
-			MatchSet match = SocketServer.getInstance().retrieveMatch(c);
-			
-			ArrayList<String> a = new ArrayList<String>();
-			match.getAll().forEach(connection -> a.add(connection.getUsername()));		
-			MessagePlayingConnections messagePlayingCs = new MessagePlayingConnections( a );
-			c.asyncSend(messagePlayingCs);
-			
-			try { Thread.sleep(1000); } catch (InterruptedException e1) { e1.printStackTrace(); } 
-			
-			int diceB = match.getGame().getDiceBlack().getValue();
-			int diceW = match.getGame().getDiceWhite().getValue();
-			int diceO = match.getGame().getDiceOrange().getValue();
-			MessageBoardSetupDice messageDice = new MessageBoardSetupDice(diceB, diceW, diceO );
-			c.asyncSend(messageDice);
-			
-			try { Thread.sleep(1000); } catch (InterruptedException e1) { e1.printStackTrace(); } 
-			
-			MessageCurrentPlayer messageCurrentP = new MessageCurrentPlayer( match.getGame().getCurrentPlayer().getID() );
-			c.asyncSend(messageCurrentP);
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
+		MatchSet match = SocketServer.getInstance().retrieveMatch(c);
+
+		ArrayList<String> a = new ArrayList<String>();
+		match.getAll().forEach(connection -> a.add(connection.getUsername()));		
+		MessagePlayingConnections messagePlayingCs = new MessagePlayingConnections( a );
+		c.asyncSend(messagePlayingCs);
+
+		try { Thread.sleep(1000); } catch (InterruptedException e1) { e1.printStackTrace(); } 
+
+		int diceB = match.getGame().getDiceBlack().getValue();
+		int diceW = match.getGame().getDiceWhite().getValue();
+		int diceO = match.getGame().getDiceOrange().getValue();
+		MessageBoardSetupDice messageDice = new MessageBoardSetupDice(diceB, diceW, diceO );
+		c.asyncSend(messageDice);
+
+		try { Thread.sleep(1000); } catch (InterruptedException e1) { e1.printStackTrace(); } 
+
+		MessageCurrentPlayer messageCurrentP = new MessageCurrentPlayer( match.getGame().getCurrentPlayer().getID() );
+		c.asyncSend(messageCurrentP);
 	}
 
 	@Override
@@ -124,7 +114,7 @@ public class MessageParser implements MessageVisitor {
 	}
 
 	@Override
-	public void visit(MessageBoardAddMember newMember) {
+	public void visit(MessageBoardMemberHasBeenPlaced newMember) {
 		Board b = ((Board) supporter);
 		
 		try {
@@ -158,5 +148,60 @@ public class MessageParser implements MessageVisitor {
 	@Override
 	public void visit(MessageVaticanReport vaticanRep) {
 		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void visit(MessageModel2ViewNotification notification) {
+		System.out.println( notification.getNotification() );
+	}
+
+	@Override
+	public void visit(MessagePersonalBoardStatus pbStatus) {
+	
+		PersonalView pv = ((PersonalView) supporter);
+		
+		pv.setResources(pbStatus.getWarehouse().getResourceValue(MaterialsKind.COIN), 
+							pbStatus.getWarehouse().getResourceValue(MaterialsKind.WOOD), 
+							pbStatus.getWarehouse().getResourceValue(MaterialsKind.STONE), 
+							pbStatus.getWarehouse().getResourceValue(MaterialsKind.SERVANT), 
+							pbStatus.getWarehouse().getResourceValue(PointsKind.VICTORY_POINTS), 
+							pbStatus.getWarehouse().getResourceValue(PointsKind.MILITARY_POINTS), 
+							pbStatus.getWarehouse().getResourceValue(PointsKind.FAITH_POINTS));
+		
+		for (int i : pbStatus.getBuilding()) 
+			pv.setBuildingCard(i, pbStatus.getBuilding().indexOf(i));
+		
+		for (int i : pbStatus.getTerritory()) 
+			pv.setTerritoryCard(i, pbStatus.getBuilding().indexOf(i));
+	}
+
+	@Override
+	public void visit(MessageObtainPersonalBoardStatus obtainPbStatus) {
+		Connection connection = ((Connection) supporter);
+		Game game = SocketServer.getInstance().retrieveMatch(connection).getGame();
+		
+		Player p =  game.getPlayer( obtainPbStatus.getPlayer() );
+		
+		if ( p != null) {
+			PersonalBoard pb = p.getPersonalBoard();
+			
+			ArrayList<Integer> territoriesCode = new ArrayList<Integer>();
+			pb.getTerritories().forEach(t -> territoriesCode.add( t.getCode() ));
+			
+			ArrayList<Integer> buildingsCode = new ArrayList<Integer>();
+			pb.getBuildings().forEach(b -> buildingsCode.add( b.getCode() ));
+			
+			ArrayList<Integer> charactersCode = new ArrayList<Integer>();
+			pb.getCharacters().forEach(c -> charactersCode.add( c.getCode() ));
+			
+			ArrayList<Integer> venturesCode = new ArrayList<Integer>();
+			pb.getVentures().forEach(v -> venturesCode.add( v.getCode() ));
+			
+			MessagePersonalBoardStatus pbStatus = 
+					new MessagePersonalBoardStatus( pb.getInventory(), territoriesCode, buildingsCode, charactersCode, venturesCode);
+			connection.asyncSend(pbStatus);
+		}
+			
+		
 	}
 }

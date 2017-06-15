@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.ExecutorService;
@@ -117,17 +118,23 @@ public class SocketServer implements Server {
 		}
 	}
 	
-	public SocketServer() throws IOException {
+	public SocketServer()  {
 		
-		System.out.println();
-		System.out.println();
-		System.out.println("Lorenzo Server : ON \n");
-		System.out.println("[] Server Socket inizialiazed : " + InetAddress.getLocalHost() + " \n");
-		
-		this.serverSocket = new ServerSocket(PORT);
+		try {
+			System.out.println();
+			System.out.println();
+			System.out.println("Lorenzo Server : ON \n");
+			System.out.println("[] Server Socket inizialiazed : " + InetAddress.getLocalHost() + " \n");
+			
+			this.serverSocket = new ServerSocket(PORT);
+			
+		} catch (IOException e) {
+			System.err.println("Impossibile inizializzare il server: " + e.getMessage() + "!");
+			e.printStackTrace();
+		}
 	}
 	
-	public static SocketServer getInstance() throws IOException {
+	public static SocketServer getInstance() {
 		if (instance == null)
 			instance = new SocketServer();
 		

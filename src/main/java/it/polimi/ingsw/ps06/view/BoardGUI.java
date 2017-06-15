@@ -604,10 +604,11 @@ public class BoardGUI extends Observable implements Board {
 		        		mediaPlayer3.play();
 		        		view.close();
 		        		startGame(y);
+		        		/*
 						view = new PersonalViewGUI(); try {
 							view.show();
-						} catch (IOException e) {e.printStackTrace();}}
-	            
+						} catch (IOException e) {e.printStackTrace();}*/}
+		        		 
 	        	});
         	}
         }

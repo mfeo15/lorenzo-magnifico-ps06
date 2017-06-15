@@ -15,6 +15,8 @@ public interface PersonalView {
 	
 	void show() throws IOException;
 	
+	void hasLoaded();
+	
 	void notifyExit();
 
 }

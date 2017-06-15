@@ -3,7 +3,7 @@ package it.polimi.ingsw.ps06.model.messages;
 import it.polimi.ingsw.ps06.model.Types.Action;
 import it.polimi.ingsw.ps06.model.Types.ColorPalette;
 
-public class MessageBoardAddMember extends Server2Client {
+public class MessageBoardMemberHasBeenPlaced extends Broadcast {
 
 	/**
 	 * 
@@ -14,7 +14,7 @@ public class MessageBoardAddMember extends Server2Client {
 	private ColorPalette color;
 	private int playerIndex;
 	
-	public MessageBoardAddMember(Action actionExecuted, ColorPalette color, int playerIndex) {
+	public MessageBoardMemberHasBeenPlaced(Action actionExecuted, ColorPalette color, int playerIndex) {
 		this.actionExecuted = actionExecuted;
 		this.color = color;
 		this.playerIndex = playerIndex;

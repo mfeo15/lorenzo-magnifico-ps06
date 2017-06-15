@@ -6,10 +6,10 @@ import it.polimi.ingsw.ps06.Client;
 import it.polimi.ingsw.ps06.Connection;
 import it.polimi.ingsw.ps06.SocketServer;
 import it.polimi.ingsw.ps06.controller.BoardController;
+import it.polimi.ingsw.ps06.controller.PersonalViewController;
 import it.polimi.ingsw.ps06.controller.RoomController;
 import it.polimi.ingsw.ps06.model.Game;
 import it.polimi.ingsw.ps06.model.messages.BoardReady;
-import it.polimi.ingsw.ps06.model.messages.MessageBoardAddMember;
 
 public class EventParser implements EventVisitor {
 	
@@ -57,34 +57,27 @@ public class EventParser implements EventVisitor {
 
 	@Override
 	public void visit(StoryBoard2PersonalView storyboard) {
-		// TODO Auto-generated method stub
+		Client.getInstance().deleteAllObservers();
 		
+		PersonalViewController controller = new PersonalViewController(Client.getInstance(), storyboard.getView());
+		
+		controller.addNewObserver(Client.getInstance());
+		storyboard.getView().addNewObserver(controller);
+		Client.getInstance().addNewObserver(controller);
+		try {storyboard.getView().show();} catch (IOException e) {e.printStackTrace();}
 	}
 
 	@Override
 	public void visit(EventMemberPlaced memberPlaced) {
 		Connection c = ((Connection) theModel);
  		
-		try {
-			Game game = SocketServer.getInstance().retrieveMatch(c).getGame();
-			
-			if (game.getCurrentPlayer().equals(c.getPlayer())) {
-				
-				game.doMemberPlacement(c.getPlayer(), memberPlaced.getAction(), memberPlaced.getColor());
-				
-				//try { game.advanceCurrentPlayer(); } catch (Exception e) { e.printStackTrace(); }
-				
-				game.advanceCurrentPlayer();
-				
-				try { Thread.sleep(100); } catch (InterruptedException e1) { e1.printStackTrace(); } 
-				
-				MessageBoardAddMember newMember = new MessageBoardAddMember(memberPlaced.getAction(), memberPlaced.getColor(), c.getPlayer().getID());
-				SocketServer.getInstance().sendToPlayingConnections(c, newMember);
-			}
-	
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		Game game = SocketServer.getInstance().retrieveMatch(c).getGame();
+
+		if (game.getCurrentPlayer().equals(c.getPlayer())) {
+
+			game.doMemberPlacement(c.getPlayer(), memberPlaced.getAction(), memberPlaced.getColor());
+
+			game.advanceCurrentPlayer();
 		}
 	}
 

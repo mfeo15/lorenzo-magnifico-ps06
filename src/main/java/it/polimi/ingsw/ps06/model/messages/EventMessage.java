@@ -22,5 +22,4 @@ public class EventMessage extends Message {
 	public void accept(MessageVisitor visitor) {
 		visitor.visit(this);
 	}
-
 }

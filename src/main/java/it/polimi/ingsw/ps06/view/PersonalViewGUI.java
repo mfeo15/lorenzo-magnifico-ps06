@@ -20,6 +20,8 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import it.polimi.ingsw.ps06.model.events.EventClose;
+import it.polimi.ingsw.ps06.model.events.RoomHasLoaded;
+import it.polimi.ingsw.ps06.model.messages.MessageObtainPersonalBoardStatus;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
@@ -211,6 +213,8 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 	        
 	        f.setLocation((int)((screenSize.getWidth()-f.getWidth())/2), -height);
 	        Animations.AnimationPV(f);
+	        
+	        hasLoaded();
 		}
 		
 		public void setPersonalView(){
@@ -288,13 +292,12 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 		public void setResources(int coin, int wood, int stone, int servant, int victory, int military, int faith) {
 			
 			coins.setText(String.valueOf(coin));
-			woods.setText(String.valueOf(coin));
-			stones.setText(String.valueOf(coin));
-			servants.setText(String.valueOf(coin));
-			this.victory.setText(String.valueOf(coin));
-			this.military.setText(String.valueOf(coin));
-			this.faith.setText(String.valueOf(coin));
-			
+			woods.setText(String.valueOf(wood));
+			stones.setText(String.valueOf(wood));
+			servants.setText(String.valueOf(servant));
+			this.victory.setText(String.valueOf(victory));
+			this.military.setText(String.valueOf(military));
+			this.faith.setText(String.valueOf(faith));
 		}
 
 		@Override
@@ -331,5 +334,12 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 			EventClose close = new EventClose();
 			notifyObservers(close);
 			
+		}
+
+		@Override
+		public void hasLoaded() {
+			setChanged();
+			MessageObtainPersonalBoardStatus obtainPbStatus = new MessageObtainPersonalBoardStatus(0); // <== passare parametro corretto !!!
+			notifyObservers(obtainPbStatus);
 		}	
 }
