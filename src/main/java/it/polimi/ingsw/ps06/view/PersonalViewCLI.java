@@ -8,12 +8,14 @@ import java.util.Scanner;
 import it.polimi.ingsw.ps06.controller.PersonalViewController;
 import it.polimi.ingsw.ps06.model.Types.Action;
 import it.polimi.ingsw.ps06.model.events.EventClose;
+import it.polimi.ingsw.ps06.model.messages.MessageObtainPersonalBoardStatus;
 
 public class PersonalViewCLI extends Observable implements PersonalView {
 
 	private Scanner input;
+	private int playerCode;
 	
-	public PersonalViewCLI(Scanner input) {
+	public PersonalViewCLI(Scanner input, int playerCode) {
 		
 		this.input = input;
 	}
@@ -70,9 +72,14 @@ public class PersonalViewCLI extends Observable implements PersonalView {
 		notifyObservers(close);
 		
 	}
-	
-	
-	
+
+	@Override
+	public void hasLoaded() {
+		setChanged();
+		MessageObtainPersonalBoardStatus obtainPbStatus = new MessageObtainPersonalBoardStatus(playerCode); 
+		notifyObservers(obtainPbStatus);
+		
+	}
 	
 
 }

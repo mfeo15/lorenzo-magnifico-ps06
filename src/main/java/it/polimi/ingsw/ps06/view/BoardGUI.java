@@ -32,6 +32,7 @@ import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
+import javax.swing.AbstractButton;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.InputMap;
@@ -160,7 +161,7 @@ public class BoardGUI extends Observable implements Board {
     private int y;
     private int usedMember;
     
-    PersonalViewGUI view= new PersonalViewGUI();
+    PersonalViewGUI view= new PersonalViewGUI(0);
 	private JFXPanel fxPanel = new JFXPanel();
 	
     public enum Direction {
@@ -178,7 +179,6 @@ public class BoardGUI extends Observable implements Board {
 		 } catch (Exception e) { e.printStackTrace();}
 		
 		setBoard();	
-		setRound();
 		
 		JFrame escFrame = new JFrame();
 		
@@ -500,6 +500,7 @@ public class BoardGUI extends Observable implements Board {
         privileges = locatePrivileges(privileges);
         leaders = locateLeaders(leaders);
         
+        for(int j=0; j<members.length; j++){members[j].setDisabledIcon( members[j].getIcon() );}
         
         markets[0].setLocation((int)(width*58/100),(int)(height*61/100));
 		markets[0].setSize(width*7/100,height*9/100);
@@ -546,6 +547,7 @@ public class BoardGUI extends Observable implements Board {
         
         dices = fillLabels(dices,dicesLabel);
         excommunications = fillLabels(excommunications, excommunicationsLabel);
+        for(int j=0; j<players.length; j++){players[j].setDisabledIcon( players[j].getIcon() );}
         players = fillButtons(players,playersLabel);
         leaders = fillLeaders(leaders,leadersLabel,leadersLabelFade);
         cards = fillCards(cards);
@@ -604,11 +606,7 @@ public class BoardGUI extends Observable implements Board {
 		        		mediaPlayer3.play();
 		        		view.close();
 		        		startGame(y);
-		        		/*
-						view = new PersonalViewGUI(); try {
-							view.show();
-						} catch (IOException e) {e.printStackTrace();}*/}
-		        		 
+		            }
 	        	});
         	}
         }
@@ -723,6 +721,8 @@ public class BoardGUI extends Observable implements Board {
         desktop.add(others);
         desktop.add(towers);
 	    desktop.setVisible(true);
+	    
+		setRound();
 	    
 	    desktopFrame.add(timerInfo);
 	    desktopFrame.add(resourcesInfo);
@@ -1102,7 +1102,6 @@ public class BoardGUI extends Observable implements Board {
 	private JButton[] fillButtons(JButton[] btns, JLabel[] lbs){
 		
 		for (int j=0;j<btns.length;j++) {
-			btns[j].setDisabledIcon( btns[j].getIcon() );
 			btns[j].setIcon(lbs[j].getIcon());
 		}
 		
@@ -1542,6 +1541,7 @@ public class BoardGUI extends Observable implements Board {
 		
 		roundInfo.setText("Turno: "+roundNumber+"  Periodo: "+periodNumber);
 		
+		startTimer();
 		setRound();
 		
 	}
@@ -1807,9 +1807,10 @@ public class BoardGUI extends Observable implements Board {
 	
 	@Override
 	public void startGame(int index) {
+		view = new PersonalViewGUI(index);
 		setChanged();
 		StoryBoard2PersonalView storyBoard;
-		storyBoard = new StoryBoard2PersonalView(new PersonalViewGUI());
+		storyBoard = new StoryBoard2PersonalView(view);
 		notifyObservers(storyBoard);
 	}
 
@@ -1917,6 +1918,10 @@ public class BoardGUI extends Observable implements Board {
         case 2:
         	players[2].setEnabled(false);
         	
+        	for( MouseListener al : players[2].getMouseListeners() ) {
+        	 	players[2].removeMouseListener( al );
+        	}
+        	
         	harvest[0].setDisabledIcon(harvestCover.getIcon());
         	harvest[0].setIcon(harvestCover.getIcon());
         	harvest[0].setBorderPainted(false);
@@ -1930,6 +1935,10 @@ public class BoardGUI extends Observable implements Board {
         case 3:
         	players[3].setEnabled(false);
         	
+        	for( MouseListener al : players[3].getMouseListeners() ) {
+        	 	players[3].removeMouseListener( al );
+        	}
+        	
         	markets[2].setDisabledIcon(marketCover1.getIcon());
         	markets[2].setIcon(marketCover1.getIcon());
         	markets[2].setBorderPainted(false);
@@ -1942,6 +1951,10 @@ public class BoardGUI extends Observable implements Board {
        
         case 4:
         	players[4].setEnabled(false);
+        	
+        	for( MouseListener al : players[4].getMouseListeners() ) {
+        	 	players[4].removeMouseListener( al );
+        	}
         
         default: 
         	break;
@@ -2007,6 +2020,12 @@ public class BoardGUI extends Observable implements Board {
 		for (int j=0; j<member.length ; j++){
 			member[j] = true;
 		}
+		
+		for(int j=0; j<placements.length ; j++){placements[j].setIcon(null);}
+		for(int j=0; j<councils.length ; j++){councils[j].setIcon(null);}
+		for(int j=0; j<markets.length ; j++){markets[j].setIcon(null);}
+		for(int j=0; j<harvests.length ; j++){harvests[j].setIcon(null);}
+		for(int j=0; j<productions.length ; j++){productions[j].setIcon(null);}
 		
 	}
 

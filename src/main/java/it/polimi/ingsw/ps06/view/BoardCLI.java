@@ -349,7 +349,7 @@ public class BoardCLI extends Observable implements Board {
 	public void startGame(int index) {
 		setChanged();
 		StoryBoard2PersonalView storyBoard;
-		storyBoard = new StoryBoard2PersonalView(new PersonalViewCLI(input));
+		storyBoard = new StoryBoard2PersonalView(new PersonalViewCLI(input, index));
 		notifyObservers(storyBoard);
 		
 	}
@@ -399,7 +399,7 @@ public class BoardCLI extends Observable implements Board {
 	
 	@Override
 	public void setRound() {
-		// TODO Auto-generated method stub
+		System.out.println("--> I familiari sono tornati al loro posto originario");
 		
 	}
 

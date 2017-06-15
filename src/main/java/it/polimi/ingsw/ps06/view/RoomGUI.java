@@ -8,6 +8,7 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -43,6 +44,7 @@ public class RoomGUI extends Observable implements Room {
 	private int width;
 	private int height;
 	private AudioClip mediaPlayer4;
+	private Media hit2;
 		
 	@Override
 	public void show() throws IOException
@@ -81,7 +83,7 @@ public class RoomGUI extends Observable implements Room {
 		Media hit = new Media(new File(hoverSound).toURI().toString());
 		
 		String selectSound = "resources/menuselect.wav";
-		Media hit2 = new Media(new File(selectSound).toURI().toString());
+		hit2 = new Media(new File(selectSound).toURI().toString());
 		
 		String exitSound = "resources/exit.wav";
 		Media music1 = new Media(new File(exitSound).toURI().toString());
@@ -229,6 +231,7 @@ public class RoomGUI extends Observable implements Room {
         login.setFont(font2);
         f.add(login);
         
+        /*	Work in Progress, please be patient
         ready = new JButton("Pronto");
         ready.setLocation(width*66/100,height*77/100);
         ready.setSize(width*8/100,width*4/100);
@@ -239,9 +242,10 @@ public class RoomGUI extends Observable implements Room {
         ready.setForeground(Color.BLACK);
         ready.setFont(font2);
         f.add(ready);
+        */
         
         start = new JButton("Avvia");
-        start.setLocation(width*76/100,height*77/100);
+        start.setLocation(width*71/100,height*65/100);
         start.setSize(width*8/100,width*4/100);
         start.setOpaque(false);
         start.setContentAreaFilled(false);
@@ -249,7 +253,7 @@ public class RoomGUI extends Observable implements Room {
         start.setMargin(new Insets(0,0,0,5));
         start.setForeground(Color.BLACK);
         start.setFont(font2);
-        //start.setEnabled(false);
+        start.setEnabled(false);
         f.add(start);
         
         exit.addMouseListener(new MouseAdapter()
@@ -276,30 +280,6 @@ public class RoomGUI extends Observable implements Room {
         		notifyExit();
                 f.dispose();
 
-            }
-            
-        });
-	    
-        start.addMouseListener(new MouseAdapter()
-        {
-            public void mousePressed(MouseEvent evt)
-            {
-            	MediaPlayer mediaPlayer3 = new MediaPlayer(hit2);
-        		mediaPlayer3.play();
-        		startGame();
-        		mediaPlayer4.stop();
-				
-            }
-            
-        });
-        
-        ready.addMouseListener(new MouseAdapter()
-        {
-            public void mousePressed(MouseEvent evt)
-            {
-            	MediaPlayer mediaPlayer3 = new MediaPlayer(hit2);
-        		mediaPlayer3.play();
-        		
             }
             
         });
@@ -335,6 +315,34 @@ public class RoomGUI extends Observable implements Room {
 	public void setPlayer(String name, int index) {
 		
 		player[index].setText(name);
+		
+		if(index==1 && name!=null){
+			
+			start.setEnabled(true);
+			
+			start.addMouseListener(new MouseAdapter()
+	        {
+	            public void mousePressed(MouseEvent evt)
+	            {
+	            	MediaPlayer mediaPlayer3 = new MediaPlayer(hit2);
+	        		mediaPlayer3.play();
+	        		startGame();
+	        		mediaPlayer4.stop();
+					
+	            }
+	            
+	        });
+			
+		}
+
+		if(index==1 && name.equals("")){
+			
+			start.setEnabled(false);
+			
+			for( MouseListener al : start.getMouseListeners() ) {
+        	 	start.removeMouseListener( al );
+        	}
+		}
 	}
 
 	@Override

@@ -29,6 +29,7 @@ public class App
     		s.close();
     		return;
     	} 
+    	
     	else 
     	{	
     		System.out.print("Insert the Server IP > ");

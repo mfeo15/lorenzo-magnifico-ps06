@@ -42,6 +42,14 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 	private int btCode;
 	private Dimension screenSize;
 
+	public PersonalViewGUI(int id){
+		this.playerCode=id;
+	}
+	
+	public int getPlayerCode(){
+		return playerCode;
+	}
+	
 	@Override
 	public void show() throws IOException{
 			
@@ -282,8 +290,6 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 			
 			//f.setLocation((int)((screenSize.getWidth()-f.getWidth())/2), (int)((screenSize.getHeight()-f.getHeight())/2)- (int)(screenSize.getHeight()/182.4));
 			Animations.AnimationPV2(f);
-			
-			notifyExit();
 		}
 		
 		
@@ -339,7 +345,7 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 		@Override
 		public void hasLoaded() {
 			setChanged();
-			MessageObtainPersonalBoardStatus obtainPbStatus = new MessageObtainPersonalBoardStatus(0); // <== passare parametro corretto !!!
+			MessageObtainPersonalBoardStatus obtainPbStatus = new MessageObtainPersonalBoardStatus(playerCode);
 			notifyObservers(obtainPbStatus);
 		}	
 }
