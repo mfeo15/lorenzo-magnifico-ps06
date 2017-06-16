@@ -339,7 +339,6 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 			setChanged();
 			EventClose close = new EventClose();
 			notifyObservers(close);
-			
 		}
 
 		@Override

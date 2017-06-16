@@ -76,7 +76,7 @@ public class EventParser implements EventVisitor {
 		if (game.getCurrentPlayer().equals(c.getPlayer())) {
 
 			game.doMemberPlacement(c.getPlayer(), memberPlaced.getAction(), memberPlaced.getColor());
-
+			
 			game.advanceCurrentPlayer();
 		}
 	}

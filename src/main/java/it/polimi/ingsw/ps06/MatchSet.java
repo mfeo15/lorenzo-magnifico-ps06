@@ -70,8 +70,6 @@ public class MatchSet {
 			c.setPlayer(p);
 			game.addPlayer(p);
 		}
-		
-		game.start();
 	}
 	
 	public Game getGame() {

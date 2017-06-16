@@ -9,6 +9,7 @@ import it.polimi.ingsw.ps06.model.Types.Action;
 import it.polimi.ingsw.ps06.model.Types.ColorPalette;
 import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
 import it.polimi.ingsw.ps06.model.Types.PointsKind;
+import it.polimi.ingsw.ps06.model.messages.MessageBoardSetupDice;
 import it.polimi.ingsw.ps06.model.messages.MessageCurrentPlayer;
 import it.polimi.ingsw.ps06.model.messages.MessageGameStatus;
 import it.polimi.ingsw.ps06.model.messages.MessageVaticanReport;
@@ -55,6 +56,8 @@ public class Game extends Observable {
 	* 
 	*/
 	public Game(int numberPlayers) {
+		
+		System.out.println("NEW GAME FOR " + numberPlayers + " PLAYERS");
 		
 		this.numberPlayers = numberPlayers;
 		
@@ -215,6 +218,9 @@ public class Game extends Observable {
 		diceOrange.roll();
 		
 		for (Player p : players) p.setFamilyMemberValues(diceBlack.getValue(), diceWhite.getValue(), diceOrange.getValue());
+		
+		MessageBoardSetupDice messageDice = new MessageBoardSetupDice(diceBlack.getValue(), diceWhite.getValue(), diceOrange.getValue() );
+		notifyChangement(messageDice);
 	}
 	
 	/**
@@ -304,7 +310,6 @@ public class Game extends Observable {
 
 			board.placeMember(p.getMember(color), action);
 		}
-		
 	}
 	
 	/**

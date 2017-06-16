@@ -736,7 +736,7 @@ public class BoardGUI extends Observable implements Board {
         inputMap5.put(stroke, "OPEN");
         desktopPanel.getActionMap().put("OPEN", esc);
         
-        setBoardPlayers();
+        //setBoardPlayers();
         
         //Inizializzazione dei Frame 
         escFrame.getContentPane().add(board3Label);
@@ -1960,6 +1960,8 @@ public class BoardGUI extends Observable implements Board {
 	}
 	
 	private void setBoardPlayers(){
+		
+		System.out.println("BOARD SETUP PLAYERS: " + playerNumber);
 		
 		switch(playerNumber){
 		

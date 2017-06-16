@@ -1,6 +1,6 @@
 package it.polimi.ingsw.ps06.model.messages;
 
-public class MessageGameStatus extends Server2Client {
+public class MessageGameStatus extends Broadcast {
 
 	private int currentPeriod;
 	private int currentRound;

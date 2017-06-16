@@ -18,6 +18,7 @@ import it.polimi.ingsw.ps06.model.messages.MessageModel2ViewNotification;
 
 public class HarvestProduction extends Observable implements PlaceSpace {
 	private ArrayList<FamilyMember> harvestSpaces1;
+	//private FamilyMember[] harvestSpaces1;
 	private ArrayList<FamilyMember> harvestSpaces2;
 	private ArrayList<FamilyMember> productionSpaces1;
 	private ArrayList<FamilyMember> productionSpaces2;
@@ -117,7 +118,7 @@ public class HarvestProduction extends Observable implements PlaceSpace {
 			else{
 			
 				// Gestione attributo azione multipla del leader
-				if(multi){
+				if(multi) {
 					
 					ArrayList<FamilyMember> allProduction = new ArrayList<FamilyMember>(productionSpaces1);
 					allProduction.addAll(productionSpaces2);

@@ -3,7 +3,7 @@ package it.polimi.ingsw.ps06.model.messages;
 import java.util.EnumMap;
 import it.polimi.ingsw.ps06.model.Types.ColorPalette;
 
-public class MessageBoardSetupDice extends Server2Client {
+public class MessageBoardSetupDice extends Broadcast {
 	
 	/**
 	 * 

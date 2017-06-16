@@ -2,7 +2,7 @@ package it.polimi.ingsw.ps06.model.messages;
 
 import java.util.ArrayList;
 
-public class MessagePlayingConnections extends Server2Client {
+public class MessagePlayingConnections extends Broadcast {
 
 	/**
 	 * 

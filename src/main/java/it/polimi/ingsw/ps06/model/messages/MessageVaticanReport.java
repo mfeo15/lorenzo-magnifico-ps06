@@ -1,6 +1,6 @@
 package it.polimi.ingsw.ps06.model.messages;
 
-public class MessageVaticanReport extends Server2Client {
+public class MessageVaticanReport extends Broadcast {
 
 	/**
 	 * 

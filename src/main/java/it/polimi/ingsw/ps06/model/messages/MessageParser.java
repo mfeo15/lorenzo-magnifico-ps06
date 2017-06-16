@@ -53,6 +53,8 @@ public class MessageParser implements MessageVisitor {
 	public void visit(MessagePlayingConnections playingConnections) {
 		Board b = ((Board) supporter);
 		
+		System.out.println("PLAYERS RECEIVED FROM SERVER: " + playingConnections.getWaitingConnections().size());
+		
 		b.setPlayerNumber( playingConnections.getWaitingConnections().size() );
 		
 		for (String s : playingConnections.getWaitingConnections())
@@ -79,32 +81,34 @@ public class MessageParser implements MessageVisitor {
 	@Override
 	public void visit(BoardReady br) {
 		Connection c = ((Connection) supporter);
+		MatchSet match = SocketServer.getInstance().retrieveMatch(c);
 		
 		MessagePlayerID messageID = new MessagePlayerID(c.getPlayer().getID());
 		c.asyncSend(messageID);
 		
-		try { Thread.sleep(1000); } catch (InterruptedException e1) { e1.printStackTrace(); } 
-	
-			
-		MatchSet match = SocketServer.getInstance().retrieveMatch(c);
+		SocketServer.getInstance().increaseQueue(match);
+		if (!( SocketServer.getInstance().isFullQueue(match) ))
+			return;
+
+		SocketServer.getInstance().clearQueue(match);
 
 		ArrayList<String> a = new ArrayList<String>();
 		match.getAll().forEach(connection -> a.add(connection.getUsername()));		
-		MessagePlayingConnections messagePlayingCs = new MessagePlayingConnections( a );
-		c.asyncSend(messagePlayingCs);
+		MessagePlayingConnections messagePlayingCs = new MessagePlayingConnections( a );		
+		SocketServer.getInstance().sendToPlayingConnections(c, messagePlayingCs);
+		
+		match.getGame().start();
 
-		try { Thread.sleep(1000); } catch (InterruptedException e1) { e1.printStackTrace(); } 
-
+		/*
 		int diceB = match.getGame().getDiceBlack().getValue();
 		int diceW = match.getGame().getDiceWhite().getValue();
 		int diceO = match.getGame().getDiceOrange().getValue();
 		MessageBoardSetupDice messageDice = new MessageBoardSetupDice(diceB, diceW, diceO );
 		c.asyncSend(messageDice);
-
-		try { Thread.sleep(1000); } catch (InterruptedException e1) { e1.printStackTrace(); } 
-
+*/
+		/*
 		MessageCurrentPlayer messageCurrentP = new MessageCurrentPlayer( match.getGame().getCurrentPlayer().getID() );
-		c.asyncSend(messageCurrentP);
+		c.asyncSend(messageCurrentP);*/
 	}
 
 	@Override

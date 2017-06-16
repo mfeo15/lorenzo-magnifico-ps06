@@ -230,6 +230,7 @@ public class Market extends Observable implements PlaceSpace {
 	
 	
 	public void notifyChangement(Object o) {
+		
 		setChanged();
 		notifyObservers(o);
 	}

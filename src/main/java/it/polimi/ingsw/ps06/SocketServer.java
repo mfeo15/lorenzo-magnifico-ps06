@@ -4,16 +4,14 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import it.polimi.ingsw.ps06.model.Game;
 import it.polimi.ingsw.ps06.model.messages.Message;
 import it.polimi.ingsw.ps06.model.messages.MessageGameHasStarted;
-import it.polimi.ingsw.ps06.model.messages.MessagePlayingConnections;
 import it.polimi.ingsw.ps06.model.messages.MessageWaitingRoomConnections;
 
 /**
@@ -39,6 +37,8 @@ public class SocketServer implements Server {
 	private ArrayList<Connection> waitingConnection = new ArrayList<Connection>();
 	
 	private ArrayList< MatchSet > playingConnection = new ArrayList< MatchSet >();
+	
+	private HashMap<MatchSet, Integer> queuedMessageCounter = new HashMap<MatchSet, Integer>();;
 	
 	/**
 	 * Metodo invocato ogni qualvolta una nuova connessione viene instaurata. 
@@ -189,10 +189,8 @@ public class SocketServer implements Server {
 			MatchSet match = new MatchSet(waitingConnection);
 			match.createGame();
 			playingConnection.add(match);
-
+			
 			waitingConnection.clear();
-			
-			
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -209,6 +207,29 @@ public class SocketServer implements Server {
 		}
 		
 		return null;
+	}
+	
+	public void addElementQueue(MatchSet m) {
+		queuedMessageCounter.put(m, 0);
+	}
+	
+	public void increaseQueue(MatchSet m) {
+		if (!(queuedMessageCounter.containsKey(m)))
+			addElementQueue(m);
+		
+		queuedMessageCounter.put(m, queuedMessageCounter.get(m) + 1);
+	}
+	
+	public int getElementQueue(MatchSet m) {
+		return queuedMessageCounter.get(m);
+	}
+	
+	public void clearQueue(MatchSet m) {
+		queuedMessageCounter.put(m, 0);
+	}
+	
+	public boolean isFullQueue(MatchSet m) {
+		return ( queuedMessageCounter.get(m) == m.getAll().size() );
 	}
 	
 	/**

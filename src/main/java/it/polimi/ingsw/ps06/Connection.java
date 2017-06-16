@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.SocketAddress;
 import java.net.UnknownHostException;
 import java.util.Observable;
 import java.util.Observer;
@@ -53,6 +54,12 @@ public class Connection implements Runnable, Observer {
 		this.in = new ObjectInputStream(socket.getInputStream());
 		
 		this.username = "Guest" + (new Random()).nextInt(9999);
+		
+		System.out.println(this.socket.getRemoteSocketAddress());
+	}
+	
+	public SocketAddress getID() {
+		return this.socket.getRemoteSocketAddress();
 	}
 	
 	private synchronized boolean isActive(){
@@ -116,7 +123,7 @@ public class Connection implements Runnable, Observer {
 	 * 
 	 * @param message	Messaggio da inviare al Client
 	 */
-	public void asyncSend(final Message message){
+	public void asyncSend(final Message message) {
 		new Thread(new Runnable() {			
 			@Override
 			public void run() {
@@ -128,6 +135,8 @@ public class Connection implements Runnable, Observer {
 				}
 			}
 		}).start();
+		
+		try { Thread.sleep(1000); } catch (InterruptedException e1) { e1.printStackTrace(); } 
 	}
 	
 	
@@ -167,9 +176,12 @@ public class Connection implements Runnable, Observer {
 		
 		if (arg instanceof Server2Client)
 			if (arg instanceof Broadcast) {
-				SocketServer.getInstance().sendToPlayingConnections(this,(Message) arg);
-			} else {
+				System.out.println("BROADCAST MESSAGE MADE BY " + o);
+				//SocketServer.getInstance().sendToPlayingConnections(this,(Message) arg);
 				asyncSend((Message) arg);
+			} else {
+				if ( ((Server2Client) arg).getRecipient().equals( this.getID() ) )
+					asyncSend((Server2Client) arg);
 			}
 	}
 }
