@@ -595,22 +595,70 @@ public class BoardGUI extends Observable implements Board {
             });
         }
 
-        for(y=0; y<players.length;y++)
-        {
-        	if(players[y].isEnabled()){
-	        	players[y].addMouseListener(new MouseAdapter()
-	        	{        		
-		            public void mousePressed(MouseEvent evt)
-		            {
-		            	MediaPlayer mediaPlayer3 = new MediaPlayer(hit2);
-		        		mediaPlayer3.play();
-		        		view.close();
-		        		startGame(y);
-		            }
-	        	});
-        	}
-        }
+        if(players[0].isEnabled()){
+	       	players[0].addMouseListener(new MouseAdapter()
+	       	{        		
+	       		public void mousePressed(MouseEvent evt)
+		        {
+		          	MediaPlayer mediaPlayer3 = new MediaPlayer(hit2);
+		      		mediaPlayer3.play();
+		       		view.close();
+		       		startGame(0);
+	            }
+        	});
+       	}
         
+        if(players[1].isEnabled()){
+	       	players[1].addMouseListener(new MouseAdapter()
+	       	{        		
+	       		public void mousePressed(MouseEvent evt)
+		        {
+		          	MediaPlayer mediaPlayer3 = new MediaPlayer(hit2);
+		      		mediaPlayer3.play();
+		       		view.close();
+		       		startGame(1);
+	            }
+        	});
+       	}
+        
+        if(players[2].isEnabled()){
+	       	players[2].addMouseListener(new MouseAdapter()
+	       	{        		
+	       		public void mousePressed(MouseEvent evt)
+		        {
+		          	MediaPlayer mediaPlayer3 = new MediaPlayer(hit2);
+		      		mediaPlayer3.play();
+		       		view.close();
+		       		startGame(2);
+	            }
+        	});
+       	}
+        
+        if(players[3].isEnabled()){
+	       	players[3].addMouseListener(new MouseAdapter()
+	       	{        		
+	       		public void mousePressed(MouseEvent evt)
+		        {
+		          	MediaPlayer mediaPlayer3 = new MediaPlayer(hit2);
+		      		mediaPlayer3.play();
+		       		view.close();
+		       		startGame(3);
+	            }
+        	});
+       	}
+        
+        if(players[4].isEnabled()){
+	       	players[4].addMouseListener(new MouseAdapter()
+	       	{        		
+	       		public void mousePressed(MouseEvent evt)
+		        {
+		          	MediaPlayer mediaPlayer3 = new MediaPlayer(hit2);
+		      		mediaPlayer3.play();
+		       		view.close();
+		       		startGame(4);
+	            }
+        	});
+       	}
         
         for(int j=0; j<4;j++){
 	        if(members[j].isEnabled()) members[j].setTransferHandler(new ValueExportTransferHandler(Integer.toString(j)));
@@ -2026,6 +2074,14 @@ public class BoardGUI extends Observable implements Board {
 		for(int j=0; j<markets.length ; j++){markets[j].setIcon(null);}
 		for(int j=0; j<harvests.length ; j++){harvests[j].setIcon(null);}
 		for(int j=0; j<productions.length ; j++){productions[j].setIcon(null);}
+		
+		setBoardPlayers();
+		
+	}
+	
+	@Override
+	public void showErrorLog(String s) {
+		actionsLog.setText(s);
 		
 	}
 

@@ -6,6 +6,8 @@ import java.util.Observer;
 
 import it.polimi.ingsw.ps06.model.Types.Action;
 import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
+import it.polimi.ingsw.ps06.model.messages.MessageBoardMemberHasBeenPlaced;
+import it.polimi.ingsw.ps06.model.messages.MessageModel2ViewNotification;
 
 /**
 * Classe per la gestione del palazzo del consiglio
@@ -33,11 +35,10 @@ public class CouncilPalace extends Observable implements PlaceSpace {
 		int errorCode=0;
 		int memberValue;
 		
-		
 		if(member.getValue()>1){
 			
 			memberSpaces.add(member);
-			giveRewards(member.getPlayer());
+			giveRewards(member, chosenAction);
 		
 		} else handle(errorCode);
 		
@@ -64,6 +65,10 @@ public class CouncilPalace extends Observable implements PlaceSpace {
 	*/
 	private void handle(int code){
 		
+		String notification="";
+		
+		MessageModel2ViewNotification m = new MessageModel2ViewNotification(notification);
+		notifyChangement(m);
 	}
 	
 	/**
@@ -99,10 +104,15 @@ public class CouncilPalace extends Observable implements PlaceSpace {
 	* @param 	chosenAction	Codice dell'azione da eseguire	
 	* @return 					Nothing
 	*/
-	public void giveRewards(Player player){
+	public void giveRewards(FamilyMember member, Action chosenAction){
 
+		Player player = member.getPlayer();
+		
 		councilReward.activate(player);
 		privilegeReward.activate(player);
+		
+		MessageBoardMemberHasBeenPlaced newMember = new MessageBoardMemberHasBeenPlaced(chosenAction, member.getColor(), player.getID() );
+		notifyChangement(newMember);
 	}
 	
 	/**

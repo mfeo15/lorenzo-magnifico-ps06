@@ -402,6 +402,14 @@ public class BoardCLI extends Observable implements Board {
 		System.out.println("--> I familiari sono tornati al loro posto originario");
 		
 	}
+	
+	
+
+	@Override
+	public void showErrorLog(String s) {
+		System.out.println("--> "+s);
+		
+	}
 
 	@Override
 	public void hasLoaded() {

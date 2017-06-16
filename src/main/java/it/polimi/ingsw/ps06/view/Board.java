@@ -60,6 +60,8 @@ public interface Board {
 	
 	void addNewObserver(Observer o);
 	
+	void showErrorLog(String s);
+	
 	void startGame(int index);
 	
 	void setRound();

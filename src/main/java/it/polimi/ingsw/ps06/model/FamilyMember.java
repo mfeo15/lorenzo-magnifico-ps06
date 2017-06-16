@@ -78,4 +78,10 @@ public class FamilyMember {
 	public Player getPlayer() {
 		return ownerPlayer;
 	}
+	
+	public Player getFakePlayer() {
+		
+		if(rappresentativeDiceColor==ColorPalette.UNCOLORED) return null;
+		else return ownerPlayer;
+	}
 }

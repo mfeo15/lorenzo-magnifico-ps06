@@ -59,10 +59,10 @@ public class Market extends Observable implements PlaceSpace {
 			else  {
 					
 				// Gestione regola del colore in caso di bonus attivo di azione multipla
-				if( multi && (member.getPlayer() != memberSpaces[relativeIndex].getPlayer()) ){
+				if( multi && (member.getFakePlayer() != memberSpaces[relativeIndex].getFakePlayer()) ){
 							
 					// Solo i familiari non neutri contano al fine di non ripetere familiari dello stesso colore nello stesso spazio
-					if(member.getPlayer()!=null) { memberSpaces[relativeIndex] = member;}
+					if(member.getFakePlayer()!=null) { memberSpaces[relativeIndex] = member;}
 					giveBonus(member, chosenAction);
 					
 				} else {errorCode=2; handle(errorCode);}

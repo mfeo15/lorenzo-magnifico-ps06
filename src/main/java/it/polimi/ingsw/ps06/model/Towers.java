@@ -7,6 +7,8 @@ import java.util.Observer;
 import it.polimi.ingsw.ps06.model.Types.Action;
 import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
 import it.polimi.ingsw.ps06.model.Types.PointsKind;
+import it.polimi.ingsw.ps06.model.messages.MessageBoardMemberHasBeenPlaced;
+import it.polimi.ingsw.ps06.model.messages.MessageModel2ViewNotification;
 
 /**
 * Classe per la gestione delle torri
@@ -78,15 +80,15 @@ public class Towers extends Observable implements PlaceSpace {
 				while(arrayIndex<range2){
 					
 					// Se è presente un familiare avversario si paga un costo extra
-					if(member.getPlayer() != null) extraCost=true; 
+					if(member.getFakePlayer() != null) extraCost=true; 
 					
 					// Se è presente un familiare proprio, non è possibile metterne un altro
-					if(member.getPlayer() == memberSpaces.get(arrayIndex).getPlayer()) colorRule = false;
+					if(member.getFakePlayer() == memberSpaces.get(arrayIndex).getFakePlayer()) colorRule = false;
 					
 				}
 				
 				// Caso in cui il familiare sia neutro
-				if(member.getPlayer()==null) colorRule=true;
+				if(member.getFakePlayer()==null) colorRule=true;
 				
 				// Caso in cui il familiare può essere piazzato
 				if(!colorRule)handle(errorCode);
@@ -95,9 +97,13 @@ public class Towers extends Observable implements PlaceSpace {
 					boolean satisfied2 = acquire.checkRequirements(chosenAction);
 					
 					if(satisfied1 && satisfied2){
-						giveBonus(chosenAction, member.getPlayer());
+						giveBonus(chosenAction, member);
 						memberSpaces.add(relativeIndex, member); 
+						
 						acquire.activate();
+						MessageBoardMemberHasBeenPlaced newMember = new MessageBoardMemberHasBeenPlaced(chosenAction, member.getColor(), (member.getPlayer()).getID() );
+						notifyChangement(newMember);
+						
 						deck.add(deckIndex + relativeIndex, null);
 					}
 				}
@@ -117,6 +123,14 @@ public class Towers extends Observable implements PlaceSpace {
 		
 		this.deck=deck;
 	}
+
+	public void initializeArrayLists(){
+			
+			for(int j=0; j<60; j++){
+					memberSpaces.add(null);
+				}
+			
+		}
 	
 	private void checkWhichTower(Action chosenAction){
 		
@@ -200,9 +214,10 @@ private void checkRequirement(Action chosenAction){
 			
 	}
 	
-	private void giveBonus(Action chosenAction, Player p){
+	private void giveBonus(Action chosenAction, FamilyMember member){
 		
 		EffectsResources er = null;
+		Player player = member.getPlayer();
 		
 		if(chosenAction==Action.TOWER_GREEN_4) er = new EffectsResources(new Resources(MaterialsKind.WOOD,2));
 		if(chosenAction==Action.TOWER_GREEN_3) er = new EffectsResources(new Resources(MaterialsKind.WOOD,1));
@@ -216,7 +231,10 @@ private void checkRequirement(Action chosenAction){
 		if(chosenAction==Action.TOWER_PURPLE_4) er = new EffectsResources(new Resources(MaterialsKind.COIN,2));
 		if(chosenAction==Action.TOWER_PURPLE_3) er = new EffectsResources(new Resources(MaterialsKind.COIN,1));
 		
-		er.activate(p);
+		er.activate(player);
+		
+		MessageBoardMemberHasBeenPlaced newMember = new MessageBoardMemberHasBeenPlaced(chosenAction, member.getColor(), player.getID() );
+		notifyChangement(newMember);
 		
 
 	}
@@ -228,6 +246,11 @@ private void checkRequirement(Action chosenAction){
 	* @return 	Nothing
 	*/
 	private void handle(int code){
+		
+		String notification="";
+		
+		MessageModel2ViewNotification m = new MessageModel2ViewNotification(notification);
+		notifyChangement(m);
 		
 	}
 	
@@ -259,6 +282,7 @@ private void checkRequirement(Action chosenAction){
 	* @return 	territories	ArrayList territori
 	*/
 	public ArrayList<Territory> getTerritories(){
+		
 		for(int i=0; i<4; i++){
 			territories.add((Territory)deck.get(i));
 		}
