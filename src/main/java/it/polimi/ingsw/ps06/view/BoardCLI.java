@@ -36,7 +36,7 @@ public class BoardCLI extends Observable implements Board {
     private int ex3;
     private int harvestIndex=1, productionIndex=1, councilIndex=0;
     private int lead1, lead2, lead3, lead4;
-    private int coinV, woodV, stoneV, servantV;
+    private int coinV, woodV, stoneV, servantV, victoryV, militaryV,faithV;
     private int usedMember;
     private int leaderState1, leaderState2, leaderState3, leaderState4;
 	
@@ -107,7 +107,7 @@ public class BoardCLI extends Observable implements Board {
 			System.out.print(" > ");
 			String s1 = String.valueOf(input.nextLine());
 			int index = Integer.parseInt(s1.replaceAll("[\\D]", ""));
-			notifyAction(Action.valueOf(s.toUpperCase()),index);
+			notifyAction(Action.valueOf(s.toUpperCase()),index,0);
 		}
 		
 		
@@ -258,11 +258,15 @@ public class BoardCLI extends Observable implements Board {
 	}
 
 	@Override
-	public void setPersonalResources(int coin, int wood, int stone, int servant) {
+	public void setPersonalResources(int coin, int wood, int stone, int servant, int victory, int military, int faith) {
+		
 		this.coinV=coin;
 		this.woodV=wood;
-		this.stoneV=stone;
+		this.stoneV=wood;
 		this.servantV=servant;
+		this.victoryV=victory;
+		this.militaryV=military;
+		this.faithV=faith;
 		
 	}
 
@@ -281,7 +285,7 @@ public class BoardCLI extends Observable implements Board {
 	}
 
 	@Override
-	public void notifyAction(Action chosenAction, int memberIndex) {
+	public void notifyAction(Action chosenAction, int memberIndex, int servants) {
 		System.out.println("--> Evento registrato: familiare "+memberIndex+" in "+chosenAction.toString());
 		setChanged();
 		EventMemberPlaced memberPlaced=null;

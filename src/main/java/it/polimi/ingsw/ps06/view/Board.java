@@ -34,7 +34,7 @@ public interface Board {
 	
 	void setLeaders(int code1, int code2, int code3, int code4);
 	
-	void setPersonalResources(int coin, int wood, int stone, int servant);
+	void setPersonalResources(int coin, int wood, int stone, int servant, int victory, int military, int faith);
 	
 	void setPlayerNumber(int number);
 	

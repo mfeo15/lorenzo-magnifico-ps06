@@ -160,7 +160,7 @@ public class BoardGUI extends Observable implements Board {
     private int ex1, ex2, ex3;
     private int harvestIndex=1, productionIndex=1, councilIndex=0;
     private int lead1, lead2, lead3, lead4;
-    private int coinV, woodV, stoneV, servantV;
+    private int coinV, woodV, stoneV, servantV, victoryV, militaryV, faithV;
     private int y;
     private int usedMember;
     private int servantsCountNumber=0;
@@ -342,9 +342,9 @@ public class BoardGUI extends Observable implements Board {
 		timerInfo.setForeground(Color.BLACK);
 		timerInfo.setHorizontalAlignment(JTextField.CENTER);
 		
-		resourcesInfo = new JTextField(coinV+" Coin   "+woodV+" Wood   "+stoneV+" Wood   "+servantV+" Servant");
-		resourcesInfo.setLocation((int)screenSize.getWidth()*30/100,(int)screenSize.getHeight()*96/100);
-		resourcesInfo.setSize((int)screenSize.getWidth()*40/100,(int)screenSize.getHeight()*4/100);
+		resourcesInfo = new JTextField(coinV+" Coin   "+woodV+" Wood   "+stoneV+" Wood   "+servantV+" Servant   |    " +victoryV+" Victory   "+militaryV+" Military   "+faithV+" Faith");
+		resourcesInfo.setLocation((int)screenSize.getWidth()*10/100,(int)screenSize.getHeight()*96/100);
+		resourcesInfo.setSize((int)screenSize.getWidth()*80/100,(int)screenSize.getHeight()*4/100);
 		resourcesInfo.setOpaque(false);
 		resourcesInfo.setEditable(false);
 		resourcesInfo.setBorder(null);
@@ -1516,10 +1516,10 @@ public class BoardGUI extends Observable implements Board {
     	if( ( (JButton) c) == markets[2] ) return it.polimi.ingsw.ps06.model.Types.Action.MARKET_3;
     	if( ( (JButton) c) == markets[3] ) return it.polimi.ingsw.ps06.model.Types.Action.MARKET_4;
     	
-    	if( ( (JButton) c) == placements[4] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_GREEN_1;
-    	if( ( (JButton) c) == placements[3] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_GREEN_2;
-    	if( ( (JButton) c) == placements[2] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_GREEN_3;
-    	if( ( (JButton) c) == placements[1] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_GREEN_4;
+    	if( ( (JButton) c) == placements[3] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_GREEN_1;
+    	if( ( (JButton) c) == placements[2] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_GREEN_2;
+    	if( ( (JButton) c) == placements[1] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_GREEN_3;
+    	if( ( (JButton) c) == placements[0] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_GREEN_4;
     	
     	if( ( (JButton) c) == placements[7] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_BLUE_1;
     	if( ( (JButton) c) == placements[6] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_BLUE_2;
@@ -1582,9 +1582,9 @@ public class BoardGUI extends Observable implements Board {
     		return placements[4];
     		
     	case TOWER_YELLOW_1:
-    		return placements[7];
+    		return placements[11];
     	case TOWER_YELLOW_2:
-    		return placements[8];
+    		return placements[10];
     	case TOWER_YELLOW_3:
     		return placements[9];
     	case TOWER_YELLOW_4:
@@ -1727,14 +1727,17 @@ public class BoardGUI extends Observable implements Board {
 
 
 	@Override
-	public void setPersonalResources(int coin, int wood, int stone, int servant) {
+	public void setPersonalResources(int coin, int wood, int stone, int servant, int victory, int military, int faith) {
 		
 		this.coinV=coin;
 		this.woodV=wood;
 		this.stoneV=wood;
 		this.servantV=servant;
+		this.victoryV=victory;
+		this.militaryV=military;
+		this.faithV=faith;
 		
-		resourcesInfo.setText(coinV+" Coin   "+woodV+" Wood   "+stoneV+" Wood   "+servantV+" Servant");
+		resourcesInfo.setText(coinV+" Coin   "+woodV+" Wood   "+stoneV+" Wood   "+servantV+" Servant   |    " +victoryV+" Victory   "+militaryV+" Military   "+faithV+" Faith");
 		
 	}
 
@@ -2076,6 +2079,9 @@ public class BoardGUI extends Observable implements Board {
 	    woodV=5;
 	    stoneV=5;
 	    servantV=5;
+	    victoryV=5;
+	    militaryV=5;
+	    faithV=5;
 	    playerName="Gigi Scarfani";
 	    roundNumber=1;
 	    periodNumber=1;
