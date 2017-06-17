@@ -97,18 +97,9 @@ public class MessageParser implements MessageVisitor {
 		MessagePlayingConnections messagePlayingCs = new MessagePlayingConnections( a );		
 		SocketServer.getInstance().sendToPlayingConnections(c, messagePlayingCs);
 		
+		//match.getAll().forEach(connection -> c.getPlayer().getPersonalBoard().addNewObserver(connection));
+		
 		match.getGame().start();
-
-		/*
-		int diceB = match.getGame().getDiceBlack().getValue();
-		int diceW = match.getGame().getDiceWhite().getValue();
-		int diceO = match.getGame().getDiceOrange().getValue();
-		MessageBoardSetupDice messageDice = new MessageBoardSetupDice(diceB, diceW, diceO );
-		c.asyncSend(messageDice);
-*/
-		/*
-		MessageCurrentPlayer messageCurrentP = new MessageCurrentPlayer( match.getGame().getCurrentPlayer().getID() );
-		c.asyncSend(messageCurrentP);*/
 	}
 
 	@Override
@@ -157,6 +148,9 @@ public class MessageParser implements MessageVisitor {
 	@Override
 	public void visit(MessageModel2ViewNotification notification) {
 		System.out.println( notification.getNotification() );
+		
+		Board b = ((Board) supporter);
+		b.showErrorLog( notification.getNotification() );
 	}
 
 	@Override
@@ -207,5 +201,20 @@ public class MessageParser implements MessageVisitor {
 		}
 			
 		
+	}
+
+	@Override
+	public void visit(MessagePersonalBoardResourcesStatus resStatus) {
+		Board b = ((Board) supporter);
+		
+		int coin = resStatus.getWarehouse().getResourceValue(MaterialsKind.COIN);
+		int wood = resStatus.getWarehouse().getResourceValue(MaterialsKind.WOOD);
+		int stone = resStatus.getWarehouse().getResourceValue(MaterialsKind.STONE);
+		int servant = resStatus.getWarehouse().getResourceValue(MaterialsKind.SERVANT);
+		int victory = resStatus.getWarehouse().getResourceValue(PointsKind.VICTORY_POINTS);
+		int military = resStatus.getWarehouse().getResourceValue(PointsKind.MILITARY_POINTS);
+		int faith = resStatus.getWarehouse().getResourceValue(PointsKind.FAITH_POINTS);
+		
+		b.setPersonalResources(coin, wood, stone, servant/*, victory, military, faith*/);
 	}
 }

@@ -88,6 +88,10 @@ public class Game extends Observable {
 		players.add(newPlayer);
 	}
 	
+	public ArrayList<Player> getPlayerList() {
+		return players;
+	}
+	
 	public Player getPlayer(int ID) {
 		
 		for (Player p : players) 
@@ -235,7 +239,7 @@ public class Game extends Observable {
 		ArrayList<Integer> excommunicatedPlayersList = new ArrayList<Integer>();
 		
 		for (Player p: players) {
-			int player_faith = p.getPersonalBoard().getPointsCount(PointsKind.FAITH_POINTS);
+			int player_faith = p.getPersonalBoard().getAmount(PointsKind.FAITH_POINTS);
 			
 			if (player_faith < VaticanRequirementOnPeriod(period)) {			
 				board.getTiles(period).activateEffect(p);
@@ -303,13 +307,10 @@ public class Game extends Observable {
 	* @param 	color	colore del familiare usato
 	* @return 	Nothing
 	*/
-	public void doMemberPlacement(Player p, Action action, ColorPalette color){
+	public void doMemberPlacement(Player p, Action action, ColorPalette color, int servants) {
 		
-		if (players.contains(p)) {
-			//Player player = players.get( players.indexOf(p) ); // <== BOH
-
-			board.placeMember(p.getMember(color), action);
-		}
+		if (players.contains(p)) 
+			board.placeMember(p.getMember(color), action, servants);
 	}
 	
 	/**
@@ -323,7 +324,7 @@ public class Game extends Observable {
 		//Assegnamento dei vari coin ad ogni singolo giocatore ad inizio partita in relazione alla posizione di turno
 		for (int i=0; i < players.size(); i++) {
 			Player p = players.get(i);
-			p.getPersonalBoard().addMaterials(MaterialsKind.COIN, STANDARD_AMOUNT_COINS_FIRST_PLAYER + i);
+			p.getPersonalBoard().addResource(MaterialsKind.COIN, STANDARD_AMOUNT_COINS_FIRST_PLAYER + i);
 		}
 		
 		setupRound();
@@ -355,6 +356,14 @@ public class Game extends Observable {
 		addObserver(obs);
 		
 		board.addNewObserver(obs);
+	}
+	
+	public void addNewObserverForPlayer(Observer obs, Player p) {
+		
+		if (!( players.contains(p) ))
+			return;
+		
+		p.getPersonalBoard().addNewObserver(obs);
 	}
 	
 	public void deleteAnObserver(Observer obs) {

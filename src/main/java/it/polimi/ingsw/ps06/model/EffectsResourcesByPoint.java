@@ -37,10 +37,10 @@ public class EffectsResourcesByPoint extends EffectsResources {
 	@Override
 	public void activate(Player p) {
 
-		int pointsAmountOwned = p.getPersonalBoard().getPointsCount(pointsKind);
+		int pointsAmountOwned = p.getPersonalBoard().getAmount(pointsKind);
 		
 		for (int i=0; i < pointsAmountOwned; i++) {
-			p.getPersonalBoard().increaseResources(bonus);
+			p.getPersonalBoard().addResource(bonus);
 		}
 	}
 

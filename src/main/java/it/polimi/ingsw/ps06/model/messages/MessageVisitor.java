@@ -24,6 +24,7 @@ public interface MessageVisitor {
 	
 	public void visit(MessagePersonalBoardStatus pbStatus);
 	public void visit(MessageObtainPersonalBoardStatus obtainPbStatus);
+	public void visit(MessagePersonalBoardResourcesStatus resStatus);
 	
 	public void visit(MessageModel2ViewNotification notification);
 }

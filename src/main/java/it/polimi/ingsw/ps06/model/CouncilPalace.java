@@ -31,11 +31,11 @@ public class CouncilPalace extends Observable implements PlaceSpace {
 	* @return 					Nothing
 	*/
 	@Override
-	public void placeMember(FamilyMember member, Action chosenAction) {
+	public void placeMember(FamilyMember member, Action chosenAction, int servants) {
 		int errorCode=0;
 		int memberValue;
 		
-		if(member.getValue()>1){
+		if( (member.getValue() + servants) > 1){
 			
 			memberSpaces.add(member);
 			giveRewards(member, chosenAction);

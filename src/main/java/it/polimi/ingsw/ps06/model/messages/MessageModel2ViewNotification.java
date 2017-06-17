@@ -1,9 +1,8 @@
 package it.polimi.ingsw.ps06.model.messages;
 
-public class MessageModel2ViewNotification extends Server2Client {
+public class MessageModel2ViewNotification extends Broadcast {
 	
 	private String notification;
-	private int player;
 	
 	public MessageModel2ViewNotification(String notification) {
 		this.notification = notification;

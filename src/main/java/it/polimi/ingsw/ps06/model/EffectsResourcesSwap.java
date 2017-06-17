@@ -39,8 +39,8 @@ public class EffectsResourcesSwap extends EffectsResources {
 		
 		if (p.getPersonalBoard().getInventory().isBiggerThan(input)) 
 		{
-			p.getPersonalBoard().reduceResources(input);
-			p.getPersonalBoard().increaseResources(bonus);
+			p.getPersonalBoard().reduceResource(input);
+			p.getPersonalBoard().addResource(bonus);
 		} else {
 			//Manage the problem (notify the controller)
 		}

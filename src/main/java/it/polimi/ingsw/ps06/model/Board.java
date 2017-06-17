@@ -110,24 +110,24 @@ public class Board {
 		councilPalaceZone.addNewObserver(obs);
 	}
 	
-	public void placeMember(FamilyMember member, Action chosenAction) {
+	public void placeMember(FamilyMember member, Action chosenAction, int servants) {
 		
 		switch (chosenAction) {
 		case COUNCIL_SPACE:
-			councilPalaceZone.placeMember(member, chosenAction);
+			councilPalaceZone.placeMember(member, chosenAction, servants);
 			break;
 		case MARKET_1:
 		case MARKET_2:
 		case MARKET_3:
 		case MARKET_4:
 		case MARKET_5:
-			marketZone.placeMember(member, chosenAction);
+			marketZone.placeMember(member, chosenAction, servants);
 			break;
 		case HARVEST_1:
 		case HARVEST_2:
 		case PRODUCTION_1:
 		case PRODUCTION_2:
-			harvestProductionZone.placeMember(member, chosenAction);
+			harvestProductionZone.placeMember(member, chosenAction, servants);
 			break;
 		case TOWER_BLUE_1:
 		case TOWER_BLUE_2:
@@ -145,7 +145,7 @@ public class Board {
 		case TOWER_YELLOW_2:
 		case TOWER_YELLOW_3:
 		case TOWER_YELLOW_4:
-			towersZone.placeMember(member, chosenAction);
+			towersZone.placeMember(member, chosenAction, servants);
 			break;
 		default:
 			break;

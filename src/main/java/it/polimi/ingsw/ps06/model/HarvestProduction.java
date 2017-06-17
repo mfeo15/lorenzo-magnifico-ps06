@@ -5,6 +5,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import it.polimi.ingsw.ps06.model.Types.Action;
+import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
 import it.polimi.ingsw.ps06.model.messages.MessageBoardMemberHasBeenPlaced;
 import it.polimi.ingsw.ps06.model.messages.MessageModel2ViewNotification;
 
@@ -35,19 +36,19 @@ public class HarvestProduction extends Observable implements PlaceSpace {
 	* @return 					Nothing
 	*/
 	@Override
-	public void placeMember(FamilyMember member, Action chosenAction) throws IllegalStateException {
-		boolean multi = true; // = attivi.getMulti();
+	public void placeMember(FamilyMember member, Action chosenAction, int servants) throws IllegalStateException {
+		boolean multi = false;
 		int errorCode = 0;
 		boolean condition; //Regola del colore
 		
-		initializeArrayLists();
+		int memberValue = member.getValue() + servants;
 		
 		// Gestione condizioni della PRIMA casella di Harvest
-		if(chosenAction==Action.HARVEST_1 && member.getValue()> 1){
+		if(chosenAction == Action.HARVEST_1 && memberValue >= 1) {
 			
 			if( (harvestSpaces1.get(0) == null) || (harvestSpaces1.get(0) != null && harvestSpaces1.get(1) == null && numberPlayers>4) ){
 				harvestSpaces1.add(0,member); 
-				startGathering(member.getValue(), chosenAction, member);
+				startGathering(chosenAction, member, servants);
 			} 
 			else {
 			
@@ -70,16 +71,17 @@ public class HarvestProduction extends Observable implements PlaceSpace {
 					// Aggiunta e produzione nel caso la regola del colore sia rispettata
 					if(condition){
 						harvestSpaces1.add(1,member); 
-						startGathering(member.getValue(), chosenAction, member);
+						startGathering(chosenAction, member, servants);
 						allHarvest.clear();
 					}
 					
 				}
 			}
-		}
+		} else handle(1, member);
 		
 		// Gestione condizioni della SECONDA casella di Harvest
-		if(chosenAction==Action.HARVEST_2 && member.getValue()> 4){
+		if(chosenAction==Action.HARVEST_2 && (memberValue - 3) >= 1) {
+			memberValue -= 3;
 			if(numberPlayers>2){
 				ArrayList<FamilyMember> allHarvest = new ArrayList<FamilyMember>(harvestSpaces1);
 				allHarvest.addAll(harvestSpaces2);
@@ -99,21 +101,21 @@ public class HarvestProduction extends Observable implements PlaceSpace {
 				if(condition){
 					harvestSpaces2.add(hs2index, member); 
 					hs2index++;
-					startGathering(member.getValue() -3, chosenAction, member);
+					startGathering(chosenAction, member, servants);
 					allHarvest.clear();
 				}
 				
-			} else handle(errorCode);
-		}
+			} handle(-1, member);
+		}else handle(1, member);
 		
 		
 		
 		// Gestione condizioni della PRIMA casella di Produzione
-		if(chosenAction==Action.PRODUCTION_1 && member.getValue()> 1){
+		if(chosenAction==Action.PRODUCTION_1 && memberValue >= 1){
 			
 			if( (productionSpaces1.get(0) == null) || (productionSpaces1.get(0) != null && productionSpaces1.get(1) == null && numberPlayers>4) ){
 				productionSpaces1.add(0,member);
-				startGathering(member.getValue(), chosenAction, member);
+				startGathering(chosenAction, member, servants);
 			} 
 			else{
 			
@@ -137,16 +139,17 @@ public class HarvestProduction extends Observable implements PlaceSpace {
 					// Aggiunta e produzione nel caso la regola del colore sia rispettata
 					if(condition){
 						productionSpaces1.add(1,member); 
-						startGathering(member.getValue(), chosenAction, member);
+						startGathering(chosenAction, member, servants);
 						allProduction.clear();
 					}
 					
 				}
 			}
-		}
+		} else handle(1, member);
 		
 		// Gestione condizioni della SECONDA casella di Produzione
-		if(chosenAction==Action.PRODUCTION_2 && member.getValue()> 4){
+		if(chosenAction==Action.PRODUCTION_2 && (memberValue -3) >= 1) {
+			memberValue -= 3;
 			if(numberPlayers>2){
 				
 				ArrayList<FamilyMember> allProduction = new ArrayList<FamilyMember>(productionSpaces1);
@@ -167,12 +170,12 @@ public class HarvestProduction extends Observable implements PlaceSpace {
 				if(condition){
 					productionSpaces2.add(ps2index, member); 
 					ps2index++;
-					startGathering(member.getValue() - 3, chosenAction, member);
+					startGathering(chosenAction, member, servants);
 					allProduction.clear();
 				}
 				
-			} else handle(errorCode);
-		}
+			} else handle(-1, member);
+		} else handle(1, member);
 		
 	}
 	
@@ -190,6 +193,8 @@ public class HarvestProduction extends Observable implements PlaceSpace {
 		productionSpaces2 = new ArrayList<FamilyMember>();
 		
 		this.numberPlayers=numberPlayers;
+		
+		initializeArrayLists();
 	}
 	
 	public void initializeArrayLists(){
@@ -212,13 +217,18 @@ public class HarvestProduction extends Observable implements PlaceSpace {
 	* @param	code		codice errore
 	* @return 	Nothing
 	*/
-	private void handle(int code){
+	private void handle(int code, FamilyMember member){
 		
-		String notification="";
+		String notification = "Il giocatore " + member.getPlayer().getColorAssociatedToID() + " ha piazzato un familiare ";
+		
+		switch(code) {
+		case 1: notification += " di valore non sufficiente per l'azione";
+			break;
+		default: notification = "UNKNOWN ERROR ON HARVEST&PRODUCTION";
+		}
 		
 		MessageModel2ViewNotification m = new MessageModel2ViewNotification(notification);
 		notifyChangement(m);
-		
 	}
 	
 	/**
@@ -228,10 +238,17 @@ public class HarvestProduction extends Observable implements PlaceSpace {
 	* @param 	chosenAction	Codice dell'azione da eseguire	
 	* @return 	
 	*/
-	private void startGathering(int value, Action chosenAction, FamilyMember member){
-		Player player=member.getPlayer();
-		gathering = new Gathering(chosenAction,value, player);
+	private void startGathering(Action chosenAction, FamilyMember member, int servantsUsed) {
+		
+		Player player = member.getPlayer();
+		
+		if (servantsUsed > 0)
+			player.getPersonalBoard().reduceResource(MaterialsKind.SERVANT, servantsUsed);
+		
+		/* TO IMPLEMENT !
+		gathering = new Gathering(chosenAction,member.getValue() + servantsUsed, player);
 		gathering.activate();
+		*/
 		
 		MessageBoardMemberHasBeenPlaced newMember = new MessageBoardMemberHasBeenPlaced(chosenAction, member.getColor(), player.getID() );
 		notifyChangement(newMember);
@@ -248,6 +265,8 @@ public class HarvestProduction extends Observable implements PlaceSpace {
 		harvestSpaces2.clear();
 		productionSpaces1.clear();
 		productionSpaces2.clear();
+		
+		initializeArrayLists();
 	}
 	
 	/**

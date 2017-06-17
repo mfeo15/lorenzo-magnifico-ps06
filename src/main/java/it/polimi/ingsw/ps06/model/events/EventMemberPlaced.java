@@ -7,10 +7,12 @@ public class EventMemberPlaced extends EventMember {
 	
 	private Action chosenAction;
 	private ColorPalette color;
+	private int servantsBonus;
 	
-	public EventMemberPlaced(Action chosenAction, ColorPalette color) {
+	public EventMemberPlaced(Action chosenAction, ColorPalette color, int servantsBonus) {
 		this.chosenAction = chosenAction;
 		this.color = color;
+		this.servantsBonus = servantsBonus;
 	}
 	
 	public Action getAction() {
@@ -21,12 +23,20 @@ public class EventMemberPlaced extends EventMember {
 		return color;
 	}
 	
+	public int getServantsBonus() {
+		return servantsBonus;
+	}
+	
 	public void setAction(Action chosenAction) {
 		this.chosenAction=chosenAction;
 	}
 	
 	public void setColor(ColorPalette color) {
 		this.color=color;
+	}
+	
+	public void setServantsBonus(int servantsBonus) {
+		this.servantsBonus = servantsBonus;
 	}
 	
 	@Override

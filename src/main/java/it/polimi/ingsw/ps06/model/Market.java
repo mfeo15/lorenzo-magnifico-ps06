@@ -36,7 +36,7 @@ public class Market extends Observable implements PlaceSpace {
 	* @return 					Nothing
 	*/
 	@Override
-	public void placeMember(FamilyMember member, Action chosenAction) throws IllegalArgumentException {
+	public void placeMember(FamilyMember member, Action chosenAction, int servants) throws IllegalArgumentException {
 		
 		boolean multi = false; //attivi.getMulti();
 		int relativeIndex = chosenAction.ordinal() - marketIndex;
@@ -45,29 +45,28 @@ public class Market extends Observable implements PlaceSpace {
 		// Gestire carta scomunica del mercato if(EffectsActive.checkNoMarket == true) handle();
 		
 		// Gestione condizione di selezione sbagliata
-		if ( (relativeIndex > openedWindows) || (member.getValue()<1) ) {errorCode=1; handle(errorCode);}
+		if ( ( relativeIndex > openedWindows ) || ( (member.getValue() + servants) < 1 ) ) {
+			handle(1, member);
+			return;
+		}
 		
-		else{
 			
-			
-			// Gestione condizione base in cui il campo è vuoto
-			if(memberSpaces[relativeIndex] == null){
-				memberSpaces[relativeIndex] = member;
+		// Gestione condizione base in cui il campo è vuoto
+		if(memberSpaces[relativeIndex] == null){
+			memberSpaces[relativeIndex] = member;
+			giveBonus(member, chosenAction);
+		} 
+		else  {
+
+			// Gestione regola del colore in caso di bonus attivo di azione multipla
+			if( multi && (member.getFakePlayer() != memberSpaces[relativeIndex].getFakePlayer()) ){
+
+				// Solo i familiari non neutri contano al fine di non ripetere familiari dello stesso colore nello stesso spazio
+				if(member.getFakePlayer()!=null) { memberSpaces[relativeIndex] = member;}
 				giveBonus(member, chosenAction);
-					
-			} 
-			else  {
-					
-				// Gestione regola del colore in caso di bonus attivo di azione multipla
-				if( multi && (member.getFakePlayer() != memberSpaces[relativeIndex].getFakePlayer()) ){
-							
-					// Solo i familiari non neutri contano al fine di non ripetere familiari dello stesso colore nello stesso spazio
-					if(member.getFakePlayer()!=null) { memberSpaces[relativeIndex] = member;}
-					giveBonus(member, chosenAction);
-					
-				} else {errorCode=2; handle(errorCode);}
-				
-			}
+
+			} else handle(2, member);
+
 		}
 	}
 	
@@ -92,14 +91,14 @@ public class Market extends Observable implements PlaceSpace {
 	* @param	code		codice errore
 	* @return 	Nothing
 	*/
-	private void handle(int code) {
+	private void handle(int code, FamilyMember member) {
 		
-		String notification = "";
+		String notification = "Il giocatore " + member.getPlayer().getColorAssociatedToID() + " ha piazzato un familiare ";
 		
 		switch(code) {
-		case 1: notification = "BROKEN MODEL FOR MARKET! THE MEMBER VALUE IS INCORRECT OR THE ACTION INDEX IS NOT COMPATIBLE";
+		case 1: notification += " di valore non sufficiente per l'azione";
 			break;
-		case 2: notification = "THE CHOSEN ACTION SPACE IS ALREADY OCCUPAYED OR NOT COMPATIBLE WITH THE COLOR RULE";
+		case 2: notification = ", ma non rispetta le regola del colore";
 			break;
 		default: notification = "UNKNOWN ERROR ON MARKET";
 		}
@@ -176,22 +175,8 @@ public class Market extends Observable implements PlaceSpace {
 		
 		Player player = member.getPlayer();
 		
-		System.out.println("Player" + player.getID() + " has"
-				+ "\nCOINS:" + player.getPersonalBoard().getMaterialsCount(MaterialsKind.COIN) 
-				+ "\nWOOD:" + player.getPersonalBoard().getMaterialsCount(MaterialsKind.WOOD)
-				+ "\nSTONE:" + player.getPersonalBoard().getMaterialsCount(MaterialsKind.STONE)
-				+ "\nSERVANTS:" + player.getPersonalBoard().getMaterialsCount(MaterialsKind.SERVANT));
-		
-		System.out.println("ACTIVATE EFFECT!!!!!");
-		
 		e = bonus.get( chosenAction.ordinal() - marketIndex );
 		e.activate(player);
-		
-		System.out.println("Player" + player.getID() + " has"
-				+ "\nCOINS:" + player.getPersonalBoard().getMaterialsCount(MaterialsKind.COIN) 
-				+ "\nWOOD:" + player.getPersonalBoard().getMaterialsCount(MaterialsKind.WOOD)
-				+ "\nSTONE:" + player.getPersonalBoard().getMaterialsCount(MaterialsKind.STONE)
-				+ "\nSERVANTS:" + player.getPersonalBoard().getMaterialsCount(MaterialsKind.SERVANT));
 		
 		if( (chosenAction.ordinal() - marketIndex) == 3 ) e.activate(player);
 		

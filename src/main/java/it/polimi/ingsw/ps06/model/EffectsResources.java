@@ -32,6 +32,6 @@ public class EffectsResources extends Effect {
 	@Override
 	public void activate(Player p) {
 		
-		p.getPersonalBoard().increaseResources(bonus);
+		p.getPersonalBoard().addResource(bonus);
 	}
 }

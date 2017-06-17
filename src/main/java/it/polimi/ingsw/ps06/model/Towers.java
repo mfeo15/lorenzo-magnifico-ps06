@@ -34,8 +34,6 @@ public class Towers extends Observable implements PlaceSpace {
 	private int tower=0;
 	private int range1=0, range2=0;
 	private int errorCode=0;
-	private int spotRequirement;
-	private DevelopementCard card;
 	
 	/**
 	* Metodo per il piazzamento di un familiare su di una delle torri, include controlli di posizionamento
@@ -46,69 +44,76 @@ public class Towers extends Observable implements PlaceSpace {
 	*/
 	
 	@Override
-	public void placeMember(FamilyMember member, Action chosenAction) {
+	public void placeMember(FamilyMember member, Action chosenAction, int servants) {
 		int towerIndex = Action.valueOf("TOWER_GREEN_1").ordinal();
 		int actionIndex = chosenAction.ordinal();
 		int relativeIndex = actionIndex - towerIndex;
 		int arrayIndex;
-		int memberValue;
 		boolean value=false;
 		boolean colorRule; // Regola del colore
 		boolean extraCost; // Familiare avversario presente, +3 oro
 		
-		
-		memberValue=member.getValue();
 		//int bonus = EffectsActive.valueBonus(p);
 		//memberValue = memberValue + bonus;
 		
-		checkRequirement(chosenAction);
-		if(memberValue > spotRequirement) value=true;
+		//chosenAction = Action.TOWER_GREEN_4;
 		
-		card = deck.get(deckIndex + relativeIndex);
+		int memberValue = member.getValue() + servants;	
+		
+		// Si può piazzare solo se il valore del membro supera quello richiesto
+		if( memberValue < checkRequirement(chosenAction) ) {
+			handle(1, member);
+			return;
+		}
+		
+		
+		DevelopementCard card = deck.get(deckIndex + relativeIndex);
 		
 		// Si può piazzare solo se la carta è ancora presente, se c'è sono sicuro che non c'è un familiare
-		if( (card != null) && value) {
+		if(  card == null ) {
+			handle(2, member);
+			return;
+		}
 		
-			acquire = new CardAcquisition(card, member.getPlayer());
-				
-				checkWhichTower(chosenAction);
-				arrayIndex=range1;
-				
-				colorRule=true;
-				extraCost=false;
-				
-				while(arrayIndex<range2){
-					
-					// Se è presente un familiare avversario si paga un costo extra
-					if(member.getFakePlayer() != null) extraCost=true; 
-					
-					// Se è presente un familiare proprio, non è possibile metterne un altro
-					if(member.getFakePlayer() == memberSpaces.get(arrayIndex).getFakePlayer()) colorRule = false;
-					
-				}
-				
-				// Caso in cui il familiare sia neutro
-				if(member.getFakePlayer()==null) colorRule=true;
-				
-				// Caso in cui il familiare può essere piazzato
-				if(!colorRule)handle(errorCode);
-				else {
-					boolean satisfied1 = acquire.checkCosts(chosenAction, extraCost);
-					boolean satisfied2 = acquire.checkRequirements(chosenAction);
-					
-					if(satisfied1 && satisfied2){
-						giveBonus(chosenAction, member);
-						memberSpaces.add(relativeIndex, member); 
-						
-						acquire.activate();
-						MessageBoardMemberHasBeenPlaced newMember = new MessageBoardMemberHasBeenPlaced(chosenAction, member.getColor(), (member.getPlayer()).getID() );
-						notifyChangement(newMember);
-						
-						deck.add(deckIndex + relativeIndex, null);
-					}
-				}
-				 
-		} else handle(errorCode);
+		acquire = new CardAcquisition(card, member.getPlayer());
+
+		checkWhichTower(chosenAction);
+		arrayIndex=range1;
+
+		colorRule=true;
+		extraCost=false;
+
+		while(arrayIndex<range2){
+
+			// Se è presente un familiare avversario si paga un costo extra
+			if(member.getFakePlayer() != null) extraCost=true; 
+
+			// Se è presente un familiare proprio, non è possibile metterne un altro
+			if(member.getFakePlayer() == memberSpaces.get(arrayIndex).getFakePlayer()) colorRule = false;
+		}
+
+		// Caso in cui il familiare sia neutro
+		if(member.getFakePlayer() == null) colorRule=true;
+
+		// Caso in cui il familiare può essere piazzato
+		if(!colorRule) 
+			handle(errorCode, member);
+		else {
+			boolean satisfied1 = acquire.checkCosts(chosenAction, extraCost);
+			boolean satisfied2 = acquire.checkRequirements(chosenAction);
+
+			if(satisfied1 && satisfied2){
+				giveBonus(chosenAction, member);
+				memberSpaces.add(relativeIndex, member); 
+
+				acquire.activate();
+				MessageBoardMemberHasBeenPlaced newMember = new MessageBoardMemberHasBeenPlaced(chosenAction, member.getColor(), (member.getPlayer()).getID() );
+				notifyChangement(newMember);
+
+				deck.add(deckIndex + relativeIndex, null);
+			}
+		}
+	
 	}
 	
 	/**
@@ -177,36 +182,32 @@ public class Towers extends Observable implements PlaceSpace {
 			
 	}
 	
-private void checkRequirement(Action chosenAction){
+	private int checkRequirement(Action chosenAction){
 		
-		switch(chosenAction){
+		switch(chosenAction) {
 			case TOWER_GREEN_1:
 			case TOWER_BLUE_1:
 			case TOWER_YELLOW_1:
 			case TOWER_PURPLE_1:
-				spotRequirement = 1;
-				break;
+				return 1;
 				
 			case TOWER_GREEN_2:
 			case TOWER_BLUE_2:
 			case TOWER_YELLOW_2:
 			case TOWER_PURPLE_2:
-				spotRequirement = 3;
-				break;
+				return 3;
 				
 			case TOWER_GREEN_3:
 			case TOWER_BLUE_3:
 			case TOWER_YELLOW_3:
 			case TOWER_PURPLE_3:
-				spotRequirement = 5;
-				break;
+				return 5;
 				
 			case TOWER_GREEN_4:
 			case TOWER_BLUE_4:
 			case TOWER_YELLOW_4:
 			case TOWER_PURPLE_4:
-				spotRequirement = 7;
-				break;
+				return 7;
 				
 			default:
 				throw new IllegalArgumentException();
@@ -235,8 +236,6 @@ private void checkRequirement(Action chosenAction){
 		
 		MessageBoardMemberHasBeenPlaced newMember = new MessageBoardMemberHasBeenPlaced(chosenAction, member.getColor(), player.getID() );
 		notifyChangement(newMember);
-		
-
 	}
 	
 	/**
@@ -245,13 +244,20 @@ private void checkRequirement(Action chosenAction){
 	* @param	code		codice errore
 	* @return 	Nothing
 	*/
-	private void handle(int code){
+	private void handle(int code, FamilyMember member){
 		
-		String notification="";
+		String notification = "Il giocatore " + member.getPlayer().getColorAssociatedToID() + " ha piazzato un familiare ";
+		
+		switch(code) {
+		case 1: notification += " di valore non sufficiente per l'azione";
+			break;
+		case 2: notification += ", ma la carta sviluppo non c'era";
+			break;
+		default: notification = "UNKNOWN ERROR ON TOWERS";
+		}
 		
 		MessageModel2ViewNotification m = new MessageModel2ViewNotification(notification);
 		notifyChangement(m);
-		
 	}
 	
 	/**
@@ -335,8 +341,12 @@ private void checkRequirement(Action chosenAction){
 	}
 	
 	public void notifyChangement(Object o) {
+		try {
 		setChanged();
 		notifyObservers(o);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void addNewObserver(Observer obs) {

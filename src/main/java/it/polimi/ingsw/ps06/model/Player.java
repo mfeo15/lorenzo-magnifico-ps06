@@ -16,6 +16,8 @@ public class Player {
 	
 	private int ID;
 	
+	private String colorLabel;
+	
 	private ArrayList<Leader> leaders;
 	
 	private PersonalBoard personalBoard;
@@ -49,6 +51,18 @@ public class Player {
 	
 	public int getID() {
 		return ID;
+	}
+	
+	public String getColorAssociatedToID() {
+		
+		switch ( ID ) {
+		case 0: return "Rosso";
+		case 1: return "Verde";
+		case 2: return "Blu";
+		case 3: return "Giallo";
+		default:
+			return null;
+		}
 	}
 	
 	public FamilyMember getMember(ColorPalette color) {

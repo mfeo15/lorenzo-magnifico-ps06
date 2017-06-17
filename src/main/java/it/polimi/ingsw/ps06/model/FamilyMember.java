@@ -75,6 +75,23 @@ public class FamilyMember {
 		return rappresentativeDiceColor;
 	}
 	
+	/**
+	   * Getter for the Dice Color attribute
+	   * @param 	Nothing.
+	   * @return 	Current color associated
+	   */
+	public String getColorString() {
+		
+		switch ( rappresentativeDiceColor ) {
+		case DICE_BLACK: 	return "Nero";
+		case DICE_ORANGE: 	return "Arancione";
+		case DICE_WHITE: 	return "Bianco";
+		case UNCOLORED: 	return "Neutro";
+		default:
+			return null;
+		}
+	}
+	
 	public Player getPlayer() {
 		return ownerPlayer;
 	}

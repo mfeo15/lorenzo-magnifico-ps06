@@ -51,7 +51,7 @@ public class BonusTile {
 	*/
 	
 	public void activate_productionBonus(Player player){
-		player.getPersonalBoard().increaseResources(production_bonus);
+		player.getPersonalBoard().addResource(production_bonus);
 		return;
 		}
 
@@ -62,7 +62,7 @@ public class BonusTile {
 	*/
 	
 	public void activate_harvestBonus(Player player){
-		player.getPersonalBoard().increaseResources(harvest_bonus);
+		player.getPersonalBoard().addResource(harvest_bonus);
 		return;
 	}
 	

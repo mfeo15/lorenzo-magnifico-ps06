@@ -47,7 +47,7 @@ public class EffectsResourcesByCard extends EffectsResources {
 		}
 		
 		for (int i=0; i < cardsAmountOwned; i++) {
-			p.getPersonalBoard().increaseResources(bonus);
+			p.getPersonalBoard().addResource(bonus);
 		}
 	}
 
