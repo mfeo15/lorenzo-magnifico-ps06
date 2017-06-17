@@ -161,7 +161,7 @@ public class BoardGUI extends Observable implements Board {
     private int y;
     private int usedMember;
     
-    PersonalViewGUI view= new PersonalViewGUI(0);
+    PersonalViewGUI view= new PersonalViewGUI(0,this);
 	private JFXPanel fxPanel = new JFXPanel();
 	
     public enum Direction {
@@ -1855,7 +1855,7 @@ public class BoardGUI extends Observable implements Board {
 	
 	@Override
 	public void startGame(int index) {
-		view = new PersonalViewGUI(index);
+		view = new PersonalViewGUI(index, this);
 		setChanged();
 		StoryBoard2PersonalView storyBoard;
 		storyBoard = new StoryBoard2PersonalView(view);

@@ -21,6 +21,7 @@ import javax.swing.JTextField;
 
 import it.polimi.ingsw.ps06.model.events.EventClose;
 import it.polimi.ingsw.ps06.model.events.RoomHasLoaded;
+import it.polimi.ingsw.ps06.model.events.StoryBoard2Board;
 import it.polimi.ingsw.ps06.model.messages.MessageObtainPersonalBoardStatus;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -32,6 +33,7 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 	private JButton exit;
 	private JTextField coins, woods, stones, servants, victory, military, faith;
 	private Font font;
+	private BoardGUI board;
 	
     
     private JButton[] territories = new JButton[6];
@@ -42,7 +44,8 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 	private int btCode;
 	private Dimension screenSize;
 
-	public PersonalViewGUI(int id){
+	public PersonalViewGUI(int id, BoardGUI board){
+		this.board=board;
 		this.playerCode=id;
 	}
 	
@@ -290,6 +293,12 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 			
 			//f.setLocation((int)((screenSize.getWidth()-f.getWidth())/2), (int)((screenSize.getHeight()-f.getHeight())/2)- (int)(screenSize.getHeight()/182.4));
 			Animations.AnimationPV2(f);
+			while(f.isVisible());
+			
+			setChanged();
+			StoryBoard2Board sbboard = new StoryBoard2Board(board);
+			notifyObservers(sbboard);
+				
 		}
 		
 		

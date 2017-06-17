@@ -379,6 +379,7 @@ public static void AnimationPV2(JFrame f1){
 	                    if(to.y > (int)(screenSize.getHeight() )){
 	                    	((Timer)e.getSource()).stop();
 	                    	f1.dispose();
+	                    	
 	                    }
 	                    else f1.setLocation(to);
 	                             
