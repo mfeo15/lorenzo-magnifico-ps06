@@ -19,7 +19,7 @@ public abstract class EffectsActive extends Effect implements Observer {
 	/**
 	* Costruttore della classe Effetti Attivi.
 	* 
-	* @param	toStalk		Clase per la quale mettersi successivamente in ascolto
+	* @param	toStalk		Classe per la quale mettersi successivamente in ascolto
 	* 
 	*/
 	public EffectsActive(Observable toStalk) {

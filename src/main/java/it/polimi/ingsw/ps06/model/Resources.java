@@ -168,7 +168,7 @@ public class Resources implements Serializable {
         }
 
         Iterator<PointsKind> pointsIterator = points.keySet().iterator();
-        while(materialsIterator.hasNext() && flag==true)
+        while(pointsIterator.hasNext() && flag==true)
         {
         	PointsKind currentPoint = pointsIterator.next();	
         	if ( getResourceValue(currentPoint) < r.getResourceValue(currentPoint) ) flag = false;

@@ -9,11 +9,12 @@ package it.polimi.ingsw.ps06.model;
  */
 
 public class Leader extends Card {
-		
-	//private Requirement leaderInGame;
+	
+	private LeaderRequirement requirement;
 	private boolean used=false;
 	private boolean active=false;
 	
+<<<<<<< Updated upstream
 	private LeaderState leaderState;
 	
 	private LeaderState inHand;
@@ -56,6 +57,20 @@ public class Leader extends Card {
 		return onTableFaceDown;
 	}
 	 
+=======
+	/**
+	* metodo per verificare se il leader è stato già utilizzato o meno in questo turno
+	* 
+	* @param 	none
+	* 
+	* @return	used	valore boolean che mi dice se è stata utilizzata o no
+	*/
+	
+	public void setRequirement(LeaderRequirement lead){
+		requirement=lead;
+		return;
+	}
+>>>>>>> Stashed changes
 	/**
 	* metodo per verificare se il leader è stato già utilizzato o meno in questo turno
 	* 

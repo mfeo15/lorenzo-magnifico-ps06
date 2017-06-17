@@ -24,4 +24,6 @@ public class EffectsActiveGathering extends EffectsActive {
 			((Gathering) o).setValue( ((Gathering) o).getValue() + bonusDiceValue );
 		}
 	}
+	
+	
 }

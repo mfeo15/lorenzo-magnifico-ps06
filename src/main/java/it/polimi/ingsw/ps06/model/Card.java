@@ -61,6 +61,17 @@ import java.util.ArrayList;
 			return title;
 		}
 		
+		/**Metodo per settare il periodo della carta
+		 * 
+		 * @param	effect	effetto da aggiungere
+		 * @return	nothing
+		 */
+		
+		public void setPermEffect(Effect effect){
+			this.effect.add(effect);
+			return;
+		}
+		
 		/**Metodo che restituisce il codice della carta
 		 * 
 		 * @param	none
