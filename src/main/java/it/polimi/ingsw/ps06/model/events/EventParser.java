@@ -54,6 +54,17 @@ public class EventParser implements EventVisitor {
 		Client.getInstance().addNewObserver(controller);
 		try {storyboard.getView().show();} catch (IOException e) {e.printStackTrace();}	
 	}
+	
+	@Override
+	public void visit(StoryBoard2BoardAgain storyboard) {
+		Client.getInstance().deleteAllObservers();
+		
+		BoardController controller = new BoardController(Client.getInstance(), storyboard.getView());
+		
+		controller.addNewObserver(Client.getInstance());
+		storyboard.getView().addNewObserver(controller);
+		Client.getInstance().addNewObserver(controller);
+	}
 
 	@Override
 	public void visit(StoryBoard2PersonalView storyboard) {

@@ -19,6 +19,7 @@ public interface EventVisitor {
 	
 	public void visit(StoryBoard2Room storyboard);
 	public void visit(StoryBoard2Board storyboard);
+	public void visit(StoryBoard2BoardAgain storyboard);
 	public void visit(StoryBoard2PersonalView storyboard);
 	
 	public void visit(RoomHasLoaded roomHasLoaded);

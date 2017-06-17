@@ -24,6 +24,8 @@ public class BoardController extends Observable implements Observer {
 	public BoardController(Client model, Board view) {
 		this.theView = view;
 		this.theModel = model;
+		
+		System.out.println("BOARD IS THE BOSS");
 	}
 
 	public void addNewObserver(Observer o) {

@@ -20,8 +20,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import it.polimi.ingsw.ps06.model.events.EventClose;
-import it.polimi.ingsw.ps06.model.events.RoomHasLoaded;
-import it.polimi.ingsw.ps06.model.events.StoryBoard2Board;
+import it.polimi.ingsw.ps06.model.events.StoryBoard2BoardAgain;
 import it.polimi.ingsw.ps06.model.messages.MessageObtainPersonalBoardStatus;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -293,12 +292,12 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 			
 			//f.setLocation((int)((screenSize.getWidth()-f.getWidth())/2), (int)((screenSize.getHeight()-f.getHeight())/2)- (int)(screenSize.getHeight()/182.4));
 			Animations.AnimationPV2(f);
-			while(f.isVisible());
+			
+			//while(f.isActive());
 			
 			setChanged();
-			StoryBoard2Board sbboard = new StoryBoard2Board(board);
-			notifyObservers(sbboard);
-				
+			StoryBoard2BoardAgain sbboard = new StoryBoard2BoardAgain(board);
+			notifyObservers(sbboard);	
 		}
 		
 		

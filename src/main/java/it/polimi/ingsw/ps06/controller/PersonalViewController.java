@@ -22,6 +22,8 @@ public class PersonalViewController extends Observable implements Observer{
 	public PersonalViewController(Client model, PersonalView view) {
 		this.theView = view;
 		this.theModel = model;
+		
+		System.out.println("PERSONAL VIEW IS THE BOSS");
 	}
 
 	public void addNewObserver(Observer o) {
