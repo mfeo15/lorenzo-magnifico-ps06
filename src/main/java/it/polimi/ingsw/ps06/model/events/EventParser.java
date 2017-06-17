@@ -70,6 +70,8 @@ public class EventParser implements EventVisitor {
 	public void visit(StoryBoard2PersonalView storyboard) {
 		Client.getInstance().deleteAllObservers();
 		
+		System.out.println("SONO STATO CHIAMATO!!!");
+		
 		PersonalViewController controller = new PersonalViewController(Client.getInstance(), storyboard.getView());
 		
 		controller.addNewObserver(Client.getInstance());

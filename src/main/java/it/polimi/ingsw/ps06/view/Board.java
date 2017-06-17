@@ -44,7 +44,7 @@ public interface Board {
 	
 	void notifyExit();
 	
-	void notifyAction(Action chosenAction, int memberIndex);
+	void notifyAction(Action chosenAction, int memberIndex, int servants);
 	
 	void notifyLeaderDiscard(int index);
 	

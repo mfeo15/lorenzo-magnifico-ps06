@@ -18,6 +18,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
 
 import it.polimi.ingsw.ps06.model.events.EventClose;
 import it.polimi.ingsw.ps06.model.events.StoryBoard2BoardAgain;
@@ -55,6 +56,10 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 	@Override
 	public void show() throws IOException{
 			
+			try {
+				UIManager.setLookAndFeel( UIManager.getCrossPlatformLookAndFeelClassName() );
+			} catch (Exception e) { e.printStackTrace();}
+		
 			setPersonalView();
 			
 			exit = new JButton();
@@ -208,17 +213,14 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 			
 			
 	        f.getContentPane().add(label);
-	        f.setUndecorated(true);
+	        
+	        if(!(f.isUndecorated())) {f.setUndecorated(true);}
+	        
 	        f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	        
 	        f.setSize(width, height);
 			
-	        //new Thread(() ->Animations.AnimationPV(f));
-	        
-	        //f.setLocation((int)((screenSize.getWidth()-f.getWidth())/2), (int)((screenSize.getHeight()-f.getHeight())/2)- (int)(screenSize.getHeight()/182.4));
-	        
 	        f.setResizable(false);
-	        //f.setLocationRelativeTo(null);
 	        f.setVisible(true);  
 	        
 	        f.setLocation((int)((screenSize.getWidth()-f.getWidth())/2), -height);
@@ -292,8 +294,6 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 			
 			//f.setLocation((int)((screenSize.getWidth()-f.getWidth())/2), (int)((screenSize.getHeight()-f.getHeight())/2)- (int)(screenSize.getHeight()/182.4));
 			Animations.AnimationPV2(f);
-			
-			//while(f.isActive());
 			
 			setChanged();
 			StoryBoard2BoardAgain sbboard = new StoryBoard2BoardAgain(board);

@@ -121,6 +121,9 @@ public class BoardGUI extends Observable implements Board {
     private JButton[] privileges = new JButton[5];
     private JButton[] council = new JButton[1];
 	private JButton[] leaders = new JButton[4];
+	private JButton servants = new JButton();
+	
+	private JTextField servantsCount = new JTextField();
 	private int[] cardsCodes = new int[16];
     
     private JLabel membersLabel[] = new JLabel[4];
@@ -160,6 +163,7 @@ public class BoardGUI extends Observable implements Board {
     private int coinV, woodV, stoneV, servantV;
     private int y;
     private int usedMember;
+    private int servantsCountNumber=0;
     
     PersonalViewGUI view= new PersonalViewGUI(0,this);
 	private JFXPanel fxPanel = new JFXPanel();
@@ -348,8 +352,8 @@ public class BoardGUI extends Observable implements Board {
 		resourcesInfo.setForeground(Color.BLACK);
 		resourcesInfo.setHorizontalAlignment(JTextField.CENTER);
 		
-		actionsLog.setLocation((int)screenSize.getWidth()*25/100,(int)(screenSize.getHeight()*86/100));
-		actionsLog.setSize((int)screenSize.getWidth()*50/100,(int)screenSize.getHeight()*5/100);
+		actionsLog.setLocation((int)screenSize.getWidth()*20/100,(int)(screenSize.getHeight()*86/100));
+		actionsLog.setSize((int)screenSize.getWidth()*60/100,(int)screenSize.getHeight()*5/100);
 		actionsLog.setOpaque(false);
 		actionsLog.setEditable(false);
 		actionsLog.setBorder(null);
@@ -414,6 +418,43 @@ public class BoardGUI extends Observable implements Board {
             	            }}, 3000 );}
             });
             
+        
+        servants.setLocation((int)(width*12/100),(int)(height*92/100));
+        servants.setSize((int)width*5/100,(int)height*7/100);
+        servants.setOpaque(false);
+        servants.setContentAreaFilled(false);
+        servants.setFocusPainted(false);
+        servants.setHorizontalAlignment(JTextField.CENTER);
+        servants.setDisabledIcon( servants.getIcon() );
+        servants.setIcon(ImageHandler.setImage("resources/servant.png",4,7,width,height).getIcon());
+		
+        servants.addMouseListener(new MouseAdapter()
+        {
+            public void mousePressed(MouseEvent evt)
+            {
+            	MediaPlayer mediaPlayer3 = new MediaPlayer(hit2);
+        		mediaPlayer3.play();
+        		
+        		if(servantsCountNumber < servantV){
+        			servantsCountNumber++;
+        		}
+        		else{ 
+        			if(servantsCountNumber == servantV){
+        				servantsCountNumber=0;
+        			}
+        		}
+        		
+        		servantsCount.setText(""+servantsCountNumber);
+            }
+            
+        });
+        
+        servantsCount.setLocation((int)width*17/100,(int)(height*94/100));
+        servantsCount.setSize((int)width*2/100,(int)height*3/100);
+        servantsCount.setOpaque(false);
+        servantsCount.setFont(fontMEDIUM);
+        servantsCount.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+        servantsCount.setText(""+servantsCountNumber);
         
         escMenu1 = new JButton("Ritorna al gioco");
         escMenu1.setLocation(escWidth*20/100,escHeight*20/100);
@@ -765,6 +806,9 @@ public class BoardGUI extends Observable implements Board {
         personalBoard.setResizable(false);
         personalBoard.setVisible(true); 
          
+        desktop.add(servants);
+        desktop.add(servantsCount);
+        
         desktop.add(actionsLog);
         desktop.add(others);
         desktop.add(towers);
@@ -1267,8 +1311,9 @@ public class BoardGUI extends Observable implements Board {
 	                                 
 	                    if (component instanceof JButton && component.isEnabled() && ((JButton) component).getIcon()==null && members[Integer.parseInt(value.toString())].isEnabled()) {
 	                        
-		                    notifyAction(identifySpot(component),Integer.parseInt(value.toString()));
+		                    notifyAction(identifySpot(component),Integer.parseInt(value.toString()),servantsCountNumber);
 	                    	
+		                    servantsCountNumber=0;
 		                    usedMember= Integer.parseInt(value.toString());
 		                    
 	                        accept = true;
@@ -1471,25 +1516,25 @@ public class BoardGUI extends Observable implements Board {
     	if( ( (JButton) c) == markets[2] ) return it.polimi.ingsw.ps06.model.Types.Action.MARKET_3;
     	if( ( (JButton) c) == markets[3] ) return it.polimi.ingsw.ps06.model.Types.Action.MARKET_4;
     	
-    	if( ( (JButton) c) == placements[0] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_GREEN_1;
-    	if( ( (JButton) c) == placements[1] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_GREEN_2;
+    	if( ( (JButton) c) == placements[4] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_GREEN_1;
+    	if( ( (JButton) c) == placements[3] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_GREEN_2;
     	if( ( (JButton) c) == placements[2] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_GREEN_3;
-    	if( ( (JButton) c) == placements[3] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_GREEN_4;
+    	if( ( (JButton) c) == placements[1] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_GREEN_4;
     	
-    	if( ( (JButton) c) == placements[4] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_BLUE_1;
-    	if( ( (JButton) c) == placements[5] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_BLUE_2;
-    	if( ( (JButton) c) == placements[6] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_BLUE_3;
-    	if( ( (JButton) c) == placements[7] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_BLUE_4;
+    	if( ( (JButton) c) == placements[7] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_BLUE_1;
+    	if( ( (JButton) c) == placements[6] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_BLUE_2;
+    	if( ( (JButton) c) == placements[5] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_BLUE_3;
+    	if( ( (JButton) c) == placements[4] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_BLUE_4;
     	
-    	if( ( (JButton) c) == placements[8] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_YELLOW_1;
-    	if( ( (JButton) c) == placements[9] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_YELLOW_2;
-    	if( ( (JButton) c) == placements[10] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_YELLOW_3;
-    	if( ( (JButton) c) == placements[11] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_YELLOW_4;
+    	if( ( (JButton) c) == placements[11] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_YELLOW_1;
+    	if( ( (JButton) c) == placements[10] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_YELLOW_2;
+    	if( ( (JButton) c) == placements[9] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_YELLOW_3;
+    	if( ( (JButton) c) == placements[8] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_YELLOW_4;
     	
-    	if( ( (JButton) c) == placements[12] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_PURPLE_1;
-    	if( ( (JButton) c) == placements[13] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_PURPLE_2;
-    	if( ( (JButton) c) == placements[14] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_PURPLE_3;
-    	if( ( (JButton) c) == placements[15] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_PURPLE_4;
+    	if( ( (JButton) c) == placements[15] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_PURPLE_1;
+    	if( ( (JButton) c) == placements[14] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_PURPLE_2;
+    	if( ( (JButton) c) == placements[13] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_PURPLE_3;
+    	if( ( (JButton) c) == placements[12] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_PURPLE_4;
     	
     	return null;
     	
@@ -1519,40 +1564,40 @@ public class BoardGUI extends Observable implements Board {
     		return markets[3];
     		
     	case TOWER_GREEN_1:
-    		return placements[0];
-    	case TOWER_GREEN_2:
-    		return placements[1];
-    	case TOWER_GREEN_3:
-    		return placements[2];
-    	case TOWER_GREEN_4:
     		return placements[3];
+    	case TOWER_GREEN_2:
+    		return placements[2];
+    	case TOWER_GREEN_3:
+    		return placements[1];
+    	case TOWER_GREEN_4:
+    		return placements[0];
     		
     	case TOWER_BLUE_1:
-    		return placements[4];
-    	case TOWER_BLUE_2:
-    		return placements[5];
-    	case TOWER_BLUE_3:
-    		return placements[6];
-    	case TOWER_BLUE_4:
     		return placements[7];
+    	case TOWER_BLUE_2:
+    		return placements[6];
+    	case TOWER_BLUE_3:
+    		return placements[5];
+    	case TOWER_BLUE_4:
+    		return placements[4];
     		
     	case TOWER_YELLOW_1:
-    		return placements[8];
+    		return placements[7];
     	case TOWER_YELLOW_2:
-    		return placements[9];
+    		return placements[8];
     	case TOWER_YELLOW_3:
-    		return placements[10];
+    		return placements[9];
     	case TOWER_YELLOW_4:
-    		return placements[11];
+    		return placements[8];
 
     	case TOWER_PURPLE_1:
-    		return placements[12];
-    	case TOWER_PURPLE_2:
-    		return placements[13];
-    	case TOWER_PURPLE_3:
-    		return placements[14];
-    	case TOWER_PURPLE_4:
     		return placements[15];
+    	case TOWER_PURPLE_2:
+    		return placements[14];
+    	case TOWER_PURPLE_3:
+    		return placements[13];
+    	case TOWER_PURPLE_4:
+    		return placements[12];
     		
     	default:
     		return null;
@@ -1780,23 +1825,23 @@ public class BoardGUI extends Observable implements Board {
 
 
 	@Override
-	public void notifyAction(it.polimi.ingsw.ps06.model.Types.Action chosenAction, int memberIndex) {
+	public void notifyAction(it.polimi.ingsw.ps06.model.Types.Action chosenAction, int memberIndex, int servants) {
 		
 		setChanged();
 		EventMemberPlaced memberPlaced;
 		
 		switch(memberIndex){
 		case 0:
-			memberPlaced = new EventMemberPlaced(chosenAction, ColorPalette.DICE_BLACK);
+			memberPlaced = new EventMemberPlaced(chosenAction, ColorPalette.DICE_BLACK, int servants);
 			break;
 		case 1:
-			memberPlaced = new EventMemberPlaced(chosenAction, ColorPalette.DICE_WHITE);
+			memberPlaced = new EventMemberPlaced(chosenAction, ColorPalette.DICE_WHITE, int servants);
 			break;
 		case 2:
-			memberPlaced = new EventMemberPlaced(chosenAction, ColorPalette.DICE_ORANGE);
+			memberPlaced = new EventMemberPlaced(chosenAction, ColorPalette.DICE_ORANGE, int servants);
 			break;
 		case 3:
-			memberPlaced = new EventMemberPlaced(chosenAction, ColorPalette.UNCOLORED);
+			memberPlaced = new EventMemberPlaced(chosenAction, ColorPalette.UNCOLORED, int servants);
 			break;
 		default:
 			memberPlaced=null;
