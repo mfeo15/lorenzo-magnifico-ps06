@@ -28,7 +28,21 @@ public class CardAcquisition extends Actions {
 	*/
 	public boolean checkCosts(Action chosenAction, Boolean extraCost) {
 		//chiama risorse
-		return true;
+		
+		if (card instanceof Territory)
+			return true;
+		
+		if (card instanceof Building)
+			return p.getPersonalBoard().getInventory().isBiggerThan( ((Building) card).getRequirement() );
+		
+		if (card instanceof Character)
+			return p.getPersonalBoard().getInventory().isBiggerThan( ((Character) card).getRequirement() );
+		
+		if (card instanceof Venture)
+			//return p.getPersonalBoard().getInventory().isBiggerThan( ((Venture) card).getRequirement() );
+			return true;
+		
+		return false;
 	}
 	
 	/**
@@ -39,7 +53,10 @@ public class CardAcquisition extends Actions {
 	* @return 	
 	*/
 	public boolean checkRequirements(Action chosenAction){
-		//chiama risorse
+		
+		if (!(card instanceof Venture))
+			return true;
+		
 		return true;
 	}
 	
@@ -53,22 +70,28 @@ public class CardAcquisition extends Actions {
 	@Override
 	public void activate() {
 		
-		if(card instanceof Territory){
-			p.getPersonalBoard().addTerritory( (Territory) card);
+		if(card instanceof Territory) {
+			p.getPersonalBoard().addCard( (Territory) card);
+			return;
 		}
 		
-		if(card instanceof Building){
-			p.getPersonalBoard().addBuilding( (Building) card);
+		if(card instanceof Building) {
+			p.getPersonalBoard().addCard( (Building) card);
+			p.getPersonalBoard().getInventory().decreaseResources( ((Building) card).getRequirement() );
+			return;
 		}
 		
-		if(card instanceof Character){
-			p.getPersonalBoard().addCharacter( (Character) card);
+		if(card instanceof Character) {
+			p.getPersonalBoard().addCard( (Character) card);
+			p.getPersonalBoard().getInventory().decreaseResources( ((Character) card).getRequirement() );
+			return;
 		}
 		
-		if(card instanceof Venture){
-			p.getPersonalBoard().addVenture( (Venture) card);
+		if(card instanceof Venture) {
+			p.getPersonalBoard().addCard( (Venture) card);
+			p.getPersonalBoard().getInventory().decreaseResources( ((Building) card).getRequirement() );
+			return;
 		}
-		
 	}
 
 }

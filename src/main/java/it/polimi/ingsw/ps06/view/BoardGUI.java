@@ -1224,10 +1224,14 @@ public class BoardGUI extends Observable implements Board {
 	
 	private JButton[] fillCards(JButton[] btns) throws IOException{
 		
-		for (int j=0;j<btns.length;j++) {
-			
-			btns[j].setIcon((ImageHandler.setImage("resources/cards/devcards_f_en_c_"+(cardsCodes[j]+1)+".png",14,(int)( 14.5 * ratio * (1.77 /ratio) ),width,height)).getIcon());
-			btns[j].setDisabledIcon( btns[j].getIcon());
+		for (int j=0;j<btns.length;j++) 
+		{
+			if (cardsCodes[j] == -1)
+				btns[j].setIcon(null);
+			else {
+				btns[j].setIcon((ImageHandler.setImage("resources/cards/devcards_f_en_c_"+(cardsCodes[j]+1)+".png",14,(int)( 14.5 * ratio * (1.77 /ratio) ),width,height)).getIcon());
+				btns[j].setDisabledIcon( btns[j].getIcon());
+			}
 		}
 		
 		return btns;

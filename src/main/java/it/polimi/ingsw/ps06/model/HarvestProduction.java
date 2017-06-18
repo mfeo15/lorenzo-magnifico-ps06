@@ -44,7 +44,12 @@ public class HarvestProduction extends Observable implements PlaceSpace {
 		int memberValue = member.getValue() + servants;
 		
 		// Gestione condizioni della PRIMA casella di Harvest
-		if(chosenAction == Action.HARVEST_1 && memberValue >= 1) {
+		if(chosenAction == Action.HARVEST_1) {
+			
+			if (memberValue < 1) {
+				handle(1, member);
+				return;
+			}
 			
 			if( (harvestSpaces1.get(0) == null) || (harvestSpaces1.get(0) != null && harvestSpaces1.get(1) == null && numberPlayers>4) ){
 				harvestSpaces1.add(0,member); 
@@ -77,12 +82,18 @@ public class HarvestProduction extends Observable implements PlaceSpace {
 					
 				}
 			}
-		} else handle(1, member);
+		}
 		
 		// Gestione condizioni della SECONDA casella di Harvest
-		if(chosenAction==Action.HARVEST_2 && (memberValue - 3) >= 1) {
+		if(chosenAction==Action.HARVEST_2) {
+			
+			if ((memberValue - 3) < 1) {
+				handle(1, member);
+				return;
+			}
+				
 			memberValue -= 3;
-			if(numberPlayers>2){
+			if(numberPlayers>2) {
 				ArrayList<FamilyMember> allHarvest = new ArrayList<FamilyMember>(harvestSpaces1);
 				allHarvest.addAll(harvestSpaces2);
 				
@@ -105,13 +116,18 @@ public class HarvestProduction extends Observable implements PlaceSpace {
 					allHarvest.clear();
 				}
 				
-			} handle(-1, member);
-		}else handle(1, member);
+			} else handle(-1, member);
+		}
 		
 		
 		
 		// Gestione condizioni della PRIMA casella di Produzione
-		if(chosenAction==Action.PRODUCTION_1 && memberValue >= 1){
+		if(chosenAction==Action.PRODUCTION_1) {
+			
+			if ((memberValue - 3) < 1) {
+				handle(1, member);
+				return;
+			}
 			
 			if( (productionSpaces1.get(0) == null) || (productionSpaces1.get(0) != null && productionSpaces1.get(1) == null && numberPlayers>4) ){
 				productionSpaces1.add(0,member);
@@ -145,10 +161,16 @@ public class HarvestProduction extends Observable implements PlaceSpace {
 					
 				}
 			}
-		} else handle(1, member);
+		}
 		
 		// Gestione condizioni della SECONDA casella di Produzione
-		if(chosenAction==Action.PRODUCTION_2 && (memberValue -3) >= 1) {
+		if(chosenAction==Action.PRODUCTION_2) {
+			
+			if ((memberValue - 3) < 1) {
+				handle(1, member);
+				return;
+			}
+			
 			memberValue -= 3;
 			if(numberPlayers>2){
 				
@@ -175,7 +197,7 @@ public class HarvestProduction extends Observable implements PlaceSpace {
 				}
 				
 			} else handle(-1, member);
-		} else handle(1, member);
+		}
 		
 	}
 	

@@ -23,15 +23,17 @@ import it.polimi.ingsw.ps06.model.messages.MessageModel2ViewNotification;
 
 public class Towers extends Observable implements PlaceSpace {
 	
-	private ArrayList<FamilyMember> memberSpaces;
-	private ArrayList<DevelopementCard> deck;
-	private CardAcquisition acquire;
+	//private ArrayList<FamilyMember> memberSpaces;
+	private FamilyMember[] memberSpaces;
+	//private ArrayList<DevelopementCard> deck;
+	private DevelopementCard[] deck;
 	
 	private static final int CARTE_TORRE = 16;
 	private EffectsActive attivi; // da modificare in listener
 	private int deckIndex=0;
-	private int tower=0;
-	private int range1=0, range2=0;
+	private int towerIndex = 0;
+	private int baseFloorTower = 0;
+	private int topFloorTower= 0;
 	private int errorCode=0;
 	
 	/**
@@ -44,11 +46,10 @@ public class Towers extends Observable implements PlaceSpace {
 	
 	@Override
 	public void placeMember(FamilyMember member, Action chosenAction, int servants) {
-		int towerIndex = Action.valueOf("TOWER_GREEN_1").ordinal();
-		int actionIndex = chosenAction.ordinal();
-		int relativeIndex = actionIndex - towerIndex;
-		int arrayIndex;
-		boolean value=false;
+
+		int relativeIndex = chosenAction.ordinal() - Action.valueOf("TOWER_GREEN_1").ordinal();
+
+		boolean value = false;
 		boolean colorRule; // Regola del colore
 		boolean extraCost; // Familiare avversario presente, +3 oro
 		
@@ -64,7 +65,7 @@ public class Towers extends Observable implements PlaceSpace {
 		}
 		
 		
-		DevelopementCard card = deck.get(deckIndex + relativeIndex);
+		DevelopementCard card = deck[deckIndex + relativeIndex];
 		
 		// Si può piazzare solo se la carta è ancora presente, se c'è sono sicuro che non c'è un familiare
 		if(  card == null ) {
@@ -72,45 +73,52 @@ public class Towers extends Observable implements PlaceSpace {
 			return;
 		}
 		
-		acquire = new CardAcquisition(card, member.getPlayer());
+		CardAcquisition acquire = new CardAcquisition(card, member.getPlayer());
 
 		checkWhichTower(chosenAction);
-		arrayIndex=range1;
 
 		colorRule=true;
 		extraCost=false;
-
-		while(arrayIndex<range2){
+		/*
+		int floor = baseFloorTower;
+		while(floor <= topFloorTower) {
 
 			// Se è presente un familiare avversario si paga un costo extra
-			if(member.getFakePlayer() != null) extraCost=true; 
+			if(member.getFakePlayer() != null) extraCost = true; 
 
 			// Se è presente un familiare proprio, non è possibile metterne un altro
-			if(member.getFakePlayer() == memberSpaces.get(arrayIndex).getFakePlayer()) colorRule = false;
+			if(member.getFakePlayer() == memberSpaces.get(floor).getFakePlayer()) colorRule = false;
+			
+			floor++;
 		}
-
+		
 		// Caso in cui il familiare sia neutro
 		if(member.getFakePlayer() == null) colorRule=true;
-
+		*/
 		// Caso in cui il familiare può essere piazzato
-		if(!colorRule) 
+		if(!colorRule) {
 			handle(errorCode, member);
-		else {
-			boolean satisfied1 = acquire.checkCosts(chosenAction, extraCost);
-			boolean satisfied2 = acquire.checkRequirements(chosenAction);
+			return;
+		}
+		
+		boolean satisfied1 = acquire.checkCosts(chosenAction, extraCost);
+		boolean satisfied2 = acquire.checkRequirements(chosenAction);
 
-			if(satisfied1 && satisfied2){
-				giveBonus(chosenAction, member);
-				memberSpaces.add(relativeIndex, member); 
+		if (satisfied1 && satisfied2) {
+			giveBonus(chosenAction, member);
+			memberSpaces[relativeIndex] = member; 
 
-				acquire.activate();
-				MessageBoardMemberHasBeenPlaced newMember = new MessageBoardMemberHasBeenPlaced(chosenAction, member.getColor(), (member.getPlayer()).getID() );
-				notifyChangement(newMember);
+			acquire.activate();
 
-				deck.add(deckIndex + relativeIndex, null);
-			}
+			deck[deckIndex + relativeIndex] = null;
+
+			MessageBoardMemberHasBeenPlaced newMember = new MessageBoardMemberHasBeenPlaced(chosenAction, member.getColor(), (member.getPlayer()).getID() );
+			notifyChangement(newMember);
 		}
 	
+
+		MessageBoardSetupDevCards setupCards = new MessageBoardSetupDevCards( getRoundCards() );
+		notifyChangement(setupCards);
 	}
 	
 	/**
@@ -121,16 +129,14 @@ public class Towers extends Observable implements PlaceSpace {
 	*/
 	public Towers() {
 		
-		memberSpaces = new ArrayList<FamilyMember>();
+		memberSpaces = new FamilyMember[CARTE_TORRE];
 		
-		this.deck = (new ParserXMLCards("resources/XML/DevelopementCards.xml")).getCards();
+		this.deck = shuffleDeck( (new ParserXMLCards("resources/XML/DevelopementCards.xml")).getCards() );
 		
 		this.deckIndex = - CARTE_TORRE;
-		
-		shuffleDeck();
 	}
 
-	private void shuffleDeck() {
+	private DevelopementCard[] shuffleDeck( ArrayList<DevelopementCard> deck ) {
 		
 		ArrayList<DevelopementCard> a = new ArrayList<DevelopementCard>();
 		a.addAll( deck.subList(0, 24) );
@@ -146,13 +152,16 @@ public class Towers extends Observable implements PlaceSpace {
 			for (int q = 0; q < 4; q++) 
 				b.addAll( a.subList( 4*(6*q + t) , 4*(6*q + t + 1) ));
 		
-		this.deck = b;
+		DevelopementCard[] c = new DevelopementCard[b.size()];
+		c = b.toArray(c);
+		
+		return c;
 	}
 	
 	public void initializeArrayLists() {
 
-		for(int j=0; j<60; j++)
-			memberSpaces.add(null);
+		for(int j=0; j < 16; j++)
+			memberSpaces[j] = null;
 	}
 
 	private void checkWhichTower(Action chosenAction) {
@@ -162,36 +171,36 @@ public class Towers extends Observable implements PlaceSpace {
 			case TOWER_GREEN_2:
 			case TOWER_GREEN_3:
 			case TOWER_GREEN_4:
-				tower=1;
-				range1=0;
-				range2=3;
+				towerIndex = 1;
+				baseFloorTower = 0;
+				topFloorTower = 3;
 				break;
 				
 			case TOWER_BLUE_1:
 			case TOWER_BLUE_2:
 			case TOWER_BLUE_3:
 			case TOWER_BLUE_4:
-				tower=2;
-				range1=4;
-				range2=7;
+				towerIndex = 2;
+				baseFloorTower = 4;
+				topFloorTower = 7;
 				break;
 				
 			case TOWER_YELLOW_1:
 			case TOWER_YELLOW_2:
 			case TOWER_YELLOW_3:
 			case TOWER_YELLOW_4:
-				tower=3;
-				range1=8;
-				range2=11;
+				towerIndex = 3;
+				baseFloorTower=8;
+				topFloorTower = 11;
 				break;
 				
 			case TOWER_PURPLE_1:
 			case TOWER_PURPLE_2:
 			case TOWER_PURPLE_3:
 			case TOWER_PURPLE_4:
-				tower=4;
-				range1=12;
-				range2=15;
+				towerIndex = 4;
+				baseFloorTower = 12;
+				topFloorTower = 15;
 				break;
 				
 			default:
@@ -235,25 +244,26 @@ public class Towers extends Observable implements PlaceSpace {
 	
 	private void giveBonus(Action chosenAction, FamilyMember member){
 		
-		EffectsResources er = null;
+		EffectsResources er;
 		Player player = member.getPlayer();
 		
-		if(chosenAction==Action.TOWER_GREEN_4) er = new EffectsResources(new Resources(MaterialsKind.WOOD,2));
-		if(chosenAction==Action.TOWER_GREEN_3) er = new EffectsResources(new Resources(MaterialsKind.WOOD,1));
+		switch (chosenAction) {
+			case TOWER_GREEN_4 : er = new EffectsResources(new Resources(MaterialsKind.WOOD,2)); break;
+			case TOWER_GREEN_3 : er = new EffectsResources(new Resources(MaterialsKind.WOOD,1)); break;
 		
-		if(chosenAction==Action.TOWER_BLUE_4) er = new EffectsResources(new Resources(MaterialsKind.STONE,2));
-		if(chosenAction==Action.TOWER_BLUE_3) er = new EffectsResources(new Resources(MaterialsKind.STONE,1));
+			case TOWER_BLUE_4 : er = new EffectsResources(new Resources(MaterialsKind.STONE,2)); break;
+			case TOWER_BLUE_3 : er = new EffectsResources(new Resources(MaterialsKind.STONE,1)); break;
 		
-		if(chosenAction==Action.TOWER_YELLOW_4) er = new EffectsResources(new Resources(PointsKind.MILITARY_POINTS,2));
-		if(chosenAction==Action.TOWER_YELLOW_3) er = new EffectsResources(new Resources(PointsKind.MILITARY_POINTS,1));
+			case TOWER_YELLOW_4 : er = new EffectsResources(new Resources(PointsKind.MILITARY_POINTS,2)); break;
+			case TOWER_YELLOW_3 : er = new EffectsResources(new Resources(PointsKind.MILITARY_POINTS,1)); break;
 		
-		if(chosenAction==Action.TOWER_PURPLE_4) er = new EffectsResources(new Resources(MaterialsKind.COIN,2));
-		if(chosenAction==Action.TOWER_PURPLE_3) er = new EffectsResources(new Resources(MaterialsKind.COIN,1));
+			case TOWER_PURPLE_4 : er = new EffectsResources(new Resources(MaterialsKind.COIN,2)); break;
+			case TOWER_PURPLE_3 : er = new EffectsResources(new Resources(MaterialsKind.COIN,1)); break;
 		
-		er.activate(player);
+			default: er = null;
+		}
 		
-		MessageBoardMemberHasBeenPlaced newMember = new MessageBoardMemberHasBeenPlaced(chosenAction, member.getColor(), player.getID() );
-		notifyChangement(newMember);
+		if (er != null) er.activate(player);
 	}
 	
 	/**
@@ -297,7 +307,7 @@ public class Towers extends Observable implements PlaceSpace {
 	*/
 	public void cleanTowers() {
 		deckIndex = deckIndex + CARTE_TORRE;
-		memberSpaces.clear();
+		initializeArrayLists();
 		
 		MessageBoardSetupDevCards setupCards = new MessageBoardSetupDevCards( getRoundCards() );
 		notifyChangement(setupCards);
@@ -307,8 +317,11 @@ public class Towers extends Observable implements PlaceSpace {
 		
 		int[] roundCards = new int[16];
 		
-		for(int i = deckIndex; i < CARTE_TORRE; i++){
-			roundCards[i] = deck.get(i).getCode();
+		for(int i = deckIndex; i < CARTE_TORRE; i++) {
+			if (deck[i] == null)
+				roundCards[i] = -1;
+			else
+				roundCards[i] = deck[i].getCode();
 		}
 		
 		return roundCards;
@@ -323,8 +336,8 @@ public class Towers extends Observable implements PlaceSpace {
 		
 		ArrayList<Territory> territories = new ArrayList<Territory>();
 		
-		for(int i=0; i<4; i++){
-			territories.add((Territory)deck.get(i));
+		for(int i=0; i<4; i++) {
+			territories.add( (Territory) deck[i] );
 		}
 		return territories;
 	}
@@ -335,7 +348,8 @@ public class Towers extends Observable implements PlaceSpace {
 	* @return 	memberSpaces	ArrayList familiari
 	*/
 	public ArrayList<FamilyMember> getFamilyList(){
-		return memberSpaces;
+		//return memberSpaces;
+		return null;
 	}
 	
 	/**
@@ -348,7 +362,7 @@ public class Towers extends Observable implements PlaceSpace {
 		ArrayList<Character> characters = new ArrayList<Character>();
 		
 		for(int i=8; i<12; i++) {
-			characters.add((Character)deck.get(i));
+			characters.add( (Character) deck[i] );
 		}
 		return characters;
 	}
@@ -363,7 +377,7 @@ public class Towers extends Observable implements PlaceSpace {
 		ArrayList<Building> buildings = new ArrayList<Building>();
 		
 		for(int i=4; i<8; i++) {
-			buildings.add((Building)deck.get(i));
+			buildings.add( (Building) deck[i] );
 		}
 		return buildings;
 	}
@@ -378,18 +392,14 @@ public class Towers extends Observable implements PlaceSpace {
 		ArrayList<Venture> ventures = new ArrayList<Venture>();
 		
 		for(int i=12; i<16; i++){
-			ventures.add((Venture)deck.get(i));
+			ventures.add( (Venture) deck[i] );
 		}
 		return ventures;
 	}
 	
 	public void notifyChangement(Object o) {
-		try {
 		setChanged();
 		notifyObservers(o);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 	
 	public void addNewObserver(Observer obs) {

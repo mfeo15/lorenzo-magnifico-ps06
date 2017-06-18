@@ -181,9 +181,9 @@ public class PersonalBoard extends Observable {
 	* @return 	nothing
 	*/
 	
-	public void addTerritory(Territory cardTerritory) {
+	public void addCard(Territory cardTerritory) {
 		
-			switch(territories.size()){
+			switch(territories.size()) {
 			case 0:
 			case 1:
 				territories.add(cardTerritory);
@@ -233,8 +233,8 @@ public class PersonalBoard extends Observable {
 	* @return 	nothing
 	*/
 
-	public void addBuilding(Building cardBuilding) {
-		if(buildings.size()<6)
+	public void addCard(Building cardBuilding) {
+		if (buildings.size() < 6)
 			buildings.add(cardBuilding);
 		else
 			//Controller.handleMaxBuildings();  controller ancora da implementare
@@ -248,7 +248,7 @@ public class PersonalBoard extends Observable {
 	* @return 	nothing
 	*/
 	
-	public void addCharacter(Character cardCharacter) {
+	public void addCard(Character cardCharacter) {
 		characters.add(cardCharacter);
 	}
 
@@ -259,7 +259,7 @@ public class PersonalBoard extends Observable {
 	* @return 	nothing
 	*/
 	
-	public void addVenture(Venture cardVenture) {
+	public void addCard(Venture cardVenture) {
 		ventures.add(cardVenture);		
 	}
 	

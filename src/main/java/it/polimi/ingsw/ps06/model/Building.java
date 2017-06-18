@@ -33,6 +33,15 @@ public class Building extends DevelopementCard {
 	 	return;
 	}	
 	
+	/**Metodo per ottenere i requisiti della carta
+	 * 
+	 * @return	Resources	requisiti associati alla carta
+	 */
+	 
+	public Resources getRequirement(){
+	 	return this.requirement;
+	}
+	
 	/**
 	* Metodo per controllare che il valore del familiare sia sufficiente per avere bonus
 	* @return 	Boolean
