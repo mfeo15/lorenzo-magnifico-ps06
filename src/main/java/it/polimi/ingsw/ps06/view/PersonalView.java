@@ -18,5 +18,6 @@ public interface PersonalView {
 	void hasLoaded();
 	
 	void notifyExit();
-
+	
+	Board getBackgroundView();
 }

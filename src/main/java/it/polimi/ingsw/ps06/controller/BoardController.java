@@ -4,14 +4,13 @@ import java.util.Observable;
 import java.util.Observer;
 
 import it.polimi.ingsw.ps06.Client;
+import it.polimi.ingsw.ps06.model.events.BoardFrozenStatus;
 import it.polimi.ingsw.ps06.model.events.Event;
 import it.polimi.ingsw.ps06.model.events.EventParser;
-import it.polimi.ingsw.ps06.model.events.Model2View;
 import it.polimi.ingsw.ps06.model.events.StoryBoard;
 import it.polimi.ingsw.ps06.model.messages.Client2Server;
 import it.polimi.ingsw.ps06.model.messages.EventMessage;
 import it.polimi.ingsw.ps06.model.messages.Message;
-import it.polimi.ingsw.ps06.model.messages.MessageBoardSetupDice;
 import it.polimi.ingsw.ps06.model.messages.MessageParser;
 import it.polimi.ingsw.ps06.model.messages.Server2Client;
 import it.polimi.ingsw.ps06.view.Board;
@@ -21,11 +20,23 @@ public class BoardController extends Observable implements Observer {
 	private Board theView;
 	private Client theModel;
 	
+	private boolean frozen;
+	
 	public BoardController(Client model, Board view) {
 		this.theView = view;
 		this.theModel = model;
 		
+		this.frozen = false;
+		
 		System.out.println("BOARD IS THE BOSS");
+	}
+	
+	public void freeze() {
+		this.frozen = true;
+	}
+	
+	public void unfreeze() {
+		this.frozen = false;
 	}
 
 	public void addNewObserver(Observer o) {
@@ -43,6 +54,12 @@ public class BoardController extends Observable implements Observer {
 		if (!( arg instanceof Message))
 			return;
 		*/
+		
+		if (arg instanceof BoardFrozenStatus)
+			((BoardFrozenStatus) arg).accept(new EventParser(this));
+		
+		if (frozen)
+			return;
 		
 		//Smista le comunicazioni provenienti dal Client
 		if ( o.getClass().isInstance(theModel) ) {

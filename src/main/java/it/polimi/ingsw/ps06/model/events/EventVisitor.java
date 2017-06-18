@@ -22,6 +22,8 @@ public interface EventVisitor {
 	public void visit(StoryBoard2BoardAgain storyboard);
 	public void visit(StoryBoard2PersonalView storyboard);
 	
+	public void visit(BoardFrozenStatus frozen);
+	
 	public void visit(RoomHasLoaded roomHasLoaded);
 	public void visit(BoardHasLoaded boardHasLoaded);
 	

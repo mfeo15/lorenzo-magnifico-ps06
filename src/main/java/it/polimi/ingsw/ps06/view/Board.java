@@ -66,4 +66,7 @@ public interface Board {
 	
 	void setRound();
 	
+	void unfreeze();
+	
+	void freeze();
 }

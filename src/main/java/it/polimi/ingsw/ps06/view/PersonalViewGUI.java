@@ -20,6 +20,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 
+import it.polimi.ingsw.ps06.controller.BoardController;
 import it.polimi.ingsw.ps06.model.events.EventClose;
 import it.polimi.ingsw.ps06.model.events.StoryBoard2BoardAgain;
 import it.polimi.ingsw.ps06.model.messages.MessageObtainPersonalBoardStatus;
@@ -33,7 +34,7 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 	private JButton exit;
 	private JTextField coins, woods, stones, servants, victory, military, faith;
 	private Font font;
-	private BoardGUI board;
+	private BoardGUI boardView;
 	
     
     private JButton[] territories = new JButton[6];
@@ -44,8 +45,8 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 	private int btCode;
 	private Dimension screenSize;
 
-	public PersonalViewGUI(int id, BoardGUI board){
-		this.board=board;
+	public PersonalViewGUI(int id, BoardGUI v){
+		this.boardView = v;
 		this.playerCode=id;
 	}
 	
@@ -296,7 +297,7 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 			Animations.AnimationPV2(f);
 			
 			setChanged();
-			StoryBoard2BoardAgain sbboard = new StoryBoard2BoardAgain(board);
+			StoryBoard2BoardAgain sbboard = new StoryBoard2BoardAgain(boardView);
 			notifyObservers(sbboard);	
 		}
 		
@@ -354,5 +355,10 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 			setChanged();
 			MessageObtainPersonalBoardStatus obtainPbStatus = new MessageObtainPersonalBoardStatus(playerCode);
 			notifyObservers(obtainPbStatus);
-		}	
+		}
+		
+		@Override
+		public Board getBackgroundView() {
+			return boardView;
+		}
 }

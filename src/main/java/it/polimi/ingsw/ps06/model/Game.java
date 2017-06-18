@@ -78,8 +78,6 @@ public class Game extends Observable {
 	public void setCurrentPlayerIndex(int currentPlayerIndex) {
 		this.currentPlayerIndex = currentPlayerIndex;
 		
-		System.out.println("NEW CURRENT: " + currentPlayerIndex );
-		
 		MessageCurrentPlayer messageCurrentP = new MessageCurrentPlayer( getCurrentPlayer().getID() );
 		notifyChangement(messageCurrentP);
 	}

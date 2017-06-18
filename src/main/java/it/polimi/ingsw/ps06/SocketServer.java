@@ -51,7 +51,7 @@ public class SocketServer implements Server {
 	public synchronized void registerConnection(Connection c) {
 		
 		connections.add(c);
-		System.out.println("[ ] Connection " + c.getInetAddress() + " registered \n");
+		System.out.println("[ SERVER ] Connection " + c.getInetAddress() + " registered \n");
 	}
 	
 	/**
@@ -94,7 +94,7 @@ public class SocketServer implements Server {
 	public synchronized void rednezvous(Connection c) {
 		
 		waitingConnection.add(c);		
-		System.out.println("[ ] Connection " + c.getInetAddress() + " in Waiting Room \n");
+		System.out.println("[ SERVER ] Connection " + c.getInetAddress() + " in Waiting Room \n");
 		
 		sendWaitingConnectionsStats();
 
@@ -124,7 +124,7 @@ public class SocketServer implements Server {
 			System.out.println();
 			System.out.println();
 			System.out.println("Lorenzo Server : ON \n");
-			System.out.println("[] Server Socket inizialiazed : " + InetAddress.getLocalHost() + " \n");
+			System.out.println("[ SERVER ] Server Socket inizialiazed : " + InetAddress.getLocalHost() + " \n");
 			
 			this.serverSocket = new ServerSocket(PORT);
 			
@@ -154,7 +154,7 @@ public class SocketServer implements Server {
 				Socket connectionSocket = serverSocket.accept();
 				
 				System.out.println();
-				System.out.println("[ ] New Client IP Address : " + connectionSocket.getInetAddress() + "\n");
+				System.out.println("[ SERVER ] New Client IP Address : " + connectionSocket.getInetAddress() + "\n");
 				
 				Connection connection = new Connection(connectionSocket);
 				registerConnection(connection);

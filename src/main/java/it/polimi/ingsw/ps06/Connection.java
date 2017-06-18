@@ -54,8 +54,6 @@ public class Connection implements Runnable, Observer {
 		this.in = new ObjectInputStream(socket.getInputStream());
 		
 		this.username = "Guest" + (new Random()).nextInt(9999);
-		
-		System.out.println(this.socket.getRemoteSocketAddress());
 	}
 	
 	public SocketAddress getID() {
@@ -176,8 +174,6 @@ public class Connection implements Runnable, Observer {
 		
 		if (arg instanceof Server2Client)
 			if (arg instanceof Broadcast) {
-				System.out.println("BROADCAST MESSAGE MADE BY " + o);
-				//SocketServer.getInstance().sendToPlayingConnections(this,(Message) arg);
 				asyncSend((Message) arg);
 			} else {
 				if ( ((Server2Client) arg).getRecipient().equals( this.getID() ) )
