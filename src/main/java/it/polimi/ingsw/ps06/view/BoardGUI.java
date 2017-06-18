@@ -166,6 +166,8 @@ public class BoardGUI extends Observable implements Board {
     private int usedMember;
     private int servantsCountNumber=0;
     
+    private int excomm1Count=0, excomm2Count=0, excomm3Count=0;
+    
     PersonalViewGUI view= new PersonalViewGUI(0,this);
 	private JFXPanel fxPanel = new JFXPanel();
 	
@@ -789,6 +791,17 @@ public class BoardGUI extends Observable implements Board {
 	    desktop.setVisible(true);
 	    
 		setRound();
+		
+	    
+	    excommunicate(1,3);
+	    excommunicate(2,2);
+	    excommunicate(1,1);
+	    excommunicate(2,0);
+	    excommunicate(3,3);
+	    excommunicate(3,0);
+	    excommunicate(1,3);
+	    excommunicate(1,0);
+	    
 	    
 	    desktopFrame.add(timerInfo);
 	    desktopFrame.add(resourcesInfo);
@@ -970,7 +983,7 @@ public class BoardGUI extends Observable implements Board {
 	}
 	
 	private JButton[] locateExcommStones(JButton[] btns){
-		double x=19.3;
+		double x=19.4;
 		double y=22;
 		int i=0;
 		
@@ -980,21 +993,21 @@ public class BoardGUI extends Observable implements Board {
 				btns[i].setLocation((int)(width*x/100),(int)(height*y/100));
 				btns[i].setSize(width*2/100,height*2/100);
 				i=i+1;
-				x=x+2;		
+				x=x+2.25;		
 			}
 			
-			x=x-4;
-			y=y+2;
+			x=x-4.5;
+			y=y+2.4;
 			
 			for(int j=2;j<4;j++){
 				btns[i].setLocation((int)(width*x/100),(int)(height*y/100));
 				btns[i].setSize(width*2/100,height*2/100);
 				i=i+1;
-				x=x+2;		
+				x=x+2.25;		
 			}
 			if(z==1){y=y-1.5;}
-			x=x+4.7;
-			y=y-2;
+			x=x+4.17;
+			y=y-2.4;
 		}
 		
 		return btns;
@@ -2066,10 +2079,7 @@ public class BoardGUI extends Observable implements Board {
 	    playerName="Gigi Scarfani";
 	    roundNumber=1;
 	    periodNumber=1;
-	    
-	    
-	    //for(int j=0;j<cardsCodes.length;j++){cardsCodes[j]=j;}
-	    
+
         startTimer();
 
 	}
@@ -2095,7 +2105,28 @@ public class BoardGUI extends Observable implements Board {
 	}
 	
 	
-	
+	@Override
+	public void excommunicate(int tileNumber, int playerIndex) {
+		
+		int excommIndex=0;
+		
+		if(tileNumber==1) excommIndex=excomm1Count;
+		if(tileNumber==2) excommIndex=4+excomm2Count;
+		if(tileNumber==3) excommIndex=8+excomm3Count;
+		
+		if(playerIndex==0) excommStones[excommIndex].setBackground(Color.red);
+		if(playerIndex==1) excommStones[excommIndex].setBackground(Color.green);
+		if(playerIndex==2) excommStones[excommIndex].setBackground(Color.blue);
+		if(playerIndex==3) excommStones[excommIndex].setBackground(Color.yellow);
+		
+		excommStones[excommIndex].setOpaque(true);
+		
+		if(tileNumber==1) excomm1Count++;
+		if(tileNumber==2) excomm2Count++;
+		if(tileNumber==3) excomm3Count++;
+		
+	}
+
 	@Override
 	public void setRound() {
 

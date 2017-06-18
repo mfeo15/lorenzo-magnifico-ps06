@@ -64,6 +64,8 @@ public interface Board {
 	
 	void startGame(int index);
 	
+	void excommunicate (int tileNumber, int playerIndex);
+	
 	void setRound();
 	
 	void unfreeze();
