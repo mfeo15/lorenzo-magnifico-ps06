@@ -25,8 +25,6 @@ public class Board {
 	
 	private ExcommunicationTile excommunicationTiles[];
 	
-	private ArrayList<DevelopementCard> deck;
-	
 	
 	/**
 	* Costruttore della Board. Si occupa dell'inizializzazione delle zone 
@@ -36,18 +34,12 @@ public class Board {
 	* @return 	Nothing
 	*/
 	public Board(int numberPlayers) {
-		buildDeck();
-		towersZone = new Towers(deck);
+		towersZone = new Towers();
 		marketZone = new Market(numberPlayers);
 		councilPalaceZone = new CouncilPalace();
 		harvestProductionZone = new HarvestProduction(numberPlayers);
 	
 		drawExcommunicationTiles();
-	}
-	
-	private void buildDeck(){
-		
-		//Riempi Deck con carte dal file
 	}
 	
 	/**
@@ -82,8 +74,6 @@ public class Board {
 	*/ 
 	public void setupRound() {
 		clean();
-		
-		System.out.println("CLEANED");
 	}
 	
 	

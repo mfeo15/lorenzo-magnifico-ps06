@@ -53,8 +53,6 @@ public class MessageParser implements MessageVisitor {
 	public void visit(MessagePlayingConnections playingConnections) {
 		Board b = ((Board) supporter);
 		
-		System.out.println("PLAYERS RECEIVED FROM SERVER: " + playingConnections.getWaitingConnections().size());
-		
 		b.setPlayerNumber( playingConnections.getWaitingConnections().size() );
 		
 		for (String s : playingConnections.getWaitingConnections())
@@ -133,8 +131,6 @@ public class MessageParser implements MessageVisitor {
 
 	@Override
 	public void visit(MessageGameStatus gameStat) {
-
-		System.out.println("PERIOD: " + gameStat.getCurrentPeriod() + " ROUND: " + gameStat.getCurrentRound());
 		
 		Board b = ((Board) supporter);
 		b.setPeriodRound(gameStat.getCurrentPeriod(),gameStat.getCurrentRound());
@@ -147,8 +143,6 @@ public class MessageParser implements MessageVisitor {
 
 	@Override
 	public void visit(MessageModel2ViewNotification notification) {
-		System.out.println( notification.getNotification() );
-		
 		Board b = ((Board) supporter);
 		b.showErrorLog( notification.getNotification() );
 	}
@@ -215,6 +209,13 @@ public class MessageParser implements MessageVisitor {
 		int military = resStatus.getWarehouse().getResourceValue(PointsKind.MILITARY_POINTS);
 		int faith = resStatus.getWarehouse().getResourceValue(PointsKind.FAITH_POINTS);
 		
-		b.setPersonalResources(coin, wood, stone, servant/*, victory, military, faith*/);
+		b.setPersonalResources(coin, wood, stone, servant, victory, military, faith);
+	}
+
+	@Override
+	public void visit(MessageBoardSetupDevCards boardSetupDevCards) {
+		Board b = ((Board) supporter);
+		
+		b.setCards( boardSetupDevCards.getRoundCards() );
 	}
 }

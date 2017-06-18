@@ -20,6 +20,7 @@ public interface MessageVisitor {
 	
 	public void visit(BoardReady br);
 	public void visit(MessageBoardSetupDice boardSetupDice);
+	public void visit(MessageBoardSetupDevCards boardSetupDevCards);
 	public void visit(MessageBoardMemberHasBeenPlaced newMember);
 	
 	public void visit(MessagePersonalBoardStatus pbStatus);

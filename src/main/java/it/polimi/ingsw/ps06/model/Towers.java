@@ -1,13 +1,16 @@
 package it.polimi.ingsw.ps06.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Random;
 
 import it.polimi.ingsw.ps06.model.Types.Action;
 import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
 import it.polimi.ingsw.ps06.model.Types.PointsKind;
 import it.polimi.ingsw.ps06.model.messages.MessageBoardMemberHasBeenPlaced;
+import it.polimi.ingsw.ps06.model.messages.MessageBoardSetupDevCards;
 import it.polimi.ingsw.ps06.model.messages.MessageModel2ViewNotification;
 
 /**
@@ -19,16 +22,12 @@ import it.polimi.ingsw.ps06.model.messages.MessageModel2ViewNotification;
 */
 
 public class Towers extends Observable implements PlaceSpace {
-	private ArrayList<Territory> territories;
-	private ArrayList<Building> buildings;
-	private ArrayList<Character> characters;
-	private ArrayList<Venture> ventures;
 	
 	private ArrayList<FamilyMember> memberSpaces;
 	private ArrayList<DevelopementCard> deck;
 	private CardAcquisition acquire;
 	
-	private static final int CARTE_TORRE=16;
+	private static final int CARTE_TORRE = 16;
 	private EffectsActive attivi; // da modificare in listener
 	private int deckIndex=0;
 	private int tower=0;
@@ -55,8 +54,6 @@ public class Towers extends Observable implements PlaceSpace {
 		
 		//int bonus = EffectsActive.valueBonus(p);
 		//memberValue = memberValue + bonus;
-		
-		//chosenAction = Action.TOWER_GREEN_4;
 		
 		int memberValue = member.getValue() + servants;	
 		
@@ -122,22 +119,43 @@ public class Towers extends Observable implements PlaceSpace {
 	* @param 	deck		Mazzo di carte mischiato
 	* @return 	Nothing
 	*/
-	public Towers(ArrayList<DevelopementCard> deck) {
+	public Towers() {
 		
 		memberSpaces = new ArrayList<FamilyMember>();
 		
-		this.deck=deck;
+		this.deck = (new ParserXMLCards("resources/XML/DevelopementCards.xml")).getCards();
+		
+		this.deckIndex = - CARTE_TORRE;
+		
+		shuffleDeck();
 	}
 
-	public void initializeArrayLists(){
-			
-			for(int j=0; j<60; j++){
-					memberSpaces.add(null);
-				}
-			
-		}
+	private void shuffleDeck() {
+		
+		ArrayList<DevelopementCard> a = new ArrayList<DevelopementCard>();
+		a.addAll( deck.subList(0, 24) );
+		a.addAll( deck.subList(48, 72) );
+		a.addAll( deck.subList(24, 48) );
+		a.addAll( deck.subList(72, 96) );
+		
+		for (int i = 0; i < 12; i++) 
+			Collections.shuffle( a.subList( (0 + 8*i) , (8 + 8*i) ), new Random(System.nanoTime()));
+		
+		ArrayList<DevelopementCard> b = new ArrayList<DevelopementCard>();
+		for (int t = 0; t < 6; t++)
+			for (int q = 0; q < 4; q++) 
+				b.addAll( a.subList( 4*(6*q + t) , 4*(6*q + t + 1) ));
+		
+		this.deck = b;
+	}
 	
-	private void checkWhichTower(Action chosenAction){
+	public void initializeArrayLists() {
+
+		for(int j=0; j<60; j++)
+			memberSpaces.add(null);
+	}
+
+	private void checkWhichTower(Action chosenAction) {
 		
 		switch(chosenAction){
 			case TOWER_GREEN_1:
@@ -277,9 +295,23 @@ public class Towers extends Observable implements PlaceSpace {
 	* @param 	Unused
 	* @return 	Nothing
 	*/
-	public void cleanTowers(){
+	public void cleanTowers() {
 		deckIndex = deckIndex + CARTE_TORRE;
 		memberSpaces.clear();
+		
+		MessageBoardSetupDevCards setupCards = new MessageBoardSetupDevCards( getRoundCards() );
+		notifyChangement(setupCards);
+	}
+	
+	public int[] getRoundCards(){
+		
+		int[] roundCards = new int[16];
+		
+		for(int i = deckIndex; i < CARTE_TORRE; i++){
+			roundCards[i] = deck.get(i).getCode();
+		}
+		
+		return roundCards;
 	}
 	
 	/**
@@ -288,6 +320,8 @@ public class Towers extends Observable implements PlaceSpace {
 	* @return 	territories	ArrayList territori
 	*/
 	public ArrayList<Territory> getTerritories(){
+		
+		ArrayList<Territory> territories = new ArrayList<Territory>();
 		
 		for(int i=0; i<4; i++){
 			territories.add((Territory)deck.get(i));
@@ -310,7 +344,10 @@ public class Towers extends Observable implements PlaceSpace {
 	* @return 	characters	ArrayList personaggi
 	*/
 	public ArrayList<Character> getCharacters(){
-		for(int i=4; i<8; i++){
+		
+		ArrayList<Character> characters = new ArrayList<Character>();
+		
+		for(int i=8; i<12; i++) {
 			characters.add((Character)deck.get(i));
 		}
 		return characters;
@@ -322,7 +359,10 @@ public class Towers extends Observable implements PlaceSpace {
 	* @return 	buildings	ArrayList edifici
 	*/
 	public ArrayList<Building> getBuildings(){
-		for(int i=8; i<12; i++){
+		
+		ArrayList<Building> buildings = new ArrayList<Building>();
+		
+		for(int i=4; i<8; i++) {
 			buildings.add((Building)deck.get(i));
 		}
 		return buildings;
@@ -334,6 +374,9 @@ public class Towers extends Observable implements PlaceSpace {
 	* @return 	territories	ArrayList imprese
 	*/
 	public ArrayList<Venture> getVentures(){
+		
+		ArrayList<Venture> ventures = new ArrayList<Venture>();
+		
 		for(int i=12; i<16; i++){
 			ventures.add((Venture)deck.get(i));
 		}

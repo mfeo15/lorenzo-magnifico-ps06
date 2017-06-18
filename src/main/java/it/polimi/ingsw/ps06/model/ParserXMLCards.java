@@ -320,7 +320,7 @@ public class ParserXMLCards {
 			Resources res=new Resources();
 			res=setResourceBonus(bonus);
 			EffectsResources eff_res=new EffectsResources(res);
-			card.setInstEffect(eff_res);
+			//card.setInstEffect(eff_res);
 		}
 		else if(eff.getNodeName().equals("swapResources")){	
 			Node input=eff.getFirstChild();
@@ -372,16 +372,13 @@ public class ParserXMLCards {
 
 
 
-	/*public static void main(String[] args){
+	public static void main(String[] args){
 		ParserXMLCards c = new ParserXMLCards("resources/XML/DevelopementCards.xml");
 		ArrayList<DevelopementCard> a = new  ArrayList<DevelopementCard>();
 		a = c.getCards();
-		
+
 		for(int i=0; i<a.size();i++){
 			System.out.println("code:"+a.get(i).getCode()+", "+a.get(i).getTitle()+ " periodo: "+a.get(i).getPeriod());
-		}
-		
-		
-		
-	}*/
+		}	
 	}
+}

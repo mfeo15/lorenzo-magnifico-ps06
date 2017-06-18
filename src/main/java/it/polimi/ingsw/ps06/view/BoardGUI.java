@@ -1913,7 +1913,7 @@ public class BoardGUI extends Observable implements Board {
 
 	@Override
 	public void setCards(int[] cards) {
-		this.cardsCodes=cards;
+		this.cardsCodes = cards;
 		
 		try {
 			refresh();
@@ -2087,7 +2087,7 @@ public class BoardGUI extends Observable implements Board {
 	    periodNumber=1;
 	    
 	    
-	    for(int j=0;j<cardsCodes.length;j++){cardsCodes[j]=j;}
+	    //for(int j=0;j<cardsCodes.length;j++){cardsCodes[j]=j;}
 	    
         startTimer();
 
