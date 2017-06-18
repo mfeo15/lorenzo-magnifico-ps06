@@ -233,38 +233,11 @@ public class BoardGUI extends Observable implements Board {
 		fontbig = new Font("Lucida Handwriting",Font.PLAIN,(int)(33*(screenSize.getHeight()/1080)) );
 		
 		//Caricamento e resize delle immagini
-		BufferedImage image1 = ImageIO.read(new File("resources/board1.jpg")); 
-		BufferedImage image2 = ImageIO.read(new File("resources/board2.jpg")); 
-		BufferedImage image3 = ImageIO.read(new File("resources/stanzaVuota.png")); 
-		BufferedImage image4 = ImageIO.read(new File("resources/desktop.jpg")); 
-		
-		BufferedImage board1 = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-		BufferedImage board2 = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-		BufferedImage board3 = new BufferedImage(escWidth, escHeight, BufferedImage.TYPE_INT_ARGB);
-		BufferedImage desktopImage = new BufferedImage((int)screenSize.getWidth(), (int)screenSize.getHeight(), BufferedImage.TYPE_INT_ARGB);
-	
-		
-		Graphics g1 = board1.createGraphics();
-        g1.drawImage(image1, 0, 0, width, height, null);
-        g1.dispose();
-        
-        Graphics g2 = board2.createGraphics();
-        g2.drawImage(image2, 0, 0, width, height, null);
-        g2.dispose();
-        
-        Graphics g3 = board3.createGraphics();
-        g3.drawImage(image3, 0, 0, escWidth, escHeight, null);
-        g3.dispose();
-        
-        Graphics g4 = desktopImage.createGraphics();
-        g4.drawImage(image4, 0, 0, (int)screenSize.getWidth(), (int)screenSize.getHeight(), null);
-        g4.dispose();
-        
-        
-        JLabel board1Label = new JLabel(new ImageIcon(board1)); 
-        JLabel board2Label = new JLabel(new ImageIcon(board2));
-        JLabel board3Label = new JLabel(new ImageIcon(board3));
-        
+		JLabel board1Label = ImageHandler.setImage("resources/board1.jpg", 100, 100, width, height);
+		JLabel board2Label = ImageHandler.setImage("resources/board2.jpg", 100, 100, width, height);
+		JLabel board3Label = ImageHandler.setImage("resources/stanzaVuota.png", 60, 80, width, height);
+		JLabel board4Label = ImageHandler.setImageScreen("resources/desktop.jpg", 100, 100, (int)screenSize.getWidth(), (int)screenSize.getHeight());
+
         getResources();
         
         playersLabel[0] = ImageHandler.setImage("resources/player/avatar1.jpg",7,9,width,height);
@@ -293,7 +266,7 @@ public class BoardGUI extends Observable implements Board {
 			@Override
 		    protected void paintComponent(Graphics g) {
 		        super.paintComponent(g);
-                g.drawImage(desktopImage, 0, 0, null);
+                g.drawImage( ((ImageIcon)(board4Label.getIcon())).getImage(), 0, 0, null);
 		    }};
         
 	    
@@ -343,7 +316,7 @@ public class BoardGUI extends Observable implements Board {
 		timerInfo.setForeground(Color.BLACK);
 		timerInfo.setHorizontalAlignment(JTextField.CENTER);
 		
-		resourcesInfo = new JTextField(coinV+" Coin   "+woodV+" Wood   "+stoneV+" Wood   "+servantV+" Servant   |    " +victoryV+" Victory   "+militaryV+" Military   "+faithV+" Faith");
+		resourcesInfo = new JTextField(coinV+" Coin   "+woodV+" Wood   "+stoneV+" Wood   "+servantV+" Servant    |    " +victoryV+" Victory   "+militaryV+" Military   "+faithV+" Faith");
 		resourcesInfo.setLocation((int)screenSize.getWidth()*10/100,(int)screenSize.getHeight()*96/100);
 		resourcesInfo.setSize((int)screenSize.getWidth()*80/100,(int)screenSize.getHeight()*4/100);
 		resourcesInfo.setOpaque(false);
@@ -420,7 +393,7 @@ public class BoardGUI extends Observable implements Board {
             });
             
         
-        servants.setLocation((int)(width*12/100),(int)(height*92/100));
+        servants.setLocation((int)(width*11.5/100),(int)(height*92/100));
         servants.setSize((int)width*5/100,(int)height*7/100);
         servants.setOpaque(false);
         servants.setContentAreaFilled(false);
@@ -450,7 +423,7 @@ public class BoardGUI extends Observable implements Board {
             
         });
         
-        servantsCount.setLocation((int)width*17/100,(int)(height*94/100));
+        servantsCount.setLocation((int)(width*16.5)/100,(int)(height*94/100));
         servantsCount.setSize((int)width*2/100,(int)height*3/100);
         servantsCount.setOpaque(false);
         servantsCount.setFont(fontMEDIUM);
@@ -941,12 +914,12 @@ public class BoardGUI extends Observable implements Board {
 		
 		//Ciclo 16 volte diviso per colonne ogni colonna 4 posti
 		for(int j=0;j<=3;j++){
-			y=5;
+			y=77;
 			for(int z=0;z<=3;z++){
 				
 				btns[i].setLocation((int)(width*x/100),(int)(height*y/100));
 				btns[i].setSize(width*12/100,(int)(height*21.7/100));
-				y=y+24;
+				y=y-24;
 				i++;
 			}	
 			x=x+21.9;		
@@ -961,12 +934,12 @@ public class BoardGUI extends Observable implements Board {
 		
 		//Ciclo 16 volte diviso per colonne ogni colonna 4 posti
 		for(int j=0;j<=3;j++){
-			y=12;
+			y=86.6;
 			for(int z=0;z<=3;z++){
 				
 				btns[i].setLocation((int)(width*x/100),(int)(height*y/100));
 				btns[i].setSize((int)(width*7.9/100),height*9/100);
-				y=y+24.8;
+				y=y-24.8;
 				i++;
 			}	
 			x=x+21.9;		
@@ -1319,6 +1292,7 @@ public class BoardGUI extends Observable implements Board {
 		                    notifyAction(identifySpot(component),Integer.parseInt(value.toString()),servantsCountNumber);
 	                    	
 		                    servantsCountNumber=0;
+		                    servantsCount.setText(""+servantsCountNumber);
 		                    usedMember= Integer.parseInt(value.toString());
 		                    
 	                        accept = true;
@@ -1444,6 +1418,8 @@ public class BoardGUI extends Observable implements Board {
 	}
 
 	public void startTimer(){
+		timer.stop();
+		timer = createTimer(1000);
 		getTimer().start();
 	}
 	
@@ -1521,25 +1497,25 @@ public class BoardGUI extends Observable implements Board {
     	if( ( (JButton) c) == markets[2] ) return it.polimi.ingsw.ps06.model.Types.Action.MARKET_3;
     	if( ( (JButton) c) == markets[3] ) return it.polimi.ingsw.ps06.model.Types.Action.MARKET_4;
     	
-    	if( ( (JButton) c) == placements[3] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_GREEN_1;
-    	if( ( (JButton) c) == placements[2] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_GREEN_2;
-    	if( ( (JButton) c) == placements[1] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_GREEN_3;
-    	if( ( (JButton) c) == placements[0] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_GREEN_4;
+    	if( ( (JButton) c) == placements[0] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_GREEN_1;
+    	if( ( (JButton) c) == placements[1] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_GREEN_2;
+    	if( ( (JButton) c) == placements[2] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_GREEN_3;
+    	if( ( (JButton) c) == placements[3] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_GREEN_4;
     	
-    	if( ( (JButton) c) == placements[7] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_BLUE_1;
-    	if( ( (JButton) c) == placements[6] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_BLUE_2;
-    	if( ( (JButton) c) == placements[5] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_BLUE_3;
-    	if( ( (JButton) c) == placements[4] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_BLUE_4;
+    	if( ( (JButton) c) == placements[4] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_BLUE_1;
+    	if( ( (JButton) c) == placements[5] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_BLUE_2;
+    	if( ( (JButton) c) == placements[6] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_BLUE_3;
+    	if( ( (JButton) c) == placements[7] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_BLUE_4;
     	
-    	if( ( (JButton) c) == placements[11] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_YELLOW_1;
-    	if( ( (JButton) c) == placements[10] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_YELLOW_2;
-    	if( ( (JButton) c) == placements[9] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_YELLOW_3;
-    	if( ( (JButton) c) == placements[8] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_YELLOW_4;
+    	if( ( (JButton) c) == placements[8] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_YELLOW_1;
+    	if( ( (JButton) c) == placements[9] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_YELLOW_2;
+    	if( ( (JButton) c) == placements[10] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_YELLOW_3;
+    	if( ( (JButton) c) == placements[11] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_YELLOW_4;
     	
-    	if( ( (JButton) c) == placements[15] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_PURPLE_1;
-    	if( ( (JButton) c) == placements[14] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_PURPLE_2;
-    	if( ( (JButton) c) == placements[13] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_PURPLE_3;
-    	if( ( (JButton) c) == placements[12] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_PURPLE_4;
+    	if( ( (JButton) c) == placements[12] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_PURPLE_1;
+    	if( ( (JButton) c) == placements[13] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_PURPLE_2;
+    	if( ( (JButton) c) == placements[14] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_PURPLE_3;
+    	if( ( (JButton) c) == placements[15] ) return it.polimi.ingsw.ps06.model.Types.Action.TOWER_PURPLE_4;
     	
     	return null;
     	
@@ -1569,40 +1545,40 @@ public class BoardGUI extends Observable implements Board {
     		return markets[3];
     		
     	case TOWER_GREEN_1:
-    		return placements[3];
-    	case TOWER_GREEN_2:
-    		return placements[2];
-    	case TOWER_GREEN_3:
-    		return placements[1];
-    	case TOWER_GREEN_4:
     		return placements[0];
+    	case TOWER_GREEN_2:
+    		return placements[1];
+    	case TOWER_GREEN_3:
+    		return placements[2];
+    	case TOWER_GREEN_4:
+    		return placements[3];
     		
     	case TOWER_BLUE_1:
-    		return placements[7];
-    	case TOWER_BLUE_2:
-    		return placements[6];
-    	case TOWER_BLUE_3:
-    		return placements[5];
-    	case TOWER_BLUE_4:
     		return placements[4];
+    	case TOWER_BLUE_2:
+    		return placements[5];
+    	case TOWER_BLUE_3:
+    		return placements[6];
+    	case TOWER_BLUE_4:
+    		return placements[7];
     		
     	case TOWER_YELLOW_1:
-    		return placements[11];
-    	case TOWER_YELLOW_2:
-    		return placements[10];
-    	case TOWER_YELLOW_3:
-    		return placements[9];
-    	case TOWER_YELLOW_4:
     		return placements[8];
+    	case TOWER_YELLOW_2:
+    		return placements[9];
+    	case TOWER_YELLOW_3:
+    		return placements[10];
+    	case TOWER_YELLOW_4:
+    		return placements[11];
 
     	case TOWER_PURPLE_1:
-    		return placements[15];
-    	case TOWER_PURPLE_2:
-    		return placements[14];
-    	case TOWER_PURPLE_3:
-    		return placements[13];
-    	case TOWER_PURPLE_4:
     		return placements[12];
+    	case TOWER_PURPLE_2:
+    		return placements[13];
+    	case TOWER_PURPLE_3:
+    		return placements[14];
+    	case TOWER_PURPLE_4:
+    		return placements[15];
     		
     	default:
     		return null;

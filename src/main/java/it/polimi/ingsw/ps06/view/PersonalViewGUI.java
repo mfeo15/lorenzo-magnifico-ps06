@@ -74,23 +74,13 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 			width = (int)((screenSize.getWidth()*77/100)*(1.349 / ratio));
 			height = (int)(screenSize.getHeight()*77/100);
 			
-			BufferedImage image1 = ImageIO.read(new File("resources/personalView.png")); 
-			BufferedImage exit1 = ImageIO.read(new File("resources/button.png")); 
-			
-			BufferedImage stanza1 = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-			
-			
-			Graphics g1 = stanza1.createGraphics();
-	        g1.drawImage(image1, 0, 0, width, height, null);
-	        g1.dispose();
+			JLabel stanza = ImageHandler.setImage("resources/personalView.png", 100, 100, width, height);
 	        
 	        String hoverSound = "resources/menuhover.wav";
 			Media hit = new Media(new File(hoverSound).toURI().toString());
 			
 			String exitSound = "resources/exit.wav";
 			Media music1 = new Media(new File(exitSound).toURI().toString());
-			
-			JLabel label = new JLabel(new ImageIcon(stanza1)); 
 			
 			exit = new JButton();
 		    exit.setLocation(width*95/100,0);
@@ -99,7 +89,7 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 		    exit.setContentAreaFilled(false);
 		    exit.setFocusPainted(false);
 		    exit.setBorderPainted(false);
-		    exit.setIcon(new ImageIcon(exit1));
+		    exit.setIcon((ImageHandler.setImageScreen("resources/button.png",2,(int)(2*ratio),width,height)).getIcon());
 	        f.add(exit);
 	        
 	        exit.addMouseListener(new MouseAdapter()
@@ -213,7 +203,7 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 			f.add(bonusTile[0]);
 			
 			
-	        f.getContentPane().add(label);
+	        f.getContentPane().add(stanza);
 	        
 	        if(!(f.isUndecorated())) {f.setUndecorated(true);}
 	        

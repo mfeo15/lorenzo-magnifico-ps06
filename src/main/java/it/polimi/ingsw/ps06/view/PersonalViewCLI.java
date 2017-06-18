@@ -80,6 +80,13 @@ public class PersonalViewCLI extends Observable implements PersonalView {
 		notifyObservers(obtainPbStatus);
 		
 	}
+
+	@Override
+	public Board getBackgroundView() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	
 
 }

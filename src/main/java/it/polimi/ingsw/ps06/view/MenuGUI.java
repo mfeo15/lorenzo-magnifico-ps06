@@ -52,28 +52,9 @@ public class MenuGUI extends Observable implements Menu {
     	
 		
 		//Caricamento e resize delle immagini
-        BufferedImage image1 = ImageIO.read(new File("resources/cover4.png"));
-        BufferedImage image2 = ImageIO.read(new File("resources/cover7.png"));
-        BufferedImage image3 = ImageIO.read(new File("resources/cover6.png"));
-            
-        BufferedImage cover1 = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        BufferedImage cover2 = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        BufferedImage cover3 = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-
-        Graphics g1 = cover1.createGraphics();
-        g1.drawImage(image1, 0, 0, width, height, null);
-        g1.dispose();
-        
-        Graphics g2 = cover2.createGraphics();
-        g2.drawImage(image2, 0, 0, width, height, null);
-        g2.dispose();
-        
-        Graphics g3 = cover3.createGraphics();
-        g3.drawImage(image3, 0, 0, width, height, null);
-        g3.dispose();
-        
-        JLabel label = new JLabel(new ImageIcon(cover1)); 
-        
+		JLabel cover1 = ImageHandler.setImage("resources/cover4.png", 100, 100, width, height);
+		JLabel cover2 = ImageHandler.setImage("resources/cover7.png", 100, 100, width, height);
+		JLabel cover3 = ImageHandler.setImage("resources/cover6.png", 100, 100, width, height);
         
       //Caricamento suoni del gioco
         String hoverSound = "resources/menuhover.wav";
@@ -85,6 +66,8 @@ public class MenuGUI extends Observable implements Menu {
 		String exitSound = "resources/exit.wav";
 		Media music1 = new Media(new File(exitSound).toURI().toString());
 
+		
+		JLabel label = new JLabel(cover1.getIcon());
 		
 		/*
 		String music = "resources/menuopen.mp3";
@@ -110,7 +93,7 @@ public class MenuGUI extends Observable implements Menu {
             public void mouseEntered(MouseEvent evt)
             {
             	
-            	label.setIcon(new ImageIcon(cover2));
+            	label.setIcon(cover2.getIcon());
 				MediaPlayer mediaPlayer = new MediaPlayer(hit);
 				mediaPlayer.play();
 					
@@ -118,7 +101,7 @@ public class MenuGUI extends Observable implements Menu {
             public void mouseExited(MouseEvent evt)
             {
 
-            	label.setIcon(new ImageIcon(cover1));
+            	label.setIcon(cover1.getIcon());
 				MediaPlayer mediaPlayer = new MediaPlayer(hit);
 				mediaPlayer.play();
             	
@@ -148,7 +131,7 @@ public class MenuGUI extends Observable implements Menu {
             public void mouseEntered(MouseEvent evt)
             {
 				     		
-            	label.setIcon(new ImageIcon(cover3));
+            	label.setIcon(cover3.getIcon());
             	MediaPlayer mediaPlayer = new MediaPlayer(hit);
 				mediaPlayer.play();
 
@@ -156,7 +139,7 @@ public class MenuGUI extends Observable implements Menu {
             public void mouseExited(MouseEvent evt)
             {
 
-            	label.setIcon(new ImageIcon(cover1));
+            	label.setIcon(cover1.getIcon());
             	MediaPlayer mediaPlayer = new MediaPlayer(hit);
 				mediaPlayer.play();
 					

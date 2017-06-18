@@ -4,7 +4,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -60,7 +62,7 @@ public class RoomGUI extends Observable implements Room {
 		
 		double ratio= (screenSize.getWidth()/screenSize.getHeight());
 		
-		width = (int)((screenSize.getWidth()*70/100)*(1.5 / ratio));
+		width = (int)((screenSize.getWidth()*70/100)*(1.500678 / ratio));
 		height = (int)(screenSize.getHeight()*70/100);
 		
 		font = new Font("Lucida Handwriting",Font.PLAIN,(int)(12*(screenSize.getHeight()/1080)));
@@ -68,15 +70,7 @@ public class RoomGUI extends Observable implements Room {
 	    
 		
 		//Caricamento e resize delle immagini
-		BufferedImage image1 = ImageIO.read(new File("resources/stanza2.jpg")); 
-		BufferedImage exit1 = ImageIO.read(new File("resources/button.png")); 
-		
-		BufferedImage stanza1 = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-		
-		Graphics g1 = stanza1.createGraphics();
-        g1.drawImage(image1, 0, 0, width, height, null);
-        g1.dispose();
-		
+		JLabel stanza = ImageHandler.setImage("resources/stanza2.jpg", 100, 100, width, height);
 		
         //Caricamento suoni del gioco
         String hoverSound = "resources/menuhover.wav";
@@ -94,9 +88,6 @@ public class RoomGUI extends Observable implements Room {
 		mediaPlayer4 = new AudioClip(menuMusic.getSource());
 		mediaPlayer4.setVolume(0.3);
        	mediaPlayer4.play();
-		
-		JLabel label = new JLabel(new ImageIcon(stanza1)); 
-		
 	        
 		//Inizializzazione dei componenti
 	    exit = new JButton();
@@ -106,7 +97,7 @@ public class RoomGUI extends Observable implements Room {
 	    exit.setContentAreaFilled(false);
 	    exit.setFocusPainted(false);
 	    exit.setBorderPainted(false);
-	    exit.setIcon(new ImageIcon(exit1));
+	    exit.setIcon((ImageHandler.setImageScreen("resources/button.png",2,(int)(2*ratio),width,height)).getIcon());
         f.add(exit);
        
         
@@ -297,7 +288,7 @@ public class RoomGUI extends Observable implements Room {
             
         });
         
-	    f.getContentPane().add(label);
+	    f.getContentPane().add(stanza);
         f.setUndecorated(true);
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.pack();

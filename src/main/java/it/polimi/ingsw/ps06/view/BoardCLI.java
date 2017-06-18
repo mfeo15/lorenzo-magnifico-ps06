@@ -292,16 +292,16 @@ public class BoardCLI extends Observable implements Board {
 		
 		switch(memberIndex){
 		case 0:
-			memberPlaced = new EventMemberPlaced(chosenAction,ColorPalette.DICE_BLACK);
+			memberPlaced = new EventMemberPlaced(chosenAction,ColorPalette.DICE_BLACK,servants);
 			break;
 		case 1:
-			memberPlaced = new EventMemberPlaced(chosenAction,ColorPalette.DICE_WHITE);
+			memberPlaced = new EventMemberPlaced(chosenAction,ColorPalette.DICE_WHITE,servants);
 			break;
 		case 2:
-			memberPlaced = new EventMemberPlaced(chosenAction,ColorPalette.DICE_ORANGE);
+			memberPlaced = new EventMemberPlaced(chosenAction,ColorPalette.DICE_ORANGE,servants);
 			break;
 		case 3:
-			memberPlaced = new EventMemberPlaced(chosenAction,ColorPalette.UNCOLORED);
+			memberPlaced = new EventMemberPlaced(chosenAction,ColorPalette.UNCOLORED,servants);
 			break;
 		}
 		
@@ -420,6 +420,18 @@ public class BoardCLI extends Observable implements Board {
 		setChanged();
 		BoardHasLoaded roomLoaded = new BoardHasLoaded();
 		notifyObservers(roomLoaded);
+		
+	}
+
+	@Override
+	public void unfreeze() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void freeze() {
+		// TODO Auto-generated method stub
 		
 	}
 	
