@@ -23,9 +23,7 @@ import it.polimi.ingsw.ps06.model.messages.MessageModel2ViewNotification;
 
 public class Towers extends Observable implements PlaceSpace {
 	
-	//private ArrayList<FamilyMember> memberSpaces;
 	private FamilyMember[] memberSpaces;
-	//private ArrayList<DevelopementCard> deck;
 	private DevelopementCard[] deck;
 	
 	private static final int CARTE_TORRE = 16;
@@ -33,8 +31,7 @@ public class Towers extends Observable implements PlaceSpace {
 	private int deckIndex=0;
 	private int towerIndex = 0;
 	private int baseFloorTower = 0;
-	private int topFloorTower= 0;
-	private int errorCode=0;
+	private int topFloorTower = 0;
 	
 	/**
 	* Metodo per il piazzamento di un familiare su di una delle torri, include controlli di posizionamento
@@ -97,7 +94,7 @@ public class Towers extends Observable implements PlaceSpace {
 		*/
 		// Caso in cui il familiare può essere piazzato
 		if(!colorRule) {
-			handle(errorCode, member);
+			handle(-1, member);
 			return;
 		}
 		
@@ -114,7 +111,7 @@ public class Towers extends Observable implements PlaceSpace {
 
 			MessageBoardMemberHasBeenPlaced newMember = new MessageBoardMemberHasBeenPlaced(chosenAction, member.getColor(), (member.getPlayer()).getID() );
 			notifyChangement(newMember);
-		}
+		} else handle(3, member);
 	
 
 		MessageBoardSetupDevCards setupCards = new MessageBoardSetupDevCards( getRoundCards() );
@@ -272,7 +269,7 @@ public class Towers extends Observable implements PlaceSpace {
 	* @param	code		codice errore
 	* @return 	Nothing
 	*/
-	private void handle(int code, FamilyMember member){
+	private void handle(int code, FamilyMember member) {
 		
 		String notification = "Il giocatore " + member.getPlayer().getColorAssociatedToID() + " ha piazzato un familiare ";
 		
@@ -281,22 +278,13 @@ public class Towers extends Observable implements PlaceSpace {
 			break;
 		case 2: notification += ", ma la carta sviluppo non c'era";
 			break;
+		case 3: notification += ", ma le risorse non sono sufficienti";
+			break;
 		default: notification = "UNKNOWN ERROR ON TOWERS";
 		}
 		
 		MessageModel2ViewNotification m = new MessageModel2ViewNotification(notification);
 		notifyChangement(m);
-	}
-	
-	/**
-	* Metodo per attribuire la carta al giocatore che l'ha scelta con successo
-	*
-	* @param 	player			Giocatore a cui dare la carta
-	* @param 	chosenAction	Codice dell'azione da eseguire	
-	* @return 	 
-	*/
-	public void giveCard(Player player, Action chosenAction){
-		
 	}
 	
 	/**

@@ -5,6 +5,7 @@ import java.util.Observer;
 import java.util.Random;
 
 import it.polimi.ingsw.ps06.model.Types.Action;
+import it.polimi.ingsw.ps06.model.Types.CouncilPrivilege;
 
 /**
 * Classe per la gestione del tabellone
@@ -100,12 +101,18 @@ public class Board {
 		councilPalaceZone.addNewObserver(obs);
 	}
 	
+	
+	public void placeMember(FamilyMember member, Action chosenAction, int servants, CouncilPrivilege privilege) {
+		if (chosenAction != Action.COUNCIL_SPACE)
+			return;
+		
+		councilPalaceZone.setChosenCouncilPrivilege(privilege);
+		councilPalaceZone.placeMember(member, chosenAction, servants);
+	}
+	
 	public void placeMember(FamilyMember member, Action chosenAction, int servants) {
 		
 		switch (chosenAction) {
-		case COUNCIL_SPACE:
-			councilPalaceZone.placeMember(member, chosenAction, servants);
-			break;
 		case MARKET_1:
 		case MARKET_2:
 		case MARKET_3:

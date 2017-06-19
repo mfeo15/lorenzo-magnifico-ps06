@@ -79,8 +79,15 @@ public class EventParser implements EventVisitor {
 		Game game = SocketServer.getInstance().retrieveMatch(c).getGame();
 
 		if (game.getCurrentPlayer().equals(c.getPlayer())) {
-
-			game.doMemberPlacement(c.getPlayer(), memberPlaced.getAction(), memberPlaced.getColor(), memberPlaced.getServantsBonus());
+			
+			if (memberPlaced instanceof EventMemberPlacedWithPrivilege)
+				game.doMemberPlacement(c.getPlayer(), 
+										memberPlaced.getAction(), 
+										memberPlaced.getColor(), 
+										memberPlaced.getServantsBonus(), 
+										((EventMemberPlacedWithPrivilege) memberPlaced).getPrivilege());
+			else
+				game.doMemberPlacement(c.getPlayer(), memberPlaced.getAction(), memberPlaced.getColor(), memberPlaced.getServantsBonus());
 			
 			game.advanceCurrentPlayer();
 		}

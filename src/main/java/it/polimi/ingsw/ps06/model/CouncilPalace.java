@@ -5,7 +5,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import it.polimi.ingsw.ps06.model.Types.Action;
-import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
+import it.polimi.ingsw.ps06.model.Types.CouncilPrivilege;
 import it.polimi.ingsw.ps06.model.messages.MessageBoardMemberHasBeenPlaced;
 import it.polimi.ingsw.ps06.model.messages.MessageModel2ViewNotification;
 
@@ -20,9 +20,17 @@ import it.polimi.ingsw.ps06.model.messages.MessageModel2ViewNotification;
 public class CouncilPalace extends Observable implements PlaceSpace {
 	private ArrayList<FamilyMember> memberSpaces;
 	private ArrayList<Player> players;
-	private EffectsResources councilReward;
-	private EffectsActions privilegeReward;
+
+	private CouncilPrivilege chosenCouncilPrivilege;
 	
+	public CouncilPrivilege getChosenCouncilPrivilege() {
+		return chosenCouncilPrivilege;
+	}
+
+	public void setChosenCouncilPrivilege(CouncilPrivilege chosen) {
+		this.chosenCouncilPrivilege = chosen;
+	}
+
 	/**
 	* Metodo per il piazzamento di un familiare nel palazzo del consiglio
 	*
@@ -33,15 +41,16 @@ public class CouncilPalace extends Observable implements PlaceSpace {
 	@Override
 	public void placeMember(FamilyMember member, Action chosenAction, int servants) {
 		int errorCode=0;
-		int memberValue;
 		
 		if( (member.getValue() + servants) > 1){
 			
 			memberSpaces.add(member);
-			giveRewards(member, chosenAction);
+			giveRewards(member, servants, chosenCouncilPrivilege);
+			
+			MessageBoardMemberHasBeenPlaced newMember = new MessageBoardMemberHasBeenPlaced(chosenAction, member.getColor(), (member.getPlayer()).getID() );
+			notifyChangement(newMember);
 		
-		} else handle(errorCode);
-		
+		} else handle(1, member);
 	}
 	
 	/**
@@ -53,8 +62,6 @@ public class CouncilPalace extends Observable implements PlaceSpace {
 	public CouncilPalace(){
 		memberSpaces = new ArrayList<FamilyMember>();
 		players = new ArrayList<Player>();
-		
-		initRewards();
 	}
 	
 	/**
@@ -63,9 +70,15 @@ public class CouncilPalace extends Observable implements PlaceSpace {
 	* @param	code		codice errore
 	* @return 	Nothing
 	*/
-	private void handle(int code){
+	private void handle(int code, FamilyMember member) {
 		
-		String notification="";
+		String notification = "Il giocatore " + member.getPlayer().getColorAssociatedToID() + " ha piazzato un familiare ";
+		
+		switch(code) {
+		case 1: notification += " di valore non sufficiente per l'azione";
+			break;
+		default: notification = "UNKNOWN ERROR ON COUNCIL PALACE";
+		}
 		
 		MessageModel2ViewNotification m = new MessageModel2ViewNotification(notification);
 		notifyChangement(m);
@@ -88,31 +101,16 @@ public class CouncilPalace extends Observable implements PlaceSpace {
 	}
 	
 	/**
-	* Metodo per inizializzare i rewards
-	*	
-	* @return 					Nothing
-	*/
-	private void initRewards(){
-		privilegeReward = new EffectsActions(new Privilege(0));
-		councilReward = new EffectsResources(new Resources(MaterialsKind.COIN,1));
-	}
-	
-	/**
 	* Metodo per assegnare le risorse che sono state scelte dal giocatore
 	*
 	* @param 	player			Giocatore a cui dare le risorse
 	* @param 	chosenAction	Codice dell'azione da eseguire	
 	* @return 					Nothing
 	*/
-	public void giveRewards(FamilyMember member, Action chosenAction){
-
-		Player player = member.getPlayer();
+	public void giveRewards(FamilyMember member, int servantsUsed, CouncilPrivilege chosen){
 		
-		councilReward.activate(player);
-		privilegeReward.activate(player);
-		
-		MessageBoardMemberHasBeenPlaced newMember = new MessageBoardMemberHasBeenPlaced(chosenAction, member.getColor(), player.getID() );
-		notifyChangement(newMember);
+		Privilege priv = new Privilege(servantsUsed, member, chosen);
+		priv.activate();
 	}
 	
 	/**

@@ -7,6 +7,7 @@ import java.util.Observer;
 
 import it.polimi.ingsw.ps06.model.Types.Action;
 import it.polimi.ingsw.ps06.model.Types.ColorPalette;
+import it.polimi.ingsw.ps06.model.Types.CouncilPrivilege;
 import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
 import it.polimi.ingsw.ps06.model.Types.PointsKind;
 import it.polimi.ingsw.ps06.model.messages.MessageBoardSetupDice;
@@ -234,22 +235,19 @@ public class Game extends Observable {
 	*/
 	public void vaticanReport(int period) 
 	{
-		ArrayList<Integer> excommunicatedPlayersList = new ArrayList<Integer>();
+		ArrayList<Integer> excommunicatedPlayers = new ArrayList<Integer>();
 		
 		for (Player p: players) {
 			int player_faith = p.getPersonalBoard().getAmount(PointsKind.FAITH_POINTS);
 			
 			if (player_faith < VaticanRequirementOnPeriod(period)) {			
 				board.getTiles(period).activateEffect(p);
-				excommunicatedPlayersList.add( p.getID() );
+				excommunicatedPlayers.add( p.getID() );
 			}
 		}
 		
-		if ( excommunicatedPlayersList.size() > 0) {
-			int[] excommunicatedPlayersArray = new int[excommunicatedPlayersList.size()];
-			
-			for(int j = 0; j < excommunicatedPlayersList.size(); j++ ) excommunicatedPlayersArray[j] = excommunicatedPlayersList.get(j);
-			MessageVaticanReport vaticanRep = new MessageVaticanReport( excommunicatedPlayersArray );
+		if ( excommunicatedPlayers.size() > 0) {
+			MessageVaticanReport vaticanRep = new MessageVaticanReport(period, excommunicatedPlayers );
 			notifyChangement(vaticanRep);
 		}
 	}
@@ -309,6 +307,19 @@ public class Game extends Observable {
 		
 		if (players.contains(p)) 
 			board.placeMember(p.getMember(color), action, servants);
+	}
+	
+	/**
+	* Metodo per l'esecuzione di un azione sul Palazzo del Consiglio
+	*
+	* @param 	value	valore dell'azione
+	* @param 	color	colore del familiare usato
+	* @return 	Nothing
+	*/
+	public void doMemberPlacement(Player p, Action action, ColorPalette color, int servants, CouncilPrivilege privilege) {
+		
+		if (players.contains(p)) 
+			board.placeMember(p.getMember(color), action, servants, privilege);
 	}
 	
 	/**

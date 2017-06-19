@@ -85,14 +85,6 @@ public class Types {
 		SERVANT	
 	}
 	
-	public enum Privileges
-	{
-		BONUS_1,
-		BONUS_2,
-		BONUS_3,
-		BONUS_4
-	}
-	
 	public enum CardType {
 		LEADER,
 		BUILDING,
@@ -109,6 +101,5 @@ public class Types {
 		BONUS_3, // 2 Coins
 		BONUS_4, // 2 Military
 		BONUS_5 // 1 Faith
-
 	}
 }

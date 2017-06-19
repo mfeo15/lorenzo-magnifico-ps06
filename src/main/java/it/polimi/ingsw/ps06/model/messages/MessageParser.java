@@ -138,7 +138,10 @@ public class MessageParser implements MessageVisitor {
 
 	@Override
 	public void visit(MessageVaticanReport vaticanRep) {
-		// TODO Auto-generated method stub
+		Board b = ((Board) supporter);
+		
+		for (int excommunicatedPlayer : vaticanRep.getExcommunicatedPlayers())
+			b.excommunicate(vaticanRep.getPeriod(), excommunicatedPlayer);
 	}
 
 	@Override
@@ -164,7 +167,7 @@ public class MessageParser implements MessageVisitor {
 			pv.setBuildingCard(i, pbStatus.getBuilding().indexOf(i));
 		
 		for (int i : pbStatus.getTerritory()) 
-			pv.setTerritoryCard(i, pbStatus.getBuilding().indexOf(i));
+			pv.setTerritoryCard(i, pbStatus.getTerritory().indexOf(i));
 	}
 
 	@Override
