@@ -97,6 +97,8 @@ public class CardAcquisition extends Actions {
 			p.getPersonalBoard().getInventory().decreaseResources( ((Building) card).getRequirement() );
 			return;
 		}
+		
+		card.activateIstantEffect(p);
 	}
 
 }

@@ -18,8 +18,7 @@ import it.polimi.ingsw.ps06.model.messages.MessageModel2ViewNotification;
 */
 
 public class HarvestProduction extends Observable implements PlaceSpace {
-	private ArrayList<FamilyMember> harvestSpaces1;
-	//private FamilyMember[] harvestSpaces1;
+	private ArrayList<FamilyMember> harvestSpaces1;;
 	private ArrayList<FamilyMember> harvestSpaces2;
 	private ArrayList<FamilyMember> productionSpaces1;
 	private ArrayList<FamilyMember> productionSpaces2;
@@ -38,7 +37,6 @@ public class HarvestProduction extends Observable implements PlaceSpace {
 	@Override
 	public void placeMember(FamilyMember member, Action chosenAction, int servants) throws IllegalStateException {
 		boolean multi = false;
-		int errorCode = 0;
 		boolean condition; //Regola del colore
 		
 		int memberValue = member.getValue() + servants;
@@ -261,18 +259,11 @@ public class HarvestProduction extends Observable implements PlaceSpace {
 	* @return 	
 	*/
 	private void startGathering(Action chosenAction, FamilyMember member, int servantsUsed) {
-		
-		Player player = member.getPlayer();
-		
-		if (servantsUsed > 0)
-			player.getPersonalBoard().reduceResource(MaterialsKind.SERVANT, servantsUsed);
-		
-		/* TO IMPLEMENT !
-		gathering = new Gathering(chosenAction,member.getValue() + servantsUsed, player);
+
+		gathering = new Gathering(chosenAction, member, servantsUsed);
 		gathering.activate();
-		*/
 		
-		MessageBoardMemberHasBeenPlaced newMember = new MessageBoardMemberHasBeenPlaced(chosenAction, member.getColor(), player.getID() );
+		MessageBoardMemberHasBeenPlaced newMember = new MessageBoardMemberHasBeenPlaced(chosenAction, member.getColor(), member.getPlayer().getID() );
 		notifyChangement(newMember);
 	}
 	

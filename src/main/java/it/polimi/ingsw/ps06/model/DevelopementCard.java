@@ -23,9 +23,8 @@ public class DevelopementCard extends Card {
 	 *@return	nothing
 	 */
 
-	public void setColor(int color){
-		this.color=color;
-		return;
+	public void setColor(int color) {
+		this.color = color;
 	}
 
 
@@ -35,9 +34,8 @@ public class DevelopementCard extends Card {
 	 * @return	nothing
 	 */
 
-	public void setPeriod(int period){
-		this.period=period;
-		return;
+	public void setPeriod(int period) {
+		this.period = period;
 	}
 
 	/**Metodo per settare il periodo della carta
@@ -46,9 +44,8 @@ public class DevelopementCard extends Card {
 	 * @return	nothing
 	 */
 
-	public void setEffect(Effect effect){
+	public void setEffect(Effect effect) {
 		this.instant_effect.add(effect);
-		return;
 	}
 
 
@@ -58,11 +55,9 @@ public class DevelopementCard extends Card {
 	 * @return	nothing
 	 */
 
-	public void activateIstantEffect(Player player){
-		for(Effect i : instant_effect){
+	public void activateIstantEffect(Player player) {
+		for( Effect i : instant_effect )
 			i.activate(player);
-		}
-		return;
 	}
 
 	/**Metodo che restituisce il colore della carta
@@ -71,7 +66,7 @@ public class DevelopementCard extends Card {
 	 * @return	color	colore della carta
 	 */
 
-	public int getColor(){
+	public int getColor() {
 		return color;
 	}
 
@@ -81,7 +76,7 @@ public class DevelopementCard extends Card {
 	 * @return	period	periodo della carta
 	 */
 
-	public int getPeriod(){
+	public int getPeriod() {
 		return period;
 	}
 }
