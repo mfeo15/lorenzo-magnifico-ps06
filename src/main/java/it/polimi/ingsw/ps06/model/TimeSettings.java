@@ -9,7 +9,7 @@ package it.polimi.ingsw.ps06.model;
 * 
 **/
 
-public class timeSettings {
+public class TimeSettings {
 	private int timeoutServer;
 	private int minPlayers;
 	private int timeoutAction;
@@ -21,7 +21,7 @@ public class timeSettings {
 	*
 	**/
 	
-	public timeSettings(){
+	public TimeSettings() {
 		
 	}
 	
@@ -36,7 +36,7 @@ public class timeSettings {
 	*
 	**/
 	
-	public timeSettings(int x, int y, int z){
+	public TimeSettings(int x, int y, int z){
 		this.timeoutServer=x;
 		this.timeoutAction=y;
 		this.minPlayers=z;

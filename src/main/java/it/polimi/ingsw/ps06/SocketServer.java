@@ -7,9 +7,12 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Timer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import it.polimi.ingsw.ps06.model.ParserTimeSettings;
+import it.polimi.ingsw.ps06.model.TimeSettings;
 import it.polimi.ingsw.ps06.model.messages.Message;
 import it.polimi.ingsw.ps06.model.messages.MessageGameHasStarted;
 import it.polimi.ingsw.ps06.model.messages.MessageWaitingRoomConnections;
@@ -38,7 +41,11 @@ public class SocketServer implements Server {
 	
 	private ArrayList< MatchSet > playingConnection = new ArrayList< MatchSet >();
 	
-	private HashMap<MatchSet, Integer> queuedMessageCounter = new HashMap<MatchSet, Integer>();;
+	private HashMap<MatchSet, Integer> queuedMessageCounter = new HashMap<MatchSet, Integer>();
+	
+	private TimeSettings timeSettings = (new ParserTimeSettings("resources/XML/TimeSettings.xml")).getSettings();
+	
+	private Timer t = new Timer();
 	
 	/**
 	 * Metodo invocato ogni qualvolta una nuova connessione viene instaurata. 
@@ -93,27 +100,16 @@ public class SocketServer implements Server {
 	 */
 	public synchronized void rednezvous(Connection c) {
 		
-		waitingConnection.add(c);		
+		waitingConnection.add(c);
+		if (waitingConnection.size() == 2)
+			startCountdown();
+		
 		System.out.println("[ SERVER ] Connection " + c.getInetAddress() + " in Waiting Room \n");
 		
 		sendWaitingConnectionsStats();
 
-		if (waitingConnection.size() == 4)
-		{
-			/*
-			List<String> keys = new ArrayList<>(waitingConnection.keySet());
-			Connection c1 = waitingConnection.get(keys.get(0));
-			Connection c2 = waitingConnection.get(keys.get(1));
-			RemoteView player1 = new RemoteView(new Player(keys.get(0)), keys.get(1), c1);
-			RemoteView player2 = new RemoteView(new Player(keys.get(1)), keys.get(0), c2);
-			Model model = new Model();
-			Controller controller = new Controller(model);
-			model.addObserver(player1);
-			model.addObserver(player2);
-			player1.addObserver(controller);
-			player2.addObserver(controller);
-			*/
-			
+		if (waitingConnection.size() == 4) {	
+			stopCountdown();
 			startNewGame();
 		}
 	}
@@ -230,6 +226,22 @@ public class SocketServer implements Server {
 	
 	public boolean isFullQueue(MatchSet m) {
 		return ( queuedMessageCounter.get(m) == m.getAll().size() );
+	}
+	
+	public void startCountdown() {
+		t.schedule( 
+		        new java.util.TimerTask() {
+		            @Override
+		            public void run() {
+		            	startNewGame();
+		            }
+		        }, 
+		        ( timeSettings.getTimeoutServer() * 1000 )
+		);
+	}
+	
+	public void stopCountdown() {
+		t.cancel();
 	}
 	
 	/**

@@ -3,7 +3,7 @@ package it.polimi.ingsw.ps06.model;
 	import javax.xml.parsers.DocumentBuilder;
 	import javax.xml.parsers.DocumentBuilderFactory;
 	
-	import it.polimi.ingsw.ps06.model.timeSettings;
+	import it.polimi.ingsw.ps06.model.TimeSettings;
 	
 	import org.w3c.dom.Document;
 	import org.w3c.dom.Element;
@@ -26,7 +26,7 @@ package it.polimi.ingsw.ps06.model;
 		private int server;
 		private int action;
 		private int players;
-		private timeSettings sett;
+		private TimeSettings sett;
 		
 		/**
 		* Costruttore della classe
@@ -70,7 +70,7 @@ package it.polimi.ingsw.ps06.model;
 	    			}
 	    			
 	    		}
-	    		sett = new timeSettings(server, action, players);
+	    		sett = new TimeSettings(server, action, players);
 			}
 			catch(Exception e){
 				e.printStackTrace();
@@ -84,14 +84,14 @@ package it.polimi.ingsw.ps06.model;
 		* 
 		**/
 		
-		public timeSettings getSettings(){
+		public TimeSettings getSettings(){
 			return sett;
 		}
 		
 		
 		public static void main(String[] args){
 			ParserTimeSettings c = new ParserTimeSettings("resources/XML/TimeSettings.xml");
-			timeSettings d= new timeSettings();
+			TimeSettings d= new TimeSettings();
 			d = c.getSettings();
 			System.out.println(d.getTimeoutServer()+"   "+d.getTimeoutaction()+"   "+d.getMinPlayers());
 		}

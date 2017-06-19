@@ -77,7 +77,7 @@ public class MessageParser implements MessageVisitor {
 	}
 
 	@Override
-	public void visit(BoardReady br) {
+	public synchronized void visit(BoardReady br) {
 		Connection c = ((Connection) supporter);
 		MatchSet match = SocketServer.getInstance().retrieveMatch(c);
 		
