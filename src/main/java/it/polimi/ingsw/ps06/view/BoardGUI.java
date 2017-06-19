@@ -82,6 +82,7 @@ public class BoardGUI extends Observable implements Board {
     private JPanel panel2 = new JPanel();
 	private CardLayout cl = new CardLayout();
 	private JLabel leaderBack;
+	private Font mediumBold;
 	
 	private JButton scrollTowers = new JButton();
 	private JButton scrollOthers = new JButton();
@@ -109,6 +110,7 @@ public class BoardGUI extends Observable implements Board {
     private JButton[] productions = new JButton[9];
     private JButton[] harvests = new JButton[9];
     private JButton[] players = new JButton[5];
+    private JTextField[] playersCheck = new JTextField[5];
     private JButton[] placements = new JButton[16];
 	
     private JButton[] production = new JButton[1];
@@ -234,6 +236,7 @@ public class BoardGUI extends Observable implements Board {
 	
         fontSMALL = new Font("Lucida Handwriting",Font.PLAIN,(int)(20*(screenSize.getHeight()/1080)) );
 		fontMEDIUM = new Font("Lucida Handwriting",Font.PLAIN,(int)(25*(screenSize.getHeight()/1080)) );
+		mediumBold = new Font("Lucida Handwriting",Font.BOLD,(int)(25*(screenSize.getHeight()/1080)) );
 		fontBIG = new Font("Lucida Handwriting",Font.PLAIN,(int)(40*(screenSize.getHeight()/1080)) );
 		fontbig = new Font("Lucida Handwriting",Font.PLAIN,(int)(33*(screenSize.getHeight()/1080)) );
 		
@@ -398,7 +401,7 @@ public class BoardGUI extends Observable implements Board {
             });
             
         
-        servants.setLocation((int)(width*11.5/100),(int)(height*92/100));
+        servants.setLocation((int)(width*11.5/100),(int)(height*97/100));
         servants.setSize((int)width*5/100,(int)height*7/100);
         servants.setOpaque(false);
         servants.setContentAreaFilled(false);
@@ -428,7 +431,7 @@ public class BoardGUI extends Observable implements Board {
             
         });
         
-        servantsCount.setLocation((int)(width*16.5)/100,(int)(height*94/100));
+        servantsCount.setLocation((int)(width*16.5)/100,(int)(height*99/100));
         servantsCount.setSize((int)width*2/100,(int)height*3/100);
         servantsCount.setOpaque(false);
         servantsCount.setFont(fontMEDIUM);
@@ -488,6 +491,7 @@ public class BoardGUI extends Observable implements Board {
         productions = initializeButtons(productions);
         harvests = initializeButtons(harvests);
         players = initializeButtons(players);
+        playersCheck = initialize(playersCheck);
         placements = initializeButtons(placements);
         council = initializeButtons(council);
         harvest = initializeButtons(harvest);
@@ -510,6 +514,7 @@ public class BoardGUI extends Observable implements Board {
         harvests = locateHarvests(harvests);
         productions = locateProductions(productions);
         players = locatePlayers(players);
+        playersCheck = locatePlayersCheck(playersCheck);
         placements = locatePlacements(placements);
         
         councils = locateCouncils(councils);
@@ -550,6 +555,14 @@ public class BoardGUI extends Observable implements Board {
         members = set(members);
         markets = set(markets);
         players = set(players);
+        
+        playersCheck = setFont(playersCheck);
+        
+        for(int j=0; j<playersCheck.length; j++){
+        	
+        	playersCheck[j].setFont(mediumBold);
+        }
+        
         productions = set(productions);
         harvests = set(harvests);
         placements = set(placements);
@@ -564,6 +577,11 @@ public class BoardGUI extends Observable implements Board {
 		leaders = setLabels(leaders);
 		
 		playersInfo = setFont(playersInfo);
+		playersInfo[0].setForeground(new Color(216,35,35));
+		playersInfo[1].setForeground(new Color(26,211,17));
+		playersInfo[2].setForeground(new Color(25,153,227));
+		playersInfo[3].setForeground(new Color(255,248,48));
+		playersInfo[4].setForeground(Color.WHITE);
         
         dices = fillLabels(dices,dicesLabel);
         excommunications = fillLabels(excommunications, excommunicationsLabel);
@@ -586,6 +604,7 @@ public class BoardGUI extends Observable implements Board {
         for(int j=0; j<players.length;j++){ desktop.add(players[j]); }
         for(int j=0; j<placements.length;j++){ towers.add(placements[j]); }
              
+        for(int j=0; j<playersCheck.length;j++){ desktopFrame.add(playersCheck[j]); }
         for(int j=0; j<dices.length;j++){ others.add(dices[j]); }
         for(int j=0; j<orders.length;j++){ others.add(orders[j]); }
         for(int j=0; j<playersInfo.length;j++){ desktop.add(playersInfo[j]); }
@@ -600,7 +619,6 @@ public class BoardGUI extends Observable implements Board {
         	privileges[j].setBorderPainted(false);
         	privileges[j].setEnabled(false);
         }
-        
 
         if(players[0].isEnabled()){
 	       	players[0].addMouseListener(new MouseAdapter()
@@ -942,7 +960,7 @@ public class BoardGUI extends Observable implements Board {
 	
 	private JButton[] locateMembers(JButton[] btns){
 		double x=7;
-		double y=100;
+		double y=105;
 		
 		for(int j=0;j<2;j++){
 			btns[j].setLocation((int)(width*x/100),(int)(height*y/100));
@@ -951,7 +969,7 @@ public class BoardGUI extends Observable implements Board {
 		}
 		
 		x=7;
-		y=110;
+		y=115;
 		
 		for(int j=2;j<4;j++){
 			btns[j].setLocation((int)(width*x/100),(int)(height*y/100));
@@ -1120,6 +1138,18 @@ public class BoardGUI extends Observable implements Board {
 		for(int j=0;j<btns.length;j++){
 			btns[j].setLocation((int)(width*x/100),(int)(height*y/100));
 			btns[j].setSize(width*7/100,height*9/100);
+			y=y+16;		
+		}
+		return btns;
+	}
+	
+	private JTextField[] locatePlayersCheck(JTextField[] btns){
+		double x=0;
+		double y=17;
+		
+		for(int j=0;j<btns.length;j++){
+			btns[j].setLocation((int)(width*x/100),(int)(height*y/100));
+			btns[j].setSize(width*7/100,height*3/100);
 			y=y+16;		
 		}
 		return btns;
@@ -1635,6 +1665,29 @@ public class BoardGUI extends Observable implements Board {
 
 	@Override
 	public void setCurrentPlayerID(int id) {
+		
+		for(int j=0; j< playersCheck.length; j++){
+			playersCheck[j].setText("");
+		}
+		
+		switch(id){
+		case 0:
+			playersCheck[0].setForeground(new Color(216,35,35));
+			playersCheck[0].setText("-->");
+			break;
+		case 1:
+			playersCheck[1].setForeground(new Color(26,211,17));
+			playersCheck[1].setText("-->");
+			break;
+		case 2:
+			playersCheck[2].setForeground(new Color(25,153,227));
+			playersCheck[2].setText("-->");
+			break;
+		case 3:
+			playersCheck[3].setForeground(new Color(255,248,48));
+			playersCheck[3].setText("-->");
+			break;
+		}
 		
 		playerInfo.setText("Turno del giocatore: "+playersName[id]);
 		
@@ -2316,7 +2369,7 @@ public class BoardGUI extends Observable implements Board {
 			}
 			
 			try {
-				orders[index].setIcon((ImageHandler.setImage("resources/piece/"+color+".png",3.5,(3.5*(16/9)*ratio),width,height)).getIcon());
+				orders[index].setIcon((ImageHandler.setImage("resources/piece/"+color+".png",3.5,(3*ratio),width,height)).getIcon());
 				orders[index].setDisabledIcon(orders[index].getIcon());
 			} catch (IOException e) {e.printStackTrace();}
 			
