@@ -63,6 +63,7 @@ import it.polimi.ingsw.ps06.model.events.EventLeaderActivated;
 import it.polimi.ingsw.ps06.model.events.EventLeaderDiscarded;
 import it.polimi.ingsw.ps06.model.events.EventLeaderPlayed;
 import it.polimi.ingsw.ps06.model.events.EventMemberPlaced;
+import it.polimi.ingsw.ps06.model.events.EventMemberPlacedWithPrivilege;
 import it.polimi.ingsw.ps06.model.events.StoryBoard2PersonalView;
 import it.polimi.ingsw.ps06.model.events.StoryBoard2Room;
 import javafx.embed.swing.JFXPanel;
@@ -2162,7 +2163,6 @@ public class BoardGUI extends Observable implements Board {
     	}
     	
     	setChanged();
-		EventMemberPlaced memberPlaced=null;
 		
        	new java.util.Timer().schedule( 
   	        new java.util.TimerTask() {
@@ -2181,7 +2181,7 @@ public class BoardGUI extends Observable implements Board {
   	            }
   	            	
   	        }}, 10000 );
-    	int z;
+       	
        	    		
     	privileges[0].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent ae) {
@@ -2199,11 +2199,11 @@ public class BoardGUI extends Observable implements Board {
                    		privileges[j].removeActionListener(actionListener);
                    	}
         		}
-           		
-               	memberPlaced = new EventMemberPlacedWithPrivilege(chosenAction, findColor(memberIndex), servants, CouncilPrivilege.getPrivilege(0));
-        				
-    	    	}
-    		});
+            	
+        		EventMemberPlacedWithPrivilege memberPlaced = new EventMemberPlacedWithPrivilege(chosenAction, findColor(memberIndex), servants, CouncilPrivilege.getPrivilege(0));
+        		notifyObservers(memberPlaced);
+    	    }
+    	});
     	
     	privileges[1].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent ae) {
@@ -2222,10 +2222,11 @@ public class BoardGUI extends Observable implements Board {
                    	}
         		}
         			
-               	memberPlaced = new EventMemberPlacedWithPrivilege(chosenAction, findColor(memberIndex), servants, CouncilPrivilege.getPrivilege(1));
-        				
-    	    	}
-    		});
+        		EventMemberPlacedWithPrivilege memberPlaced = new EventMemberPlacedWithPrivilege(chosenAction, findColor(memberIndex), servants, CouncilPrivilege.getPrivilege(1));
+        		notifyObservers(memberPlaced);
+        		
+    	    }
+    	});
     	
     	privileges[2].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent ae) {
@@ -2244,10 +2245,11 @@ public class BoardGUI extends Observable implements Board {
                    	}
         		}
         			
-               	memberPlaced = new EventMemberPlacedWithPrivilege(chosenAction, findColor(memberIndex), servants, CouncilPrivilege.getPrivilege(2));
-        				
-    	    	}
-    		});
+        		EventMemberPlacedWithPrivilege memberPlaced = new EventMemberPlacedWithPrivilege(chosenAction, findColor(memberIndex), servants, CouncilPrivilege.getPrivilege(2));
+        		notifyObservers(memberPlaced);
+        		
+    	    }
+    	});
     	
     	privileges[3].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent ae) {
@@ -2266,10 +2268,11 @@ public class BoardGUI extends Observable implements Board {
                    	}
         		}
         			
-               	memberPlaced = new EventMemberPlacedWithPrivilege(chosenAction, findColor(memberIndex), servants, CouncilPrivilege.getPrivilege(3));
-        				
-    	    	}
-    		});
+        		EventMemberPlacedWithPrivilege memberPlaced = new EventMemberPlacedWithPrivilege(chosenAction, findColor(memberIndex), servants, CouncilPrivilege.getPrivilege(3));
+        		notifyObservers(memberPlaced);
+        		
+    	    }
+    	});
     	
     	privileges[4].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent ae) {
@@ -2288,12 +2291,13 @@ public class BoardGUI extends Observable implements Board {
                    	}
         		}
         			
-               	memberPlaced = new EventMemberPlacedWithPrivilege(chosenAction, findColor(memberIndex), servants, CouncilPrivilege.getPrivilege(4));
-        				
-    	    	}
-    		});
+        		EventMemberPlacedWithPrivilege memberPlaced = new EventMemberPlacedWithPrivilege(chosenAction, findColor(memberIndex), servants, CouncilPrivilege.getPrivilege(4));
+        		notifyObservers(memberPlaced);
+        		
+    	    }
+    	});
     		
-        	notifyObservers(memberPlaced);
+        	
 
    	}
 	
