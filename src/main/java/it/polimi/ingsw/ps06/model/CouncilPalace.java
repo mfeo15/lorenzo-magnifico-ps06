@@ -40,17 +40,17 @@ public class CouncilPalace extends Observable implements PlaceSpace {
 	*/
 	@Override
 	public void placeMember(FamilyMember member, Action chosenAction, int servants) {
-		int errorCode=0;
 		
-		if( (member.getValue() + servants) > 1){
-			
-			memberSpaces.add(member);
-			giveRewards(member, servants, chosenCouncilPrivilege);
-			
-			MessageBoardMemberHasBeenPlaced newMember = new MessageBoardMemberHasBeenPlaced(chosenAction, member.getColor(), (member.getPlayer()).getID() );
-			notifyChangement(newMember);
-		
-		} else handle(1, member);
+		if( (member.getValue() + servants) < 1) {
+			handle(1, member);
+			return;
+		}
+
+		memberSpaces.add(member);
+		giveRewards(member, servants, chosenCouncilPrivilege);
+
+		MessageBoardMemberHasBeenPlaced newMember = new MessageBoardMemberHasBeenPlaced(chosenAction, member.getColor(), (member.getPlayer()).getID() );
+		notifyChangement(newMember);
 	}
 	
 	/**

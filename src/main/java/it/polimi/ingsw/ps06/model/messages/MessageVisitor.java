@@ -6,6 +6,7 @@ public interface MessageVisitor {
 	
 	public void visit(MessagePlayerID messageID);
 	public void visit(MessageCurrentPlayer currentPlayer);
+	public void visit(MessageCurrentPlayerOrder currentPlayerOrder);
 	
 	public void visit(MessageUser userMessage);
 	public void visit(MessageWaitingRoomConnections waitingConnections);

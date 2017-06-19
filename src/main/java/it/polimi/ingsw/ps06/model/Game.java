@@ -12,6 +12,7 @@ import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
 import it.polimi.ingsw.ps06.model.Types.PointsKind;
 import it.polimi.ingsw.ps06.model.messages.MessageBoardSetupDice;
 import it.polimi.ingsw.ps06.model.messages.MessageCurrentPlayer;
+import it.polimi.ingsw.ps06.model.messages.MessageCurrentPlayerOrder;
 import it.polimi.ingsw.ps06.model.messages.MessageGameStatus;
 import it.polimi.ingsw.ps06.model.messages.MessageVaticanReport;
 
@@ -281,19 +282,24 @@ public class Game extends Observable {
 		setCurrentPlayerIndex(0);
 		
 		ArrayList<Player> councilPlayers = board.getOrder();
-		if (councilPlayers == null)
-			return;
-		
-		ArrayList<Player> newOrderPlayers = new ArrayList<Player>();
-		
-		Iterator<Player> councilIterator = councilPlayers.iterator();
-		while (councilIterator.hasNext() && newOrderPlayers.size() < numberPlayers) {
-			Player p = councilIterator.next();
-			if ( players.contains(p) ) newOrderPlayers.add(p);	
+		if (councilPlayers != null) {
+
+			ArrayList<Player> newOrderPlayers = new ArrayList<Player>();
+
+			Iterator<Player> councilIterator = councilPlayers.iterator();
+			while (councilIterator.hasNext() && newOrderPlayers.size() < numberPlayers) {
+				Player p = councilIterator.next();
+				if ( players.contains(p) ) newOrderPlayers.add(p);	
+			}
+
+			players.removeAll(newOrderPlayers);
+			players.addAll(0, newOrderPlayers);
 		}
 		
-		players.removeAll(newOrderPlayers);
-		players.addAll(0, newOrderPlayers);
+		ArrayList<Integer> playersID = new ArrayList<Integer>();
+		players.forEach(p -> playersID.add(p.getID()));
+		MessageCurrentPlayerOrder order = new MessageCurrentPlayerOrder(playersID);
+		notifyChangement(order);
 	}
 	
 	/**

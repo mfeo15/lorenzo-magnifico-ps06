@@ -13,18 +13,17 @@ import it.polimi.ingsw.ps06.model.Types.PointsKind;
 */
 public class Privilege extends Actions {
 	
-	private CouncilPrivilege chosen;
 	private FamilyMember member;
-	
 	private CouncilPrivilege privilege;
 	
 	/**
 	* Costruttore
 	* 	
 	*/
-	public Privilege(int servants, FamilyMember member, CouncilPrivilege chosen) {
+	public Privilege(int servants, FamilyMember member, CouncilPrivilege privilege) {
 		super(servants);
 		this.member = member;
+		this.privilege = privilege;
 	}
 	
 	/**

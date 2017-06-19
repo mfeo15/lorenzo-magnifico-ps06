@@ -16,8 +16,6 @@ public class Player {
 	
 	private int ID;
 	
-	private String colorLabel;
-	
 	private ArrayList<Leader> leaders;
 	
 	private PersonalBoard personalBoard;

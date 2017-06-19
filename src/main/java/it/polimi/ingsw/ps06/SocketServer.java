@@ -109,7 +109,6 @@ public class SocketServer implements Server {
 		sendWaitingConnectionsStats();
 
 		if (waitingConnection.size() == 4) {	
-			stopCountdown();
 			startNewGame();
 		}
 	}
@@ -179,6 +178,8 @@ public class SocketServer implements Server {
 	
 	public void startNewGame() {
 		
+		stopCountdown();
+		
 		sendToConnections(waitingConnection, new MessageGameHasStarted() );
 		
 		try {
@@ -233,6 +234,7 @@ public class SocketServer implements Server {
 		        new java.util.TimerTask() {
 		            @Override
 		            public void run() {
+		            	System.out.println("TIME!!!!");
 		            	startNewGame();
 		            }
 		        }, 
@@ -242,6 +244,7 @@ public class SocketServer implements Server {
 	
 	public void stopCountdown() {
 		t.cancel();
+		t.purge();
 	}
 	
 	/**

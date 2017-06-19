@@ -221,4 +221,10 @@ public class MessageParser implements MessageVisitor {
 		
 		b.setCards( boardSetupDevCards.getRoundCards() );
 	}
+
+	@Override
+	public void visit(MessageCurrentPlayerOrder currentPlayerOrder) {
+		Board b = ((Board) supporter);
+		b.setOrder( currentPlayerOrder.getPlayerOrder() );
+	}
 }
