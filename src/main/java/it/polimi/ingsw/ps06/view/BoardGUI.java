@@ -55,6 +55,7 @@ import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 
 import it.polimi.ingsw.ps06.model.Types.ColorPalette;
+import it.polimi.ingsw.ps06.model.Types.CouncilPrivilege;
 import it.polimi.ingsw.ps06.model.events.BoardFrozenStatus;
 import it.polimi.ingsw.ps06.model.events.BoardHasLoaded;
 import it.polimi.ingsw.ps06.model.events.EventClose;
@@ -167,6 +168,7 @@ public class BoardGUI extends Observable implements Board {
     private int servantsCountNumber=0;
     
     private int excomm1Count=0, excomm2Count=0, excomm3Count=0;
+    private Media hit2;
     
     PersonalViewGUI view= new PersonalViewGUI(0,this);
 	private JFXPanel fxPanel = new JFXPanel();
@@ -277,7 +279,7 @@ public class BoardGUI extends Observable implements Board {
 		//Media hit = new Media(new File(hoverSound).toURI().toString());
 		
 		String selectSound = "resources/menuselect.wav";
-		Media hit2 = new Media(new File(selectSound).toURI().toString());
+		hit2 = new Media(new File(selectSound).toURI().toString());
 		
 		String exitsound = "resources/exit.wav";
 		Media exitSound = new Media(new File(exitsound).toURI().toString());
@@ -598,19 +600,6 @@ public class BoardGUI extends Observable implements Board {
         	privileges[j].setEnabled(false);
         }
         
-        
-        for(int j=0; j<privileges.length; j++){
-        	privileges[j].addMouseListener(new MouseAdapter()
-            {
-                public void mousePressed(MouseEvent evt)
-                {
-                	for(int j=0; j<privileges.length;j++){
-                    	privileges[j].setBorderPainted(false);
-                    	privileges[j].setEnabled(false);
-                    }	
-                }
-            });
-        }
 
         if(players[0].isEnabled()){
 	       	players[0].addMouseListener(new MouseAdapter()
@@ -1302,7 +1291,8 @@ public class BoardGUI extends Observable implements Board {
 	                                 
 	                    if (component instanceof JButton && component.isEnabled() && ((JButton) component).getIcon()==null && members[Integer.parseInt(value.toString())].isEnabled()) {
 	                        
-		                    notifyAction(identifySpot(component),Integer.parseInt(value.toString()),servantsCountNumber);
+	                    	if(component == council[0]){activateCouncil(identifySpot(component),Integer.parseInt(value.toString()),servantsCountNumber);}
+	                    	else notifyAction(identifySpot(component),Integer.parseInt(value.toString()),servantsCountNumber);
 	                    	
 		                    servantsCountNumber=0;
 		                    servantsCount.setText(""+servantsCountNumber);
@@ -1628,7 +1618,6 @@ public class BoardGUI extends Observable implements Board {
 		
 		roundInfo.setText("Turno: "+roundNumber+"  Periodo: "+periodNumber);
 		
-		startTimer();
 		setRound();
 		
 	}
@@ -1671,6 +1660,7 @@ public class BoardGUI extends Observable implements Board {
 			allowedStatus();
 		}
 		
+		startTimer();
 	}
 
 
@@ -1790,13 +1780,6 @@ public class BoardGUI extends Observable implements Board {
 		JButton btn = identifyComponent(chosenAction);
 		
 		btn.setIcon((ImageHandler.setImage("resources/member/"+pColor+mColor+".png",5,7,width,height)).getIcon());
-		
-		if((btn)==council[0]){
-    		for(int j=0; j<privileges.length; j++){
-    			privileges[j].setEnabled(true);
-    			privileges[j].setBorderPainted(true);
-    		}
-    	}
     	
         String hoverSound = "resources/place.wav";
 		Media hit = new Media(new File(hoverSound).toURI().toString());
@@ -2169,5 +2152,165 @@ public class BoardGUI extends Observable implements Board {
 		setChanged();
 		BoardFrozenStatus frozen = new BoardFrozenStatus(true);
 		notifyObservers(frozen);
+	}
+	
+	private void activateCouncil(it.polimi.ingsw.ps06.model.Types.Action chosenAction, int memberIndex, int servants){
+		
+    	for(int j=0; j<privileges.length; j++){
+    		privileges[j].setEnabled(true);
+    		privileges[j].setBorderPainted(true);
+    	}
+    	
+    	setChanged();
+		EventMemberPlaced memberPlaced=null;
+		
+       	new java.util.Timer().schedule( 
+  	        new java.util.TimerTask() {
+  	            @Override
+   	            public void run() {
+  	            	
+  	            	for(int j=0; j<privileges.length; j++){
+  	            		privileges[j].setEnabled(false);
+  	            		privileges[j].setBorderPainted(false);
+  	            		
+  	            		ActionListener[] actionListeners = privileges[j].getActionListeners();
+  	            		for (ActionListener actionListener : actionListeners) {
+  	            			privileges[j].removeActionListener(actionListener);
+  	            		}
+  	            		
+  	            }
+  	            	
+  	        }}, 10000 );
+    	int z;
+       	    		
+    	privileges[0].addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent ae) {
+        	            	      	
+               	MediaPlayer mediaPlayer2 = new MediaPlayer(hit2);
+        		mediaPlayer2.play();
+    	    		
+        		for(int j=0; j<privileges.length; j++){
+        			
+        			privileges[j].setEnabled(false);
+                   	privileges[j].setBorderPainted(false);
+                   		
+                  	ActionListener[] actionListeners = privileges[j].getActionListeners();
+                   	for (ActionListener actionListener : actionListeners) {
+                   		privileges[j].removeActionListener(actionListener);
+                   	}
+        		}
+           		
+               	memberPlaced = new EventMemberPlacedWithPrivilege(chosenAction, findColor(memberIndex), servants, CouncilPrivilege.getPrivilege(0));
+        				
+    	    	}
+    		});
+    	
+    	privileges[1].addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent ae) {
+        	            	      	
+               	MediaPlayer mediaPlayer2 = new MediaPlayer(hit2);
+        		mediaPlayer2.play();
+    	    		
+        		for(int j=0; j<privileges.length; j++){
+        			
+        			privileges[j].setEnabled(false);
+                   	privileges[j].setBorderPainted(false);
+                   		
+                  	ActionListener[] actionListeners = privileges[j].getActionListeners();
+                   	for (ActionListener actionListener : actionListeners) {
+                   		privileges[j].removeActionListener(actionListener);
+                   	}
+        		}
+        			
+               	memberPlaced = new EventMemberPlacedWithPrivilege(chosenAction, findColor(memberIndex), servants, CouncilPrivilege.getPrivilege(1));
+        				
+    	    	}
+    		});
+    	
+    	privileges[2].addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent ae) {
+        	            	      	
+               	MediaPlayer mediaPlayer2 = new MediaPlayer(hit2);
+        		mediaPlayer2.play();
+    	    		
+        		for(int j=0; j<privileges.length; j++){
+        			
+        			privileges[j].setEnabled(false);
+                   	privileges[j].setBorderPainted(false);
+                   		
+                  	ActionListener[] actionListeners = privileges[j].getActionListeners();
+                   	for (ActionListener actionListener : actionListeners) {
+                   		privileges[j].removeActionListener(actionListener);
+                   	}
+        		}
+        			
+               	memberPlaced = new EventMemberPlacedWithPrivilege(chosenAction, findColor(memberIndex), servants, CouncilPrivilege.getPrivilege(2));
+        				
+    	    	}
+    		});
+    	
+    	privileges[3].addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent ae) {
+        	            	      	
+               	MediaPlayer mediaPlayer2 = new MediaPlayer(hit2);
+        		mediaPlayer2.play();
+    	    		
+        		for(int j=0; j<privileges.length; j++){
+        			
+        			privileges[j].setEnabled(false);
+                   	privileges[j].setBorderPainted(false);
+                   		
+                  	ActionListener[] actionListeners = privileges[j].getActionListeners();
+                   	for (ActionListener actionListener : actionListeners) {
+                   		privileges[j].removeActionListener(actionListener);
+                   	}
+        		}
+        			
+               	memberPlaced = new EventMemberPlacedWithPrivilege(chosenAction, findColor(memberIndex), servants, CouncilPrivilege.getPrivilege(3));
+        				
+    	    	}
+    		});
+    	
+    	privileges[4].addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent ae) {
+        	            	      	
+               	MediaPlayer mediaPlayer2 = new MediaPlayer(hit2);
+        		mediaPlayer2.play();
+    	    		
+        		for(int j=0; j<privileges.length; j++){
+        			
+        			privileges[j].setEnabled(false);
+                   	privileges[j].setBorderPainted(false);
+                   		
+                  	ActionListener[] actionListeners = privileges[j].getActionListeners();
+                   	for (ActionListener actionListener : actionListeners) {
+                   		privileges[j].removeActionListener(actionListener);
+                   	}
+        		}
+        			
+               	memberPlaced = new EventMemberPlacedWithPrivilege(chosenAction, findColor(memberIndex), servants, CouncilPrivilege.getPrivilege(4));
+        				
+    	    	}
+    		});
+    		
+        	notifyObservers(memberPlaced);
+
+   	}
+	
+	private ColorPalette findColor(int memberIndex){
+		
+		switch(memberIndex){
+		case 0:
+			return ColorPalette.DICE_BLACK;
+		case 1:
+			return ColorPalette.DICE_WHITE;
+		case 2:
+			return ColorPalette.DICE_ORANGE;
+		case 3:
+			return ColorPalette.UNCOLORED;
+		default:
+			return null;
+		}
+		
 	}
 }

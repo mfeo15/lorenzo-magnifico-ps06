@@ -68,6 +68,7 @@ public class ParserBonusBoard {
 	    		
 	    		
 	    		
+	    		
 	    		for(int j = 0; j < carte.getLength(); j++){
 	    			Node node = carte.item(j); 
 	    			Element carta = (Element)node; 

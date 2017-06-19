@@ -96,10 +96,24 @@ public class Types {
 	
 	public enum CouncilPrivilege {
 		
-		BONUS_1, //Wood e Stone
-		BONUS_2, // 2 Servants
-		BONUS_3, // 2 Coins
-		BONUS_4, // 2 Military
-		BONUS_5 // 1 Faith
+		BONUS_1(1), //Wood e Stone
+		BONUS_2(2), // 2 Servants
+		BONUS_3(3), // 2 Coins
+		BONUS_4(4), // 2 Military
+		BONUS_5(5); // 1 Faith
+
+		private int index;
+		private CouncilPrivilege(int index) { this.index=index; }
+		
+		public static CouncilPrivilege getPrivilege(int index){
+			for (CouncilPrivilege a : CouncilPrivilege.values()) {
+				if(a.index == index) return a;
+			}
+			throw new IllegalArgumentException("Action not found");
+		}
+		
+		public int getIndex(){
+			return index;
+		}
 	}
 }

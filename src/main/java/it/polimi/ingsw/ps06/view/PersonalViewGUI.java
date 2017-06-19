@@ -180,9 +180,8 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 	        territories = setLabels(territories);
 	        buildings = setLabels(buildings);
 	        
-        	territories = locatePersonalCards(territories,false);
-        	buildings = locatePersonalCards(buildings,true);
-	          
+	        buildings = locatePersonalCards(buildings,false);
+        	territories = locatePersonalCards(territories,true);
 	        
 	        JButton[] bonusTile = new JButton[1];
 	        bonusTile = initializeButtons(bonusTile);
@@ -201,6 +200,19 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 			for(int j=0; j<territories.length;j++){ f.add(territories[j]); }
 			for(int j=0; j<buildings.length;j++){ f.add(buildings[j]); }
 			f.add(bonusTile[0]);
+			
+			setTerritoryCard(1,0);
+			setTerritoryCard(2,1);
+			setTerritoryCard(3,2);
+			setTerritoryCard(4,3);
+			setTerritoryCard(5,4);
+			setTerritoryCard(6,5);
+			setBuildingCard(44,0);
+			setBuildingCard(45,1);
+			setBuildingCard(46,2);
+			setBuildingCard(47,3);
+			setBuildingCard(48,4);
+			setBuildingCard(43,5);
 			
 			
 	        f.getContentPane().add(stanza);
@@ -267,15 +279,15 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 		}
 		
 		private JButton[] locatePersonalCards(JButton[] btns, boolean buildings){
-			double x=6.5;
-			double y=3;
+			double x=7.3;
+			double y=9;
 			
-			if(buildings)y=y+40;
+			if(buildings)y=y+35;
 			
 			for(int j=0;j<btns.length;j++){
 				
 				btns[j].setLocation((int)(width*x/100),(int)(height*y/100));
-				btns[j].setSize((int)(width*15.4/100),height*32/100);
+				btns[j].setSize((int)(width*14.3/100),(int)(height*27/100));
 				x=x+15.3;		
 			}
 			return btns;
@@ -298,7 +310,7 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 			
 			coins.setText(String.valueOf(coin));
 			woods.setText(String.valueOf(wood));
-			stones.setText(String.valueOf(wood));
+			stones.setText(String.valueOf(stone));
 			servants.setText(String.valueOf(servant));
 			this.victory.setText(String.valueOf(victory));
 			this.military.setText(String.valueOf(military));
@@ -308,7 +320,7 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 		@Override
 		public void setTerritoryCard(int id, int index) {
 			try {
-				territories[index].setIcon((ImageHandler.setImageScreen("resources/cards/devcards_f_en_c_"+id+".png",9,(int)(13*ratio),width,height)).getIcon());
+				territories[index].setIcon((ImageHandler.setImage("resources/cards/devcards_f_en_c_"+id+".png",17,(int)( 17.5 * 1.77 ),width,height)).getIcon());
 			} catch (IOException e) {
 				e.printStackTrace();}
 			
@@ -318,7 +330,7 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 		@Override
 		public void setBuildingCard(int id, int index) {
 			try {
-				buildings[index].setIcon((ImageHandler.setImageScreen("resources/cards/devcards_f_en_c_"+id+".png",9,(int)(13*ratio),width,height)).getIcon());
+				buildings[index].setIcon((ImageHandler.setImage("resources/cards/devcards_f_en_c_"+id+".png",17,(int)( 17.5 * 1.77  ),width,height)).getIcon());
 			} catch (IOException e) {
 				e.printStackTrace();}
 			
@@ -351,4 +363,9 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 		public Board getBackgroundView() {
 			return boardView;
 		}
+		
+		public static void main(String[] args) throws IOException
+	    {   
+	        (new PersonalViewGUI(1, null)).show();  
+	    }   
 }

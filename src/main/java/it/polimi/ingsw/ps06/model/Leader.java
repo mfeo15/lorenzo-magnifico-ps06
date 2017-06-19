@@ -13,7 +13,7 @@ public class Leader extends Card {
 	private LeaderRequirement requirement;
 	private boolean used=false;
 	private boolean active=false;
-	
+
 	private LeaderState leaderState;
 	
 	private LeaderState inHand;
@@ -55,7 +55,7 @@ public class Leader extends Card {
 	public LeaderState getDeactivateLeaderState() {
 		return onTableFaceDown;
 	}
-	 
+
 	/**
 	* metodo per verificare se il leader è stato già utilizzato o meno in questo turno
 	* 

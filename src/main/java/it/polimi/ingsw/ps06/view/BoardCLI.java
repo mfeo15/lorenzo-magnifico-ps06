@@ -10,6 +10,7 @@ import it.polimi.ingsw.ps06.controller.BoardController;
 import it.polimi.ingsw.ps06.model.DevelopementCard;
 import it.polimi.ingsw.ps06.model.Types.Action;
 import it.polimi.ingsw.ps06.model.Types.ColorPalette;
+import it.polimi.ingsw.ps06.model.events.BoardFrozenStatus;
 import it.polimi.ingsw.ps06.model.events.BoardHasLoaded;
 import it.polimi.ingsw.ps06.model.events.EventClose;
 import it.polimi.ingsw.ps06.model.events.EventLeaderActivated;
@@ -425,13 +426,23 @@ public class BoardCLI extends Observable implements Board {
 
 	@Override
 	public void unfreeze() {
-		// TODO Auto-generated method stub
+		setChanged();
+		BoardFrozenStatus frozen = new BoardFrozenStatus(false);
+		notifyObservers(frozen);
 		
 	}
 
 	@Override
 	public void freeze() {
-		// TODO Auto-generated method stub
+		setChanged();
+		BoardFrozenStatus frozen = new BoardFrozenStatus(true);
+		notifyObservers(frozen);
+		
+	}
+
+	@Override
+	public void excommunicate(int tileNumber, int playerIndex) {
+		System.out.println("--> Il giocatore numero "+playerIndex+" è appena stato scomunicato!");
 		
 	}
 	
