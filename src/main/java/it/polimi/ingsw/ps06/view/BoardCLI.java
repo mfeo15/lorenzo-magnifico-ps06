@@ -445,7 +445,12 @@ public class BoardCLI extends Observable implements Board {
 		System.out.println("--> Il giocatore numero "+playerIndex+" è appena stato scomunicato!");
 		
 	}
-	
+
+	@Override
+	public void setOrder(int[] players) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 }

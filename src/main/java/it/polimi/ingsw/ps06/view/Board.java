@@ -38,6 +38,8 @@ public interface Board {
 	
 	void setPlayerNumber(int number);
 	
+	void setOrder(int[] players);
+	
 	void addMember(Action chosenAction, ColorPalette color, int playerIndex) throws IOException;
 	
 	void startTimer();

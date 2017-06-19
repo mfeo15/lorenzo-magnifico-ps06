@@ -201,20 +201,6 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 			for(int j=0; j<buildings.length;j++){ f.add(buildings[j]); }
 			f.add(bonusTile[0]);
 			
-			setTerritoryCard(1,0);
-			setTerritoryCard(2,1);
-			setTerritoryCard(3,2);
-			setTerritoryCard(4,3);
-			setTerritoryCard(5,4);
-			setTerritoryCard(6,5);
-			setBuildingCard(44,0);
-			setBuildingCard(45,1);
-			setBuildingCard(46,2);
-			setBuildingCard(47,3);
-			setBuildingCard(48,4);
-			setBuildingCard(43,5);
-			
-			
 	        f.getContentPane().add(stanza);
 	        
 	        if(!(f.isUndecorated())) {f.setUndecorated(true);}
@@ -272,7 +258,6 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 				btn.setOpaque(false);
 				btn.setContentAreaFilled(false);
 				btn.setFocusPainted(false);
-		        //btn.setBorderPainted(false);
 			}
 			
 			return btns;
@@ -362,10 +347,5 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 		@Override
 		public Board getBackgroundView() {
 			return boardView;
-		}
-		
-		public static void main(String[] args) throws IOException
-	    {   
-	        (new PersonalViewGUI(1, null)).show();  
-	    }   
+		}  
 }

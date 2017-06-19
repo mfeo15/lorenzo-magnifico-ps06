@@ -321,7 +321,7 @@ public class BoardGUI extends Observable implements Board {
 		timerInfo.setForeground(Color.BLACK);
 		timerInfo.setHorizontalAlignment(JTextField.CENTER);
 		
-		resourcesInfo = new JTextField(coinV+" Coin   "+woodV+" Wood   "+stoneV+" Wood   "+servantV+" Servant    |    " +victoryV+" Victory   "+militaryV+" Military   "+faithV+" Faith");
+		resourcesInfo = new JTextField(coinV+" Coin   "+woodV+" Wood   "+stoneV+" Stone   "+servantV+" Servant    |    " +victoryV+" Victory   "+militaryV+" Military   "+faithV+" Faith");
 		resourcesInfo.setLocation((int)screenSize.getWidth()*10/100,(int)screenSize.getHeight()*96/100);
 		resourcesInfo.setSize((int)screenSize.getWidth()*80/100,(int)screenSize.getHeight()*4/100);
 		resourcesInfo.setOpaque(false);
@@ -752,7 +752,7 @@ public class BoardGUI extends Observable implements Board {
    	 	escFrame.setSize(escWidth, escHeight);
    	 	escFrame.setResizable(false);
    	 	escFrame.setLocationRelativeTo(null);        
-        		
+
    	 	towers.add(scrollTowers);
    	 	towers.getContentPane().add(board2Label);
    	 	towers.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -781,17 +781,6 @@ public class BoardGUI extends Observable implements Board {
 	    desktop.setVisible(true);
 	    
 		setRound();
-		
-	    
-	    excommunicate(1,3);
-	    excommunicate(2,2);
-	    excommunicate(1,1);
-	    excommunicate(2,0);
-	    excommunicate(3,3);
-	    excommunicate(3,0);
-	    excommunicate(1,3);
-	    excommunicate(1,0);
-	    
 	    
 	    desktopFrame.add(timerInfo);
 	    desktopFrame.add(resourcesInfo);
@@ -974,7 +963,7 @@ public class BoardGUI extends Observable implements Board {
 	
 	private JButton[] locateExcommStones(JButton[] btns){
 		double x=19.4;
-		double y=22;
+		double y=21.8;
 		int i=0;
 		
 		for(int z=0;z<3;z++){
@@ -1058,13 +1047,13 @@ public class BoardGUI extends Observable implements Board {
 	
 	
 	private JButton[] locateOrders(JButton[] tfs){
-		double x=84;
+		double x=84.1;
 		double y=0.5;
 		
 		for(int j=0;j<tfs.length;j++){
 			tfs[j].setLocation((int)(width*x/100),(int)(height*y/100));
-			tfs[j].setSize(width*6/100,height*8/100);
-			y=y+8;		
+			tfs[j].setSize(width*6/100,(int)(height*8.1/100));
+			y=y+8.1;		
 		}
 		return tfs;
 	}
@@ -1224,10 +1213,6 @@ public class BoardGUI extends Observable implements Board {
 		for (JButton btn : btns) {
 	        btn.setEnabled(false);
 	    }
-	}
-	
-	private void fillStones(int index){
-		
 	}
 	
 	public static void main(String[] args) throws IOException
@@ -2098,11 +2083,15 @@ public class BoardGUI extends Observable implements Board {
 		if(tileNumber==2) excommIndex=4+excomm2Count;
 		if(tileNumber==3) excommIndex=8+excomm3Count;
 		
-		if(playerIndex==0) excommStones[excommIndex].setBackground(Color.red);
-		if(playerIndex==1) excommStones[excommIndex].setBackground(Color.green);
-		if(playerIndex==2) excommStones[excommIndex].setBackground(Color.blue);
-		if(playerIndex==3) excommStones[excommIndex].setBackground(Color.yellow);
+		String color=null;
 		
+		if(playerIndex==0) color="red";
+		if(playerIndex==1) color="green";
+		if(playerIndex==2) color="blue";
+		if(playerIndex==3) color="yellow";
+		
+		try {excommStones[excommIndex].setIcon((ImageHandler.setImage("resources/stone/"+color+".png",3.5,(3.5*(16/9)*ratio),width,height)).getIcon());} catch (IOException e) {}
+		excommStones[excommIndex].setDisabledIcon(excommStones[excommIndex].getIcon());
 		excommStones[excommIndex].setOpaque(true);
 		
 		if(tileNumber==1) excomm1Count++;
@@ -2296,11 +2285,44 @@ public class BoardGUI extends Observable implements Board {
         		
     	    }
     	});
-    		
-        	
-
    	}
 	
+	
+	@Override
+	public void setOrder(int[] players) {
+		int index=0;
+		String color=null;
+		
+		for(int player : players){
+			
+			switch(player){
+			case 0:
+				color="red";
+				break;
+			case 1:
+				color="green";
+				break;
+			case 2:
+				color="blue";
+				break;
+			case 3:
+				color="yellow";
+				break;
+			default:
+				break;
+				
+			}
+			
+			try {
+				orders[index].setIcon((ImageHandler.setImage("resources/piece/"+color+".png",3.5,(3.5*(16/9)*ratio),width,height)).getIcon());
+				orders[index].setDisabledIcon(orders[index].getIcon());
+			} catch (IOException e) {e.printStackTrace();}
+			
+			index++;
+		}
+		
+	}
+
 	private ColorPalette findColor(int memberIndex){
 		
 		switch(memberIndex){
