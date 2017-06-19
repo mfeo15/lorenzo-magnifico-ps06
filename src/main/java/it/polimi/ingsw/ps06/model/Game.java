@@ -80,6 +80,8 @@ public class Game extends Observable {
 	public void setCurrentPlayerIndex(int currentPlayerIndex) {
 		this.currentPlayerIndex = currentPlayerIndex;
 		
+		System.out.println("CURRENT: " + this.currentPlayerIndex);
+		
 		MessageCurrentPlayer messageCurrentP = new MessageCurrentPlayer( getCurrentPlayer().getID() );
 		notifyChangement(messageCurrentP);
 	}
@@ -103,14 +105,7 @@ public class Game extends Observable {
 	
 	public Player getCurrentPlayer() {
 		
-		if (currentPlayerIndex >= 2) {
-			if ( currentPlayerIndex % 2 == 0)
-				return players.get(0);
-			else
-				return players.get(1);
-		}
-		
-		return players.get(currentPlayerIndex);
+		return players.get( currentPlayerIndex % players.size() );
 	}
 	
 	public void advanceCurrentPlayer() {

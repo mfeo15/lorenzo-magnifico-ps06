@@ -2109,11 +2109,14 @@ public class BoardGUI extends Observable implements Board {
 		
 		for(int j=0; j<placements.length ; j++){placements[j].setIcon(null);}
 		for(int j=0; j<councils.length ; j++){councils[j].setIcon(null);}
-		for(int j=0; j<markets.length ; j++){markets[j].setIcon(null);}
+		
+		for(int j=0; j<markets.length ; j++){
+				
+				if(markets[j].isEnabled()) markets[j].setIcon(null);
+			}
+		
 		for(int j=0; j<harvests.length ; j++){harvests[j].setIcon(null);}
 		for(int j=0; j<productions.length ; j++){productions[j].setIcon(null);}
-		
-		setBoardPlayers();
 		
 	}
 	

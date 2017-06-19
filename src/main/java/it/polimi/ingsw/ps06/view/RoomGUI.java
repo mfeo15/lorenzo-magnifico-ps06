@@ -8,6 +8,7 @@ import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -306,6 +307,13 @@ public class RoomGUI extends Observable implements Room {
 	public void setPlayer(String name, int index) {
 		
 		player[index].setText(name);
+		
+		if(index==1 && name!=null){
+			MouseListener[] mouseListeners= start.getMouseListeners();
+	  		for (MouseListener mouseListener : mouseListeners) {
+	  			start.removeMouseListener(mouseListener);
+	  		}
+		}
 		
 		if(index==1 && name!=null){
 			
