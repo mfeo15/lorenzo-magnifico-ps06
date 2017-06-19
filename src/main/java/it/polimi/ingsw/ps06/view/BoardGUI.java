@@ -2117,7 +2117,6 @@ public class BoardGUI extends Observable implements Board {
 		
 		for(int j=0; j<harvests.length ; j++){harvests[j].setIcon(null);}
 		for(int j=0; j<productions.length ; j++){productions[j].setIcon(null);}
-		
 	}
 	
 	@Override
