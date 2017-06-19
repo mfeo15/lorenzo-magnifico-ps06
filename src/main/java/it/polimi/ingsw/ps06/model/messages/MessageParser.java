@@ -225,6 +225,9 @@ public class MessageParser implements MessageVisitor {
 	@Override
 	public void visit(MessageCurrentPlayerOrder currentPlayerOrder) {
 		Board b = ((Board) supporter);
-		b.setOrder( currentPlayerOrder.getPlayerOrder() );
+		
+		int[] playerOrder = new int[ currentPlayerOrder.getPlayerOrder().size() ];
+		for(int i=0; i < currentPlayerOrder.getPlayerOrder().size(); i++) playerOrder[i] = currentPlayerOrder.getPlayerOrder().get(i);
+		b.setOrder( playerOrder );
 	}
 }
