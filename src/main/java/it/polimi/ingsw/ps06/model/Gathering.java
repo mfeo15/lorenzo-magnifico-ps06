@@ -36,7 +36,8 @@ public class Gathering extends Actions {
 	* @param 	chosenAction	Codice dell'azione da eseguire	
 	* @return 					Nothing
 	*/
-	public Gathering (Action chosenAction, int value, Player p) {
+	public Gathering (Action chosenAction, int value, Player p, int servants) {
+		super(servants);
 		
 		this.chosenAction=chosenAction;
 		this.value=value;

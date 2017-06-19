@@ -93,7 +93,7 @@ public class CouncilPalace extends Observable implements PlaceSpace {
 	* @return 					Nothing
 	*/
 	private void initRewards(){
-		privilegeReward = new EffectsActions(new Privilege());
+		privilegeReward = new EffectsActions(new Privilege(0));
 		councilReward = new EffectsResources(new Resources(MaterialsKind.COIN,1));
 	}
 	

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.ps06.model;
 
 import it.polimi.ingsw.ps06.model.Types.Action;
+import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
 
 /**
 * Classe per la gestione delle azioni che comportano un acquisizione di una carta
@@ -14,7 +15,8 @@ public class CardAcquisition extends Actions {
 	private DevelopementCard card;
 	private Player p;
 	
-	public CardAcquisition(DevelopementCard card, Player p){
+	public CardAcquisition(DevelopementCard card, Player p, int servants) {
+		super(servants);
 		this.card = card;
 		this.p = p;
 	}
@@ -69,6 +71,9 @@ public class CardAcquisition extends Actions {
 	*/
 	@Override
 	public void activate() {
+		
+		if (servants > 0)
+			p.getPersonalBoard().getInventory().decreaseResourceValue(MaterialsKind.SERVANT, servants);
 		
 		if(card instanceof Territory) {
 			p.getPersonalBoard().addCard( (Territory) card);

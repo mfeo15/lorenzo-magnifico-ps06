@@ -73,7 +73,7 @@ public class Towers extends Observable implements PlaceSpace {
 			return;
 		}
 		
-		CardAcquisition acquire = new CardAcquisition(card, member.getPlayer());
+		CardAcquisition acquire = new CardAcquisition(card, member.getPlayer(), servants);
 
 		checkWhichTower(chosenAction);
 

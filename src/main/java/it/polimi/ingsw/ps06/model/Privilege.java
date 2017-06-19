@@ -16,7 +16,8 @@ public class Privilege extends Actions{
 	* Costruttore
 	* 	
 	*/
-	public Privilege(){
+	public Privilege(int servants) {
+		super(servants);
 		askChoice();
 	}
 	

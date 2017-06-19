@@ -10,6 +10,12 @@ import java.util.Observable;
 * @since   2017-05-16
 */
 public abstract class Actions extends Observable {
+	
+	protected int servants;
+	
+	public Actions(int servants) {
+		this.servants = servants;
+	}
 
 	/**
 	* Metodo di attivazione dell'azione
