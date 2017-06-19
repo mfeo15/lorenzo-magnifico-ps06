@@ -15,6 +15,7 @@ public class Leader extends Card {
 	private boolean active=false;
 	
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 	private LeaderState leaderState;
 	
 	private LeaderState inHand;
@@ -58,6 +59,8 @@ public class Leader extends Card {
 	}
 	 
 =======
+=======
+>>>>>>> Stashed changes
 	/**
 	* metodo per verificare se il leader è stato già utilizzato o meno in questo turno
 	* 
@@ -70,6 +73,9 @@ public class Leader extends Card {
 		requirement=lead;
 		return;
 	}
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 	/**
 	* metodo per verificare se il leader è stato già utilizzato o meno in questo turno
