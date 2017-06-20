@@ -26,6 +26,8 @@ public class BoardCLI extends Observable implements Board {
 	//private Scanner input;
 	
 	private String[] player = new String[5];
+	private int[] cardsCodes = new int[16];
+	
     private String playerColor="G";
     private int blackValue;
     private int orangeValue;
@@ -43,55 +45,32 @@ public class BoardCLI extends Observable implements Board {
     private int usedMember;
     private int leaderState1, leaderState2, leaderState3, leaderState4;
     
-    private BufferedReader in;
+    private BufferedReader input;
     
-    private boolean reading = true;
-    
-    
+    private boolean cond = true;
 	
 	public BoardCLI(BufferedReader input) {
 		
-		this.in = input;
+		this.input = input;
 	}
 	
 	public void addNewControllerObserver(BoardController controller) {
 		addObserver(controller);
 	}
 	
-	public void readThreaded() {
-		new Thread(new Runnable() {			
-			@Override
-			public void run() {
-
-				while (reading) {
-
-					String s;
-					//while ( !(s = input.nextLine()).equals("exit") ) read(s);
-					try {
-						/*while ( !(s = input.readLine()).equalsIgnoreCase("exit") )*/ read( in.readLine() );
-
-						//notifyExit();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-
-				}
-			}
-		}).start();
-	}
 	
-	public void read (String s) throws IOException {
+	public void read () throws IOException {
+		
+		String s = input.readLine();
 		
 		if (s == null)
 			return;
 
-		System.out.println("You said: " + s);
-		
 		if(("spots").equals(s)) giveSpots();
 		if(("actions").equals(s)) giveActions();
 		if(("?").equals(s)) giveInfo();
 		if(("status").equals(s)) giveGameStatus();
+		if(("towers").equals(s)) giveTowerStatus();
 
 		if(("info").equals(s)) printPoints(0);
 		if(("info1").equals(s)) printPoints(1);
@@ -115,14 +94,21 @@ public class BoardCLI extends Observable implements Board {
 		if(("piazza3").equals(s)) notifyLeaderPlacement(3);
 		if(("piazza4").equals(s)) notifyLeaderPlacement(4);
 
-
-		for(int j=0; j<25; j++)
-			if( s.equalsIgnoreCase(( ((Action.getAction(j)).toString())) )){
-				System.out.print(" > ");
-				String s1 = String.valueOf(in.readLine());
-				int index = Integer.parseInt(s1.replaceAll("[\\D]", ""));
-				notifyAction(Action.valueOf(s.toUpperCase()),index,0);
-			}
+		if(("action").equals(s))
+		{
+			System.out.print("Che azione? > ");
+			String s1 = String.valueOf(input.readLine());
+			for(int j=0; j<25; j++)
+				if( s1.equalsIgnoreCase(( ((Action.getAction(j)).toString())) )){
+					System.out.print("Che familiare? (Numero) > ");
+					String s2 = String.valueOf(input.readLine());
+					int index = Integer.parseInt(s2.replaceAll("[\\D]", ""));
+					
+					System.out.print("Quanti servi vuoi usare? > ");
+					int servants = Integer.parseInt(input.readLine());
+					notifyAction(Action.valueOf(s1.toUpperCase()),index,servants);
+				}
+		}
 	}
 	
 	public void show() {
@@ -136,6 +122,32 @@ public class BoardCLI extends Observable implements Board {
 		System.out.print(" > ");
 		
 		hasLoaded();
+		
+		while (cond)
+			try {
+				read();
+			} catch (NumberFormatException | IOException e) {
+				e.printStackTrace();
+			}
+	}
+	
+	public void giveTowerStatus() {
+		
+		System.out.println(" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+		System.out.println("");
+		System.out.println("	 Territori		Personaggi	     Edifici		Sviluppo");
+		System.out.println("");
+		System.out.println("	     "+cardsCodes[4]+"			    "+cardsCodes[7]+"			"+cardsCodes[11]+"		    "+cardsCodes[15]);
+		System.out.println("");
+		System.out.println("	     "+cardsCodes[2]+"			    "+cardsCodes[6]+"			"+cardsCodes[10]+"		    "+cardsCodes[14]);
+		System.out.println("");
+		System.out.println("	     "+cardsCodes[1]+"			    "+cardsCodes[5]+"			"+cardsCodes[9]+"		    "+cardsCodes[13]);
+		System.out.println("");
+		System.out.println("	     "+cardsCodes[0]+"			    "+cardsCodes[4]+"			"+cardsCodes[8]+"		    "+cardsCodes[12]);
+		System.out.println("");
+		System.out.println(" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+		
+		
 	}
 	
 	public void giveGameStatus() {
@@ -148,19 +160,22 @@ public class BoardCLI extends Observable implements Board {
 		System.out.println("");
 		System.out.println("Turno: " + this.roundNumber + "\t Periodo: " + this.periodNumber);
 		System.out.println("");
-		System.out.println("Current Player: " + this.roundPlayerID);
+		System.out.println("Current Player: " +player[this.roundPlayerID] );
 		System.out.println("");
 		System.out.println(" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
 		System.out.println();
+		System.out.print(" > ");
 	}
 
 	public void giveInfo() {
 		System.out.println("----- LISTA COMANDI -----");
 		System.out.println();
-		System.out.println("Per eseguire un azione digita un comando composto nel seguente modo: \"market_1 familiare1\"");
+		System.out.println("Per eseguire un azione digita il comando \"action\"");
 		System.out.println("Ricorda che l'ordine dei colori è: Nero(1) Bianco(2) Arancio(3) Neutro(4)");
-		System.out.println("Per una lista delle posizioni del gioco digita \"spots\"");
+		System.out.println("Per una lista delle posizioni del gioco digita: \"spots\"");
 		System.out.println("Per una lista di azioni extra digita: \"actions\"");
+		System.out.println("Per una panoramica sulla situazione della partita digita: \"status\"");
+		System.out.println("La situazione delle torri è mostrata digitando: \"towers\"");
 		System.out.println();
 		System.out.print(" > ");
 	}
@@ -187,7 +202,7 @@ public class BoardCLI extends Observable implements Board {
 	private void printTowers() {
 		
 		System.out.println("");
-		System.out.print("                                ");
+		System.out.print("                                                 ");
 		System.out.println("      |>>>		"); 	 System.out.print("      |>>>	"); 	System.out.print("      |>>>	"); 	System.out.print("      |>>>		");
 		System.out.println("      |			");		 System.out.print("      |		"); 	System.out.print("      |		");		System.out.print("      |		");
 		System.out.println(" |;|_|;|_|;|	");	 	 System.out.print(" |;|_|;|_|;|	");		System.out.print(" |;|_|;|_|;|	");		System.out.print(" |;|_|;|_|;|	");
@@ -302,6 +317,7 @@ public class BoardCLI extends Observable implements Board {
 	public void setPlayersNames(String s, int index) {
 		this.player[index]=s;
 		
+		
 	}
 
 	@Override
@@ -328,7 +344,7 @@ public class BoardCLI extends Observable implements Board {
 
 	@Override
 	public void setCards(int[] cards) {
-		// TODO Auto-generated method stub
+		this.cardsCodes = cards;
 		
 	}
 
@@ -377,7 +393,7 @@ public class BoardCLI extends Observable implements Board {
 
 	@Override
 	public void notifyAction(Action chosenAction, int memberIndex, int servants) {
-		System.out.println("--> Evento registrato: familiare "+memberIndex+" in "+chosenAction.toString());
+		System.out.println("--> Evento registrato: familiare "+memberIndex+" in "+chosenAction.toString()+", sono stati usati "+servants+" servi");
 		setChanged();
 		EventMemberPlaced memberPlaced=null;
 		
@@ -430,7 +446,9 @@ public class BoardCLI extends Observable implements Board {
 
 	@Override
 	public void notifyTimesUp() {
-		
+		System.out.println("--> Tempo scaduto!");
+		System.out.println();
+		System.out.print(" > ");
 		
 	}
 
@@ -476,6 +494,45 @@ public class BoardCLI extends Observable implements Board {
 				break;
 		}
 		
+		switch(chosenAction){
+	
+    	case TOWER_GREEN_1:
+    		cardsCodes[0]=-1;
+    	case TOWER_GREEN_2:
+    		cardsCodes[1]=-1;
+    	case TOWER_GREEN_3:
+    		cardsCodes[2]=-1;
+    	case TOWER_GREEN_4:
+    		cardsCodes[3]=-1;
+    		
+    	case TOWER_BLUE_1:
+    		cardsCodes[4]=-1;
+    	case TOWER_BLUE_2:
+    		cardsCodes[5]=-1;
+    	case TOWER_BLUE_3:
+    		cardsCodes[6]=-1;
+    	case TOWER_BLUE_4:
+    		cardsCodes[7]=-1;
+    		
+    	case TOWER_YELLOW_1:
+    		cardsCodes[8]=-1;
+    	case TOWER_YELLOW_2:
+    		cardsCodes[9]=-1;
+    	case TOWER_YELLOW_3:
+    		cardsCodes[10]=-1;
+    	case TOWER_YELLOW_4:
+    		cardsCodes[11]=-1;
+
+    	case TOWER_PURPLE_1:
+    		cardsCodes[12]=-1;
+    	case TOWER_PURPLE_2:
+    		cardsCodes[13]=-1;
+    	case TOWER_PURPLE_3:
+    		cardsCodes[14]=-1;
+    	case TOWER_PURPLE_4:
+    		cardsCodes[15]=-1;
+		}
+		
 		
 		System.out.println("--> Il familiare"+memberIndex+" è stato piazzato dal giocatore"+playerIndex+" in "+chosenAction.toString()+" con successo!");
 		System.out.println("");
@@ -498,8 +555,6 @@ public class BoardCLI extends Observable implements Board {
 		
 	}
 	
-	
-
 	@Override
 	public void showErrorLog(String s) {
 		System.out.println("--> "+s);
@@ -508,8 +563,6 @@ public class BoardCLI extends Observable implements Board {
 
 	@Override
 	public void hasLoaded() {
-		
-		readThreaded();
 		
 		setChanged();
 		BoardHasLoaded boardLoaded = new BoardHasLoaded();

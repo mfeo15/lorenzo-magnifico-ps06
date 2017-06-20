@@ -11,9 +11,11 @@ import it.polimi.ingsw.ps06.controller.MenuController;
 import it.polimi.ingsw.ps06.model.events.EventClose;
 import it.polimi.ingsw.ps06.model.events.StoryBoard2Room;
 
+
 public class MenuCLI extends Observable implements Menu {
 	
 	private BufferedReader input;
+	private boolean cond = true;
 	
 	public MenuCLI(BufferedReader input) {
 		
@@ -31,6 +33,7 @@ public class MenuCLI extends Observable implements Menu {
 	public void show() {
 		
 		System.out.println("\n\n\n\n");
+		
 		
 		System.out.println("   ▄█        ▄██████▄     ▄████████    ▄████████ ███▄▄▄▄    ▄███████▄   ▄██████▄  ");     
 		System.out.println("  ███       ███    ███   ███    ███   ███    ███ ███▀▀▀██▄ ██▀     ▄██ ███    ███ ");    
@@ -61,7 +64,7 @@ public class MenuCLI extends Observable implements Menu {
 		System.out.println();
 		System.out.print(" > ");
 
-		while (true)
+		while (cond)
 			try {
 				readInput();
 			} catch (NumberFormatException | IOException e) {
@@ -71,8 +74,10 @@ public class MenuCLI extends Observable implements Menu {
 	
 	public void readInput() throws NumberFormatException, IOException {
 		
-		int i = Integer.parseInt(input.readLine());
+		System.out.println("ciao");
 		
+		int i = Integer.parseInt(input.readLine());
+
 		switch (i) {
 			case 1: startGame(); break;
 			case 2: notifyExit(); break;
@@ -92,6 +97,7 @@ public class MenuCLI extends Observable implements Menu {
 
 	@Override
 	public void startGame() {
+		cond=false;
 		setChanged();
 		StoryBoard2Room storyBoard = new StoryBoard2Room(new RoomCLI(input));
 		notifyObservers(storyBoard);

@@ -1629,10 +1629,8 @@ public class BoardGUI extends Observable implements Board {
 
 	@Override
 	public void setPeriodRound(int period, int round) {
-		this.periodNumber=period;
-		this.roundNumber=period;
 		
-		roundInfo.setText("Turno: "+roundNumber+"  Periodo: "+periodNumber);
+		roundInfo.setText("Turno: "+round+"  Periodo: "+period);
 		
 		setRound();
 		
@@ -1760,7 +1758,7 @@ public class BoardGUI extends Observable implements Board {
 		this.militaryV=military;
 		this.faithV=faith;
 		
-		resourcesInfo.setText(coinV+" Coin   "+woodV+" Wood   "+stoneV+" Wood   "+servantV+" Servant   |    " +victoryV+" Victory   "+militaryV+" Military   "+faithV+" Faith");
+		resourcesInfo.setText(coinV+" Coin   "+woodV+" Wood   "+stoneV+" Wood   "+servantV+" Servant     |    " +victoryV+" Victory   "+militaryV+" Military   "+faithV+" Faith");
 		
 	}
 

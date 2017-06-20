@@ -18,10 +18,8 @@ import it.polimi.ingsw.ps06.model.events.StoryBoard2Room;
 public class RoomCLI extends Observable implements Room {
 	
 	private BufferedReader input;
-	
-	private Thread reader;
-	
-	private boolean reading = true;
+
+	private boolean cond = true;
 	
 	
 	public RoomCLI(BufferedReader input) {
@@ -37,53 +35,29 @@ public class RoomCLI extends Observable implements Room {
 		addObserver(controller);
 	}
 	
-	public void readThreaded() {
-		reader = new Thread(new Runnable() {			
-			@Override
-			public void run() {
-
-				while (reading) {
-
-					String s;
-					//while ( !(s = input.nextLine()).equals("exit") ) read(s);
-					try {
-						/*while ( !(s = input.readLine()).equalsIgnoreCase("exit") )*/ read( input.readLine() );
-
-						//notifyExit();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-
-				}
+	public void read() throws IOException {
+		
+			String s = input.readLine();
+			
+		if(cond){
+			if( ("start").equals(s) ) {
+				startGame();
+				return;
 			}
-		});
-		
-		reader.start();
-	}
-	
-	public void read(String s) throws IOException {
-		
-		if (s == null)
-			return;
-		
-		if( ("start").equals(s) ) {
-			startGame();
-			return;
-		}
-		
-		if( ("?").equals(s) ) {
-			giveInfo();
-			return;
-		}
-		
-		if( ("login").equals(s) ) {
-			System.out.print(" Username > ");
-			String s1 = input.readLine();
-			System.out.print(" Password > ");
-			String s2 = input.readLine();
-			giveCredentials(s1,s2);
-			return;
+			
+			if( ("?").equals(s) ) {
+				giveInfo();
+				return;
+			}
+			
+			if( ("login").equals(s) ) {
+				System.out.print(" Username > ");
+				String s1 = input.readLine();
+				System.out.print(" Password > ");
+				String s2 = input.readLine();
+				giveCredentials(s1,s2);
+				return;
+			}
 		}
 	}
 	
@@ -96,6 +70,13 @@ public class RoomCLI extends Observable implements Room {
 		System.out.print(" > ");
 		
 		hasLoaded();
+		
+		while (cond)
+			try {
+				read();
+			} catch (NumberFormatException | IOException e) {
+				e.printStackTrace();
+			}
 	}
 
 	public void giveInfo() {
@@ -158,8 +139,6 @@ public class RoomCLI extends Observable implements Room {
 	@Override
 	public void notifyExit() {
 		
-		reading = false;
-		
 		setChanged();
 		EventClose close = new EventClose();
 		notifyObservers(close);
@@ -169,7 +148,8 @@ public class RoomCLI extends Observable implements Room {
 	@Override
 	public void hasStarted() {
 		
-		reading = false;
+		System.out.println("a");
+		cond=false;
 		
 		setChanged();
 		StoryBoard2Board storyBoard = new StoryBoard2Board(new BoardCLI(input));
@@ -179,15 +159,10 @@ public class RoomCLI extends Observable implements Room {
 	@Override
 	public void hasLoaded() {
 		
-		readThreaded();
-		
 		setChanged();
 		RoomHasLoaded roomLoaded = new RoomHasLoaded();
 		notifyObservers(roomLoaded);
 	}
-	
-	
-	
-	
+
 	
 }
