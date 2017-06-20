@@ -1,6 +1,8 @@
 package it.polimi.ingsw.ps06;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Scanner;
 
 import it.polimi.ingsw.ps06.controller.MenuController;
@@ -19,14 +21,15 @@ public class App
     }
     
     public static void setup() throws IOException {
-    	Scanner s = new Scanner(System.in);
+    	InputStreamReader reader = new InputStreamReader(System.in);
+    	BufferedReader in = new BufferedReader(reader);
     	
     	System.out.print("\n" + "Press 1 for Server or 2 for Client > ");
-    	if ( Integer.parseInt(s.nextLine()) == 1 ) 
+    	if ( Integer.parseInt(in.readLine()) == 1 ) 
     	{
     		SocketServer.getInstance().start();
     
-    		s.close();
+    		in.close();
     		return;
     	} 
     	
@@ -34,11 +37,11 @@ public class App
     	{	
     		System.out.print("Insert the Server IP > ");
     		
-    		String host = s.nextLine();
+    		String host = in.readLine();
     		Client.getInstance().setupParameters(host, 12345);
     		
     		System.out.print("\n" + "Press 1 for CLI or 2 for GUI > ");
-    		Menu menuView = ( Integer.parseInt(s.nextLine()) == 1 ) ? new MenuCLI(s) : new MenuGUI();
+    		Menu menuView = ( Integer.parseInt(in.readLine()) == 1 ) ? new MenuCLI(in) : new MenuGUI();
     		
     		System.out.println("\n" + "\n");
 				

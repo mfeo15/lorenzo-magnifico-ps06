@@ -67,6 +67,7 @@ public class MessageParser implements MessageVisitor {
 	
 	@Override
 	public void visit(MessageGameStart gameStart) {
+		System.out.println("OOOOOOOOOOOO");
 		SocketServer.getInstance().startNewGame();
 	}
 

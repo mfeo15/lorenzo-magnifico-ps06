@@ -1,6 +1,8 @@
 package it.polimi.ingsw.ps06.view;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
@@ -21,7 +23,7 @@ import it.polimi.ingsw.ps06.model.events.StoryBoard2PersonalView;
 
 public class BoardCLI extends Observable implements Board {
 	
-	private Scanner input;
+	//private Scanner input;
 	
 	private String[] player = new String[5];
     private String playerColor="G";
@@ -40,24 +42,92 @@ public class BoardCLI extends Observable implements Board {
     private int coinV, woodV, stoneV, servantV, victoryV, militaryV,faithV;
     private int usedMember;
     private int leaderState1, leaderState2, leaderState3, leaderState4;
+    
+    private BufferedReader in;
+    
+    private boolean reading = true;
+    
+    
 	
-	public BoardCLI(Scanner input) {
+	public BoardCLI(BufferedReader input) {
 		
-		this.input = input;
+		this.in = input;
 	}
 	
 	public void addNewControllerObserver(BoardController controller) {
 		addObserver(controller);
 	}
 	
-	public void printTowers(ArrayList<DevelopementCard> t) {
-		printTowerASCII();
+	public void readThreaded() {
+		new Thread(new Runnable() {			
+			@Override
+			public void run() {
+
+				while (reading) {
+
+					String s;
+					//while ( !(s = input.nextLine()).equals("exit") ) read(s);
+					try {
+						/*while ( !(s = input.readLine()).equalsIgnoreCase("exit") )*/ read( in.readLine() );
+
+						//notifyExit();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+				}
+			}
+		}).start();
+	}
+	
+	public void read (String s) throws IOException {
 		
+		if (s == null)
+			return;
+
+		System.out.println("You said: " + s);
+		
+		if(("spots").equals(s)) giveSpots();
+		if(("actions").equals(s)) giveActions();
+		if(("?").equals(s)) giveInfo();
+		if(("status").equals(s)) giveGameStatus();
+
+		if(("info").equals(s)) printPoints(0);
+		if(("info1").equals(s)) printPoints(1);
+		if(("info2").equals(s)) printPoints(2);
+		if(("info3").equals(s)) printPoints(3);
+		if(("info4").equals(s)) printPoints(4);
+		if(("info5").equals(s)) printPoints(5);
+
+		if(("attiva1").equals(s)) notifyLeaderActivation(1);
+		if(("attiva2").equals(s)) notifyLeaderActivation(2);
+		if(("attiva3").equals(s)) notifyLeaderActivation(3);
+		if(("attiva4").equals(s)) notifyLeaderActivation(4);
+
+		if(("scarta1").equals(s)) notifyLeaderDiscard(1);
+		if(("scarta2").equals(s)) notifyLeaderDiscard(2);
+		if(("scarta3").equals(s)) notifyLeaderDiscard(3);
+		if(("scarta4").equals(s)) notifyLeaderDiscard(4);
+
+		if(("piazza1").equals(s)) notifyLeaderPlacement(1);
+		if(("piazza2").equals(s)) notifyLeaderPlacement(2);
+		if(("piazza3").equals(s)) notifyLeaderPlacement(3);
+		if(("piazza4").equals(s)) notifyLeaderPlacement(4);
+
+
+		for(int j=0; j<25; j++)
+			if( s.equalsIgnoreCase(( ((Action.getAction(j)).toString())) )){
+				System.out.print(" > ");
+				String s1 = String.valueOf(in.readLine());
+				int index = Integer.parseInt(s1.replaceAll("[\\D]", ""));
+				notifyAction(Action.valueOf(s.toUpperCase()),index,0);
+			}
 	}
 	
 	public void show() {
 		
-		printTowerASCII();
+		printTowers();
 		System.out.println();
 		System.out.println(" --- Firenze, 1500. Benvenuto in questa magnifica città. --- ");
 		System.out.println();
@@ -66,52 +136,22 @@ public class BoardCLI extends Observable implements Board {
 		System.out.print(" > ");
 		
 		hasLoaded();
-		while(true) readInput();
-		
 	}
 	
-	public void readInput() {
-		String s = input.nextLine();
+	public void giveGameStatus() {
 		
-		Action chosenAction;
-		
-		if(("spots").equals(s)) giveSpots();
-		if(("actions").equals(s)) giveActions();
-		if(("?").equals(s)) giveInfo();
-		if(("exit").equals(s)) notifyExit();
-		
-		if(("info").equals(s)) printPoints(0);
-		if(("info1").equals(s)) printPoints(1);
-		if(("info2").equals(s)) printPoints(2);
-		if(("info3").equals(s)) printPoints(3);
-		if(("info4").equals(s)) printPoints(4);
-		if(("info5").equals(s)) printPoints(5);
-		
-		if(("attiva1").equals(s)) notifyLeaderActivation(1);
-		if(("attiva2").equals(s)) notifyLeaderActivation(2);
-		if(("attiva3").equals(s)) notifyLeaderActivation(3);
-		if(("attiva4").equals(s)) notifyLeaderActivation(4);
-		
-		if(("scarta1").equals(s)) notifyLeaderDiscard(1);
-		if(("scarta2").equals(s)) notifyLeaderDiscard(2);
-		if(("scarta3").equals(s)) notifyLeaderDiscard(3);
-		if(("scarta4").equals(s)) notifyLeaderDiscard(4);
-		
-		if(("piazza1").equals(s)) notifyLeaderPlacement(1);
-		if(("piazza2").equals(s)) notifyLeaderPlacement(2);
-		if(("piazza3").equals(s)) notifyLeaderPlacement(3);
-		if(("piazza4").equals(s)) notifyLeaderPlacement(4);
-		
-		
-		for(int j=0; j<25; j++)
-		if( s.equalsIgnoreCase(( ((Action.getAction(j)).toString())) )){
-			System.out.print(" > ");
-			String s1 = String.valueOf(input.nextLine());
-			int index = Integer.parseInt(s1.replaceAll("[\\D]", ""));
-			notifyAction(Action.valueOf(s.toUpperCase()),index,0);
-		}
-		
-		
+		System.out.println();
+		System.out.println(" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
+		System.out.println("");
+		System.out.println("	 BLACK			 WHITE			ORANGE");
+		printDice(this.blackValue,this.whiteValue,this.blackValue);
+		System.out.println("");
+		System.out.println("Turno: " + this.roundNumber + "\t Periodo: " + this.periodNumber);
+		System.out.println("");
+		System.out.println("Current Player: " + this.roundPlayerID);
+		System.out.println("");
+		System.out.println(" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
+		System.out.println();
 	}
 
 	public void giveInfo() {
@@ -123,8 +163,6 @@ public class BoardCLI extends Observable implements Board {
 		System.out.println("Per una lista di azioni extra digita: \"actions\"");
 		System.out.println();
 		System.out.print(" > ");
-
-		while(true) readInput();
 	}
 	
 	public void giveSpots() {
@@ -134,8 +172,6 @@ public class BoardCLI extends Observable implements Board {
 		System.out.println("Ricorda che i posti della torre vanno da sinistra a destra nel seguente ordine: green-blue-yellow-purple; dal basso verso l'alto!");
 		System.out.println();
 		System.out.print(" > ");
-
-		while(true) readInput();
 	}
 	
 	public void giveActions() {
@@ -146,28 +182,84 @@ public class BoardCLI extends Observable implements Board {
 		System.out.println("Se non conosci il tuo codice giocatore puoi usare semplicemente il comando Info !");
 		System.out.println();
 		System.out.print(" > ");
-
-		while(true) readInput();
 	}
 	
-	private void printTowerASCII() {
+	private void printTowers() {
 		
 		System.out.println("");
 		System.out.print("                                ");
-		System.out.println("      |>>>		"); 	 System.out.print("      |>>>	"); 	System.out.print("      |>>>	");
-		System.out.println("      |			");		 System.out.print("      |		"); 	System.out.print("      |		");
-		System.out.println(" |;|_|;|_|;|	");	 	 System.out.print(" |;|_|;|_|;|	");		System.out.print(" |;|_|;|_|;|	");
-		System.out.println(" \\.    .  /	"); 	 System.out.print(" \\.    .  /	");		System.out.print(" \\.    .  /	");
-		System.out.println("  \\:  .  /		"); 	 System.out.print("  \\:  .  /	"); 	System.out.print("  \\:  .  /	");
-		System.out.println("   ||:   |		"); 	 System.out.print("   ||:   |	");		System.out.print("   ||:   |	");
-		System.out.println("   ||:.  |		");	 	 System.out.print("   ||:.  |	");		System.out.print("   ||:.  |	");
-		System.out.println("   ||:  .|		");		 System.out.print("   ||:  .|	");		System.out.print("   ||:  .|	");
-		System.out.println("   ||:   |		");	 	 System.out.print("   ||:   |	");		System.out.print("   ||:   |	");
-		System.out.println("   ||: , |		");	 	 System.out.print("   ||: , |	");		System.out.print("   ||: , |	");
-		System.out.println("   ||:   |		");		 System.out.print("   ||:   |	");		System.out.print("   ||:   |	");
-		System.out.println("   ||: . |		");	 	 System.out.print("   ||: . |	");		System.out.print("   ||: . |	");
-		System.out.println("  _||_   |		");	 	 System.out.print("  _||_   |	");		System.out.print("  _||_   |	");
-		System.out.println("-~    ~`--		");	 	 System.out.print("-~    ~`--	");		System.out.print("-~    ~`--	");
+		System.out.println("      |>>>		"); 	 System.out.print("      |>>>	"); 	System.out.print("      |>>>	"); 	System.out.print("      |>>>		");
+		System.out.println("      |			");		 System.out.print("      |		"); 	System.out.print("      |		");		System.out.print("      |		");
+		System.out.println(" |;|_|;|_|;|	");	 	 System.out.print(" |;|_|;|_|;|	");		System.out.print(" |;|_|;|_|;|	");		System.out.print(" |;|_|;|_|;|	");
+		System.out.println(" \\.    .  /	"); 	 System.out.print(" \\.    .  /	");		System.out.print(" \\.    .  /	");		System.out.print(" \\.    .  /	");
+		System.out.println("  \\:  .  /		"); 	 System.out.print("  \\:  .  /	"); 	System.out.print("  \\:  .  /	");		System.out.print("  \\:  .  /	");
+		System.out.println("   ||:   |		"); 	 System.out.print("   ||:   |	");		System.out.print("   ||:   |	");		System.out.print("   ||:   |	");
+		System.out.println("   ||:.  |		");	 	 System.out.print("   ||:.  |	");		System.out.print("   ||:.  |	");		System.out.print("   ||:.  |	");
+		System.out.println("   ||:  .|		");		 System.out.print("   ||:  .|	");		System.out.print("   ||:  .|	");		System.out.print("   ||:  .|	");
+		System.out.println("   ||:   |		");	 	 System.out.print("   ||:   |	");		System.out.print("   ||:   |	");		System.out.print("   ||:   |	");
+		System.out.println("   ||: , |		");	 	 System.out.print("   ||: , |	");		System.out.print("   ||: , |	");		System.out.print("   ||: , |	");
+		System.out.println("   ||:   |		");		 System.out.print("   ||:   |	");		System.out.print("   ||:   |	");		System.out.print("   ||:   |	");
+		System.out.println("   ||: . |		");	 	 System.out.print("   ||: . |	");		System.out.print("   ||: . |	");		System.out.print("   ||: . |	");
+		System.out.println("  _||_   |		");	 	 System.out.print("  _||_   |	");		System.out.print("  _||_   |	");		System.out.print("  _||_   |	");
+		System.out.println("-~    ~`--		");	 	 System.out.print("-~    ~`--	");		System.out.print("-~    ~`--	");		System.out.print("-~    ~`--	");
+	}
+	
+	
+	
+	private void printDice(int... dices) {
+		
+		for (int j=0; j<5;j++) {
+			
+			System.out.print("\t");
+
+			for (int d : dices) {
+				switch(d) {
+				case 1:
+					if (j==0) System.out.print("------- \t\t");
+					if (j==1) System.out.print("|     | \t\t");
+					if (j==2) System.out.print("|  o  | \t\t");
+					if (j==3) System.out.print("|     | \t\t");
+					if (j==4) System.out.print("------- \t\t");
+					break;
+				case 2:
+					if (j==0)System.out.print("------- \t\t");
+					if (j==1)System.out.print("| o   | \t\t");
+					if (j==2)System.out.print("|     | \t\t");
+					if (j==3)System.out.print("|   o | \t\t");
+					if (j==4)System.out.print("------- \t\t");
+					break;
+				case 3:
+					if (j==0) System.out.print("------- \t\t");
+					if (j==1) System.out.print("| o   | \t\t");
+					if (j==2) System.out.print("|  o  | \t\t");
+					if (j==3) System.out.print("|   o | \t\t");
+					if (j==4) System.out.print("------- \t\t");
+					break;
+				case 4:
+					if (j==0) System.out.print("------- \t\t");
+					if (j==1) System.out.print("| o o | \t\t");
+					if (j==2) System.out.print("|     | \t\t");
+					if (j==3) System.out.print("| o o | \t\t");
+					if (j==4) System.out.print("------- \t\t");
+					break;
+				case 5:
+					if (j==0) System.out.print("------- \t\t");
+					if (j==1) System.out.print("| o o | \t\t");
+					if (j==2) System.out.print("|  o  | \t\t");
+					if (j==3) System.out.print("| o o | \t\t");
+					if (j==4) System.out.print("------- \t\t");
+					break;
+				case 6:
+					if (j==0) System.out.print("------- \t\t");
+					if (j==1) System.out.print("| o o | \t\t");
+					if (j==2) System.out.print("| o o | \t\t");
+					if (j==3) System.out.print("| o o | \t\t");
+					if (j==4) System.out.print("------- \t\t");
+					break;
+				}
+			}
+			System.out.print("\n");
+		}
 	}
 	
 	public void printPoints(int index) {
@@ -220,9 +312,9 @@ public class BoardCLI extends Observable implements Board {
 
 	@Override
 	public void setDices(int black, int white, int orange) {
-		this.blackValue=black;
-		this.whiteValue=white;
-		this.orangeValue=orange;
+		this.blackValue = black;
+		this.whiteValue = white;
+		this.orangeValue = orange;
 		
 	}
 
@@ -274,7 +366,6 @@ public class BoardCLI extends Observable implements Board {
 	@Override
 	public void startTimer() {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -282,7 +373,6 @@ public class BoardCLI extends Observable implements Board {
 		setChanged();
 		EventClose close = new EventClose();
 		notifyObservers(close);
-		
 	}
 
 	@Override
@@ -354,7 +444,7 @@ public class BoardCLI extends Observable implements Board {
 	public void startGame(int index) {
 		setChanged();
 		StoryBoard2PersonalView storyBoard;
-		storyBoard = new StoryBoard2PersonalView(new PersonalViewCLI(input, index));
+		storyBoard = new StoryBoard2PersonalView(new PersonalViewCLI(new Scanner(System.in), index));
 		notifyObservers(storyBoard);
 		
 	}
@@ -418,10 +508,12 @@ public class BoardCLI extends Observable implements Board {
 
 	@Override
 	public void hasLoaded() {
-		setChanged();
-		BoardHasLoaded roomLoaded = new BoardHasLoaded();
-		notifyObservers(roomLoaded);
 		
+		readThreaded();
+		
+		setChanged();
+		BoardHasLoaded boardLoaded = new BoardHasLoaded();
+		notifyObservers(boardLoaded);
 	}
 
 	@Override
@@ -452,5 +544,8 @@ public class BoardCLI extends Observable implements Board {
 		
 	}
 	
-	
+	public static void main(String[] args) {
+		BoardCLI m = new BoardCLI( new BufferedReader(new InputStreamReader(System.in)));
+		m.show();
+	}
 }
