@@ -88,8 +88,6 @@ public class EventParser implements EventVisitor {
 										((EventMemberPlacedWithPrivilege) memberPlaced).getPrivilege());
 			else
 				game.doMemberPlacement(c.getPlayer(), memberPlaced.getAction(), memberPlaced.getColor(), memberPlaced.getServantsBonus());
-			
-			game.advanceCurrentPlayer();
 		}
 	}
 

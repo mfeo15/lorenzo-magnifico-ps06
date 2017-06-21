@@ -49,8 +49,13 @@ public class CouncilPalace extends Observable implements PlaceSpace {
 		memberSpaces.add(member);
 		giveRewards(member, servants, chosenCouncilPrivilege);
 
+		//Tell the view what happened
 		MessageBoardMemberHasBeenPlaced newMember = new MessageBoardMemberHasBeenPlaced(chosenAction, member.getColor(), (member.getPlayer()).getID() );
 		notifyChangement(newMember);
+		
+		//Tell the model what happened
+		Integer i = 1;
+		notifyChangement(i);
 	}
 	
 	/**

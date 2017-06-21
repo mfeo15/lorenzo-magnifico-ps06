@@ -25,7 +25,7 @@ import it.polimi.ingsw.ps06.model.messages.MessageVaticanReport;
 * @version 1.0
 * @since   2017-05-09 
 */
-public class Game extends Observable {
+public class Game extends Observable implements Observer {
 	
 	private final int NUMBER_OF_PERIODS	= 3;
 	private final int NUMBER_OF_ROUNDS	= 2;
@@ -71,6 +71,7 @@ public class Game extends Observable {
 		diceOrange = new Dice(ColorPalette.DICE_ORANGE);
 		
 		board = new Board(numberPlayers);
+		board.addNewObserver(this);
 		
 		players = new ArrayList<Player>();
 		
@@ -390,5 +391,15 @@ public class Game extends Observable {
 	
 	public void deleteAnObserver(Observer obs) {
 		deleteObserver(obs);
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		
+		if (!(arg instanceof Integer))
+			return;
+		
+		if (((Integer) arg) == 1)
+			advanceCurrentPlayer();
 	}
 }

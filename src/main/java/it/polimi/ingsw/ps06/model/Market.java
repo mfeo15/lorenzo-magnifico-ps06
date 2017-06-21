@@ -180,8 +180,13 @@ public class Market extends Observable implements PlaceSpace {
 		
 		if( (chosenAction.ordinal() - marketIndex) == 3 ) e.activate(player);
 		
+		//Tell the view what happened
 		MessageBoardMemberHasBeenPlaced newMember = new MessageBoardMemberHasBeenPlaced(chosenAction, member.getColor(), player.getID() );
 		notifyChangement(newMember);
+		
+		//Tell the model what happened
+		Integer i = 1;
+		notifyChangement(i);
 	}
 	
 	/**
