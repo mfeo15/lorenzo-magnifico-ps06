@@ -1,5 +1,7 @@
 # Lorenzo il Magnifico
 
+<img src="http://oi65.tinypic.com/6zshm1.jpg" width="400" alt="Lorenzo Box Icon" align="right" />
+
 Gioco de Lorenzo il Magnifico sviluppato in Java, con un approccio client-server
 
 ## Contenuti
