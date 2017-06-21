@@ -2,6 +2,7 @@ package it.polimi.ingsw.ps06.model.messages;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import it.polimi.ingsw.ps06.Connection;
 import it.polimi.ingsw.ps06.MatchSet;
@@ -98,7 +99,11 @@ public class MessageParser implements MessageVisitor {
 		
 		//match.getAll().forEach(connection -> c.getPlayer().getPersonalBoard().addNewObserver(connection));
 		
-		match.getGame().start();
+		try {
+			match.getGame().start();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -197,8 +202,6 @@ public class MessageParser implements MessageVisitor {
 					new MessagePersonalBoardStatus( pb.getInventory(), territoriesCode, buildingsCode, charactersCode, venturesCode);
 			connection.asyncSend(pbStatus);
 		}
-			
-		
 	}
 
 	@Override
@@ -230,5 +233,15 @@ public class MessageParser implements MessageVisitor {
 		int[] playerOrder = new int[ currentPlayerOrder.getPlayerOrder().size() ];
 		for(int i=0; i < currentPlayerOrder.getPlayerOrder().size(); i++) playerOrder[i] = currentPlayerOrder.getPlayerOrder().get(i);
 		b.setOrder( playerOrder );
+	}
+
+	@Override
+	public void visit(MessageLeaderCards leaderCards) {
+		Board b = ((Board) supporter);
+		
+		ArrayList<Integer> leadersCode = new ArrayList<Integer>();
+		leaderCards.getLeaderCards().keySet().forEach( l -> leadersCode.add(l) );
+		
+		b.setLeaders(leadersCode.get(0), leadersCode.get(1), leadersCode.get(2), leadersCode.get(3));
 	}
 }

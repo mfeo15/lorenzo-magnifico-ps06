@@ -1,9 +1,11 @@
 package it.polimi.ingsw.ps06.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Random;
 
 import it.polimi.ingsw.ps06.model.Types.Action;
 import it.polimi.ingsw.ps06.model.Types.ColorPalette;
@@ -37,6 +39,7 @@ public class Game extends Observable {
 	
 	private int numberPlayers;
 	private ArrayList<Player> players;
+	private ArrayList<Leader> leaders;
 	
 	private Board board;
 	
@@ -70,6 +73,16 @@ public class Game extends Observable {
 		board = new Board(numberPlayers);
 		
 		players = new ArrayList<Player>();
+		
+		//leaders = Collections.shuffle( (new ParserXMLLeaders("resources/XML/DevelopementCards.xml")).getCards(), new Random(System.nanoTime()));
+		
+		leaders = new ArrayList<Leader>();
+		for (int i=0; i < 20; i++) {
+			Leader l = new Leader();
+			l.setCode(i+1);
+			l.setTitle("LEADER_TITLE_" + (i+1) );
+			leaders.add( l );
+		}
 		
 		period = 1;
 		round = 1;
@@ -130,9 +143,9 @@ public class Game extends Observable {
 		}
 		
 		round++;
-		setupRound();
-		
 		gameStatusUpdate();
+
+		setupRound();
 	}
 	
 	public void advancePeriod() {
@@ -335,6 +348,13 @@ public class Game extends Observable {
 		for (int i=0; i < players.size(); i++) {
 			Player p = players.get(i);
 			p.getPersonalBoard().addResource(MaterialsKind.COIN, STANDARD_AMOUNT_COINS_FIRST_PLAYER + i);
+			p.addLeaders( new ArrayList<Leader>( leaders.subList( (4 * p.getID()) , (4 + 4 * p.getID()) ) ) );
+			
+			System.out.println("Giocatore " + p.getColorAssociatedToID() + " ha leaders "  + 
+									p.getLeaders().get(0).getCode() + ", " + 
+									p.getLeaders().get(1).getCode() + ", " + 
+									p.getLeaders().get(2).getCode() + ", " +
+									p.getLeaders().get(3).getCode() + "\n" );
 		}
 		
 		setupRound();
@@ -366,14 +386,6 @@ public class Game extends Observable {
 		addObserver(obs);
 		
 		board.addNewObserver(obs);
-	}
-	
-	public void addNewObserverForPlayer(Observer obs, Player p) {
-		
-		if (!( players.contains(p) ))
-			return;
-		
-		p.getPersonalBoard().addNewObserver(obs);
 	}
 	
 	public void deleteAnObserver(Observer obs) {

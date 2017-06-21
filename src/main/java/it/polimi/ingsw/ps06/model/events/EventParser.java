@@ -95,20 +95,23 @@ public class EventParser implements EventVisitor {
 
 	@Override
 	public void visit(EventLeaderDiscarded leaderDiscarded) {
-		// TODO Auto-generated method stub
-		
+
+		Connection c = ((Connection) theModel);
+		c.getPlayer().getLeader( leaderDiscarded.getCode() ).discardLeader();
 	}
 
 	@Override
 	public void visit(EventLeaderActivated leaderActivated) {
-		// TODO Auto-generated method stub
+		Connection c = ((Connection) theModel);
 		
+		c.getPlayer().getLeader( leaderActivated.getCode() ).activateLeader();
 	}
 
 	@Override
 	public void visit(EventLeaderPlayed leaderPlayed) {
-		// TODO Auto-generated method stub
+		Connection c = ((Connection) theModel);
 		
+		c.getPlayer().getLeader( leaderPlayed.getCode() ).playLeader();
 	}
 
 	@Override

@@ -2,8 +2,8 @@ package it.polimi.ingsw.ps06.model;
 
 public interface LeaderState {
 
-	void playLeader();
-	void activateLeader();
-	void deactivateLeader();
-	
+	String playLeader();
+	String activateLeader();
+	String deactivateLeader();
+	String discardLeader();
 }

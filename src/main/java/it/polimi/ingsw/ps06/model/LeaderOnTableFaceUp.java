@@ -9,17 +9,27 @@ public class LeaderOnTableFaceUp implements LeaderState {
 	}
 	
 	@Override
-	public void playLeader() {
-		System.out.println("LEADER HAVE ALREADY BEEN PLAYED");
+	public String playLeader() {
+		return "La carta Leader " + leader.title + "è già stata giocata";
 	}
 
 	@Override
-	public void activateLeader() {
-		System.out.println("LEADER HAS BEEN ACTIVATED");
+	public String activateLeader() {
+		
+		if (! leader.isOncePerRoundEffect())
+			return "La carta Leader " + leader.title + "non ha un effetto \"una volta per turno\"";
+		
+		leader.setLeaderState( leader.getActivatedLeaderState() );
+		return "La carta Leader " + leader.title + "è posta faccia in giù e l'effetto è stato risolto";
 	}
 
 	@Override
-	public void deactivateLeader() {
-		System.out.println("LEADER IS ALREADY DEACTIVE, PLEASE ACTIVATE IT");
+	public String deactivateLeader() {
+		return "La carta Leader " + leader.title + "è già a faccia in su";
+	}
+
+	@Override
+	public String discardLeader() {
+		return "La carta Leader " + leader.title + "è già stata giocata e non può più essere scartata";
 	}
 }

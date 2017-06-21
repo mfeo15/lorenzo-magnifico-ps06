@@ -116,4 +116,11 @@ public class Types {
 			return index;
 		}
 	}
+	
+	public enum LeaderStates {
+		IN_HAND, 
+		ON_TABLE_FACE_DOWN, 
+		ON_TABLE_FACE_UP, 
+		DISCARDED
+	}
 }

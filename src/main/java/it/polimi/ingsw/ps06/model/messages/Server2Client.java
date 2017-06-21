@@ -4,14 +4,14 @@ import java.net.SocketAddress;
 
 public abstract class Server2Client extends Message{
 
-	private SocketAddress recipient;
+	private int recipientPlayerID;
 
-	public SocketAddress getRecipient() {
-		return recipient;
+	public int getRecipient() {
+		return recipientPlayerID;
 	}
 
-	public void setRecipient(SocketAddress recipient) {
-		this.recipient = recipient;
+	public void setRecipient(int recipientPlayerID) {
+		this.recipientPlayerID = recipientPlayerID;
 	}
 	 
 }

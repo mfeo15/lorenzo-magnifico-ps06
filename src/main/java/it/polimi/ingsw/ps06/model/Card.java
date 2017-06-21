@@ -1,6 +1,7 @@
 package it.polimi.ingsw.ps06.model;
 
 import java.util.ArrayList;
+import java.util.Observable;
 /**
  * classe astratta per definire le carte
  * 
@@ -9,7 +10,7 @@ import java.util.ArrayList;
  * @since 13-05-2017
  */
 
-	public abstract class Card {
+	public abstract class Card extends Observable {
 	
 		protected int code;
 		protected String title;

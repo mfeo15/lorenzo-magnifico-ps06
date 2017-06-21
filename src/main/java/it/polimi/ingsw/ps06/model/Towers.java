@@ -305,7 +305,7 @@ public class Towers extends Observable implements PlaceSpace {
 		
 		int[] roundCards = new int[16];
 		
-		for(int i = deckIndex; i < CARTE_TORRE; i++) {
+		for(int i = deckIndex; i < deckIndex + CARTE_TORRE; i++) {
 			if (deck[i] == null)
 				roundCards[i] = -1;
 			else

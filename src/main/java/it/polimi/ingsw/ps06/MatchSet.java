@@ -68,6 +68,7 @@ public class MatchSet {
 			
 			Player p = new Player( participants.indexOf(c) );
 			c.setPlayer(p);
+			c.getPlayer().addNewObserver(c);
 			game.addPlayer(p);
 			//game.getPlayer( participants.indexOf(c) ).getPersonalBoard().addNewObserver(c);
 		}

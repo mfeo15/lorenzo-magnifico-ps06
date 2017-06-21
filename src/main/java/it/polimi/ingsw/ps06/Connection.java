@@ -176,7 +176,7 @@ public class Connection implements Runnable, Observer {
 			if (arg instanceof Broadcast) {
 				asyncSend((Message) arg);
 			} else {
-				if ( ((Server2Client) arg).getRecipient().equals( this.getID() ) )
+				if ( ((Server2Client) arg).getRecipient() == this.getPlayer().getID() )
 					asyncSend((Server2Client) arg);
 			}
 	}
