@@ -76,11 +76,13 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 			
 			JLabel stanza = ImageHandler.setImage("resources/personalView.png", 100, 100, width, height);
 	        
-	        String hoverSound = "resources/menuhover.wav";
-			Media hit = new Media(new File(hoverSound).toURI().toString());
+			String hoverSound = "/menuhover.wav";
+	        String mediaURL = getClass().getResource(hoverSound).toExternalForm();
+			Media hit = new Media(mediaURL);
 			
-			String exitSound = "resources/exit.wav";
-			Media music1 = new Media(new File(exitSound).toURI().toString());
+			String exitSound = "/exit.wav";
+	        String mediaURL3 = getClass().getResource(exitSound).toExternalForm();
+			Media music1 = new Media(mediaURL3);
 			
 			exit = new JButton();
 		    exit.setLocation(width*95/100,0);

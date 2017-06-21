@@ -74,17 +74,23 @@ public class RoomGUI extends Observable implements Room {
 		JLabel stanza = ImageHandler.setImage("resources/stanza2.jpg", 100, 100, width, height);
 		
         //Caricamento suoni del gioco
-        String hoverSound = "resources/menuhover.wav";
-		Media hit = new Media(new File(hoverSound).toURI().toString());
+
+		String hoverSound = "/menuhover.wav";
+        String mediaURL = getClass().getResource(hoverSound).toExternalForm();
+		Media hit = new Media(mediaURL);
 		
-		String selectSound = "resources/menuselect.wav";
-		hit2 = new Media(new File(selectSound).toURI().toString());
+		String selectSound = "/menuselect.wav";
+        String mediaURL2 = getClass().getResource(selectSound).toExternalForm();
+		hit2 = new Media(mediaURL2);
 		
-		String exitSound = "resources/exit.wav";
-		Media music1 = new Media(new File(exitSound).toURI().toString());
+		String exitSound = "/exit.wav";
+        String mediaURL3 = getClass().getResource(exitSound).toExternalForm();
+		Media music1 = new Media(mediaURL3);
 		
-		String menu = "resources/music1.mp3";
-		Media menuMusic = new Media(new File(menu).toURI().toString());
+		String menu = "/music1.mp3";
+        String mediaURL4 = getClass().getResource(menu).toExternalForm();
+		Media menuMusic = new Media(mediaURL4);
+
 		
 		mediaPlayer4 = new AudioClip(menuMusic.getSource());
 		mediaPlayer4.setVolume(0.3);

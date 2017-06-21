@@ -282,18 +282,22 @@ public class BoardGUI extends Observable implements Board {
         //String hoverSound = "resources/menuhover.wav";
 		//Media hit = new Media(new File(hoverSound).toURI().toString());
 		
-		String selectSound = "resources/menuselect.wav";
-		hit2 = new Media(new File(selectSound).toURI().toString());
+		String selectSound = "/menuselect.wav";
+	    String mediaURL2 = getClass().getResource(selectSound).toExternalForm();
+		Media hit2 = new Media(mediaURL2);
+			
+		String exitSounds = "/exit.wav";
+	    String mediaURL3 = getClass().getResource(exitSounds).toExternalForm();
+		Media exitSound = new Media(mediaURL3);
 		
-		String exitsound = "resources/exit.wav";
-		Media exitSound = new Media(new File(exitsound).toURI().toString());
+		String slideSounds = "/slide.mp3";
+	    String mediaURL4 = getClass().getResource(slideSounds).toExternalForm();
+		Media slideSound = new Media(mediaURL4);
 		
-		String slidesound = "resources/slide.mp3";
-		Media slideSound = new Media(new File(slidesound).toURI().toString());
-		
-		String switchsound = "resources/effect1.mp3";
-		Media switchSound = new Media(new File(switchsound).toURI().toString());
-        
+		String switchSounds = "/effect1.mp3";
+	    String mediaURL5 = getClass().getResource(switchSounds).toExternalForm();
+		Media switchSound = new Media(mediaURL5);
+		 
         //Inizializzazione dei componenti
 		
 		playerInfo = new JTextField();

@@ -66,7 +66,7 @@ public class MenuGUI extends Observable implements Menu {
 		Media hit2 = new Media(mediaURL2);
 		
 		String exitSound = "/exit.wav";
-        String mediaURL3 = getClass().getResource(selectSound).toExternalForm();
+        String mediaURL3 = getClass().getResource(exitSound).toExternalForm();
 		Media music1 = new Media(mediaURL3);
 		
 		JLabel label = new JLabel(cover1.getIcon());
