@@ -57,24 +57,19 @@ public class MenuGUI extends Observable implements Menu {
 		JLabel cover3 = ImageHandler.setImage("resources/cover6.png", 100, 100, width, height);
         
       //Caricamento suoni del gioco
-        String hoverSound = "resources/menuhover.wav";
-		Media hit = new Media(new File(hoverSound).toURI().toString());
+        String hoverSound = "/menuhover.wav";
+        String mediaURL = getClass().getResource(hoverSound).toExternalForm();
+		Media hit = new Media(mediaURL);
 		
-		String selectSound = "resources/menuselect.wav";
-		Media hit2 = new Media(new File(selectSound).toURI().toString());
+		String selectSound = "/menuselect.wav";
+        String mediaURL2 = getClass().getResource(selectSound).toExternalForm();
+		Media hit2 = new Media(mediaURL2);
 		
-		String exitSound = "resources/exit.wav";
-		Media music1 = new Media(new File(exitSound).toURI().toString());
-
+		String exitSound = "/exit.wav";
+        String mediaURL3 = getClass().getResource(selectSound).toExternalForm();
+		Media music1 = new Media(mediaURL3);
 		
 		JLabel label = new JLabel(cover1.getIcon());
-		
-		/*
-		String music = "resources/menuopen.mp3";
-		Media music2 = new Media(new File(music).toURI().toString());
-		AudioClip mediaPlayer4 = new AudioClip(music2.getSource());
-		mediaPlayer4.play(); 
-		*/
     	
         
 		//Inizializzazione dei componenti
