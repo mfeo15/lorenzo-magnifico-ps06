@@ -52,7 +52,9 @@ public class ParserXMLLeaders {
 		try{
 			DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
     		DocumentBuilder builder = documentFactory.newDocumentBuilder(); 
-    		Document document = builder.parse(XML_sourceFile); 
+    		
+    		XML_sourceFile = XML_sourceFile.replaceFirst("resources", "");
+    		Document document = builder.parse( getClass().getResourceAsStream(XML_sourceFile) );  
   
     		NodeList carte = document.getElementsByTagName("card");
     		Leader lead=new Leader();

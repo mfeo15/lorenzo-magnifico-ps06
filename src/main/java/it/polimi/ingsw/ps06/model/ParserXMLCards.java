@@ -51,7 +51,9 @@ public class ParserXMLCards {
 		try{
 			DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
     		DocumentBuilder builder = documentFactory.newDocumentBuilder(); 
-    		Document document = builder.parse(XML_sourceFile); 
+    		
+    		XML_sourceFile = XML_sourceFile.replaceFirst("resources", "");
+    		Document document = builder.parse( getClass().getResourceAsStream(XML_sourceFile) ); 
     		
     		
     		NodeList carte = document.getElementsByTagName("card");
@@ -373,6 +375,7 @@ public class ParserXMLCards {
 
 
 	public static void main(String[] args){
+
 		ParserXMLCards c = new ParserXMLCards("resources/XML/DevelopementCards.xml");
 		ArrayList<DevelopementCard> a = new  ArrayList<DevelopementCard>();
 		a = c.getCards();

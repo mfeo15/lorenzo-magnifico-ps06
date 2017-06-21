@@ -3,22 +3,31 @@ package it.polimi.ingsw.ps06.view;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import sun.awt.image.ToolkitImage;
 
 public class ImageHandler {
 	
 
 	public static JLabel setImage(String s,double xMod, double yMod, int width, int height) throws IOException{
 		
-		BufferedImage image = ImageIO.read(new File(s)); 
+		//BufferedImage image = ImageIO.read(new File(s)); 
+		
+	    s =s.replaceFirst("resources", "");
+		BufferedImage image = ImageIO.read( ImageHandler.class.getResourceAsStream(s) );
 		
 		BufferedImage board = new BufferedImage((int)(width*xMod/100), (int)(height*yMod/100), BufferedImage.TYPE_INT_ARGB);
 		
@@ -43,7 +52,11 @@ public class ImageHandler {
 	
 	public static JLabel setImageScreen(String s,int xMod, int yMod, int width, int height) throws IOException{
 		
-		BufferedImage image = ImageIO.read(new File(s)); 
+		//BufferedImage image = ImageIO.read(new File(s)); 
+		
+		s =s.replaceFirst("resources", "");
+		BufferedImage image = ImageIO.read( ImageHandler.class.getResourceAsStream(s) );
+		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		
 		BufferedImage board = new BufferedImage((int)(screenSize.getWidth())*xMod/100, (int)(screenSize.getHeight())*yMod/100, BufferedImage.TYPE_INT_ARGB);

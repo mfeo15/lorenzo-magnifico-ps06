@@ -1369,6 +1369,7 @@ public class BoardGUI extends Observable implements Board {
 		        gioca.addActionListener(new ActionListener() {
 		            public void actionPerformed(ActionEvent e) {
 		              leaders[value].setEnabled(true);
+		              notifyLeaderPlacement(value);
 		            }
 	          });
 		        
@@ -1379,6 +1380,8 @@ public class BoardGUI extends Observable implements Board {
 		    scarta.addActionListener(new ActionListener() {
 		    	public void actionPerformed(ActionEvent e) {
 		              
+		    		notifyLeaderDiscard(value);
+		    		
 		          	leaders[value].disable();
 		           	leaders[value].setIcon(null);
 		            	
@@ -1397,6 +1400,8 @@ public class BoardGUI extends Observable implements Board {
 		        attiva.addActionListener(new ActionListener() {
 		            public void actionPerformed(ActionEvent e) {
 		            
+		            	notifyLeaderActivation(value);
+		            	
 		            	if(leaders[value].isEnabled()){
 		            		leaders[value].setIcon(leaderBack.getIcon());
 		  	              	leaders[value].setDisabledIcon(leaderBack.getIcon());

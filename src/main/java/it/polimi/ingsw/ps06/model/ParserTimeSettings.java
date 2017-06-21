@@ -52,7 +52,9 @@ package it.polimi.ingsw.ps06.model;
 			try{
 				DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
 	    		DocumentBuilder builder = documentFactory.newDocumentBuilder(); 
-	    		Document document = builder.parse(XML_sourceFile); 
+	    		
+	    		XML_sourceFile = XML_sourceFile.replaceFirst("resources", "");
+	    		Document document = builder.parse( getClass().getResourceAsStream(XML_sourceFile) ); 
 	    		
 	    		
 	    		Node settings = document.getFirstChild();
