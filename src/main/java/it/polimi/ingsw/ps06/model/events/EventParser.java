@@ -58,13 +58,16 @@ public class EventParser implements EventVisitor {
 	@Override
 	public void visit(StoryBoard2BoardAgain storyboard) {
 	
-		storyboard.getView().unfreeze();
+		Client.getInstance().deleteAllObservers();
+		
+		PersonalViewController pvController = ((PersonalViewController) theModel);
+		Client.getInstance().addNewObserver(pvController.getThePreviousController());
 	}
 
 	@Override
 	public void visit(StoryBoard2PersonalView storyboard) {
-		storyboard.getView().getBackgroundView().unfreeze();
-		PersonalViewController controller = new PersonalViewController(Client.getInstance(), storyboard.getView());
+		BoardController previous = ((BoardController) theModel);
+		PersonalViewController controller = new PersonalViewController(Client.getInstance(), storyboard.getView(), previous);
 		
 		controller.addNewObserver(Client.getInstance());
 		storyboard.getView().addNewObserver(controller);
@@ -133,7 +136,5 @@ public class EventParser implements EventVisitor {
 	@Override
 	public void visit(BoardFrozenStatus frozen) {
 		BoardController b = ((BoardController) theModel);
-		
-		if ( frozen.isFrozen() ) b.freeze(); else b.unfreeze();
 	}
 }

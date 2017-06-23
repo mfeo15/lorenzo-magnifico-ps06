@@ -20,23 +20,11 @@ public class BoardController extends Observable implements Observer {
 	private Board theView;
 	private Client theModel;
 	
-	private boolean frozen;
-	
 	public BoardController(Client model, Board view) {
 		this.theView = view;
 		this.theModel = model;
 		
-		this.frozen = false;
-		
 		System.out.println("BOARD IS THE BOSS");
-	}
-	
-	public void freeze() {
-		this.frozen = true;
-	}
-	
-	public void unfreeze() {
-		this.frozen = false;
 	}
 
 	public void addNewObserver(Observer o) {
@@ -54,12 +42,6 @@ public class BoardController extends Observable implements Observer {
 		if (!( arg instanceof Message))
 			return;
 		*/
-		
-		if (arg instanceof BoardFrozenStatus)
-			((BoardFrozenStatus) arg).accept(new EventParser(this));
-		
-		if (frozen)
-			return;
 		
 		//Smista le comunicazioni provenienti dal Client
 		if ( o.getClass().isInstance(theModel) ) {
@@ -102,7 +84,7 @@ public class BoardController extends Observable implements Observer {
 		if ( e instanceof StoryBoard) 
 		{
 			//Let the controller handle this, it's just a StoryBoard Event (new View)
-			EventParser parser = new EventParser();
+			EventParser parser = new EventParser(this);
 			((StoryBoard) e).accept(parser);
 		} 
 		else 

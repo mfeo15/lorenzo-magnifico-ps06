@@ -18,12 +18,24 @@ public class PersonalViewController extends Observable implements Observer{
 
 	private PersonalView theView;
 	private Client theModel;
+	
+	private BoardController thePreviousController;
 
-	public PersonalViewController(Client model, PersonalView view) {
+
+	public PersonalViewController(Client model, PersonalView view, BoardController thePreviousController) {
 		this.theView = view;
 		this.theModel = model;
+		this.thePreviousController = thePreviousController;
 		
 		System.out.println("PERSONAL VIEW IS THE BOSS");
+	}
+	
+	public BoardController getThePreviousController() {
+		return thePreviousController;
+	}
+
+	public void setThePreviousController(BoardController thePreviousController) {
+		this.thePreviousController = thePreviousController;
 	}
 
 	public void addNewObserver(Observer o) {
@@ -83,7 +95,7 @@ public class PersonalViewController extends Observable implements Observer{
 		if ( e instanceof StoryBoard) 
 		{
 			//Let the controller handle this, it's just a StoryBoard Event (new View)
-			EventParser parser = new EventParser();
+			EventParser parser = new EventParser(this);
 			((StoryBoard) e).accept(parser);
 		} 
 		else 

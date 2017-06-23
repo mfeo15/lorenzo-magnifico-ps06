@@ -102,13 +102,17 @@ public class SocketServer implements Server {
 		
 		waitingConnection.add(c);
 		if (waitingConnection.size() == 2)
-			startCountdown();
+			startCountdown( timeSettings.getTimeoutServer() );
 		
 		System.out.println("[ SERVER ] Connection " + c.getInetAddress() + " in Waiting Room \n");
 		
 		sendWaitingConnectionsStats();
 
-		if (waitingConnection.size() == 4) {	
+		if (waitingConnection.size() == 4) {
+			
+			stopCountdown();
+			startCountdown( 20 );
+			
 			startNewGame();
 		}
 	}
@@ -228,7 +232,7 @@ public class SocketServer implements Server {
 		return ( queuedMessageCounter.get(m) == m.getAll().size() );
 	}
 	
-	public void startCountdown() {
+	public void startCountdown(int seconds) {
 		t.schedule( 
 		        new java.util.TimerTask() {
 		            @Override
@@ -237,7 +241,7 @@ public class SocketServer implements Server {
 		            	startNewGame();
 		            }
 		        }, 
-		        ( timeSettings.getTimeoutServer() * 1000 )
+		        ( seconds * 1000 )
 		);
 	}
 	
