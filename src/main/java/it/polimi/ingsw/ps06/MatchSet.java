@@ -26,8 +26,6 @@ public class MatchSet {
 	
 	private ArrayList<Connection> participants;
 	
-	private HashMap<Player, Connection> p;
-	
 	private Game game;
 	
 	/**

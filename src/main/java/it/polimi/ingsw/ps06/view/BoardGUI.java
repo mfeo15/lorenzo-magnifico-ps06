@@ -284,7 +284,7 @@ public class BoardGUI extends Observable implements Board {
 		
 		String selectSound = "/menuselect.wav";
 	    String mediaURL2 = getClass().getResource(selectSound).toExternalForm();
-		Media hit2 = new Media(mediaURL2);
+		hit2 = new Media(mediaURL2);
 			
 		String exitSounds = "/exit.wav";
 	    String mediaURL3 = getClass().getResource(exitSounds).toExternalForm();
