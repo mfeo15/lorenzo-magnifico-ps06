@@ -143,12 +143,12 @@ public class ParserXMLCards {
 				((Venture) d).setRequirement(res);
 			}
 		}
-		/*else if(a.getNodeName().equals("permanent_effect")){
+		else if(a.getNodeName().equals("permanent_effect")){
 			generatePermanentEffect(d, a);
 		}
 		else if(a.getNodeName().equals("instant_effects")){
 			generateInstantEffect(d, a);
-		}*/
+		}
 		
 		else if(a.getNodeName().equals("production_requirement")){
 			if(d instanceof Building){
@@ -160,12 +160,12 @@ public class ParserXMLCards {
 				((Territory) d).setDiceReq(x);
 				}
 		}
-		/*else if(a.getNodeName().equals("requirement")){
+			else if(a.getNodeName().equals("requirement")){
 			int x=Integer.parseInt(a.getFirstChild().getTextContent());
 			if(d instanceof Venture){
 				((Venture) d).setMilRequirement(x);
 			}
-		}*/
+		}
 		return d;
 	}
 	
@@ -231,17 +231,14 @@ public class ParserXMLCards {
 		for(int k=0; k<d.getLength();k++){
 			Node eff1=d.item(k);
 			Node eff=eff1.getFirstChild();
-			System.out.println(eff1.getTextContent());
-		}
-		
-			/*if(eff.getNodeName().equals("resources")){
+			if(eff1.getTextContent().equals("resources")){
 					Node bonus=eff.getNextSibling();
 					Resources res=new Resources();
 					res=setResourceBonus(bonus);
 					EffectsResources eff_res=new EffectsResources(res);
 					card.setInstEffect(eff_res);
 			}	
-			else if(eff.getNodeName().equals("byCard")){
+			else if(eff1.getTextContent().equals("byCard")){
 				Node col=eff.getNextSibling();
 				String color = col.getTextContent();
 				Node bonus=col.getNextSibling();
@@ -250,7 +247,7 @@ public class ParserXMLCards {
 				EffectsResourcesByCard e = new EffectsResourcesByCard(res, ColorPalette.valueOf(color.toUpperCase()));
 				card.setInstEffect(e);
 			}
-			else if(eff.getNodeName().equals("byPoints")){
+			else if(eff1.getTextContent().equals("byPoints")){
 				Node mil=eff.getNextSibling();
 				//int x=Integer.parseInt(mil.getNodeValue());
 				Node bonus=mil.getNextSibling();
@@ -259,32 +256,32 @@ public class ParserXMLCards {
 				EffectsResourcesByPoint ef = new EffectsResourcesByPoint(res, PointsKind.MILITARY_POINTS);
 				card.setInstEffect(ef);
 			}
-			else if(eff.getNodeName().equals("privilege") ){
+			else if(eff1.getTextContent().equals("privilege")){
 				//EffectsPrivilege effec = new EffectPrivilege();
 				//card.setEffect(effec);
 				//Integer x = Integer.parseInt(effect.getElementsByTagName("amount").item(0).getTextContent());   qtà di privilegi
 			}			
-			else if(eff.getNodeName().equals("colorful")){
+			else if(eff1.getTextContent().equals("colorful")){
 				//nuovo effeto colorful? EffectsAction
 				//Integer x = Integer.parseInt(effect.getElementsByTagName("value").item(0).getTextContent());
 			}
-			else if(eff.getNodeName().equals("green")){
+			else if(eff1.getTextContent().equals("green")){
 				//new EffectsActive qlcs....
 				//Integer x1 = Integer.parseInt(effect.getElementsByTagName("value").item(0).getTextContent());
 			}
-			else if(eff.getNodeName().equals("yellow")){
+			else if(eff1.getTextContent().equals("yellow")){
 				//new EffectsActive qlcs....
 				//Integer x2 = Integer.parseInt(effect.getElementsByTagName("value").item(0).getTextContent());
 			}
-			else if(eff.getNodeName().equals("blue")){
+			else if(eff1.getTextContent().equals("blue")){
 				//new EffectsActive qlcs....
 				//Integer x3 = Integer.parseInt(effect.getElementsByTagName("value").item(0).getTextContent());
 			}
-			else if(eff.getNodeName().equals("purple")){
+			else if(eff1.getTextContent().equals("purple")){
 				//new EffectsActive qlcs....
 				//Integer x4 = Integer.parseInt(effect.getElementsByTagName("value").item(0).getTextContent());
 			}
-			else if(eff.getNodeName().equals("discount")){
+			else if(eff1.getTextContent().equals("discount")){
 				//Effect eff= new EffectsActive();
 				//String b=effect.getAttribute("color");
 				//Integer y = Integer.parseInt(effect.getElementsByTagName("amount").item(0).getTextContent());
@@ -292,15 +289,8 @@ public class ParserXMLCards {
 				//EffectsActive.qualcosa per risorsa da togliere(setResourceBonus(effect);
 				//card.setPermEffect(eff);
 			}
-			
-			}
-		*/
-		
-		//eff=eff.getNextSibling();
 		}
-		//eff1=eff1.getNextSibling();
-		
-	
+	}
 	
 	/**
 	* Metodo che genera l'effetto permanente delle carte
@@ -312,36 +302,37 @@ public class ParserXMLCards {
 	* 
 	*/	
 	public void generatePermanentEffect(DevelopementCard card, Node effetto){
-		Node eff1=effetto.getFirstChild();
-		while(eff1!=null){
-		Node eff=eff1.getFirstChild();
-		while(eff!=null){
+		Element c=(Element)effetto;
+		NodeList d=c.getElementsByTagName("effect");
+		for(int k=0; k<d.getLength();k++){
+			Node eff1=d.item(k);
+			Node eff=eff1.getFirstChild();
 
-		if(eff.getNodeName().equals("resources")){
-			Node bonus=eff.getNextSibling();
-			Resources res=new Resources();
-			res=setResourceBonus(bonus);
-			EffectsResources eff_res=new EffectsResources(res);
-			//card.setInstEffect(eff_res);
-		}
-		else if(eff.getNodeName().equals("swapResources")){	
-			Node input=eff.getFirstChild();
-			Resources res=new Resources();
-			res=setResourceBonus(input);
-			Node bonus=input.getNextSibling();
-			Resources res1=new Resources();
-			res1=setResourceBonus(bonus);
-			EffectsResourcesSwap swap=new EffectsResourcesSwap(res1, res);
-			card.setPermEffect(swap);
-		}
-			else if(eff.getNodeName().equals("bmMember")){
+			if(eff1.getTextContent().equals("resources")){
+				Node bonus=eff.getNextSibling();
+				Resources res=new Resources();
+				res=setResourceBonus(bonus);
+				EffectsResources eff_res=new EffectsResources(res);
+				card.setInstEffect(eff_res);
+			}
+			else if(eff1.getTextContent().equals("swapResources")){	
+				Node input=eff.getFirstChild();
+				Resources res=new Resources();
+				res=setResourceBonus(input);
+				Node bonus=input.getNextSibling();
+				Resources res1=new Resources();
+				res1=setResourceBonus(bonus);
+				EffectsResourcesSwap swap=new EffectsResourcesSwap(res1, res);
+				card.setPermEffect(swap);
+			}
+			else if(eff1.getTextContent().equals("bmMember")){
 			//Effect eff= new EffectsActive();
 			//String a=effect.getAttribute("color");
 			//Integer x = Integer.parseInt(effect.getElementsByTagName("amount").item(0).getTextContent());
 			//settare amount per carta
 			//card.setPermEffect(eff);
 			}
-			else if(eff.getNodeName().equals("bmMember")){
+			else if(eff1.getTextContent().equals("bmMember")){
 			//Effect eff= new EffectsActive();
 			//String b=effect.getAttribute("color");
 			//Integer x1 = Integer.parseInt(effect.getElementsByTagName("amount").item(0).getTextContent());
@@ -349,24 +340,27 @@ public class ParserXMLCards {
 			//EffectsActive.qualcosa per risorsa da togliere(setResourceBonus(effect);
 			//card.setPermEffect(eff);
 			}
-			else if(eff.getNodeName().equals("harvest")){
+			else if(eff1.getTextContent().equals("harvest")){
 			//Integer x2 = Integer.parseInt(effect.getElementsByTagName("amount").item(0).getTextContent());
 			//Effect eff=new EffectsActiveGathering(Observable cosa mettere??, x2);
 			}
-			else if(eff.getNodeName().equals("production")){  //produzione e gathering sono uguali?
+			else if(eff1.getTextContent().equals("production")){  //produzione e gathering sono uguali?
 			//Integer x3 = Integer.parseInt(effect.getElementsByTagName("amount").item(0).getTextContent());
 			//Effect eff=new EffectsActiveGathering(Observable cosa mettere??, x3);
 			}
-			else if(eff.getNodeName().equals("noEffettoTorri")){
+			else if(eff1.getTextContent().equals("noEffettoTorri")){
 			//new effetto cosa?
 			}
-
-			eff=eff.getNextSibling();
-			}
-			eff1=eff1.getNextSibling();
 		}
 	}
 	 
+
+	/**
+	* Metodo che ritorna il mazzo di carte
+	* 
+	* @return cards   
+	* 
+	*/	 
 	
 	public ArrayList<DevelopementCard> getCards(){
 		return cards;
@@ -374,14 +368,5 @@ public class ParserXMLCards {
 
 
 
-	public static void main(String[] args){
-
-		ParserXMLCards c = new ParserXMLCards("resources/XML/DevelopementCards.xml");
-		ArrayList<DevelopementCard> a = new  ArrayList<DevelopementCard>();
-		a = c.getCards();
-
-		for(int i=0; i<a.size();i++){
-			System.out.println("code:"+a.get(i).getCode()+", "+a.get(i).getTitle()+ " periodo: "+a.get(i).getPeriod());
-		}	
-	}
+	
 }

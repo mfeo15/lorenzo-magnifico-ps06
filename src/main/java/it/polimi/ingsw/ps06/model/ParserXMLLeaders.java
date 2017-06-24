@@ -222,7 +222,7 @@ public class ParserXMLLeaders {
 	* 
 	*/	
 	
-	/*public void generatePermanentEffect(Leader card, Node effetto ){
+	public void generatePermanentEffect(Leader card, Node effetto ){
 		Node d=effetto.getFirstChild();
 		Element e=(Element) d;
 		if(e.getAttribute("type").equals("turno")){
@@ -230,18 +230,62 @@ public class ParserXMLLeaders {
 			for(int j=0; j<attr.getLength(); j++){
 				Node c=attr.item(j);
 				if(c.getTextContent().equals("harvest")){
-					//fai un azione gathering
-					int x=Integer.parseInt(c.getne)
+					int x=Integer.parseInt(c.getNextSibling().getTextContent());
+					//EffectsActiveGathering eff=new EffectsActiveGathering();					
+				}
+				else if(c.getTextContent().equals("resources")){
+					EffectsResources eff= new EffectsResources(setResourceBonus(c.getNextSibling()));
+					card.setPermEffect(eff);
+				}
+				else if(c.getTextContent().equals("production")){
+					int x=Integer.parseInt(c.getNextSibling().getTextContent());
+					//attiva produzione
+				}
+				else if(c.getTextContent().equals("memberEffect")){
+					String x = c.getNextSibling().getTextContent();
+					int z=Integer.parseInt(c.getNextSibling().getNextSibling().getTextContent());
+				}
+				else if(c.getTextContent().equals("privilege")){
 				}
 			}
 		}
-		else if(e.getAttribute("type".equals("permanente"))){
-			
-	
+		else if(e.getAttribute("type").equals("permanente")){
+			NodeList attr=d.getChildNodes();
+			for(int j=0; j<attr.getLength(); j++){
+				Node c=attr.item(j);
+				if(c.getTextContent().equals("noExtraMoney")){	
+				}
+				else if(c.getTextContent().equals("memberEffect")){
+					String x = c.getNextSibling().getTextContent();
+					int z=Integer.parseInt(c.getNextSibling().getNextSibling().getTextContent());
+				}
+				else if(c.getTextContent().equals("multi")){
+				
+				}
+				else if(c.getTextContent().equals("copia")){
+					
+				}
+				else if(c.getTextContent().equals("faith")){
+					
+				}
+				else if(c.getTextContent().equals("noMilitary")){
+					
+				}
+				else if(c.getTextContent().equals("double")){
+					
+				}
 		}
-	}*/
+	}
+}
+	
+		/**
+		* Metodo che ritorna il mazzo di carte
+		* 
+		* @return cards   
+		* 
+		*/	 
 		
-		/*public static void main(String[] args){
-			ParserXMLLeaders c = new ParserXMLLeaders("resources/XML/Leaders.xml");
-		}*/
+		public ArrayList<Leader> getCards(){
+			return leaders;
+		}
 	}
