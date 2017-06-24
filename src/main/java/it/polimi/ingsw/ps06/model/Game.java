@@ -75,15 +75,8 @@ public class Game extends Observable implements Observer {
 		
 		players = new ArrayList<Player>();
 		
-		//leaders = Collections.shuffle( (new ParserXMLLeaders("resources/XML/DevelopementCards.xml")).getCards(), new Random(System.nanoTime()));
-		
-		leaders = new ArrayList<Leader>();
-		for (int i=0; i < 20; i++) {
-			Leader l = new Leader();
-			l.setCode(i+1);
-			l.setTitle("LEADER_TITLE_" + (i+1) );
-			leaders.add( l );
-		}
+		leaders = (new ParserXMLLeaders("resources/XML/DevelopementCards.xml")).getCards();
+		Collections.shuffle( leaders, new Random(System.nanoTime()) );
 		
 		period = 1;
 		round = 1;

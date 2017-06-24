@@ -74,8 +74,8 @@ public class Towers extends Observable implements PlaceSpace {
 
 		checkWhichTower(chosenAction);
 
-		colorRule=true;
-		extraCost=false;
+		colorRule = true;
+		extraCost = false;
 		/*
 		int floor = baseFloorTower;
 		while(floor <= topFloorTower) {

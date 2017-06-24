@@ -135,17 +135,19 @@ public class Resources implements Serializable {
 	* Somma la risorsa corrente con una seconda risorsa, settando correttamente
 	* ogni singolo campo opportunatamente 
 	*
-	* @param 	r	Risorsa da sommare
+	* @param 	r			Risorsa da sommare
 	* 
-	* @return 	Nothing. 
+	* @return 	Resources	Risorsa attuale a seguito dell'addizione
 	*/
-	public void add(Resources r) {
+	public Resources add(Resources r) {
 		
 		Set<MaterialsKind> materialsSet = materials.keySet();
         for(MaterialsKind currentMaterial : materialsSet) increaseResourceValue(currentMaterial, r.getResourceValue(currentMaterial));
         
         Set<PointsKind> pointsSet = points.keySet();
         for(PointsKind currentPoint : pointsSet) increaseResourceValue(currentPoint, r.getResourceValue(currentPoint));
+        
+        return this;
 	}
 	
 	/**

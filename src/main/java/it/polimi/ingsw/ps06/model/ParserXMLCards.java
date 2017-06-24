@@ -236,7 +236,7 @@ public class ParserXMLCards {
 					Resources res=new Resources();
 					res=setResourceBonus(bonus);
 					EffectsResources eff_res=new EffectsResources(res);
-					card.setInstEffect(eff_res);
+					card.setEffect(eff_res);
 			}	
 			else if(eff1.getTextContent().equals("byCard")){
 				Node col=eff.getNextSibling();
@@ -245,7 +245,7 @@ public class ParserXMLCards {
 				Resources res=new Resources();
 				res=setResourceBonus(bonus);
 				EffectsResourcesByCard e = new EffectsResourcesByCard(res, ColorPalette.valueOf(color.toUpperCase()));
-				card.setInstEffect(e);
+				card.setEffect(e);
 			}
 			else if(eff1.getTextContent().equals("byPoints")){
 				Node mil=eff.getNextSibling();
@@ -254,7 +254,7 @@ public class ParserXMLCards {
 				Resources res=new Resources();
 				res=setResourceBonus(bonus);
 				EffectsResourcesByPoint ef = new EffectsResourcesByPoint(res, PointsKind.MILITARY_POINTS);
-				card.setInstEffect(ef);
+				card.setEffect(ef);
 			}
 			else if(eff1.getTextContent().equals("privilege")){
 				//EffectsPrivilege effec = new EffectPrivilege();
@@ -313,7 +313,7 @@ public class ParserXMLCards {
 				Resources res=new Resources();
 				res=setResourceBonus(bonus);
 				EffectsResources eff_res=new EffectsResources(res);
-				card.setInstEffect(eff_res);
+				card.setEffect(eff_res);
 			}
 			else if(eff1.getTextContent().equals("swapResources")){	
 				Node input=eff.getFirstChild();

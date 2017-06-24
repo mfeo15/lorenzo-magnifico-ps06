@@ -9,15 +9,16 @@ import java.util.ArrayList;
 * @since   2017-05-11
 */
 public class Venture extends DevelopementCard {
+	
 	private ArrayList<Resources> requirement;
-	private int MilitaryRequirement=-1;
+	private int MilitaryRequirement = -1;
 	
 	/**Metodo per aggiungere i requisiti delle carte impresa
 	 * 
 	 * @param res	requisito di tipo risorsa per prendere la carta
 	 */
 	
-	public void setRequirement(Resources res){
+	public void setRequirement(Resources res) {
 		requirement=new ArrayList<Resources>();
 		requirement.add(res);
 		return;
@@ -29,7 +30,7 @@ public class Venture extends DevelopementCard {
 	 * @return nothing
 	 */
 	
-	public void setMilRequirement(int i){
+	public void setMilRequirement(int i) {
 		MilitaryRequirement=i;
 		return;
 	}
@@ -40,7 +41,7 @@ public class Venture extends DevelopementCard {
 	 * @return boolean
 	 */
 	
-	public boolean isMilRequirement(){
+	public boolean isMilRequirement() {
 		return (MilitaryRequirement > 0);
 	}
 
@@ -49,8 +50,17 @@ public class Venture extends DevelopementCard {
 	 * @param res	requisito di tipo risorsa per prendere la carta
 	 */
 	
-	public ArrayList<Resources> getRequirements(){
+	public ArrayList<Resources> getRequirements() {
 		return requirement;
+	}
+	
+	/**Metodo che restituisce il requisito militare della carta
+	 * 
+	 * @param res	requisito di tipo risorsa per prendere la carta
+	 */
+	
+	public int getMilitaryRequirement() {
+		return MilitaryRequirement;
 	}
 	
 }

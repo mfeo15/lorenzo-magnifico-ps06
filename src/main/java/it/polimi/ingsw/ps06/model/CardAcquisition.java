@@ -2,6 +2,7 @@ package it.polimi.ingsw.ps06.model;
 
 import it.polimi.ingsw.ps06.model.Types.Action;
 import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
+import it.polimi.ingsw.ps06.model.Types.PointsKind;
 
 /**
 * Classe per la gestione delle azioni che comportano un acquisizione di una carta
@@ -14,6 +15,8 @@ public class CardAcquisition extends Actions {
 
 	private DevelopementCard card;
 	private Player p;
+	
+	private boolean extraCost;
 	
 	public CardAcquisition(DevelopementCard card, Player p, int servants) {
 		super(servants);
@@ -28,21 +31,23 @@ public class CardAcquisition extends Actions {
 	* @param 	chosenAction	Codice dell'azione da eseguire	
 	* @return 	
 	*/
-	public boolean checkCosts(Action chosenAction, Boolean extraCost) {
-		//chiama risorse
+	public boolean checkCosts(Action chosenAction, boolean extraCost) {
+		
+		this.extraCost = extraCost;
+		Resources extraMoney = new Resources();
+		if (extraCost) extraMoney.increaseResourceValue(MaterialsKind.COIN, 3);
 		
 		if (card instanceof Territory)
-			return true;
+			return p.getPersonalBoard().getInventory().isBiggerThan( extraMoney );
 		
 		if (card instanceof Building)
-			return p.getPersonalBoard().getInventory().isBiggerThan( ((Building) card).getRequirement() );
+			return p.getPersonalBoard().getInventory().isBiggerThan( extraMoney.add( ((Building) card).getRequirement() ) );
 		
 		if (card instanceof Character)
-			return p.getPersonalBoard().getInventory().isBiggerThan( ((Character) card).getRequirement() );
+			return p.getPersonalBoard().getInventory().isBiggerThan( extraMoney.add( ((Character) card).getRequirement() ) );
 		
 		if (card instanceof Venture)
-			//return p.getPersonalBoard().getInventory().isBiggerThan( ((Venture) card).getRequirement() );
-			return true;
+			return p.getPersonalBoard().getInventory().isBiggerThan( extraMoney.add( ((Venture) card).getRequirements().get(0) ) );
 		
 		return false;
 	}
@@ -59,6 +64,13 @@ public class CardAcquisition extends Actions {
 		if (!(card instanceof Venture))
 			return true;
 		
+		
+		if ( !((Venture) card).isMilRequirement() )
+			return true;
+		
+		if ( ((Venture) card).getMilitaryRequirement() >= p.getPersonalBoard().getAmount(PointsKind.MILITARY_POINTS) )
+			return true;
+
 		return true;
 	}
 	
@@ -74,6 +86,9 @@ public class CardAcquisition extends Actions {
 		
 		if (servants > 0)
 			p.getPersonalBoard().getInventory().decreaseResourceValue(MaterialsKind.SERVANT, servants);
+		
+		if (extraCost)
+			p.getPersonalBoard().getInventory().decreaseResourceValue(MaterialsKind.COIN, 3);
 		
 		if(card instanceof Territory) {
 			p.getPersonalBoard().addCard( (Territory) card);
