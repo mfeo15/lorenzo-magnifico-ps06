@@ -10,10 +10,10 @@ import it.polimi.ingsw.ps06.controller.RoomController;
 import it.polimi.ingsw.ps06.model.events.BoardHasLoaded;
 import it.polimi.ingsw.ps06.model.events.EventClose;
 import it.polimi.ingsw.ps06.model.events.RoomHasLoaded;
-import it.polimi.ingsw.ps06.model.messages.MessageGameStart;
-import it.polimi.ingsw.ps06.model.messages.MessageUser;
 import it.polimi.ingsw.ps06.model.events.StoryBoard2Board;
 import it.polimi.ingsw.ps06.model.events.StoryBoard2Room;
+import it.polimi.ingsw.ps06.networking.messages.MessageGameStart;
+import it.polimi.ingsw.ps06.networking.messages.MessageUser;
 
 public class RoomCLI extends Observable implements Room {
 	

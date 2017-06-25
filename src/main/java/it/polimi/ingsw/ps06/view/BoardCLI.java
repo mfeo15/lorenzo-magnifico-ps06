@@ -9,9 +9,9 @@ import java.util.Observer;
 import java.util.Scanner;
 
 import it.polimi.ingsw.ps06.controller.BoardController;
-import it.polimi.ingsw.ps06.model.DevelopementCard;
 import it.polimi.ingsw.ps06.model.Types.Action;
 import it.polimi.ingsw.ps06.model.Types.ColorPalette;
+import it.polimi.ingsw.ps06.model.cards.DevelopementCard;
 import it.polimi.ingsw.ps06.model.events.BoardFrozenStatus;
 import it.polimi.ingsw.ps06.model.events.BoardHasLoaded;
 import it.polimi.ingsw.ps06.model.events.EventClose;

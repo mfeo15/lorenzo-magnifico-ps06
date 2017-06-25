@@ -2,6 +2,8 @@ package it.polimi.ingsw.ps06.model;
 
 import it.polimi.ingsw.ps06.model.Types.Action;
 import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
+import it.polimi.ingsw.ps06.model.cards.Building;
+import it.polimi.ingsw.ps06.model.cards.Territory;
 
 /**
 * Classe per la gestione delle azioni di produzione/raccolto

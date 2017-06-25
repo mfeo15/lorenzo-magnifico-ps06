@@ -1,6 +1,6 @@
 package it.polimi.ingsw.ps06.model.events;
 
-import it.polimi.ingsw.ps06.model.messages.MessageVisitor;
+import it.polimi.ingsw.ps06.networking.messages.MessageVisitor;
 
 public class EventClose extends StoryBoard {
 

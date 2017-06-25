@@ -8,7 +8,7 @@ import java.util.Scanner;
 import it.polimi.ingsw.ps06.controller.PersonalViewController;
 import it.polimi.ingsw.ps06.model.Types.Action;
 import it.polimi.ingsw.ps06.model.events.EventClose;
-import it.polimi.ingsw.ps06.model.messages.MessageObtainPersonalBoardStatus;
+import it.polimi.ingsw.ps06.networking.messages.MessageObtainPersonalBoardStatus;
 
 public class PersonalViewCLI extends Observable implements PersonalView {
 

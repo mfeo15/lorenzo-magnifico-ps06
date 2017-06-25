@@ -12,11 +12,14 @@ import it.polimi.ingsw.ps06.model.Types.ColorPalette;
 import it.polimi.ingsw.ps06.model.Types.CouncilPrivilege;
 import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
 import it.polimi.ingsw.ps06.model.Types.PointsKind;
-import it.polimi.ingsw.ps06.model.messages.MessageBoardSetupDice;
-import it.polimi.ingsw.ps06.model.messages.MessageCurrentPlayer;
-import it.polimi.ingsw.ps06.model.messages.MessageCurrentPlayerOrder;
-import it.polimi.ingsw.ps06.model.messages.MessageGameStatus;
-import it.polimi.ingsw.ps06.model.messages.MessageVaticanReport;
+import it.polimi.ingsw.ps06.model.XMLparser.ParserXMLLeaders;
+import it.polimi.ingsw.ps06.model.board.Board;
+import it.polimi.ingsw.ps06.model.cards.leader.Leader;
+import it.polimi.ingsw.ps06.networking.messages.MessageBoardSetupDice;
+import it.polimi.ingsw.ps06.networking.messages.MessageCurrentPlayer;
+import it.polimi.ingsw.ps06.networking.messages.MessageCurrentPlayerOrder;
+import it.polimi.ingsw.ps06.networking.messages.MessageGameStatus;
+import it.polimi.ingsw.ps06.networking.messages.MessageVaticanReport;
 
 /**
 * Classe che modellizza una partita tra n giocatori

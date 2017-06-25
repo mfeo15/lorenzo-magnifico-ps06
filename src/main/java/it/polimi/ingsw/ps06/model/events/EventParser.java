@@ -2,14 +2,14 @@ package it.polimi.ingsw.ps06.model.events;
 
 import java.io.IOException;
 
-import it.polimi.ingsw.ps06.Client;
-import it.polimi.ingsw.ps06.Connection;
-import it.polimi.ingsw.ps06.SocketServer;
 import it.polimi.ingsw.ps06.controller.BoardController;
 import it.polimi.ingsw.ps06.controller.PersonalViewController;
 import it.polimi.ingsw.ps06.controller.RoomController;
 import it.polimi.ingsw.ps06.model.Game;
-import it.polimi.ingsw.ps06.model.messages.BoardReady;
+import it.polimi.ingsw.ps06.networking.Client;
+import it.polimi.ingsw.ps06.networking.Connection;
+import it.polimi.ingsw.ps06.networking.SocketServer;
+import it.polimi.ingsw.ps06.networking.messages.BoardReady;
 
 public class EventParser implements EventVisitor {
 	

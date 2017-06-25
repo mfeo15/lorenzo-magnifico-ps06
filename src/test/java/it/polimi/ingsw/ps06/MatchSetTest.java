@@ -7,6 +7,9 @@ import java.net.UnknownHostException;
 import org.junit.Before;
 import org.junit.Test;
 
+import it.polimi.ingsw.ps06.networking.Connection;
+import it.polimi.ingsw.ps06.networking.MatchSet;
+
 public class MatchSetTest {
 	
 	private MatchSet matchTest;

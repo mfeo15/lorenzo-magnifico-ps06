@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.util.Scanner;
 
 import it.polimi.ingsw.ps06.controller.MenuController;
+import it.polimi.ingsw.ps06.networking.Client;
+import it.polimi.ingsw.ps06.networking.SocketServer;
 import it.polimi.ingsw.ps06.view.Menu;
 import it.polimi.ingsw.ps06.view.MenuCLI;
 import it.polimi.ingsw.ps06.view.MenuGUI;

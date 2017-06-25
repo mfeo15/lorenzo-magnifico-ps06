@@ -7,9 +7,10 @@ import java.util.Observer;
 
 import it.polimi.ingsw.ps06.model.Types.ColorPalette;
 import it.polimi.ingsw.ps06.model.Types.LeaderStates;
-import it.polimi.ingsw.ps06.model.messages.Message;
-import it.polimi.ingsw.ps06.model.messages.MessageLeaderCards;
-import it.polimi.ingsw.ps06.model.messages.Server2Client;
+import it.polimi.ingsw.ps06.model.cards.leader.Leader;
+import it.polimi.ingsw.ps06.networking.messages.Message;
+import it.polimi.ingsw.ps06.networking.messages.MessageLeaderCards;
+import it.polimi.ingsw.ps06.networking.messages.Server2Client;
 
 /**
 * Classe rappresentante un singolo giocatore in una partita
@@ -91,7 +92,7 @@ public class Player extends Observable implements Observer {
 	public Leader getLeader(int code) {
 		Leader leader = null;
 		for (Leader l : leaders) 
-			if (l.code == code) leader = l;
+			if (l.getCode() == code) leader = l;
 		
 		return leader;
 	}
@@ -105,7 +106,7 @@ public class Player extends Observable implements Observer {
 		this.leaders.forEach(l -> l.addNewObserver(this.o));
 		
 		HashMap<Integer, LeaderStates> ls = new HashMap<Integer, LeaderStates>();
-		this.leaders.forEach(leader -> ls.put(leader.code, leader.getLeaderState() ));  
+		this.leaders.forEach(leader -> ls.put(leader.getCode(), leader.getLeaderState() ));
 		
 		MessageLeaderCards leaderCards = new MessageLeaderCards(ls);
 		leaderCards.setRecipient(this.getID());

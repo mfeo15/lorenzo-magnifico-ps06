@@ -3,9 +3,9 @@ package it.polimi.ingsw.ps06.controller;
 import java.util.Observable;
 import java.util.Observer;
 
-import it.polimi.ingsw.ps06.Client;
 import it.polimi.ingsw.ps06.model.events.Event;
 import it.polimi.ingsw.ps06.model.events.EventParser;
+import it.polimi.ingsw.ps06.networking.Client;
 import it.polimi.ingsw.ps06.view.Menu;
 
 public class MenuController extends Observable implements Observer {
