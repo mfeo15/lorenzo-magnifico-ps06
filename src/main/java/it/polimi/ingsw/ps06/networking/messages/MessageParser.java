@@ -14,7 +14,6 @@ import it.polimi.ingsw.ps06.networking.Connection;
 import it.polimi.ingsw.ps06.networking.MatchSet;
 import it.polimi.ingsw.ps06.networking.SocketServer;
 import it.polimi.ingsw.ps06.view.Board;
-import it.polimi.ingsw.ps06.view.PersonalView;
 import it.polimi.ingsw.ps06.view.Room;
 
 public class MessageParser implements MessageVisitor {
@@ -68,7 +67,6 @@ public class MessageParser implements MessageVisitor {
 	
 	@Override
 	public void visit(MessageGameStart gameStart) {
-		System.out.println("OOOOOOOOOOOO");
 		SocketServer.getInstance().startNewGame();
 	}
 
@@ -158,22 +156,23 @@ public class MessageParser implements MessageVisitor {
 
 	@Override
 	public void visit(MessagePersonalBoardStatus pbStatus) {
-	
-		PersonalView pv = ((PersonalView) supporter);
+		Board b = ((Board) supporter);
 		
-		pv.setResources(pbStatus.getWarehouse().getResourceValue(MaterialsKind.COIN), 
-							pbStatus.getWarehouse().getResourceValue(MaterialsKind.WOOD), 
-							pbStatus.getWarehouse().getResourceValue(MaterialsKind.STONE), 
-							pbStatus.getWarehouse().getResourceValue(MaterialsKind.SERVANT), 
-							pbStatus.getWarehouse().getResourceValue(PointsKind.VICTORY_POINTS), 
-							pbStatus.getWarehouse().getResourceValue(PointsKind.MILITARY_POINTS), 
-							pbStatus.getWarehouse().getResourceValue(PointsKind.FAITH_POINTS));
+		
+		
+		b.setResourcesPersonalView(pbStatus.getWarehouse().getResourceValue(MaterialsKind.COIN), 
+										pbStatus.getWarehouse().getResourceValue(MaterialsKind.WOOD), 
+										pbStatus.getWarehouse().getResourceValue(MaterialsKind.STONE), 
+										pbStatus.getWarehouse().getResourceValue(MaterialsKind.SERVANT), 
+										pbStatus.getWarehouse().getResourceValue(PointsKind.VICTORY_POINTS), 
+										pbStatus.getWarehouse().getResourceValue(PointsKind.MILITARY_POINTS), 
+										pbStatus.getWarehouse().getResourceValue(PointsKind.FAITH_POINTS));
 		
 		for (int i : pbStatus.getBuilding()) 
-			pv.setBuildingCard(i, pbStatus.getBuilding().indexOf(i));
+			b.setBuildingCardPersonalView(i, pbStatus.getBuilding().indexOf(i));
 		
 		for (int i : pbStatus.getTerritory()) 
-			pv.setTerritoryCard(i, pbStatus.getTerritory().indexOf(i));
+			b.setTerritoryCardPersonalView(i, pbStatus.getTerritory().indexOf(i));
 	}
 
 	@Override

@@ -66,6 +66,7 @@ public class EventParser implements EventVisitor {
 
 	@Override
 	public void visit(StoryBoard2PersonalView storyboard) {
+		/*
 		BoardController previous = ((BoardController) theModel);
 		PersonalViewController controller = new PersonalViewController(Client.getInstance(), storyboard.getView(), previous);
 		
@@ -73,6 +74,7 @@ public class EventParser implements EventVisitor {
 		storyboard.getView().addNewObserver(controller);
 		Client.getInstance().addNewObserver(controller);
 		try {storyboard.getView().show();} catch (IOException e) {e.printStackTrace();}
+		*/
 	}
 
 	@Override
