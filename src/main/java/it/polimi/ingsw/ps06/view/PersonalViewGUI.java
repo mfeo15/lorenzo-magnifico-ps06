@@ -27,7 +27,7 @@ import it.polimi.ingsw.ps06.networking.messages.MessageObtainPersonalBoardStatus
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
-public class PersonalViewGUI extends Observable implements PersonalView {
+public class PersonalViewGUI  {
 	private int playerCode;
 	private int width, height;
 	private JFrame f = new JFrame();
@@ -54,7 +54,6 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 		return playerCode;
 	}
 	
-	@Override
 	public void show() throws IOException{
 			
 			try {
@@ -284,15 +283,9 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 			
 			//f.setLocation((int)((screenSize.getWidth()-f.getWidth())/2), (int)((screenSize.getHeight()-f.getHeight())/2)- (int)(screenSize.getHeight()/182.4));
 			Animations.AnimationPV2(f);
-			
-			setChanged();
-			StoryBoard2BoardAgain sbboard = new StoryBoard2BoardAgain(boardView);
-			notifyObservers(sbboard);	
+				
 		}
 		
-		
-		
-		@Override
 		public void setResources(int coin, int wood, int stone, int servant, int victory, int military, int faith) {
 			
 			coins.setText(String.valueOf(coin));
@@ -304,7 +297,7 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 			this.faith.setText(String.valueOf(faith));
 		}
 
-		@Override
+
 		public void setTerritoryCard(int id, int index) {
 			try {
 				territories[index].setIcon((ImageHandler.setImage("resources/cards/devcards_f_en_c_"+id+".png",17,(int)( 17.5 * 1.77 ),width,height)).getIcon());
@@ -314,7 +307,7 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 			territories[index].setDisabledIcon( territories[index].getIcon());
 		}
 		
-		@Override
+		
 		public void setBuildingCard(int id, int index) {
 			try {
 				buildings[index].setIcon((ImageHandler.setImage("resources/cards/devcards_f_en_c_"+id+".png",17,(int)( 17.5 * 1.77  ),width,height)).getIcon());
@@ -326,28 +319,9 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 		}
 		
 
-		@Override
-		public void addNewObserver(Observer o) {
-			addObserver(o);
-			
-		}
-
-		@Override
-		public void notifyExit() {
-			setChanged();
-			EventClose close = new EventClose();
-			notifyObservers(close);
-		}
-
-		@Override
 		public void hasLoaded() {
-			setChanged();
-			MessageObtainPersonalBoardStatus obtainPbStatus = new MessageObtainPersonalBoardStatus(playerCode);
-			notifyObservers(obtainPbStatus);
+			
+			boardView.hasLoadedPersonalView();
 		}
 		
-		@Override
-		public Board getBackgroundView() {
-			return boardView;
-		}  
 }

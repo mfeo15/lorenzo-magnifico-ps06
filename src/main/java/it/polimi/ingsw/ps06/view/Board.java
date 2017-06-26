@@ -8,6 +8,12 @@ import it.polimi.ingsw.ps06.model.Types.ColorPalette;
 
 public interface Board {
 	
+	void setResourcesPersonalView (int coin, int wood, int stone, int servant, int victory, int military, int faith);
+	
+	void setTerritoryCardPersonalView (int id, int index);
+	
+	void setBuildingCardPersonalView (int id, int index);
+	
 	void setHarvestIndex(int value);
 	
 	void setProductionIndex(int value);
@@ -67,6 +73,8 @@ public interface Board {
 	void startGame(int index);
 	
 	void excommunicate (int tileNumber, int playerIndex);
+	
+	void hasLoadedPersonalView();
 	
 	void setRound();
 	

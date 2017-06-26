@@ -20,6 +20,7 @@ import it.polimi.ingsw.ps06.model.events.EventLeaderDiscarded;
 import it.polimi.ingsw.ps06.model.events.EventLeaderPlayed;
 import it.polimi.ingsw.ps06.model.events.EventMemberPlaced;
 import it.polimi.ingsw.ps06.model.events.StoryBoard2PersonalView;
+import it.polimi.ingsw.ps06.networking.messages.MessageObtainPersonalBoardStatus;
 
 public class BoardCLI extends Observable implements Board {
 	
@@ -278,7 +279,7 @@ public class BoardCLI extends Observable implements Board {
 	}
 	
 	public void printPoints(int index) {
-		if (index==0) System.out.println("--> Coin: "+coinV+" Wood: "+woodV+" Stone: "+stoneV+" Servant:"+servantV);
+		if (index==0) System.out.println("--> Coin: "+coinV+" Wood: "+woodV+" Stone: "+stoneV+" Servant:"+servantV+" Victory:"+victoryV+" Military:"+militaryV+" Faith:"+faithV);
 		startGame(index);
 	}
 
@@ -460,10 +461,10 @@ public class BoardCLI extends Observable implements Board {
 
 	@Override
 	public void startGame(int index) {
+		
 		setChanged();
-		StoryBoard2PersonalView storyBoard;
-		storyBoard = new StoryBoard2PersonalView(new PersonalViewCLI(new Scanner(System.in), index));
-		notifyObservers(storyBoard);
+		MessageObtainPersonalBoardStatus obtainPbStatus = new MessageObtainPersonalBoardStatus(index); 
+		notifyObservers(obtainPbStatus);
 		
 	}
 
@@ -597,6 +598,39 @@ public class BoardCLI extends Observable implements Board {
 		
 	}
 	
+	
+	
+	@Override
+	public void setResourcesPersonalView(int coin, int wood, int stone, int servant, int victory, int military,
+			int faith) {
+		System.out.println("--> Il giocatore ha Coin: "+coin+" Wood: "+wood+" Stone: "+stone+" Servant:"+servant+" Victory:"+victory+" Military:"+military+" Faith:"+faith);
+		System.out.println();
+		System.out.print(" >");
+		
+	}
+
+	@Override
+	public void setTerritoryCardPersonalView(int id, int index) {
+		System.out.println("--> Il giocatore ha il territorio con ID:"+id);
+		System.out.println();
+		System.out.print(" >");
+		
+	}
+
+	@Override
+	public void setBuildingCardPersonalView(int id, int index) {
+		System.out.println("--> Il giocatore ha l'edificio con ID:"+id);
+		System.out.println();
+		System.out.print(" >");
+		
+	}
+
+	@Override
+	public void hasLoadedPersonalView() {
+		// Nothing
+		
+	}
+
 	public static void main(String[] args) {
 		BoardCLI m = new BoardCLI( new BufferedReader(new InputStreamReader(System.in)));
 		m.show();

@@ -66,6 +66,7 @@ import it.polimi.ingsw.ps06.model.events.EventMemberPlaced;
 import it.polimi.ingsw.ps06.model.events.EventMemberPlacedWithPrivilege;
 import it.polimi.ingsw.ps06.model.events.StoryBoard2PersonalView;
 import it.polimi.ingsw.ps06.model.events.StoryBoard2Room;
+import it.polimi.ingsw.ps06.networking.messages.MessageObtainPersonalBoardStatus;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -98,6 +99,8 @@ public class BoardGUI extends Observable implements Board {
 	private Timer timer = createTimer(1000);
 	
 	private Direction direction;
+	
+	private int pvIndex;
     
     private String playerName;
     
@@ -1926,11 +1929,12 @@ public class BoardGUI extends Observable implements Board {
 	
 	@Override
 	public void startGame(int index) {
-		view = new PersonalViewGUI(index, this);
-		setChanged();
-		StoryBoard2PersonalView storyBoard;
-		storyBoard = new StoryBoard2PersonalView(view);
-		notifyObservers(storyBoard);
+		this.pvIndex=index;
+		
+		view = new PersonalViewGUI(pvIndex, this);
+		
+		try { view.show(); } catch (IOException e) {e.printStackTrace();}
+
 	}
 
 
@@ -2400,5 +2404,35 @@ public class BoardGUI extends Observable implements Board {
 			return null;
 		}
 		
+	}
+	
+	
+	
+	@Override
+	public void setResourcesPersonalView(int coin, int wood, int stone, int servant, int victory, int military,
+			int faith) {
+		view.setResources(coin, wood, stone, servant, victory, military, faith);
+		
+	}
+
+	@Override
+	public void setTerritoryCardPersonalView(int id, int index) {
+		view.setTerritoryCard(id, index);
+	
+	}
+	
+
+	@Override
+	public void setBuildingCardPersonalView(int id, int index) {
+		view.setBuildingCard(id, index);
+		
+	}
+
+	@Override
+	public void hasLoadedPersonalView() {
+		
+		setChanged();
+		MessageObtainPersonalBoardStatus obtainPbStatus = new MessageObtainPersonalBoardStatus(pvIndex);
+		notifyObservers(obtainPbStatus);
 	}
 }
