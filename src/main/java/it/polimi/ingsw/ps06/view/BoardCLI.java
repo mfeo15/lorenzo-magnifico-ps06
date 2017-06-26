@@ -12,7 +12,6 @@ import it.polimi.ingsw.ps06.controller.BoardController;
 import it.polimi.ingsw.ps06.model.Types.Action;
 import it.polimi.ingsw.ps06.model.Types.ColorPalette;
 import it.polimi.ingsw.ps06.model.cards.DevelopementCard;
-import it.polimi.ingsw.ps06.model.events.BoardFrozenStatus;
 import it.polimi.ingsw.ps06.model.events.BoardHasLoaded;
 import it.polimi.ingsw.ps06.model.events.EventClose;
 import it.polimi.ingsw.ps06.model.events.EventLeaderActivated;
@@ -567,22 +566,6 @@ public class BoardCLI extends Observable implements Board {
 		setChanged();
 		BoardHasLoaded boardLoaded = new BoardHasLoaded();
 		notifyObservers(boardLoaded);
-	}
-
-	@Override
-	public void unfreeze() {
-		setChanged();
-		BoardFrozenStatus frozen = new BoardFrozenStatus(false);
-		notifyObservers(frozen);
-		
-	}
-
-	@Override
-	public void freeze() {
-		setChanged();
-		BoardFrozenStatus frozen = new BoardFrozenStatus(true);
-		notifyObservers(frozen);
-		
 	}
 
 	@Override

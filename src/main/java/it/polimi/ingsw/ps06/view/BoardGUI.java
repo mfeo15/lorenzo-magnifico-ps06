@@ -56,7 +56,6 @@ import javax.swing.plaf.basic.BasicInternalFrameUI;
 
 import it.polimi.ingsw.ps06.model.Types.ColorPalette;
 import it.polimi.ingsw.ps06.model.Types.CouncilPrivilege;
-import it.polimi.ingsw.ps06.model.events.BoardFrozenStatus;
 import it.polimi.ingsw.ps06.model.events.BoardHasLoaded;
 import it.polimi.ingsw.ps06.model.events.EventClose;
 import it.polimi.ingsw.ps06.model.events.EventLeaderActivated;
@@ -2192,20 +2191,6 @@ public class BoardGUI extends Observable implements Board {
 		setChanged();
 		BoardHasLoaded roomLoaded = new BoardHasLoaded();
 		notifyObservers(roomLoaded);
-	}
-	
-	@Override
-	public void unfreeze() {
-		setChanged();
-		BoardFrozenStatus frozen = new BoardFrozenStatus(false);
-		notifyObservers(frozen);
-	}
-	
-	@Override
-	public void freeze() {
-		setChanged();
-		BoardFrozenStatus frozen = new BoardFrozenStatus(true);
-		notifyObservers(frozen);
 	}
 	
 	private void activateCouncil(it.polimi.ingsw.ps06.model.Types.Action chosenAction, int memberIndex, int servants){

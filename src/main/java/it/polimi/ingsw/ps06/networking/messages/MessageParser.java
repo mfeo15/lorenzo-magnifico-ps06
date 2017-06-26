@@ -243,4 +243,11 @@ public class MessageParser implements MessageVisitor {
 		
 		b.setLeaders(leadersCode.get(0), leadersCode.get(1), leadersCode.get(2), leadersCode.get(3));
 	}
+
+	@Override
+	public void visit(MessageDisconnect disconnect) {
+		Connection connection = ((Connection) supporter);
+		
+		connection.closeConnection();
+	}
 }

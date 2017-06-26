@@ -9,6 +9,7 @@ import it.polimi.ingsw.ps06.networking.Client;
 import it.polimi.ingsw.ps06.networking.Connection;
 import it.polimi.ingsw.ps06.networking.SocketServer;
 import it.polimi.ingsw.ps06.networking.messages.BoardReady;
+import it.polimi.ingsw.ps06.networking.messages.MessageDisconnect;
 
 public class EventParser implements EventVisitor {
 	
@@ -24,6 +25,7 @@ public class EventParser implements EventVisitor {
 	
 	@Override
 	public void visit(EventClose eventClose) {
+		Client.getInstance().asyncSend( new MessageDisconnect() );
 		System.exit(0);
 	}
 

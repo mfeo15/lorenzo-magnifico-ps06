@@ -3,7 +3,6 @@ package it.polimi.ingsw.ps06.controller;
 import java.util.Observable;
 import java.util.Observer;
 
-import it.polimi.ingsw.ps06.model.events.BoardFrozenStatus;
 import it.polimi.ingsw.ps06.model.events.Event;
 import it.polimi.ingsw.ps06.model.events.EventParser;
 import it.polimi.ingsw.ps06.model.events.StoryBoard;

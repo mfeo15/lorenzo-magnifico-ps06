@@ -139,18 +139,15 @@ public class Connection implements Runnable, Observer {
 	
 	
 	public synchronized void closeConnection() {		
-		//send("Connessione terminata!");
 		try {
+			SocketServer.getInstance().deregisterConnection(this);
 			socket.close();
+			
+			System.out.println("[ SERVER ] The Client " + getInetAddress() + " (" + getUsername() + "): has closed the connection \n");
+			
 		} catch (IOException e) {
 		}
 		active = false;
-	}
-	
-	private void close() {
-		closeConnection();		
-		System.out.println("Deregistro il client!");
-		SocketServer.getInstance().deregisterConnection(this);
 	}
 
 	public String getUsername() {

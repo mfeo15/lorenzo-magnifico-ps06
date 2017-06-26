@@ -4,6 +4,9 @@ public interface MessageVisitor {
 	
 	void visit(EventMessage event);
 	
+	void visit(MessageConnectionStart startConnection);
+	void visit(MessageDisconnect disconnect);
+	
 	void visit(MessagePlayerID messageID);
 	void visit(MessageCurrentPlayer currentPlayer);
 	void visit(MessageCurrentPlayerOrder currentPlayerOrder);
@@ -15,7 +18,6 @@ public interface MessageVisitor {
 	void visit(MessageGameStart gameStart);
 	void visit(MessageGameHasStarted hasStarted);
 	void visit(MessageGameStatus gameStat);
-	void visit(MessageConnectionStart startConnection);
 	
 	void visit(MessageVaticanReport vaticanRep);
 	

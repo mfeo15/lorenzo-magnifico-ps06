@@ -77,8 +77,4 @@ public interface Board {
 	void hasLoadedPersonalView();
 	
 	void setRound();
-	
-	void unfreeze();
-	
-	void freeze();
 }
