@@ -8,7 +8,6 @@ import java.util.Observer;
 import it.polimi.ingsw.ps06.model.Types.ColorPalette;
 import it.polimi.ingsw.ps06.model.Types.LeaderStates;
 import it.polimi.ingsw.ps06.model.cards.leader.Leader;
-import it.polimi.ingsw.ps06.networking.messages.Message;
 import it.polimi.ingsw.ps06.networking.messages.MessageLeaderCards;
 import it.polimi.ingsw.ps06.networking.messages.Server2Client;
 
@@ -65,8 +64,8 @@ public class Player extends Observable implements Observer {
 		return ID;
 	}
 	
-	public String getColorAssociatedToID() {
-		
+	public String getColorAssociatedToID() 
+	{	
 		switch ( ID ) {
 		case 0: return "Rosso";
 		case 1: return "Verde";

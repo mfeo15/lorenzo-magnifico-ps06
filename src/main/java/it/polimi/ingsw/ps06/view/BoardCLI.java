@@ -19,7 +19,6 @@ import it.polimi.ingsw.ps06.model.events.EventLeaderActivated;
 import it.polimi.ingsw.ps06.model.events.EventLeaderDiscarded;
 import it.polimi.ingsw.ps06.model.events.EventLeaderPlayed;
 import it.polimi.ingsw.ps06.model.events.EventMemberPlaced;
-import it.polimi.ingsw.ps06.model.events.StoryBoard2PersonalView;
 import it.polimi.ingsw.ps06.networking.messages.MessageObtainPersonalBoardStatus;
 
 public class BoardCLI extends Observable implements Board {

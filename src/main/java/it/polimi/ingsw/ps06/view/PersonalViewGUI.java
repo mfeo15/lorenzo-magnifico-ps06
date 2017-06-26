@@ -22,7 +22,6 @@ import javax.swing.UIManager;
 
 import it.polimi.ingsw.ps06.controller.BoardController;
 import it.polimi.ingsw.ps06.model.events.EventClose;
-import it.polimi.ingsw.ps06.model.events.StoryBoard2BoardAgain;
 import it.polimi.ingsw.ps06.networking.messages.MessageObtainPersonalBoardStatus;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;

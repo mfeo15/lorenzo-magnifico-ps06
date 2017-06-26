@@ -3,7 +3,6 @@ package it.polimi.ingsw.ps06.model.events;
 import java.io.IOException;
 
 import it.polimi.ingsw.ps06.controller.BoardController;
-import it.polimi.ingsw.ps06.controller.PersonalViewController;
 import it.polimi.ingsw.ps06.controller.RoomController;
 import it.polimi.ingsw.ps06.model.Game;
 import it.polimi.ingsw.ps06.networking.Client;
@@ -25,7 +24,6 @@ public class EventParser implements EventVisitor {
 	
 	@Override
 	public void visit(EventClose eventClose) {
-		//Client.getInstance().
 		System.exit(0);
 	}
 
@@ -53,28 +51,6 @@ public class EventParser implements EventVisitor {
 		storyboard.getView().addNewObserver(controller);
 		Client.getInstance().addNewObserver(controller);
 		try {storyboard.getView().show();} catch (IOException e) {e.printStackTrace();}	
-	}
-	
-	@Override
-	public void visit(StoryBoard2BoardAgain storyboard) {
-	
-		Client.getInstance().deleteAllObservers();
-		
-		PersonalViewController pvController = ((PersonalViewController) theModel);
-		Client.getInstance().addNewObserver(pvController.getThePreviousController());
-	}
-
-	@Override
-	public void visit(StoryBoard2PersonalView storyboard) {
-		/*
-		BoardController previous = ((BoardController) theModel);
-		PersonalViewController controller = new PersonalViewController(Client.getInstance(), storyboard.getView(), previous);
-		
-		controller.addNewObserver(Client.getInstance());
-		storyboard.getView().addNewObserver(controller);
-		Client.getInstance().addNewObserver(controller);
-		try {storyboard.getView().show();} catch (IOException e) {e.printStackTrace();}
-		*/
 	}
 
 	@Override
@@ -124,7 +100,6 @@ public class EventParser implements EventVisitor {
 			Client.getInstance().init();
 			(new Thread(Client.getInstance())).start();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -133,10 +108,5 @@ public class EventParser implements EventVisitor {
 	public void visit(BoardHasLoaded boardHasLoaded) {
 		BoardReady br = new BoardReady();
 		Client.getInstance().asyncSend(br);
-	}
-
-	@Override
-	public void visit(BoardFrozenStatus frozen) {
-		BoardController b = ((BoardController) theModel);
 	}
 }

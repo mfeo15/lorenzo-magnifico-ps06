@@ -17,6 +17,11 @@ import it.polimi.ingsw.ps06.model.Types.PointsKind;
 */
 public class Resources implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 9193388048987531889L;
+	
 	private EnumMap<MaterialsKind, Integer> materials;
 	private EnumMap<PointsKind, Integer> points;
 	
@@ -80,7 +85,6 @@ public class Resources implements Serializable {
         
         Set<PointsKind> pointsSet = points.keySet();
         for(PointsKind currentPoint : pointsSet) setResourceValue(currentPoint, 0);
-
 	}
 	
 	/**
@@ -160,23 +164,24 @@ public class Resources implements Serializable {
 	*/
 	public boolean isBiggerThan(Resources r) {
 		
-		boolean flag = true;
+		boolean flagMaterials = true;
+		boolean flagPoints = true;
 		
 		Iterator<MaterialsKind> materialsIterator = materials.keySet().iterator();
-        while(materialsIterator.hasNext() && flag==true) 
+        while(materialsIterator.hasNext() && flagMaterials == true) 
         {
         	MaterialsKind currentMaterial = materialsIterator.next();	
-        	if ( getResourceValue(currentMaterial) < r.getResourceValue(currentMaterial) ) flag = false;
+        	if ( getResourceValue(currentMaterial) < r.getResourceValue(currentMaterial) ) flagMaterials = false;
         }
 
         Iterator<PointsKind> pointsIterator = points.keySet().iterator();
-        while(pointsIterator.hasNext() && flag==true)
+        while(pointsIterator.hasNext() && flagPoints == true)
         {
         	PointsKind currentPoint = pointsIterator.next();	
-        	if ( getResourceValue(currentPoint) < r.getResourceValue(currentPoint) ) flag = false;
+        	if ( getResourceValue(currentPoint) < r.getResourceValue(currentPoint) ) flagPoints = false;
         }
 		
-        return flag;
+        return (flagMaterials && flagPoints);
 	}
 	
 	/**
@@ -187,10 +192,14 @@ public class Resources implements Serializable {
 	 * @return	nothing
 	 */
 	
-	public void decreaseResourceValue(MaterialsKind kind, int x){
+	public boolean decreaseResourceValue(MaterialsKind kind, int decreaseValue) {
+		
+		if (decreaseValue > materials.get(kind))
+			return false;
+		
 		int currentvalue = materials.get(kind);
-		materials.put(kind, currentvalue - x);
-		return;
+		materials.put(kind, currentvalue - decreaseValue);
+		return true;
 	}
 	
 	/**
@@ -201,10 +210,14 @@ public class Resources implements Serializable {
 	 * @return	nothing
 	 */
 	
-	public void decreaseResourceValue(PointsKind kind, int x){
+	public boolean decreaseResourceValue(PointsKind kind, int decreaseValue) {
+		
+		if (decreaseValue > points.get(kind))
+			return false;
+		
 		int currentvalue = points.get(kind);
-		points.put(kind, currentvalue - x);
-		return;
+		points.put(kind, currentvalue - decreaseValue);
+		return true;
 	}
 	
 	/**

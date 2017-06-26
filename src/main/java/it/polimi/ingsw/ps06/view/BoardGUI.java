@@ -64,8 +64,6 @@ import it.polimi.ingsw.ps06.model.events.EventLeaderDiscarded;
 import it.polimi.ingsw.ps06.model.events.EventLeaderPlayed;
 import it.polimi.ingsw.ps06.model.events.EventMemberPlaced;
 import it.polimi.ingsw.ps06.model.events.EventMemberPlacedWithPrivilege;
-import it.polimi.ingsw.ps06.model.events.StoryBoard2PersonalView;
-import it.polimi.ingsw.ps06.model.events.StoryBoard2Room;
 import it.polimi.ingsw.ps06.networking.messages.MessageObtainPersonalBoardStatus;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.media.Media;
