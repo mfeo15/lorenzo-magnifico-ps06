@@ -54,7 +54,36 @@ public class Types {
 			return index;
 		}
 		
+		public ActionCategory getActionCategory() {
+			if ( this.index >= 1 && this.index <= 4 )
+				return ActionCategory.TOWER_GREEN;
+			
+			if ( this.index >= 5 && this.index <= 8 )
+				return ActionCategory.TOWER_BLUE;
+			
+			if ( this.index >= 9 && this.index <= 12 )
+				return ActionCategory.TOWER_YELLOW;
+			
+			if ( this.index >= 13 && this.index <= 16 )
+				return ActionCategory.TOWER_PURPLE;
+			
+			if ( this.index == 17 )
+				return ActionCategory.COUNCIL;
+			
+			if ( this.index == 18 || this.index == 19 )
+				return ActionCategory.HARVEST;
+			
+			if ( this.index == 20 || this.index == 21 )
+				return ActionCategory.PRODUCTION;
+			
+			if ( this.index >= 22 && this.index <= 26 )
+				return ActionCategory.MARKET;
+			
+			return null;
+		}
 	}
+	
+	public enum ActionCategory { TOWER_GREEN, TOWER_BLUE, TOWER_YELLOW, TOWER_PURPLE, MARKET, PRODUCTION, HARVEST, COUNCIL }
 	
 	public enum ColorPalette 
 	{

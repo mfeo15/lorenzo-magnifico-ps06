@@ -1,17 +1,21 @@
 package it.polimi.ingsw.ps06.model;
 
-import it.polimi.ingsw.ps06.model.Types.Action;
+import it.polimi.ingsw.ps06.model.Types.ActionCategory;
 
 public class BonusMalusAction extends BonusMalus {
 
-	private Action action;
+	private ActionCategory actionCategory;
 	
-	public BonusMalusAction(int value, Action action) {
+	public BonusMalusAction(int value, ActionCategory actionCategory) {
 		super(value);
-		this.action = action;
+		this.actionCategory = actionCategory;
 	}
 	
-	public Action getAction() {
-		return action;
+	public ActionCategory getActionCategory() {
+		return actionCategory;
+	}
+	
+	public void setActionCategory(ActionCategory actionCategory) {
+		this.actionCategory = actionCategory;
 	}
 }

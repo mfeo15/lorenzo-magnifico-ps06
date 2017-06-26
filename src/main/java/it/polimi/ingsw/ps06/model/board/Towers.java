@@ -20,7 +20,7 @@ import it.polimi.ingsw.ps06.model.cards.Character;
 import it.polimi.ingsw.ps06.model.cards.DevelopementCard;
 import it.polimi.ingsw.ps06.model.cards.Territory;
 import it.polimi.ingsw.ps06.model.cards.Venture;
-import it.polimi.ingsw.ps06.model.effects.EffectsActive;
+import it.polimi.ingsw.ps06.model.effects.EffectsBonusMalus;
 import it.polimi.ingsw.ps06.model.effects.EffectsResources;
 import it.polimi.ingsw.ps06.networking.messages.MessageBoardMemberHasBeenPlaced;
 import it.polimi.ingsw.ps06.networking.messages.MessageBoardSetupDevCards;
@@ -40,7 +40,7 @@ public class Towers extends Observable implements PlaceSpace {
 	private DevelopementCard[] deck;
 	
 	private static final int CARTE_TORRE = 16;
-	private EffectsActive attivi; // da modificare in listener
+	private EffectsBonusMalus attivi; // da modificare in listener
 	private int deckIndex=0;
 	private int towerIndex = 0;
 	private int baseFloorTower = 0;
@@ -63,10 +63,9 @@ public class Towers extends Observable implements PlaceSpace {
 		boolean colorRule; // Regola del colore
 		boolean extraCost; // Familiare avversario presente, +3 oro
 		
-		//int bonus = EffectsActive.valueBonus(p);
-		//memberValue = memberValue + bonus;
-		
 		int memberValue = member.getValue() + servants;	
+		if (member.getPlayer().getBonusMalusCollection().contains(chosenAction.getActionCategory())) 
+			memberValue += member.getPlayer().getBonusMalusCollection().getBonusMalus(chosenAction.getActionCategory()).getValue();
 		
 		// Si può piazzare solo se il valore del membro supera quello richiesto
 		if( memberValue < checkRequirement(chosenAction) ) {

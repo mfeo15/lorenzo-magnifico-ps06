@@ -32,6 +32,8 @@ public class Player extends Observable implements Observer {
 	private FamilyMember memberOrange;
 	private FamilyMember memberUncolored;
 	
+	private BonusMalusSet bonusMalusCollection;
+	
 	private Observer o;
 	 
 	/**
@@ -51,6 +53,8 @@ public class Player extends Observable implements Observer {
 		
 		this.personalBoard = new PersonalBoard();
 		this.leaders = new ArrayList<Leader>();
+		
+		this.bonusMalusCollection = new BonusMalusSet();
 	}
 	
 	public void setID(int ID) {
@@ -71,6 +75,10 @@ public class Player extends Observable implements Observer {
 		default:
 			return null;
 		}
+	}
+	
+	public BonusMalusSet getBonusMalusCollection() {
+		return this.bonusMalusCollection;
 	}
 	
 	public FamilyMember getMember(ColorPalette color) {

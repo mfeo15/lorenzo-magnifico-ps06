@@ -47,6 +47,7 @@ public class EffectsResourcesByCard extends EffectsResources {
 		case CARD_PURPLE:
 			cardsAmountOwned = p.getPersonalBoard().getVentures().size();
 			break;
+		default : cardsAmountOwned = 0;
 		}
 		
 		for (int i=0; i < cardsAmountOwned; i++) {

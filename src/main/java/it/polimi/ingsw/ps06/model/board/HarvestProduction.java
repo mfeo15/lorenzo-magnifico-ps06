@@ -9,7 +9,7 @@ import it.polimi.ingsw.ps06.model.Gathering;
 import it.polimi.ingsw.ps06.model.Types;
 import it.polimi.ingsw.ps06.model.Types.Action;
 import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
-import it.polimi.ingsw.ps06.model.effects.EffectsActive;
+import it.polimi.ingsw.ps06.model.effects.EffectsBonusMalus;
 import it.polimi.ingsw.ps06.networking.messages.MessageBoardMemberHasBeenPlaced;
 import it.polimi.ingsw.ps06.networking.messages.MessageModel2ViewNotification;
 
@@ -26,7 +26,7 @@ public class HarvestProduction extends Observable implements PlaceSpace {
 	private ArrayList<FamilyMember> harvestSpaces2;
 	private ArrayList<FamilyMember> productionSpaces1;
 	private ArrayList<FamilyMember> productionSpaces2;
-	private EffectsActive attivi;
+	private EffectsBonusMalus attivi;
 	private Gathering gathering;
 	private int numberPlayers;
 	private int hs2index=0, ps2index=0;
@@ -44,6 +44,8 @@ public class HarvestProduction extends Observable implements PlaceSpace {
 		boolean condition; //Regola del colore
 		
 		int memberValue = member.getValue() + servants;
+		if (member.getPlayer().getBonusMalusCollection().contains(chosenAction.getActionCategory())) 
+			memberValue += member.getPlayer().getBonusMalusCollection().getBonusMalus(chosenAction.getActionCategory()).getValue();
 		
 		// Gestione condizioni della PRIMA casella di Harvest
 		if(chosenAction == Action.HARVEST_1) {

@@ -55,9 +55,11 @@ public class Gathering extends Actions {
 	* 
 	* @throws InterruptedException 
 	*/
-	private void checkGatheringBonus (Player p) {
-		// malus = EffectsActive.gatheringBonus(p);
-		// value = value + malus;
+	private int getGatheringBonus(Player p) {
+		if (! member.getPlayer().getBonusMalusCollection().contains(chosenAction.getActionCategory())) 
+			return 0;
+		
+		return ( member.getPlayer().getBonusMalusCollection().getBonusMalus(chosenAction.getActionCategory()).getValue() );
 	}
 	
 	/**
@@ -75,12 +77,14 @@ public class Gathering extends Actions {
 		if( isProduction() == true)
 		
 			for (Building b : member.getPlayer().getPersonalBoard().getBuildings())
-				b.activateEffect(member.getPlayer());
+				if ( b.check_dice( member.getValue() + servants + getGatheringBonus(member.getFakePlayer())) )
+						b.activateEffect(member.getPlayer());
 		
 		else
 			
 			for (Territory t : member.getPlayer().getPersonalBoard().getTerritories())
-				t.activateEffect(member.getPlayer());
+				if ( t.check_dice( member.getValue() + servants + getGatheringBonus(member.getFakePlayer())) )
+					t.activateEffect(member.getPlayer());
 	}
 
 }
