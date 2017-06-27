@@ -53,11 +53,6 @@ public class BoardCLI extends Observable implements Board {
 		this.input = input;
 	}
 	
-	public void addNewControllerObserver(BoardController controller) {
-		addObserver(controller);
-	}
-	
-	
 	public void read () throws IOException {
 		
 		String s = input.readLine();

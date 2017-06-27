@@ -20,12 +20,16 @@ public class DevelopementCard extends Card {
 	protected int period;
 	protected ArrayList<Effect> instant_effect; 
 
+	
+	public DevelopementCard() {
+		this.instant_effect = new ArrayList<Effect>();
+	}
+	
 	/**Metodo per settare il colore della carta	 
 	 * 
 	 *@param	color	colore della carta
 	 *@return	nothing
 	 */
-
 	public void setColor(int color) {
 		this.color = color;
 	}

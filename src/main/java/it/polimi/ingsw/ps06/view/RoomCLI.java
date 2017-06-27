@@ -31,10 +31,6 @@ public class RoomCLI extends Observable implements Room {
 		return input;
 	}
 	
-	public void addNewControllerObserver(RoomController controller) {
-		addObserver(controller);
-	}
-	
 	public void read() throws IOException {
 		
 			String s = input.readLine();

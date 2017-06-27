@@ -112,7 +112,7 @@ public class ParserXMLCards {
 	    		cards.add(dev);
     		}
 		}
-		catch(Exception e){
+		catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -239,58 +239,58 @@ public class ParserXMLCards {
 		NodeList d=c.getElementsByTagName("effect");
 		for(int k=0; k<d.getLength();k++){
 			Node eff1=d.item(k);
-			Node eff=eff1.getFirstChild();
-			if(eff1.getTextContent().equals("resources")){
-					Node bonus=eff.getNextSibling();
+			Node eff = ((Element) eff1).getElementsByTagName("kind").item(0);
+			if(eff.getTextContent().equals("resources")) {
+					Node bonus = ((Element) eff1).getElementsByTagName("bonus").item(0);
 					Resources res=new Resources();
-					res=setResourceBonus(bonus);
+					//res=setResourceBonus(bonus);
 					EffectsResources eff_res=new EffectsResources(res);
 					card.setEffect(eff_res);
 			}	
-			else if(eff1.getTextContent().equals("byCard")){
-				Node col=eff.getNextSibling();
+			else if(eff.getTextContent().equals("byCard")){
+				Node col = ((Element) eff1).getElementsByTagName("color").item(0);
 				String color = col.getTextContent();
-				Node bonus=col.getNextSibling();
+				Node bonus = ((Element) eff1).getElementsByTagName("bonus").item(0);
 				Resources res=new Resources();
-				res=setResourceBonus(bonus);
-				EffectsResourcesByCard e = new EffectsResourcesByCard(res, ColorPalette.valueOf(color.toUpperCase()));
+				//res=setResourceBonus(bonus);
+				EffectsResourcesByCard e = new EffectsResourcesByCard(res, parseColorCard(color) );
 				card.setEffect(e);
 			}
-			else if(eff1.getTextContent().equals("byPoints")){
-				Node mil=eff.getNextSibling();
-				//int x=Integer.parseInt(mil.getNodeValue());
-				Node bonus=mil.getNextSibling();
+			else if(eff.getTextContent().equals("byPoints")){
+				//Node poi = ((Element) eff1).getElementsByTagName("military").item(0);
+				//String points = poi.getTextContent();
+				Node bonus = ((Element) eff1).getElementsByTagName("bonus").item(0);
 				Resources res=new Resources();
-				res=setResourceBonus(bonus);
+				//res=setResourceBonus(bonus);
 				EffectsResourcesByPoint ef = new EffectsResourcesByPoint(res, PointsKind.MILITARY_POINTS);
 				card.setEffect(ef);
 			}
-			else if(eff1.getTextContent().equals("privilege")){
+			else if(eff.getTextContent().equals("privilege")){
 				//EffectsPrivilege effec = new EffectPrivilege();
 				//card.setEffect(effec);
 				//Integer x = Integer.parseInt(effect.getElementsByTagName("amount").item(0).getTextContent());   qtà di privilegi
 			}			
-			else if(eff1.getTextContent().equals("colorful")){
+			else if(eff.getTextContent().equals("colorful")){
 				//nuovo effeto colorful? EffectsAction
 				//Integer x = Integer.parseInt(effect.getElementsByTagName("value").item(0).getTextContent());
 			}
-			else if(eff1.getTextContent().equals("green")){
+			else if(eff.getTextContent().equals("green")){
 				//new EffectsActive qlcs....
 				//Integer x1 = Integer.parseInt(effect.getElementsByTagName("value").item(0).getTextContent());
 			}
-			else if(eff1.getTextContent().equals("yellow")){
+			else if(eff.getTextContent().equals("yellow")){
 				//new EffectsActive qlcs....
 				//Integer x2 = Integer.parseInt(effect.getElementsByTagName("value").item(0).getTextContent());
 			}
-			else if(eff1.getTextContent().equals("blue")){
+			else if(eff.getTextContent().equals("blue")){
 				//new EffectsActive qlcs....
 				//Integer x3 = Integer.parseInt(effect.getElementsByTagName("value").item(0).getTextContent());
 			}
-			else if(eff1.getTextContent().equals("purple")){
+			else if(eff.getTextContent().equals("purple")){
 				//new EffectsActive qlcs....
 				//Integer x4 = Integer.parseInt(effect.getElementsByTagName("value").item(0).getTextContent());
 			}
-			else if(eff1.getTextContent().equals("discount")){
+			else if(eff.getTextContent().equals("discount")){
 				//Effect eff= new EffectsActive();
 				//String b=effect.getAttribute("color");
 				//Integer y = Integer.parseInt(effect.getElementsByTagName("amount").item(0).getTextContent());
@@ -299,6 +299,16 @@ public class ParserXMLCards {
 				//card.setPermEffect(eff);
 			}
 		}
+	}
+	
+	private ColorPalette parseColorCard(String color) {
+		
+		if (color.equals("verde")) return ColorPalette.CARD_GREEN;
+		if (color.equals("giallo")) return ColorPalette.CARD_YELLOW;
+		if (color.equals("blu")) return ColorPalette.CARD_BLUE;
+		if (color.equals("viola")) return ColorPalette.CARD_PURPLE;
+		
+		return null;
 	}
 	
 	/**

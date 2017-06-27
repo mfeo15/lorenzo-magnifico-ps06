@@ -26,10 +26,6 @@ public class MenuCLI extends Observable implements Menu {
 		return input;
 	}
 	
-	public void addNewControllerObserver(MenuController controller) {
-		addObserver(controller);
-	}
-	
 	public void show() {
 		
 		System.out.println("\n\n\n\n");
@@ -73,8 +69,6 @@ public class MenuCLI extends Observable implements Menu {
 	}
 	
 	public void readInput() throws NumberFormatException, IOException {
-		
-		System.out.println("ciao");
 		
 		int i = Integer.parseInt(input.readLine());
 

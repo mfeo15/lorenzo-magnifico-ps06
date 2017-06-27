@@ -415,4 +415,8 @@ public class Towers extends Observable implements PlaceSpace {
 	public void deleteAnObserver(Observer obs) {
 		deleteObserver(obs);
 	}
+	
+	public static void main(String[] args) {
+		Towers t = new Towers();
+	}
 }

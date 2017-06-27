@@ -50,7 +50,10 @@ public class Client extends Observable implements Runnable, Observer {
 	}
 	
 	
-	private void send(Message message) throws IOException{
+	private void send(Message message) throws IOException {
+		
+		if (socket == null)
+			return;
 		
 		out.writeObject(message);
 		out.flush();
@@ -109,8 +112,6 @@ public class Client extends Observable implements Runnable, Observer {
 				receive();
 			} catch (ClassNotFoundException | IOException e) {
 				e.printStackTrace();
-				
-				System.exit(0);
 			}
 		}
 	}
