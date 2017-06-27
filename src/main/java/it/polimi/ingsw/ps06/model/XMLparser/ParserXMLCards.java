@@ -11,7 +11,6 @@ import it.polimi.ingsw.ps06.model.effects.EffectsResourcesByCard;
 import it.polimi.ingsw.ps06.model.effects.EffectsResourcesByPoint;
 import it.polimi.ingsw.ps06.model.effects.EffectsResourcesSwap;
 import it.polimi.ingsw.ps06.model.Resources;
-import it.polimi.ingsw.ps06.model.Types;
 import it.polimi.ingsw.ps06.model.Types.ColorPalette;
 
 import javax.xml.parsers.DocumentBuilder;

@@ -160,13 +160,13 @@ public class MessageParser implements MessageVisitor {
 		
 		
 		
-		b.setResourcesPersonalView(pbStatus.getWarehouse().getResourceValue(MaterialsKind.COIN), 
-										pbStatus.getWarehouse().getResourceValue(MaterialsKind.WOOD), 
-										pbStatus.getWarehouse().getResourceValue(MaterialsKind.STONE), 
-										pbStatus.getWarehouse().getResourceValue(MaterialsKind.SERVANT), 
-										pbStatus.getWarehouse().getResourceValue(PointsKind.VICTORY_POINTS), 
-										pbStatus.getWarehouse().getResourceValue(PointsKind.MILITARY_POINTS), 
-										pbStatus.getWarehouse().getResourceValue(PointsKind.FAITH_POINTS));
+		b.setResourcesPersonalView(pbStatus.getResourceValue(MaterialsKind.COIN), 
+										pbStatus.getResourceValue(MaterialsKind.WOOD), 
+										pbStatus.getResourceValue(MaterialsKind.STONE), 
+										pbStatus.getResourceValue(MaterialsKind.SERVANT), 
+										pbStatus.getResourceValue(PointsKind.VICTORY_POINTS), 
+										pbStatus.getResourceValue(PointsKind.MILITARY_POINTS), 
+										pbStatus.getResourceValue(PointsKind.FAITH_POINTS));
 		
 		for (int i : pbStatus.getBuilding()) 
 			b.setBuildingCardPersonalView(i, pbStatus.getBuilding().indexOf(i));
@@ -180,10 +180,10 @@ public class MessageParser implements MessageVisitor {
 		Connection connection = ((Connection) supporter);
 		Game game = SocketServer.getInstance().retrieveMatch(connection).getGame();
 		
-		Player p =  game.getPlayer( obtainPbStatus.getPlayer() );
+		Player player =  game.getPlayer( obtainPbStatus.getPlayer() );
 		
-		if ( p != null) {
-			PersonalBoard pb = p.getPersonalBoard();
+		if ( player != null) {
+			PersonalBoard pb = player.getPersonalBoard();
 			
 			ArrayList<Integer> territoriesCode = new ArrayList<Integer>();
 			pb.getTerritories().forEach(t -> territoriesCode.add( t.getCode() ));
@@ -197,8 +197,9 @@ public class MessageParser implements MessageVisitor {
 			ArrayList<Integer> venturesCode = new ArrayList<Integer>();
 			pb.getVentures().forEach(v -> venturesCode.add( v.getCode() ));
 			
-			MessagePersonalBoardStatus pbStatus = 
-					new MessagePersonalBoardStatus( pb.getInventory(), territoriesCode, buildingsCode, charactersCode, venturesCode);
+			MessagePersonalBoardStatus pbStatus = new MessagePersonalBoardStatus(territoriesCode, buildingsCode, charactersCode, venturesCode);
+			for (MaterialsKind m : MaterialsKind.values()) pbStatus.setResourceValue(m, pb.getInventory().getResourceValue(m));
+			for (PointsKind p : PointsKind.values()) pbStatus.setResourceValue(p, pb.getInventory().getResourceValue(p));
 			connection.asyncSend(pbStatus);
 		}
 	}
@@ -206,14 +207,16 @@ public class MessageParser implements MessageVisitor {
 	@Override
 	public void visit(MessagePersonalBoardResourcesStatus resStatus) {
 		Board b = ((Board) supporter);
+
+		int coin = resStatus.getResourceValue(MaterialsKind.COIN);
+		int wood = resStatus.getResourceValue(MaterialsKind.WOOD);
+		int stone = resStatus.getResourceValue(MaterialsKind.STONE);
+		int servant = resStatus.getResourceValue(MaterialsKind.SERVANT);
+		int faith = resStatus.getResourceValue(PointsKind.FAITH_POINTS);
+		int victory = resStatus.getResourceValue(PointsKind.VICTORY_POINTS);
+		int military = resStatus.getResourceValue(PointsKind.MILITARY_POINTS);
 		
-		int coin = resStatus.getWarehouse().getResourceValue(MaterialsKind.COIN);
-		int wood = resStatus.getWarehouse().getResourceValue(MaterialsKind.WOOD);
-		int stone = resStatus.getWarehouse().getResourceValue(MaterialsKind.STONE);
-		int servant = resStatus.getWarehouse().getResourceValue(MaterialsKind.SERVANT);
-		int victory = resStatus.getWarehouse().getResourceValue(PointsKind.VICTORY_POINTS);
-		int military = resStatus.getWarehouse().getResourceValue(PointsKind.MILITARY_POINTS);
-		int faith = resStatus.getWarehouse().getResourceValue(PointsKind.FAITH_POINTS);
+		System.out.println("PERSONALBOARD UPDATE FROM PARSER C:" + coin + " W:" + wood + " St:" + stone + " Se:" + servant + " F:" + faith + " M:" + military + " V:" + victory);
 		
 		b.setPersonalResources(coin, wood, stone, servant, victory, military, faith);
 	}
@@ -249,5 +252,12 @@ public class MessageParser implements MessageVisitor {
 		Connection connection = ((Connection) supporter);
 		
 		connection.closeConnection();
+	}
+
+	@Override
+	public void visit(MessagePlayerPassed playerPassed) {
+		Connection connection = ((Connection) supporter);
+		
+		SocketServer.getInstance().retrieveMatch(connection).getGame().advanceCurrentPlayer();
 	}
 }

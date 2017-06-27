@@ -7,8 +7,10 @@ import java.util.Observer;
 
 import it.polimi.ingsw.ps06.model.Types.ColorPalette;
 import it.polimi.ingsw.ps06.model.Types.LeaderStates;
+import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
 import it.polimi.ingsw.ps06.model.cards.leader.Leader;
 import it.polimi.ingsw.ps06.networking.messages.MessageLeaderCards;
+import it.polimi.ingsw.ps06.networking.messages.MessagePersonalBoardResourcesStatus;
 import it.polimi.ingsw.ps06.networking.messages.Server2Client;
 
 /**
@@ -156,7 +158,7 @@ public class Player extends Observable implements Observer {
 	@Override
 	public void update(Observable o, Object arg) {
 		
-		if (arg instanceof Server2Client)
+		if (arg instanceof Server2Client) 
 			((Server2Client) arg).setRecipient(this.getID());
 		
 		notifyChangement(arg);

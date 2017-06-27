@@ -90,10 +90,10 @@ public class CardAcquisition extends Actions {
 	public void activate() {
 		
 		if (servants > 0)
-			p.getPersonalBoard().getInventory().decreaseResourceValue(MaterialsKind.SERVANT, servants);
+			p.getPersonalBoard().reduceResource(MaterialsKind.SERVANT, servants);
 		
 		if (extraCost)
-			p.getPersonalBoard().getInventory().decreaseResourceValue(MaterialsKind.COIN, 3);
+			p.getPersonalBoard().reduceResource(MaterialsKind.COIN, 3);
 		
 		if(card instanceof Territory) {
 			p.getPersonalBoard().addCard( (Territory) card);
@@ -102,19 +102,19 @@ public class CardAcquisition extends Actions {
 		
 		if(card instanceof Building) {
 			p.getPersonalBoard().addCard( (Building) card);
-			p.getPersonalBoard().getInventory().decreaseResources( ((Building) card).getRequirement() );
+			p.getPersonalBoard().reduceResource( ((Building) card).getRequirement() );
 			return;
 		}
 		
 		if(card instanceof Character) {
 			p.getPersonalBoard().addCard( (Character) card);
-			p.getPersonalBoard().getInventory().decreaseResources( ((Character) card).getRequirement() );
+			p.getPersonalBoard().reduceResource( ((Character) card).getRequirement() );
 			return;
 		}
 		
 		if(card instanceof Venture) {
 			p.getPersonalBoard().addCard( (Venture) card);
-			p.getPersonalBoard().getInventory().decreaseResources( ((Venture) card).getRequirements().get(0) );
+			p.getPersonalBoard().reduceResource( ((Venture) card).getRequirements().get(0) );
 			return;
 		}
 		

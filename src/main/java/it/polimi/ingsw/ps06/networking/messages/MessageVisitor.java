@@ -15,6 +15,8 @@ public interface MessageVisitor {
 	void visit(MessageWaitingRoomConnections waitingConnections);
 	void visit(MessagePlayingConnections playingConnections);
 	
+	void visit(MessagePlayerPassed playerPassed);
+	
 	void visit(MessageGameStart gameStart);
 	void visit(MessageGameHasStarted hasStarted);
 	void visit(MessageGameStatus gameStat);

@@ -307,7 +307,10 @@ public class PersonalBoard extends Observable {
 	
 	public void notifyChangement() {
 		
-		MessagePersonalBoardResourcesStatus resStatus = new MessagePersonalBoardResourcesStatus( getInventory() );
+		MessagePersonalBoardResourcesStatus resStatus = new MessagePersonalBoardResourcesStatus( );
+		for (MaterialsKind m : MaterialsKind.values()) resStatus.setResourceValue(m, getInventory().getResourceValue(m));
+		for (PointsKind p : PointsKind.values()) resStatus.setResourceValue(p, getInventory().getResourceValue(p));
+
 		setChanged();
 		notifyObservers(resStatus);
 	}

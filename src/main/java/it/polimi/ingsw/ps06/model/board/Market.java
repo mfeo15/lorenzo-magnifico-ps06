@@ -46,7 +46,6 @@ public class Market extends Observable implements PlaceSpace {
 		
 		boolean multi = false; //attivi.getMulti();
 		int relativeIndex = chosenAction.ordinal() - marketIndex;
-		int errorCode;
 		
 		// Gestire carta scomunica del mercato if(EffectsActive.checkNoMarket == true) handle();
 		

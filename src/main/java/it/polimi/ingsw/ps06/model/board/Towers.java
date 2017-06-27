@@ -110,8 +110,8 @@ public class Towers extends Observable implements PlaceSpace {
 			return;
 		}
 		
-		boolean satisfied1 = acquire.checkCosts(chosenAction, extraCost);
-		boolean satisfied2 = acquire.checkRequirements(chosenAction);
+		boolean satisfied1 = acquire.checkCosts(extraCost);
+		boolean satisfied2 = acquire.checkRequirements();
 
 		if (satisfied1 && satisfied2) {
 			giveBonus(chosenAction, member);
