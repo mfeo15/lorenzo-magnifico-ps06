@@ -10,8 +10,7 @@ package it.polimi.ingsw.ps06.model;
 **/
 
 public class TimeSettings {
-	private int timeoutServer;
-	private int minPlayers;
+	private int timeoutWaitingConnections;
 	private int timeoutAction;
 	
 	/**
@@ -36,10 +35,9 @@ public class TimeSettings {
 	*
 	**/
 	
-	public TimeSettings(int x, int y, int z){
-		this.timeoutServer=x;
-		this.timeoutAction=y;
-		this.minPlayers=z;
+	public TimeSettings(int x, int y) {
+		this.timeoutWaitingConnections = x;
+		this.timeoutAction = y;
 	}
 	
 	/**
@@ -49,8 +47,8 @@ public class TimeSettings {
 	* 
 	**/
 	
-	public int getTimeoutServer(){
-		return timeoutServer;
+	public int getTimeoutWaitingConnections(){
+		return timeoutWaitingConnections;
 	}
 	
 	/**
@@ -60,18 +58,7 @@ public class TimeSettings {
 	* 
 	**/
 	
-	public int getTimeoutaction(){
+	public int getTimeoutAction(){
 		return timeoutAction;
-	}
-	
-	/**
-	* Getter del numero minimo di giocatori
-	*
-	*@return minPlayers		numero minimo di giocatori
-	* 
-	**/	
-
-	public int getMinPlayers(){
-		return minPlayers;
 	}
 }

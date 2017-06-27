@@ -95,13 +95,11 @@ public class MessageParser implements MessageVisitor {
 		MessagePlayingConnections messagePlayingCs = new MessagePlayingConnections( a );		
 		SocketServer.getInstance().sendToPlayingConnections(c, messagePlayingCs);
 		
-		//match.getAll().forEach(connection -> c.getPlayer().getPersonalBoard().addNewObserver(connection));
+		MessageBoardSetupTimeoutAction timeoutAction = new MessageBoardSetupTimeoutAction( SocketServer.getInstance().getTimeoutAction() );
+		SocketServer.getInstance().sendToPlayingConnections(c, timeoutAction);
 		
-		try {
-			match.getGame().start();
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
+		match.getGame().start();
+
 	}
 
 	@Override
@@ -259,5 +257,12 @@ public class MessageParser implements MessageVisitor {
 		Connection connection = ((Connection) supporter);
 		
 		SocketServer.getInstance().retrieveMatch(connection).getGame().advanceCurrentPlayer();
+	}
+
+	@Override
+	public void visit(MessageBoardSetupTimeoutAction timeoutAction) {
+		Board b = ((Board) supporter);
+		
+		b.setTimer( timeoutAction.getTimeout() );
 	}
 }

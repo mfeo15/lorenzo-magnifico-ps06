@@ -85,7 +85,7 @@ public class SocketServer implements Server {
 		
 		waitingConnection.add(c);
 		if (waitingConnection.size() == 2)
-			startCountdown( timeSettings.getTimeoutServer() );
+			startCountdown( timeSettings.getTimeoutWaitingConnections() );
 		
 		System.out.println("[ SERVER ] Connection " + c.getInetAddress() + " in Waiting Room \n");
 		
@@ -231,6 +231,10 @@ public class SocketServer implements Server {
 	public void stopCountdown() {
 		t.cancel();
 		t.purge();
+	}
+	
+	public int getTimeoutAction() {
+		return timeSettings.getTimeoutAction();
 	}
 	
 	/**

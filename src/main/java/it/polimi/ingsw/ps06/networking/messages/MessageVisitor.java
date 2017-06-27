@@ -24,6 +24,7 @@ public interface MessageVisitor {
 	void visit(MessageVaticanReport vaticanRep);
 	
 	void visit(BoardReady br);
+	void visit(MessageBoardSetupTimeoutAction timeoutAction);
 	void visit(MessageBoardSetupDice boardSetupDice);
 	void visit(MessageBoardSetupDevCards boardSetupDevCards);
 	void visit(MessageBoardMemberHasBeenPlaced newMember);
