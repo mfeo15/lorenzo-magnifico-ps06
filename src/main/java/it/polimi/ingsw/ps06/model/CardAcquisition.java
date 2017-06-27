@@ -36,7 +36,7 @@ public class CardAcquisition extends Actions {
 	* @param 	chosenAction	Codice dell'azione da eseguire	
 	* @return 	
 	*/
-	public boolean checkCosts(Action chosenAction, boolean extraCost) {
+	public boolean checkCosts(boolean extraCost) {
 		
 		this.extraCost = extraCost;
 		Resources extraMoney = new Resources();
@@ -64,7 +64,7 @@ public class CardAcquisition extends Actions {
 	* @param 	chosenAction	Codice dell'azione da eseguire	
 	* @return 	
 	*/
-	public boolean checkRequirements(Action chosenAction){
+	public boolean checkRequirements(){
 		
 		if (!(card instanceof Venture))
 			return true;
@@ -72,11 +72,11 @@ public class CardAcquisition extends Actions {
 		
 		if ( !((Venture) card).isMilRequirement() )
 			return true;
-		
-		if ( ((Venture) card).getMilitaryRequirement() >= p.getPersonalBoard().getAmount(PointsKind.MILITARY_POINTS) )
+
+		if ( p.getPersonalBoard().getAmount(PointsKind.MILITARY_POINTS) >= ((Venture) card).getMilitaryRequirement() )
 			return true;
 
-		return true;
+		return false;
 	}
 	
 
@@ -114,7 +114,7 @@ public class CardAcquisition extends Actions {
 		
 		if(card instanceof Venture) {
 			p.getPersonalBoard().addCard( (Venture) card);
-			p.getPersonalBoard().getInventory().decreaseResources( ((Building) card).getRequirement() );
+			p.getPersonalBoard().getInventory().decreaseResources( ((Venture) card).getRequirements().get(0) );
 			return;
 		}
 		
