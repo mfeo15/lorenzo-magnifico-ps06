@@ -47,31 +47,30 @@ public class Privilege extends Actions {
 	public void activate() {
 		
 		if (servants > 0)
-			member.getPlayer().getPersonalBoard().getInventory().decreaseResourceValue(MaterialsKind.SERVANT, servants);
+			member.getPlayer().getPersonalBoard().reduceResource(MaterialsKind.SERVANT, servants);
 		
 		switch (privilege) {
 		case BONUS_1: 
-			member.getPlayer().getPersonalBoard().getInventory().increaseResourceValue(MaterialsKind.WOOD, 1);
-			member.getPlayer().getPersonalBoard().getInventory().increaseResourceValue(MaterialsKind.STONE, 1);
+			member.getPlayer().getPersonalBoard().addResource(MaterialsKind.WOOD, 1);
+			member.getPlayer().getPersonalBoard().addResource(MaterialsKind.STONE, 1);
 			break;
 		case BONUS_2:
-			member.getPlayer().getPersonalBoard().getInventory().increaseResourceValue(MaterialsKind.SERVANT, 2);
+			member.getPlayer().getPersonalBoard().addResource(MaterialsKind.SERVANT, 2);
 			break;
 		case BONUS_3:
-			member.getPlayer().getPersonalBoard().getInventory().increaseResourceValue(MaterialsKind.COIN, 2);
+			member.getPlayer().getPersonalBoard().addResource(MaterialsKind.COIN, 2);
 			break;
 		case BONUS_4:
-			member.getPlayer().getPersonalBoard().getInventory().increaseResourceValue(PointsKind.MILITARY_POINTS, 2);
+			member.getPlayer().getPersonalBoard().addResource(PointsKind.MILITARY_POINTS, 2);
 			break;
 		case BONUS_5:
-			member.getPlayer().getPersonalBoard().getInventory().increaseResourceValue(PointsKind.FAITH_POINTS, 1);
+			member.getPlayer().getPersonalBoard().addResource(PointsKind.FAITH_POINTS, 1);
 			break;
 		default:
 			break;
 		}
 		
-		member.getPlayer().getPersonalBoard().getInventory().increaseResourceValue(MaterialsKind.COIN, 1);
-		
+		member.getPlayer().getPersonalBoard().addResource(MaterialsKind.COIN, 1);
 	}
 
 
