@@ -123,6 +123,7 @@ public class PersonalViewGUI  {
 	        coins.setSize(width*4/100,(int)(height*4/100));
 	        coins.setOpaque(false);
 	        coins.setFont(font);
+	        coins.setEditable(false);
 	        coins.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 	        f.add(coins);
 	        
@@ -131,6 +132,7 @@ public class PersonalViewGUI  {
 	        woods.setSize(width*4/100,(int)(height*4/100));
 	        woods.setOpaque(false);
 	        woods.setFont(font);
+	        woods.setEditable(false);
 	        woods.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 	        f.add(woods);
 	        
@@ -139,6 +141,7 @@ public class PersonalViewGUI  {
 	        stones.setSize(width*4/100,(int)(height*4/100));
 	        stones.setOpaque(false);
 	        stones.setFont(font);
+	        stones.setEditable(false);
 	        stones.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 	        f.add(stones);
 	        
@@ -147,6 +150,7 @@ public class PersonalViewGUI  {
 	        servants.setSize(width*4/100,(int)(height*4/100));
 	        servants.setOpaque(false);
 	        servants.setFont(font);
+	        servants.setEditable(false);
 	        servants.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 	        f.add(servants);
 	        
@@ -155,6 +159,7 @@ public class PersonalViewGUI  {
 	        victory.setSize(width*4/100,(int)(height*4/100));
 	        victory.setOpaque(false);
 	        victory.setFont(font);
+	        victory.setEditable(false);
 	        victory.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 	        f.add(victory);
 	        
@@ -163,6 +168,7 @@ public class PersonalViewGUI  {
 	        military.setSize(width*4/100,(int)(height*4/100));
 	        military.setOpaque(false);
 	        military.setFont(font);
+	        military.setEditable(false);
 	        military.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 	        f.add(military);
 	        
@@ -171,6 +177,7 @@ public class PersonalViewGUI  {
 	        faith.setSize(width*4/100,(int)(height*4/100));
 	        faith.setOpaque(false);
 	        faith.setFont(font);
+	        faith.setEditable(false);
 	        faith.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 	        f.add(faith);
 	        

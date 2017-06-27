@@ -6,6 +6,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Scanner;
 
+import it.polimi.ingsw.ps06.controller.MenuController;
 import it.polimi.ingsw.ps06.controller.RoomController;
 import it.polimi.ingsw.ps06.model.events.BoardHasLoaded;
 import it.polimi.ingsw.ps06.model.events.EventClose;
@@ -57,7 +58,8 @@ public class RoomCLI extends Observable implements Room {
 		}
 	}
 	
-	public void show() {
+	@Override
+	public void show() throws IOException{
 		System.out.println();
 		System.out.println("----- THE ROOM -----");
 		System.out.println();
@@ -128,7 +130,6 @@ public class RoomCLI extends Observable implements Room {
 		MessageGameStart gameStart;
 		gameStart = new MessageGameStart();
 		notifyObservers(gameStart);
-		
 	}
 
 
@@ -144,7 +145,6 @@ public class RoomCLI extends Observable implements Room {
 	@Override
 	public void hasStarted() {
 		
-		System.out.println("a");
 		cond=false;
 		
 		setChanged();

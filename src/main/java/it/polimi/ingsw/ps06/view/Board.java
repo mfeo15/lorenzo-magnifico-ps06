@@ -20,6 +20,8 @@ public interface Board {
 	
 	void setCouncilIndex(int value);
 	
+	void setTimer(int seconds);
+	
 	void setPeriodRound(int period, int round);
 	
 	void setPlayerColor(String s);

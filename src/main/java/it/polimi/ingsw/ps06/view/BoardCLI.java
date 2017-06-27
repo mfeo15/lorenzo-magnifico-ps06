@@ -9,6 +9,7 @@ import java.util.Observer;
 import java.util.Scanner;
 
 import it.polimi.ingsw.ps06.controller.BoardController;
+import it.polimi.ingsw.ps06.controller.MenuController;
 import it.polimi.ingsw.ps06.model.Types.Action;
 import it.polimi.ingsw.ps06.model.Types.ColorPalette;
 import it.polimi.ingsw.ps06.model.cards.DevelopementCard;
@@ -52,6 +53,7 @@ public class BoardCLI extends Observable implements Board {
 		
 		this.input = input;
 	}
+	
 	
 	public void read () throws IOException {
 		
@@ -105,7 +107,8 @@ public class BoardCLI extends Observable implements Board {
 		}
 	}
 	
-	public void show() {
+    @Override
+	public void show() throws IOException{
 		
 		printTowers();
 		System.out.println();
@@ -576,7 +579,6 @@ public class BoardCLI extends Observable implements Board {
 	}
 	
 	
-	
 	@Override
 	public void setResourcesPersonalView(int coin, int wood, int stone, int servant, int victory, int military,
 			int faith) {
@@ -604,12 +606,27 @@ public class BoardCLI extends Observable implements Board {
 
 	@Override
 	public void hasLoadedPersonalView() {
-		// Nothing
+		
+		//Nothing
 		
 	}
 
+	
+	
+	@Override
+	public void setTimer(int seconds) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
 	public static void main(String[] args) {
 		BoardCLI m = new BoardCLI( new BufferedReader(new InputStreamReader(System.in)));
-		m.show();
+		try {
+			m.show();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

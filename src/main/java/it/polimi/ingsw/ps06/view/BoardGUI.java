@@ -64,6 +64,7 @@ import it.polimi.ingsw.ps06.model.events.EventLeaderPlayed;
 import it.polimi.ingsw.ps06.model.events.EventMemberPlaced;
 import it.polimi.ingsw.ps06.model.events.EventMemberPlacedWithPrivilege;
 import it.polimi.ingsw.ps06.networking.messages.MessageObtainPersonalBoardStatus;
+import it.polimi.ingsw.ps06.networking.messages.MessagePlayerPassed;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -146,10 +147,14 @@ public class BoardGUI extends Observable implements Board {
     private JLabel productionCover;
     private JLabel harvestCover;
     
+    private JButton pass = new JButton();
+    
     private String[] playersName = new String[5]; 
     
     private JInternalFrame towers;
     private JInternalFrame others;
+    
+    private int TimerValue=30;
     
     private boolean allowed = true;
     private boolean[] member = new boolean[4];
@@ -300,7 +305,7 @@ public class BoardGUI extends Observable implements Board {
 		 
         //Inizializzazione dei componenti
 		
-		playerInfo = new JTextField();
+		playerInfo = new JTextField("Loading...");
 		playerInfo.setLocation((int)(screenSize.getWidth()*3/100),0);
 		playerInfo.setSize((int)screenSize.getWidth()*60/100,(int)screenSize.getHeight()*6/100);
 		playerInfo.setOpaque(false);
@@ -309,7 +314,7 @@ public class BoardGUI extends Observable implements Board {
 		playerInfo.setFont(fontBIG);
 		playerInfo.setForeground(Color.BLACK);
 		
-		roundInfo = new JTextField();
+		roundInfo = new JTextField("Loading...");
 		roundInfo.setLocation((int)screenSize.getWidth()*60/100,0);
 		roundInfo.setSize((int)screenSize.getWidth()*29/100,(int)screenSize.getHeight()*6/100);
 		roundInfo.setOpaque(false);
@@ -318,7 +323,7 @@ public class BoardGUI extends Observable implements Board {
 		roundInfo.setFont(fontBIG);
 		roundInfo.setForeground(Color.BLACK);
 		
-		timerInfo = new JTextField();
+		timerInfo = new JTextField("");
 		timerInfo.setLocation((int)screenSize.getWidth()*89/100,0);
 		timerInfo.setSize((int)screenSize.getWidth()*11/100,(int)screenSize.getHeight()*6/100);
 		timerInfo.setOpaque(false);
@@ -328,7 +333,7 @@ public class BoardGUI extends Observable implements Board {
 		timerInfo.setForeground(Color.BLACK);
 		timerInfo.setHorizontalAlignment(JTextField.CENTER);
 		
-		resourcesInfo = new JTextField(coinV+" Coin   "+woodV+" Wood   "+stoneV+" Stone   "+servantV+" Servant    |    " +victoryV+" Victory   "+militaryV+" Military   "+faithV+" Faith");
+		resourcesInfo = new JTextField("Loading...");
 		resourcesInfo.setLocation((int)screenSize.getWidth()*10/100,(int)screenSize.getHeight()*96/100);
 		resourcesInfo.setSize((int)screenSize.getWidth()*80/100,(int)screenSize.getHeight()*4/100);
 		resourcesInfo.setOpaque(false);
@@ -403,7 +408,25 @@ public class BoardGUI extends Observable implements Board {
                         		scrollOthers.setEnabled(true);
             	            }}, 3000 );}
             });
-            
+         
+        
+        pass=new JButton("Passa");
+        pass.setFont(fontSMALL);
+        pass.setLocation((int)(width*10/100),(int)(height*124.5/100));
+        pass.setSize((int)width*8/100,(int)height*4/100);
+        pass.setOpaque(false);
+        pass.setContentAreaFilled(false);
+        pass.setFocusPainted(false);
+        pass.setHorizontalAlignment(JTextField.CENTER);
+        
+        pass.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+        
+		        setChanged();
+				MessagePlayerPassed playerPass = new MessagePlayerPassed();
+				notifyObservers(playerPass);
+            }
+        });
         
         servants.setLocation((int)(width*11.5/100),(int)(height*97/100));
         servants.setSize((int)width*5/100,(int)height*7/100);
@@ -804,6 +827,7 @@ public class BoardGUI extends Observable implements Board {
 	    
 		setRound();
 	    
+		desktopFrame.add(pass);
 	    desktopFrame.add(timerInfo);
 	    desktopFrame.add(resourcesInfo);
 	    desktopFrame.add(playerInfo);
@@ -1453,11 +1477,12 @@ public class BoardGUI extends Observable implements Board {
 	
     private Timer createTimer(int delay) {
         Timer timer = new Timer(delay, new ActionListener(){
-            Time counter = new Time(90);
+            Time counter = new Time(TimerValue);
             public void actionPerformed(ActionEvent e) {
                 if (counter.getTime() == 0) {
                     ((Timer)e.getSource()).stop();
-                    timerInfo.setText("Times up!");
+                    if(allowed) notifyTimesUp();
+                    
                 } else {
                     timerInfo.setText("" + Integer.toString(counter.getTime()));
                     counter.decTime();
@@ -1700,10 +1725,12 @@ public class BoardGUI extends Observable implements Board {
 		
 		if(id != playerID){
 			blockedStatus();
+			pass.setEnabled(false);
 		}
 		
 		if(id == playerID){
 			allowedStatus();
+			pass.setEnabled(true);
 		}
 		
 		startTimer();
@@ -1723,6 +1750,14 @@ public class BoardGUI extends Observable implements Board {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	@Override
+	public void setTimer(int seconds){
+		
+		this.TimerValue=seconds;
+		
+		startTimer();
 	}
 
 
@@ -1919,7 +1954,12 @@ public class BoardGUI extends Observable implements Board {
 
 	@Override
 	public void notifyTimesUp() {
-		// TODO Auto-generated method stub
+		
+		timerInfo.setText("Times up!");
+		
+		setChanged();
+		MessagePlayerPassed playerPass = new MessagePlayerPassed();
+		notifyObservers(playerPass);
 		
 	}
 

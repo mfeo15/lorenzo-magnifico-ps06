@@ -26,7 +26,13 @@ public class MenuCLI extends Observable implements Menu {
 		return input;
 	}
 	
-	public void show() {
+
+	public void addNewControllerObserver(MenuController controller) {
+		addObserver(controller);
+	}
+	
+	@Override
+	public void show() throws IOException{
 		
 		System.out.println("\n\n\n\n");
 		
@@ -95,6 +101,7 @@ public class MenuCLI extends Observable implements Menu {
 		setChanged();
 		StoryBoard2Room storyBoard = new StoryBoard2Room(new RoomCLI(input));
 		notifyObservers(storyBoard);
+		
 	}
 
 
@@ -107,6 +114,11 @@ public class MenuCLI extends Observable implements Menu {
 	
 	public static void main(String[] args) {
 		MenuCLI m = new MenuCLI( new BufferedReader(new InputStreamReader(System.in)));
-		m.show();
+		try {
+			m.show();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
