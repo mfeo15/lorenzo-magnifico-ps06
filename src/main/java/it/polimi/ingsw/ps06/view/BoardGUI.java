@@ -1,7 +1,7 @@
 package it.polimi.ingsw.ps06.view;
 
 // for Container
-import java.awt.CardLayout;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -21,7 +21,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -30,9 +29,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.TimerTask;
 
-import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
-import javax.swing.AbstractButton;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.InputMap;
@@ -42,7 +39,6 @@ import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -75,11 +71,6 @@ public class BoardGUI extends Observable implements Board {
 	
 	private int width, escWidth;
 	private int height, escHeight;
-	private double screenWidth, screenHeight;
-    private JLayeredPane lp = new JLayeredPane();
-    private JPanel panel1 = new JPanel();
-    private JPanel panel2 = new JPanel();
-	private CardLayout cl = new CardLayout();
 	private JLabel leaderBack;
 	private Font mediumBold;
 	
@@ -96,12 +87,8 @@ public class BoardGUI extends Observable implements Board {
 	private JButton escMenu2;
 	private Timer timer = createTimer(1000);
 	
-	private Direction direction;
-	
 	private int pvIndex;
-    
-    private String playerName;
-    
+
     private Font fontBIG, fontMEDIUM, fontSMALL, fontbig;
     private JDesktopPane desktop;
     private JFrame desktopFrame;
@@ -159,19 +146,17 @@ public class BoardGUI extends Observable implements Board {
     private boolean allowed = true;
     private boolean[] member = new boolean[4];
     private int playerID=0;
-    private String player="";
     private String playerColor="G";
-    private int blackValue;
-    private int orangeValue;
-    private int whiteValue;
-    private int playerNumber;
-    private int roundNumber;
-    private int periodNumber;
-    private int ex1, ex2, ex3;
+    private int blackValue=1;
+    private int orangeValue=1;
+    private int whiteValue=1;
+    private int playerNumber=1;
+    private int roundNumber=1;
+    private int periodNumber=1;
+    private int ex1=1, ex2=8, ex3=16;
     private int harvestIndex=1, productionIndex=1, councilIndex=0;
-    private int lead1, lead2, lead3, lead4;
-    private int coinV, woodV, stoneV, servantV, victoryV, militaryV, faithV;
-    private int y;
+    private int lead1=1, lead2=2, lead3=3, lead4=4;
+    private int coinV=0, woodV=0, stoneV=0, servantV=0, victoryV=0, militaryV=0, faithV=0;
     private int usedMember;
     private int servantsCountNumber=0;
     
@@ -203,10 +188,7 @@ public class BoardGUI extends Observable implements Board {
 		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		ratio= (screenSize.getWidth()/screenSize.getHeight());
-		
-		screenWidth = screenSize.getWidth();
-		screenHeight = screenSize.getHeight();
-		
+
 	    //Due frame interni al desktop per la parte delle torri e la sezione rimanente
 		towers = new JInternalFrame("frame", false, false, false, false);
 	    towers.putClientProperty("JInternalFrame.isPalette", Boolean.TRUE);
@@ -1273,11 +1255,6 @@ public class BoardGUI extends Observable implements Board {
 	    }
 	}
 	
-	public static void main(String[] args) throws IOException
-    {   
-        (new BoardGUI()).show();  
-    }   
-
 
 	public static class ValueExportTransferHandler extends TransferHandler {
 	
@@ -2126,33 +2103,8 @@ public class BoardGUI extends Observable implements Board {
 	}
 	
 	private void setBoard(){
-	   		
-		player = "null";
-	    blackValue=1;
-	    orangeValue=1;
-	    whiteValue=1;
-		playerColor="G";
-	    playerNumber=2;
-	    ex1=5;
-	    ex2=9;
-	    ex3=17;
-	    lead1=1;
-	    lead2=9;
-	    lead3=18;
-	    lead4=12;
-	    coinV=5;
-	    woodV=5;
-	    stoneV=5;
-	    servantV=5;
-	    victoryV=5;
-	    militaryV=5;
-	    faithV=5;
-	    playerName="Gigi Scarfani";
-	    roundNumber=1;
-	    periodNumber=1;
 
         startTimer();
-
 	}
 	
 	private void blockedStatus(){

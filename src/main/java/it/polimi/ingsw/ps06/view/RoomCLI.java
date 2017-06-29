@@ -4,15 +4,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Scanner;
 
-import it.polimi.ingsw.ps06.controller.MenuController;
-import it.polimi.ingsw.ps06.controller.RoomController;
-import it.polimi.ingsw.ps06.model.events.BoardHasLoaded;
 import it.polimi.ingsw.ps06.model.events.EventClose;
 import it.polimi.ingsw.ps06.model.events.RoomHasLoaded;
 import it.polimi.ingsw.ps06.model.events.StoryBoard2Board;
-import it.polimi.ingsw.ps06.model.events.StoryBoard2Room;
 import it.polimi.ingsw.ps06.networking.messages.MessageGameStart;
 import it.polimi.ingsw.ps06.networking.messages.MessageUser;
 

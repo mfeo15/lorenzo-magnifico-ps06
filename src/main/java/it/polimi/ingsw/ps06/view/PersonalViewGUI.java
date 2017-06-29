@@ -6,23 +6,14 @@ import java.awt.Graphics;
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.util.Observable;
-import java.util.Observer;
 
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 
-import it.polimi.ingsw.ps06.controller.BoardController;
-import it.polimi.ingsw.ps06.model.events.EventClose;
-import it.polimi.ingsw.ps06.networking.messages.MessageObtainPersonalBoardStatus;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
@@ -40,7 +31,6 @@ public class PersonalViewGUI  {
     private JButton[] buildings = new JButton[6];
 	
     private double ratio;
-	private int code1, code2, code3, code4;
 	private int btCode;
 	private Dimension screenSize;
 
@@ -59,8 +49,6 @@ public class PersonalViewGUI  {
 				UIManager.setLookAndFeel( UIManager.getCrossPlatformLookAndFeelClassName() );
 			} catch (Exception e) { e.printStackTrace();}
 		
-			setPersonalView();
-			
 			exit = new JButton();
 			
 			screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -224,16 +212,7 @@ public class PersonalViewGUI  {
 	        
 	        hasLoaded();
 		}
-		
-		public void setPersonalView(){
-			
-			code1= 5;
-			code2= 7;
-			code3= 15;
-			code4=19;
-			btCode=1;
-			
-		}
+	
 		
 		private JButton[] initializeButtons(JButton...btns){
 			
