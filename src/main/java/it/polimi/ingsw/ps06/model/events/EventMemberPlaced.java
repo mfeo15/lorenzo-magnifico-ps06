@@ -6,27 +6,29 @@ import it.polimi.ingsw.ps06.model.Types.ColorPalette;
 public class EventMemberPlaced extends EventMember {
 	
 	private Action chosenAction;
-	private ColorPalette color;
+	private int servantsBonus;
 	
-	public EventMemberPlaced(Action chosenAction, ColorPalette color) {
+	public EventMemberPlaced(Action chosenAction, ColorPalette color, int servantsBonus) {
+		super(color);
+		
 		this.chosenAction = chosenAction;
-		this.color = color;
+		this.servantsBonus = servantsBonus;
 	}
 	
 	public Action getAction() {
 		return chosenAction;
 	}
 	
-	public ColorPalette getColor() {
-		return color;
+	public int getServantsBonus() {
+		return servantsBonus;
 	}
 	
 	public void setAction(Action chosenAction) {
 		this.chosenAction=chosenAction;
 	}
 	
-	public void setColor(ColorPalette color) {
-		this.color=color;
+	public void setServantsBonus(int servantsBonus) {
+		this.servantsBonus = servantsBonus;
 	}
 	
 	@Override

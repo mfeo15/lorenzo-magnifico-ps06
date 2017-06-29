@@ -1,14 +1,25 @@
 package it.polimi.ingsw.ps06.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Random;
 
+import it.polimi.ingsw.ps06.model.Types.Action;
 import it.polimi.ingsw.ps06.model.Types.ColorPalette;
-import it.polimi.ingsw.ps06.model.messages.MessageBoardSetupDice;
-import it.polimi.ingsw.ps06.model.messages.MessageWaitingRoomConnections;
+import it.polimi.ingsw.ps06.model.Types.CouncilPrivilege;
 import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
+import it.polimi.ingsw.ps06.model.Types.PointsKind;
+import it.polimi.ingsw.ps06.model.XMLparser.ParserXMLLeaders;
+import it.polimi.ingsw.ps06.model.board.Board;
+import it.polimi.ingsw.ps06.model.cards.leader.Leader;
+import it.polimi.ingsw.ps06.networking.messages.MessageBoardSetupDice;
+import it.polimi.ingsw.ps06.networking.messages.MessageCurrentPlayer;
+import it.polimi.ingsw.ps06.networking.messages.MessageCurrentPlayerOrder;
+import it.polimi.ingsw.ps06.networking.messages.MessageGameStatus;
+import it.polimi.ingsw.ps06.networking.messages.MessageVaticanReport;
 
 /**
 * Classe che modellizza una partita tra n giocatori
@@ -17,7 +28,7 @@ import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
 * @version 1.0
 * @since   2017-05-09 
 */
-public class Game extends Observable {
+public class Game extends Observable implements Observer {
 	
 	private final int NUMBER_OF_PERIODS	= 3;
 	private final int NUMBER_OF_ROUNDS	= 2;
@@ -31,12 +42,18 @@ public class Game extends Observable {
 	
 	private int numberPlayers;
 	private ArrayList<Player> players;
+	private ArrayList<Leader> leaders;
 	
 	private Board board;
 	
 	private Dice diceBlack;
 	private Dice diceWhite;
 	private Dice diceOrange;
+	
+	private int currentPlayerIndex;
+	
+	private int round;
+	private int period;
 	
 	
 	/**
@@ -48,21 +65,156 @@ public class Game extends Observable {
 	*/
 	public Game(int numberPlayers) {
 		
+		System.out.println("NEW GAME FOR " + numberPlayers + " PLAYERS");
+		
 		this.numberPlayers = numberPlayers;
 		
 		diceBlack = new Dice(ColorPalette.DICE_BLACK);
 		diceWhite = new Dice(ColorPalette.DICE_WHITE);
 		diceOrange = new Dice(ColorPalette.DICE_ORANGE);
 		
-		//board = new Board(numberPlayers);
+		board = new Board(numberPlayers);
+		board.addNewObserver(this);
 		
 		players = new ArrayList<Player>();
+
+		/*
+		leaders = (new ParserXMLLeaders("resources/XML/DevelopementCards.xml")).getCards();
+		Collections.shuffle( leaders, new Random(System.nanoTime()) );
+		*/
+		
+		this.leaders = new ArrayList<Leader>();
+
+		for (int i=1; i <= 20; i++) {
+			Leader l = new Leader();
+			l.setCode(i);
+			this.leaders.add(l);
+		}
+		
+		period = 1;
+		round = 1;
+		
+		currentPlayerIndex = 0;
+	}
+	
+	public void setCurrentPlayerIndex(int currentPlayerIndex) {
+		this.currentPlayerIndex = currentPlayerIndex;
+		
+		System.out.println("CURRENT: " + this.currentPlayerIndex);
+		
+		MessageCurrentPlayer messageCurrentP = new MessageCurrentPlayer( getCurrentPlayer().getID() );
+		notifyChangement(messageCurrentP);
 	}
 	
 	public void addPlayer(Player newPlayer) {
 		players.add(newPlayer);
 	}
 	
+	public ArrayList<Player> getPlayerList() {
+		return players;
+	}
+	
+	public Player getPlayer(int ID) {
+		
+		for (Player p : players) 
+			if ( p.getID() == ID ) return p;
+		
+		return null;
+		
+	}
+	
+	public Player getCurrentPlayer() {
+		
+		return players.get( currentPlayerIndex % players.size() );
+	}
+	
+	public void advanceCurrentPlayer() {
+		
+		int total_number_members = players.size() * 4;
+		
+		if (total_number_members - 1 == currentPlayerIndex) {
+			advanceRound();
+			return;
+		}
+		
+		setCurrentPlayerIndex(currentPlayerIndex + 1);
+	}
+	
+	public void advanceRound() {
+		
+		if (round + 1 > NUMBER_OF_ROUNDS) {
+			round = 1;
+			setupRound();
+			advancePeriod();
+			return;
+		}
+		
+		round++;
+		gameStatusUpdate();
+
+		setupRound();
+	}
+	
+	public void advancePeriod() {
+		
+		if (period + 1 > NUMBER_OF_PERIODS) {
+			end();
+			return;
+		}
+		
+		period++;	
+		vaticanReport(period);
+		
+		gameStatusUpdate();
+	}
+	
+	public void gameStatusUpdate() {
+		MessageGameStatus stat = new MessageGameStatus(period, round);
+		notifyChangement(stat);
+	}
+	
+	/**
+	 * @return the diceBlack
+	 */
+	public Dice getDiceBlack() {
+		return diceBlack;
+	}
+
+	/**
+	 * @param diceBlack the diceBlack to set
+	 */
+	public void setDiceBlack(Dice diceBlack) {
+		this.diceBlack = diceBlack;
+	}
+
+	/**
+	 * @return the diceWhite
+	 */
+	public Dice getDiceWhite() {
+		return diceWhite;
+	}
+
+	/**
+	 * @param diceWhite the diceWhite to set
+	 */
+	public void setDiceWhite(Dice diceWhite) {
+		this.diceWhite = diceWhite;
+	}
+
+	/**
+	 * @return the diceOrange
+	 */
+	public Dice getDiceOrange() {
+		return diceOrange;
+	}
+
+	/**
+	 * @param diceOrange the diceOrange to set
+	 */
+	public void setDiceOrange(Dice diceOrange) {
+		this.diceOrange = diceOrange;
+	}
+
 	/**
 	* Metodo invocato per il setup di ogni singolo nuovo round. 
 	* Si occupa di far partire la gestione del turno giocatore ed il setup
@@ -72,11 +224,11 @@ public class Game extends Observable {
 	*/
 	public void setupRound() 
 	{
-		//reorderPlayers();
+		reorderPlayers();
 		
 		rollDices();
 		
-		//board.setupRound();
+		board.setupRound();
 	}
 	
 	public void rollDices() {
@@ -84,10 +236,9 @@ public class Game extends Observable {
 		diceWhite.roll();
 		diceOrange.roll();
 		
+		for (Player p : players) p.setFamilyMemberValues(diceBlack.getValue(), diceWhite.getValue(), diceOrange.getValue());
+		
 		MessageBoardSetupDice messageDice = new MessageBoardSetupDice(diceBlack.getValue(), diceWhite.getValue(), diceOrange.getValue() );
-		
-		//MessageWaitingRoomConnections c = new MessageWaitingRoomConnections( new ArrayList<String>() );
-		
 		notifyChangement(messageDice);
 	}
 	
@@ -100,16 +251,20 @@ public class Game extends Observable {
 	*/
 	public void vaticanReport(int period) 
 	{
-		for (Player p: players) 
-		{
-			int player_faith = 0;
+		ArrayList<Integer> excommunicatedPlayers = new ArrayList<Integer>();
+		
+		for (Player p: players) {
+			int player_faith = p.getPersonalBoard().getAmount(PointsKind.FAITH_POINTS);
 			
-			//Get the Player Faith points, p ==> player_faith = p.getFaith();
-			
-			if (player_faith < VaticanRequirementOnPeriod(period)) {
-				//board.getTiles(period).activate(p);   <== Mancano implementazioni di metodi
+			if (player_faith < VaticanRequirementOnPeriod(period)) {			
+				board.getTiles(period).activateEffect(p);
+				excommunicatedPlayers.add( p.getID() );
 			}
-
+		}
+		
+		if ( excommunicatedPlayers.size() > 0) {
+			MessageVaticanReport vaticanRep = new MessageVaticanReport(period, excommunicatedPlayers );
+			notifyChangement(vaticanRep);
 		}
 	}
 	
@@ -139,17 +294,53 @@ public class Game extends Observable {
 	*/
 	private void reorderPlayers() 
 	{
-		ArrayList<Player> councilPlayers = board.getOrder();
-		ArrayList<Player> newOrderPlayers = new ArrayList<Player>();
+		setCurrentPlayerIndex(0);
 		
-		Iterator<Player> councilIterator = councilPlayers.iterator();
-		while (councilIterator.hasNext() && newOrderPlayers.size() < numberPlayers) {
-			Player p = councilIterator.next();
-			if ( players.contains(p) ) newOrderPlayers.add(p);	
+		ArrayList<Player> councilPlayers = board.getOrder();
+		if (councilPlayers != null) {
+
+			ArrayList<Player> newOrderPlayers = new ArrayList<Player>();
+
+			Iterator<Player> councilIterator = councilPlayers.iterator();
+			while (councilIterator.hasNext() && newOrderPlayers.size() < numberPlayers) {
+				Player p = councilIterator.next();
+				if ( players.contains(p) ) newOrderPlayers.add(p);	
+			}
+
+			players.removeAll(newOrderPlayers);
+			players.addAll(0, newOrderPlayers);
 		}
 		
-		players.removeAll(newOrderPlayers);
-		players.addAll(0, newOrderPlayers);
+		ArrayList<Integer> playersID = new ArrayList<Integer>();
+		players.forEach(p -> playersID.add(p.getID()));
+		MessageCurrentPlayerOrder order = new MessageCurrentPlayerOrder(playersID);
+		notifyChangement(order);
+	}
+	
+	/**
+	* Metodo per l'esecuzione di un azione
+	*
+	* @param 	value	valore dell'azione
+	* @param 	color	colore del familiare usato
+	* @return 	Nothing
+	*/
+	public void doMemberPlacement(Player p, Action action, ColorPalette color, int servants) {
+		
+		if (players.contains(p)) 
+			board.placeMember(p.getMember(color), action, servants);
+	}
+	
+	/**
+	* Metodo per l'esecuzione di un azione sul Palazzo del Consiglio
+	*
+	* @param 	value	valore dell'azione
+	* @param 	color	colore del familiare usato
+	* @return 	Nothing
+	*/
+	public void doMemberPlacement(Player p, Action action, ColorPalette color, int servants, CouncilPrivilege privilege) {
+		
+		if (players.contains(p)) 
+			board.placeMember(p.getMember(color), action, servants, privilege);
 	}
 	
 	/**
@@ -160,37 +351,21 @@ public class Game extends Observable {
 	*/
 	public void start() 
 	{
-		//Bad placement, temporary
 		//Assegnamento dei vari coin ad ogni singolo giocatore ad inizio partita in relazione alla posizione di turno
 		for (int i=0; i < players.size(); i++) {
 			Player p = players.get(i);
-			p.getPersonalBoard().addMaterials(MaterialsKind.COIN, STANDARD_AMOUNT_COINS_FIRST_PLAYER + i);
+			p.getPersonalBoard().addResource(MaterialsKind.COIN, STANDARD_AMOUNT_COINS_FIRST_PLAYER + i);
+			p.addLeaders( new ArrayList<Leader>( leaders.subList( (4 * p.getID()) , (4 + 4 * p.getID()) ) ) );
+			
+			System.out.println("Giocatore " + p.getColorAssociatedToID() + " ha leaders "  + 
+									p.getLeaders().get(0).getCode() + ", " + 
+									p.getLeaders().get(1).getCode() + ", " + 
+									p.getLeaders().get(2).getCode() + ", " +
+									p.getLeaders().get(3).getCode() + "\n" );
 		}
 		
-		for(int period = 0; period < NUMBER_OF_PERIODS; period++) 
-		{
-			for(int round = 0; round < NUMBER_OF_ROUNDS; round++) 
-			{
-				for(int phase = 1; phase < NUMBER_OF_PHASES; phase++) 
-				{
-					switch (phase) {
-						case 1:
-							setupRound();
-							break;
-						case 2: 
-							for( Player p : players) {
-								
-							}
-							break;
-						case 3: 
-							if (round == 2 || round == 4 || round == 6) vaticanReport(period);
-							break;
-					}
-				}
-			}
-		}
-		
-		end();
+		setupRound();
+		gameStatusUpdate();
 	}
 	
 	public void end() {
@@ -216,10 +391,21 @@ public class Game extends Observable {
 	
 	public void addNewObserver(Observer obs) {
 		addObserver(obs);
+		
+		board.addNewObserver(obs);
 	}
 	
 	public void deleteAnObserver(Observer obs) {
 		deleteObserver(obs);
 	}
-	
+
+	@Override
+	public void update(Observable o, Object arg) {
+		
+		if (!(arg instanceof Integer))
+			return;
+		
+		if (((Integer) arg) == 1)
+			advanceCurrentPlayer();
+	}
 }

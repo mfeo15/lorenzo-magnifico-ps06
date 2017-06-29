@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
-import it.polimi.ingsw.ps06.Client;
 import it.polimi.ingsw.ps06.model.events.Event;
 import it.polimi.ingsw.ps06.model.events.EventParser;
 import it.polimi.ingsw.ps06.model.events.StoryBoard;
-import it.polimi.ingsw.ps06.model.messages.Client2Server;
-import it.polimi.ingsw.ps06.model.messages.EventMessage;
-import it.polimi.ingsw.ps06.model.messages.Message;
-import it.polimi.ingsw.ps06.model.messages.MessageParser;
-import it.polimi.ingsw.ps06.model.messages.Server2Client;
+import it.polimi.ingsw.ps06.networking.Client;
+import it.polimi.ingsw.ps06.networking.messages.Client2Server;
+import it.polimi.ingsw.ps06.networking.messages.EventMessage;
+import it.polimi.ingsw.ps06.networking.messages.Message;
+import it.polimi.ingsw.ps06.networking.messages.MessageParser;
+import it.polimi.ingsw.ps06.networking.messages.Server2Client;
 import it.polimi.ingsw.ps06.view.Room;
 
 public class RoomController extends Observable implements Observer {

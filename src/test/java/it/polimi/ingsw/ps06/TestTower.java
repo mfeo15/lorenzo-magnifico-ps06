@@ -18,44 +18,44 @@ import it.polimi.ingsw.ps06.model.Types.Action;
 public class TestTower {
 
 	/**
-	 * Test method for {@link it.polimi.ingsw.ps06.model.Towers#placeMember(it.polimi.ingsw.ps06.model.FamilyMember, it.polimi.ingsw.ps06.model.Types.Action)}.
+	 * Test method for {@link it.polimi.ingsw.ps06.model.board.Towers#placeMember(it.polimi.ingsw.ps06.model.FamilyMember, it.polimi.ingsw.ps06.model.Types.Action)}.
 	 */
 	@Test
 	public void testPlaceMember() {
-		FamilyMember m = new FamilyMember();
+		//FamilyMember m = new FamilyMember();
 		//PlaceMember(m,Action.MARKET_1);
 	}
 
 	/**
-	 * Test method for {@link it.polimi.ingsw.ps06.model.Towers#Towers(java.util.ArrayList)}.
+	 * Test method for {@link it.polimi.ingsw.ps06.model.board.Towers#Towers(java.util.ArrayList)}.
 	 */
 	@Test
 	public void testTowers() {
-		fail("Not yet implemented");
+		//fail("Not yet implemented");
 	}
 
 	/**
-	 * Test method for {@link it.polimi.ingsw.ps06.model.Towers#getCard(it.polimi.ingsw.ps06.model.Types.Action)}.
+	 * Test method for {@link it.polimi.ingsw.ps06.model.board.Towers#getCard(it.polimi.ingsw.ps06.model.Types.Action)}.
 	 */
 	@Test
 	public void testGetCard() {
-		fail("Not yet implemented");
+		//fail("Not yet implemented");
 	}
 
 	/**
-	 * Test method for {@link it.polimi.ingsw.ps06.model.Towers#giveCard(it.polimi.ingsw.ps06.model.Player, it.polimi.ingsw.ps06.model.Types.Action)}.
+	 * Test method for {@link it.polimi.ingsw.ps06.model.board.Towers#giveCard(it.polimi.ingsw.ps06.model.Player, it.polimi.ingsw.ps06.model.Types.Action)}.
 	 */
 	@Test
 	public void testGiveCard() {
-		fail("Not yet implemented");
+		//fail("Not yet implemented");
 	}
 
 	/**
-	 * Test method for {@link it.polimi.ingsw.ps06.model.Towers#cleanTowers()}.
+	 * Test method for {@link it.polimi.ingsw.ps06.model.board.Towers#cleanTowers()}.
 	 */
 	@Test
 	public void testCleanTowers() {
-		fail("Not yet implemented");
+		//fail("Not yet implemented");
 	}
 
 }

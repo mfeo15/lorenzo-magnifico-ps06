@@ -2,16 +2,30 @@ package it.polimi.ingsw.ps06.model.events;
 
 import java.io.IOException;
 
-import it.polimi.ingsw.ps06.Client;
 import it.polimi.ingsw.ps06.controller.BoardController;
 import it.polimi.ingsw.ps06.controller.RoomController;
-import it.polimi.ingsw.ps06.model.messages.BoardReady;
+import it.polimi.ingsw.ps06.model.Game;
+import it.polimi.ingsw.ps06.networking.Client;
+import it.polimi.ingsw.ps06.networking.Connection;
+import it.polimi.ingsw.ps06.networking.SocketServer;
+import it.polimi.ingsw.ps06.networking.messages.BoardReady;
+import it.polimi.ingsw.ps06.networking.messages.MessageDisconnect;
 
 public class EventParser implements EventVisitor {
 	
+	private Object theModel;
+	
+	public EventParser() {
+		
+	}
+	
+	public EventParser(Object model) {
+		this.theModel = model;
+	}
+	
 	@Override
 	public void visit(EventClose eventClose) {
-		//Client.getInstance().
+		Client.getInstance().asyncSend( new MessageDisconnect() );
 		System.exit(0);
 	}
 
@@ -42,33 +56,43 @@ public class EventParser implements EventVisitor {
 	}
 
 	@Override
-	public void visit(StoryBoard2PersonalView storyboard) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void visit(EventMemberPlaced memberPlaced) {
-		// TODO Auto-generated method stub
-		
+		Connection c = ((Connection) theModel);
+ 		
+		Game game = SocketServer.getInstance().retrieveMatch(c).getGame();
+
+		if (game.getCurrentPlayer().equals(c.getPlayer())) {
+			
+			if (memberPlaced instanceof EventMemberPlacedWithPrivilege)
+				game.doMemberPlacement(c.getPlayer(), 
+										memberPlaced.getAction(), 
+										memberPlaced.getColor(), 
+										memberPlaced.getServantsBonus(), 
+										((EventMemberPlacedWithPrivilege) memberPlaced).getPrivilege());
+			else
+				game.doMemberPlacement(c.getPlayer(), memberPlaced.getAction(), memberPlaced.getColor(), memberPlaced.getServantsBonus());
+		}
 	}
 
 	@Override
 	public void visit(EventLeaderDiscarded leaderDiscarded) {
-		// TODO Auto-generated method stub
-		
+
+		Connection c = ((Connection) theModel);
+		c.getPlayer().getLeader( leaderDiscarded.getCode() ).discardLeader();
 	}
 
 	@Override
 	public void visit(EventLeaderActivated leaderActivated) {
-		// TODO Auto-generated method stub
+		Connection c = ((Connection) theModel);
 		
+		c.getPlayer().getLeader( leaderActivated.getCode() ).activateLeader();
 	}
 
 	@Override
 	public void visit(EventLeaderPlayed leaderPlayed) {
-		// TODO Auto-generated method stub
+		Connection c = ((Connection) theModel);
 		
+		c.getPlayer().getLeader( leaderPlayed.getCode() ).playLeader();
 	}
 
 	@Override
@@ -78,7 +102,6 @@ public class EventParser implements EventVisitor {
 			Client.getInstance().init();
 			(new Thread(Client.getInstance())).start();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

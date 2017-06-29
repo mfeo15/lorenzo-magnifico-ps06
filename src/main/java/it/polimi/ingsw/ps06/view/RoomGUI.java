@@ -4,10 +4,14 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.RenderingHints;
 import java.awt.Toolkit;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -26,8 +30,8 @@ import javax.swing.UIManager;
 import it.polimi.ingsw.ps06.model.events.EventClose;
 import it.polimi.ingsw.ps06.model.events.RoomHasLoaded;
 import it.polimi.ingsw.ps06.model.events.StoryBoard2Board;
-import it.polimi.ingsw.ps06.model.messages.MessageGameStart;
-import it.polimi.ingsw.ps06.model.messages.MessageUser;
+import it.polimi.ingsw.ps06.networking.messages.MessageGameStart;
+import it.polimi.ingsw.ps06.networking.messages.MessageUser;
 import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -42,6 +46,8 @@ public class RoomGUI extends Observable implements Room {
 	private Font font,font2;
 	private int width;
 	private int height;
+	private AudioClip mediaPlayer4;
+	private Media hit2;
 		
 	@Override
 	public void show() throws IOException
@@ -57,7 +63,7 @@ public class RoomGUI extends Observable implements Room {
 		
 		double ratio= (screenSize.getWidth()/screenSize.getHeight());
 		
-		width = (int)((screenSize.getWidth()*70/100)*(1.5 / ratio));
+		width = (int)((screenSize.getWidth()*70/100)*(1.500678 / ratio));
 		height = (int)(screenSize.getHeight()*70/100);
 		
 		font = new Font("Lucida Handwriting",Font.PLAIN,(int)(12*(screenSize.getHeight()/1080)));
@@ -65,35 +71,30 @@ public class RoomGUI extends Observable implements Room {
 	    
 		
 		//Caricamento e resize delle immagini
-		BufferedImage image1 = ImageIO.read(new File("resources/stanza2.jpg")); 
-		BufferedImage exit1 = ImageIO.read(new File("resources/button.png")); 
-		
-		BufferedImage stanza1 = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-		
-		Graphics g1 = stanza1.createGraphics();
-        g1.drawImage(image1, 0, 0, width, height, null);
-        g1.dispose();
-		
+		JLabel stanza = ImageHandler.setImage("resources/stanza2.jpg", 100, 100, width, height);
 		
         //Caricamento suoni del gioco
-        String hoverSound = "resources/menuhover.wav";
-		Media hit = new Media(new File(hoverSound).toURI().toString());
+
+		String hoverSound = "/menuhover.wav";
+        String mediaURL = getClass().getResource(hoverSound).toExternalForm();
+		Media hit = new Media(mediaURL);
 		
-		String selectSound = "resources/menuselect.wav";
-		Media hit2 = new Media(new File(selectSound).toURI().toString());
+		String selectSound = "/menuselect.wav";
+        String mediaURL2 = getClass().getResource(selectSound).toExternalForm();
+		hit2 = new Media(mediaURL2);
 		
-		String exitSound = "resources/exit.wav";
-		Media music1 = new Media(new File(exitSound).toURI().toString());
+		String exitSound = "/exit.wav";
+        String mediaURL3 = getClass().getResource(exitSound).toExternalForm();
+		Media music1 = new Media(mediaURL3);
 		
-		String menu = "resources/music1.mp3";
-		Media menuMusic = new Media(new File(menu).toURI().toString());
+		String menu = "/music1.mp3";
+        String mediaURL4 = getClass().getResource(menu).toExternalForm();
+		Media menuMusic = new Media(mediaURL4);
+
 		
-		AudioClip mediaPlayer4 = new AudioClip(menuMusic.getSource());
+		mediaPlayer4 = new AudioClip(menuMusic.getSource());
 		mediaPlayer4.setVolume(0.3);
        	mediaPlayer4.play();
-		
-		JLabel label = new JLabel(new ImageIcon(stanza1)); 
-		
 	        
 		//Inizializzazione dei componenti
 	    exit = new JButton();
@@ -103,7 +104,7 @@ public class RoomGUI extends Observable implements Room {
 	    exit.setContentAreaFilled(false);
 	    exit.setFocusPainted(false);
 	    exit.setBorderPainted(false);
-	    exit.setIcon(new ImageIcon(exit1));
+	    exit.setIcon((ImageHandler.setImageScreen("resources/button.png",2,(int)(2*ratio),width,height)).getIcon());
         f.add(exit);
        
         
@@ -228,6 +229,7 @@ public class RoomGUI extends Observable implements Room {
         login.setFont(font2);
         f.add(login);
         
+        /*	Work in Progress, please be patient
         ready = new JButton("Pronto");
         ready.setLocation(width*66/100,height*77/100);
         ready.setSize(width*8/100,width*4/100);
@@ -238,9 +240,10 @@ public class RoomGUI extends Observable implements Room {
         ready.setForeground(Color.BLACK);
         ready.setFont(font2);
         f.add(ready);
+        */
         
         start = new JButton("Avvia");
-        start.setLocation(width*76/100,height*77/100);
+        start.setLocation(width*71/100,height*65/100);
         start.setSize(width*8/100,width*4/100);
         start.setOpaque(false);
         start.setContentAreaFilled(false);
@@ -248,7 +251,7 @@ public class RoomGUI extends Observable implements Room {
         start.setMargin(new Insets(0,0,0,5));
         start.setForeground(Color.BLACK);
         start.setFont(font2);
-        //start.setEnabled(false);
+        start.setEnabled(false);
         f.add(start);
         
         exit.addMouseListener(new MouseAdapter()
@@ -278,31 +281,6 @@ public class RoomGUI extends Observable implements Room {
             }
             
         });
-	    
-        start.addMouseListener(new MouseAdapter()
-        {
-            public void mousePressed(MouseEvent evt)
-            {
-            	MediaPlayer mediaPlayer3 = new MediaPlayer(hit2);
-        		mediaPlayer3.play();
-        		startGame();
-        		mediaPlayer4.stop();
-				f.dispose();
-				
-            }
-            
-        });
-        
-        ready.addMouseListener(new MouseAdapter()
-        {
-            public void mousePressed(MouseEvent evt)
-            {
-            	MediaPlayer mediaPlayer3 = new MediaPlayer(hit2);
-        		mediaPlayer3.play();
-        		
-            }
-            
-        });
         
         login.addMouseListener(new MouseAdapter()
         {
@@ -317,7 +295,7 @@ public class RoomGUI extends Observable implements Room {
             
         });
         
-	    f.getContentPane().add(label);
+	    f.getContentPane().add(stanza);
         f.setUndecorated(true);
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.pack();
@@ -335,6 +313,41 @@ public class RoomGUI extends Observable implements Room {
 	public void setPlayer(String name, int index) {
 		
 		player[index].setText(name);
+		
+		if(index==1 && name!=null){
+			MouseListener[] mouseListeners= start.getMouseListeners();
+	  		for (MouseListener mouseListener : mouseListeners) {
+	  			start.removeMouseListener(mouseListener);
+	  		}
+		}
+		
+		if(index==1 && name!=null){
+			
+			start.setEnabled(true);
+			
+			start.addMouseListener(new MouseAdapter()
+	        {
+	            public void mousePressed(MouseEvent evt)
+	            {
+	            	MediaPlayer mediaPlayer3 = new MediaPlayer(hit2);
+	        		mediaPlayer3.play();
+	        		startGame();
+	        		mediaPlayer4.stop();
+					
+	            }
+	            
+	        });
+			
+		}
+
+		if(index==1 && name.equals("")){
+			
+			start.setEnabled(false);
+			
+			for( MouseListener al : start.getMouseListeners() ) {
+        	 	start.removeMouseListener( al );
+        	}
+		}
 	}
 
 	@Override
@@ -364,6 +377,9 @@ public class RoomGUI extends Observable implements Room {
 	
 	@Override
 	public void hasStarted(){
+		
+		mediaPlayer4.stop();
+		f.dispose();
 		setChanged();
 		StoryBoard2Board storyBoard;
 		storyBoard = new StoryBoard2Board(new BoardGUI());

@@ -4,7 +4,7 @@ import it.polimi.ingsw.ps06.view.Board;
 
 public class StoryBoard2Board extends StoryBoard {
 
-	private Board view;
+	private transient Board view;
 	
 	public StoryBoard2Board(Board view) {
 		this.view = view;

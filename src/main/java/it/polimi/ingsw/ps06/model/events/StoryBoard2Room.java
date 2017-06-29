@@ -4,7 +4,7 @@ import it.polimi.ingsw.ps06.view.Room;
 
 public class StoryBoard2Room extends StoryBoard {
 
-	private Room view;
+	private transient Room view;
 	
 	public StoryBoard2Room(Room view) {
 		this.view = view;

@@ -1,9 +1,13 @@
 package it.polimi.ingsw.ps06;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Scanner;
 
 import it.polimi.ingsw.ps06.controller.MenuController;
+import it.polimi.ingsw.ps06.networking.Client;
+import it.polimi.ingsw.ps06.networking.SocketServer;
 import it.polimi.ingsw.ps06.view.Menu;
 import it.polimi.ingsw.ps06.view.MenuCLI;
 import it.polimi.ingsw.ps06.view.MenuGUI;
@@ -19,30 +23,29 @@ public class App
     }
     
     public static void setup() throws IOException {
-    	Scanner s = new Scanner(System.in);
+    	InputStreamReader reader = new InputStreamReader(System.in);
+    	BufferedReader in = new BufferedReader(reader);
     	
-    	System.out.print("Press 1 for Server or 2 for Client > ");
-    	if ( Integer.parseInt(s.nextLine()) == 1 ) 
+    	System.out.print("\n" + "Press 1 for Server or 2 for Client > ");
+    	if ( Integer.parseInt(in.readLine()) == 1 ) 
     	{
-    		try {
-    			SocketServer.getInstance().start();
-    			
-    		} catch (IOException e) {
-    			System.err.println("Impossibile inizializzare il server: " + e.getMessage() + "!");
-    		}
+    		SocketServer.getInstance().start();
     
-    		s.close();
+    		in.close();
     		return;
     	} 
+    	
     	else 
     	{	
     		System.out.print("Insert the Server IP > ");
     		
-    		String host = s.nextLine();
+    		String host = in.readLine();
     		Client.getInstance().setupParameters(host, 12345);
     		
-    		System.out.print("Press 1 for CLI or 2 for GUI > ");
-    		Menu menuView = ( Integer.parseInt(s.nextLine()) == 1 ) ? new MenuCLI(s) : new MenuGUI();
+    		System.out.print("\n" + "Press 1 for CLI or 2 for GUI > ");
+    		Menu menuView = ( Integer.parseInt(in.readLine()) == 1 ) ? new MenuCLI(in) : new MenuGUI();
+    		
+    		System.out.println("\n" + "\n");
 				
 			MenuController controller = new MenuController(menuView);
 			menuView.addNewObserver(controller);

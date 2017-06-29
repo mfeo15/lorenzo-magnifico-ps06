@@ -1,7 +1,17 @@
 package it.polimi.ingsw.ps06.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Observable;
+import java.util.Observer;
+
 import it.polimi.ingsw.ps06.model.Types.ColorPalette;
+import it.polimi.ingsw.ps06.model.Types.LeaderStates;
+import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
+import it.polimi.ingsw.ps06.model.cards.leader.Leader;
+import it.polimi.ingsw.ps06.networking.messages.MessageLeaderCards;
+import it.polimi.ingsw.ps06.networking.messages.MessagePersonalBoardResourcesStatus;
+import it.polimi.ingsw.ps06.networking.messages.Server2Client;
 
 /**
 * Classe rappresentante un singolo giocatore in una partita
@@ -10,10 +20,9 @@ import it.polimi.ingsw.ps06.model.Types.ColorPalette;
 * @version 1.0
 * @since   2017-05-10 
 */
-public class Player {
+public class Player extends Observable implements Observer {
 	
-	private String name;
-	private ColorPalette color;
+	private int ID;
 	
 	private ArrayList<Leader> leaders;
 	
@@ -23,6 +32,10 @@ public class Player {
 	private FamilyMember memberWhite;
 	private FamilyMember memberOrange;
 	private FamilyMember memberUncolored;
+	
+	private BonusMalusSet bonusMalusCollection;
+	
+	private Observer o;
 	 
 	/**
 	* Costruttore della classe
@@ -30,11 +43,9 @@ public class Player {
 	* @param name	nome del giocatore
 	* @param color	colore del giocatore
 	*/
-	public Player(String name, ColorPalette color) {
-		super();
+	public Player(int ID) {
 		
-		this.name = name;
-		this.color = color;
+		this.ID = ID;
 		
 		memberBlack = new FamilyMember(this, ColorPalette.DICE_BLACK);
 		memberWhite = new FamilyMember(this, ColorPalette.DICE_WHITE);
@@ -42,27 +53,75 @@ public class Player {
 		memberUncolored = new FamilyMember(this);
 		
 		this.personalBoard = new PersonalBoard();
+		this.leaders = new ArrayList<Leader>();
+		
+		this.bonusMalusCollection = new BonusMalusSet();
 	}
 	
-	public void setName(String name) {
-		this.name = name;
+	public void setID(int ID) {
+		this.ID = ID;
 	}
 	
-	public void setColor(ColorPalette color) {
-		this.color = color;
+	public int getID() {
+		return ID;
+	}
+	
+	public String getColorAssociatedToID() 
+	{	
+		switch ( ID ) {
+		case 0: return "Rosso";
+		case 1: return "Verde";
+		case 2: return "Blu";
+		case 3: return "Giallo";
+		default:
+			return null;
+		}
+	}
+	
+	public BonusMalusSet getBonusMalusCollection() {
+		return this.bonusMalusCollection;
+	}
+	
+	public FamilyMember getMember(ColorPalette color) {
+		
+		if (color == ColorPalette.DICE_BLACK) return memberBlack;
+		if (color == ColorPalette.DICE_WHITE) return memberWhite;
+		if (color == ColorPalette.DICE_ORANGE) return memberOrange;
+		if (color == ColorPalette.UNCOLORED) return memberUncolored;
+		
+		return null;
+	}
+	
+	public void setFamilyMemberValues(int black, int white, int orange) {
+		memberBlack.setValue(black);
+		memberWhite.setValue(white);
+		memberOrange.setValue(orange);
+	}
+	
+	public Leader getLeader(int code) {
+		Leader leader = null;
+		for (Leader l : leaders) 
+			if (l.getCode() == code) leader = l;
+		
+		return leader;
 	}
 	
 	public ArrayList<Leader> getLeaders() {
 		return leaders;
 	}
 	
-	public void addLeaders(ArrayList<Leader> leaders) {
-		this.leaders.addAll(leaders);
+	public void addLeaders(ArrayList<Leader> list) {
+		this.leaders.addAll(list);
+		this.leaders.forEach(l -> l.addNewObserver(this.o));
+		
+		HashMap<Integer, LeaderStates> ls = new HashMap<Integer, LeaderStates>();
+		this.leaders.forEach(leader -> ls.put(leader.getCode(), leader.getLeaderState() ));
+		
+		MessageLeaderCards leaderCards = new MessageLeaderCards(ls);
+		leaderCards.setRecipient(this.getID());
+		notifyChangement(leaderCards);
 	}
 	
-	public void removeLeader(int index) {
-		this.leaders.remove(index);
-	}
 	
 	public PersonalBoard getPersonalBoard() {
 		return personalBoard;
@@ -75,18 +134,33 @@ public class Player {
 	* @param 	color	colore del familiare usato
 	* @return 	Nothing
 	*/
-	public void doMemberPlacement(int value, ColorPalette color){
+	public void doLeaderDiscarding(int value, ColorPalette color){
 		
 	}
 	
-	/**
-	* Metodo per l'esecuzione di un azione
-	*
-	* @param 	value	valore dell'azione
-	* @param 	color	colore del familiare usato
-	* @return 	Nothing
-	*/
-	public void doLeaderDiscarding(int value, ColorPalette color){
+	
+	public void notifyChangement(Object o) {
+		setChanged();
+		notifyObservers(o);
+	}
+	
+	public void addNewObserver(Observer obs) {
+		addObserver(obs);
 		
+		this.o = obs;
+		this.personalBoard.addNewObserver(this);
+	}
+	
+	public void deleteAnObserver(Observer obs) {
+		deleteObserver(obs);
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		
+		if (arg instanceof Server2Client) 
+			((Server2Client) arg).setRecipient(this.getID());
+		
+		notifyChangement(arg);
 	}
 }

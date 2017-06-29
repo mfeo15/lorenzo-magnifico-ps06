@@ -4,13 +4,14 @@ import it.polimi.ingsw.ps06.model.Types.Action;
 import it.polimi.ingsw.ps06.model.Types.ColorPalette;
 
 public abstract class EventLeader extends View2Control {
-	protected int leaderCode;
+	
+	private int leaderCode;
 
 	public EventLeader(int leaderCode) {
 		this.leaderCode = leaderCode;
 	}
 	
-	public int getColor() {
+	public int getCode() {
 		return leaderCode;
 	}
 	

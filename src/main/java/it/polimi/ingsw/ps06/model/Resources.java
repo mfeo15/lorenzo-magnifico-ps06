@@ -1,5 +1,6 @@
 package it.polimi.ingsw.ps06.model;
 
+import java.io.Serializable;
 import java.util.EnumMap;
 import java.util.Iterator;
 import java.util.Set;
@@ -14,7 +15,12 @@ import it.polimi.ingsw.ps06.model.Types.PointsKind;
 * @version 1.1
 * @since   2017-05-13
 */
-public class Resources {
+public class Resources implements Serializable {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 9193388048987531889L;
 	
 	private EnumMap<MaterialsKind, Integer> materials;
 	private EnumMap<PointsKind, Integer> points;
@@ -79,7 +85,6 @@ public class Resources {
         
         Set<PointsKind> pointsSet = points.keySet();
         for(PointsKind currentPoint : pointsSet) setResourceValue(currentPoint, 0);
-
 	}
 	
 	/**
@@ -134,17 +139,19 @@ public class Resources {
 	* Somma la risorsa corrente con una seconda risorsa, settando correttamente
 	* ogni singolo campo opportunatamente 
 	*
-	* @param 	r	Risorsa da sommare
+	* @param 	r			Risorsa da sommare
 	* 
-	* @return 	Nothing. 
+	* @return 	Resources	Risorsa attuale a seguito dell'addizione
 	*/
-	public void add(Resources r) {
+	public Resources add(Resources r) {
 		
 		Set<MaterialsKind> materialsSet = materials.keySet();
         for(MaterialsKind currentMaterial : materialsSet) increaseResourceValue(currentMaterial, r.getResourceValue(currentMaterial));
         
         Set<PointsKind> pointsSet = points.keySet();
         for(PointsKind currentPoint : pointsSet) increaseResourceValue(currentPoint, r.getResourceValue(currentPoint));
+        
+        return this;
 	}
 	
 	/**
@@ -157,23 +164,24 @@ public class Resources {
 	*/
 	public boolean isBiggerThan(Resources r) {
 		
-		boolean flag = true;
+		boolean flagMaterials = true;
+		boolean flagPoints = true;
 		
 		Iterator<MaterialsKind> materialsIterator = materials.keySet().iterator();
-        while(materialsIterator.hasNext() && flag==true) 
+        while(materialsIterator.hasNext() && flagMaterials == true) 
         {
         	MaterialsKind currentMaterial = materialsIterator.next();	
-        	if ( getResourceValue(currentMaterial) < r.getResourceValue(currentMaterial) ) flag = false;
+        	if ( getResourceValue(currentMaterial) < r.getResourceValue(currentMaterial) ) flagMaterials = false;
         }
 
         Iterator<PointsKind> pointsIterator = points.keySet().iterator();
-        while(materialsIterator.hasNext() && flag==true)
+        while(pointsIterator.hasNext() && flagPoints == true)
         {
         	PointsKind currentPoint = pointsIterator.next();	
-        	if ( getResourceValue(currentPoint) < r.getResourceValue(currentPoint) ) flag = false;
+        	if ( getResourceValue(currentPoint) < r.getResourceValue(currentPoint) ) flagPoints = false;
         }
 		
-        return flag;
+        return (flagMaterials && flagPoints);
 	}
 	
 	/**
@@ -184,10 +192,14 @@ public class Resources {
 	 * @return	nothing
 	 */
 	
-	public void decreaseResourceValue(MaterialsKind kind, int x){
+	public boolean decreaseResourceValue(MaterialsKind kind, int decreaseValue) {
+		
+		if (decreaseValue > materials.get(kind))
+			return false;
+		
 		int currentvalue = materials.get(kind);
-		materials.put(kind, currentvalue - x);
-		return;
+		materials.put(kind, currentvalue - decreaseValue);
+		return true;
 	}
 	
 	/**
@@ -198,10 +210,14 @@ public class Resources {
 	 * @return	nothing
 	 */
 	
-	public void decreaseResourceValue(PointsKind kind, int x){
+	public boolean decreaseResourceValue(PointsKind kind, int decreaseValue) {
+		
+		if (decreaseValue > points.get(kind))
+			return false;
+		
 		int currentvalue = points.get(kind);
-		points.put(kind, currentvalue - x);
-		return;
+		points.put(kind, currentvalue - decreaseValue);
+		return true;
 	}
 	
 	/**

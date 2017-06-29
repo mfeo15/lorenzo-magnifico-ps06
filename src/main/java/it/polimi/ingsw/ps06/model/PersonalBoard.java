@@ -1,10 +1,16 @@
 package it.polimi.ingsw.ps06.model;
 
 import java.util.ArrayList;
-import it.polimi.ingsw.ps06.model.Resources;
-import it.polimi.ingsw.ps06.model.Warehouse;
+import java.util.Observable;
+import java.util.Observer;
+
 import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
 import it.polimi.ingsw.ps06.model.Types.PointsKind;
+import it.polimi.ingsw.ps06.model.cards.Building;
+import it.polimi.ingsw.ps06.model.cards.Character;
+import it.polimi.ingsw.ps06.model.cards.Territory;
+import it.polimi.ingsw.ps06.model.cards.Venture;
+import it.polimi.ingsw.ps06.networking.messages.MessagePersonalBoardResourcesStatus;
 
 /**
 * Classe per la modellizzazione della tessera personale
@@ -13,7 +19,7 @@ import it.polimi.ingsw.ps06.model.Types.PointsKind;
 * @version 1.1
 * @since   2017-05-09 
 */
-public class PersonalBoard {
+public class PersonalBoard extends Observable {
 	
 	private ArrayList<Territory> territories;
 	private ArrayList<Building> buildings;
@@ -71,7 +77,7 @@ public class PersonalBoard {
 	* @return 	inventory.getMaterial(kind)  metodo di warehouse che restituisce la quantità del materiale che ho chiesto
 	*/
 	
-	public int getMaterialsCount(MaterialsKind kind){
+	public int getAmount(MaterialsKind kind){
 		return inventory.getMaterial(kind);
 	}
 	
@@ -82,7 +88,7 @@ public class PersonalBoard {
 	* @return 	inventory.getPoints(kind)  metodo di warehouse che restituisce il numero dei punti che ho chiesto
 	*/
 	
-	public int getPointsCount(PointsKind type){
+	public int getAmount(PointsKind type){
 		return inventory.getPoints(type);
 	}	
 	
@@ -141,9 +147,9 @@ public class PersonalBoard {
 	* @return 	nothing
 	*/
 	
-	public void addMaterials(MaterialsKind kind, int quantity){
+	public void addResource(MaterialsKind kind, int quantity){
 		inventory.increaseMaterials(kind, quantity);
-		return;
+		notifyChangement();
 	}
 	
 	/**
@@ -154,9 +160,9 @@ public class PersonalBoard {
 	* @return 	nothing
 	*/
 	
-	public void addPoints(PointsKind type, int amount){
-		inventory.increasePoints(type, amount);
-		return;
+	public void addResource(PointsKind kind, int quantity){
+		inventory.increasePoints(kind, quantity);
+		notifyChangement();
 	}
 	
 
@@ -167,9 +173,9 @@ public class PersonalBoard {
 	* @return 	nothing
 	*/
 	
-	public void increaseResources(Resources r){
+	public void addResource(Resources r){
 		inventory.addResources(r);
-		return;
+		notifyChangement();
 	}
 	
 	/**
@@ -179,9 +185,9 @@ public class PersonalBoard {
 	* @return 	nothing
 	*/
 	
-	public void addTerritory(Territory cardTerritory) {
+	public void addCard(Territory cardTerritory) {
 		
-			switch(territories.size()){
+			switch(territories.size()) {
 			case 0:
 			case 1:
 				territories.add(cardTerritory);
@@ -231,8 +237,8 @@ public class PersonalBoard {
 	* @return 	nothing
 	*/
 
-	public void addBuilding(Building cardBuilding) {
-		if(buildings.size()<6)
+	public void addCard(Building cardBuilding) {
+		if (buildings.size() < 6)
 			buildings.add(cardBuilding);
 		else
 			//Controller.handleMaxBuildings();  controller ancora da implementare
@@ -246,9 +252,8 @@ public class PersonalBoard {
 	* @return 	nothing
 	*/
 	
-	public void addCharacter(Character cardCharacter) {
+	public void addCard(Character cardCharacter) {
 		characters.add(cardCharacter);
-		return;
 	}
 
 	/**
@@ -258,9 +263,8 @@ public class PersonalBoard {
 	* @return 	nothing
 	*/
 	
-	public void addVenture(Venture cardVenture) {
-		ventures.add(cardVenture);
-		return;		
+	public void addCard(Venture cardVenture) {
+		ventures.add(cardVenture);		
 	}
 	
 	/**
@@ -270,9 +274,9 @@ public class PersonalBoard {
 	 * @return	nothing
 	 */
 
-	public void reduceResources(Resources r){
+	public void reduceResource(Resources r){
 		inventory.reduceRes(r);
-		return;
+		notifyChangement();
 	}
 
 	/**
@@ -283,9 +287,9 @@ public class PersonalBoard {
 	 * @return	nothing
 	 */
 
-	public void reduceMaterials(MaterialsKind kind, int x){
+	public void reduceResource(MaterialsKind kind, int x){
 		inventory.decreaseMaterial(kind, x);
-		return;
+		notifyChangement();
 	}
 	
 	/**
@@ -296,9 +300,26 @@ public class PersonalBoard {
 	 * @return	nothing
 	 */
 
-	public void reducePoints(PointsKind kind, int x){
+	public void reduceResource(PointsKind kind, int x){
 		inventory.decreasePoints(kind, x);
-		return;
+		notifyChangement();
 	}
 	
+	public void notifyChangement() {
+		
+		MessagePersonalBoardResourcesStatus resStatus = new MessagePersonalBoardResourcesStatus( );
+		for (MaterialsKind m : MaterialsKind.values()) resStatus.setResourceValue(m, getInventory().getResourceValue(m));
+		for (PointsKind p : PointsKind.values()) resStatus.setResourceValue(p, getInventory().getResourceValue(p));
+
+		setChanged();
+		notifyObservers(resStatus);
+	}
+	
+	public void addNewObserver(Observer obs) {
+		addObserver(obs);
+	}
+	
+	public void deleteAnObserver(Observer obs) {
+		deleteObserver(obs);
+	}
 }

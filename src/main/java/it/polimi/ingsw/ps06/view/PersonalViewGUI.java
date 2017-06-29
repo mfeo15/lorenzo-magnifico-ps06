@@ -18,18 +18,22 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
 
+import it.polimi.ingsw.ps06.controller.BoardController;
 import it.polimi.ingsw.ps06.model.events.EventClose;
+import it.polimi.ingsw.ps06.networking.messages.MessageObtainPersonalBoardStatus;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
-public class PersonalViewGUI extends Observable implements PersonalView {
+public class PersonalViewGUI  {
 	private int playerCode;
 	private int width, height;
 	private JFrame f = new JFrame();
 	private JButton exit;
 	private JTextField coins, woods, stones, servants, victory, military, faith;
 	private Font font;
+	private BoardGUI boardView;
 	
     
     private JButton[] territories = new JButton[6];
@@ -38,15 +42,28 @@ public class PersonalViewGUI extends Observable implements PersonalView {
     private double ratio;
 	private int code1, code2, code3, code4;
 	private int btCode;
+	private Dimension screenSize;
 
-	@Override
+	public PersonalViewGUI(int id, BoardGUI v){
+		this.boardView = v;
+		this.playerCode=id;
+	}
+	
+	public int getPlayerCode(){
+		return playerCode;
+	}
+	
 	public void show() throws IOException{
 			
+			try {
+				UIManager.setLookAndFeel( UIManager.getCrossPlatformLookAndFeelClassName() );
+			} catch (Exception e) { e.printStackTrace();}
+		
 			setPersonalView();
 			
 			exit = new JButton();
 			
-			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+			screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 			
 			ratio= (screenSize.getWidth()/screenSize.getHeight());
 			
@@ -55,26 +72,15 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 			width = (int)((screenSize.getWidth()*77/100)*(1.349 / ratio));
 			height = (int)(screenSize.getHeight()*77/100);
 			
-			BufferedImage image1 = ImageIO.read(new File("resources/personalView.png")); 
-			BufferedImage exit1 = ImageIO.read(new File("resources/button.png")); 
-			
-			BufferedImage stanza1 = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-			
-			
-			Graphics g1 = stanza1.createGraphics();
-	        g1.drawImage(image1, 0, 0, width, height, null);
-	        g1.dispose();
+			JLabel stanza = ImageHandler.setImage("resources/personalView.png", 100, 100, width, height);
 	        
-	        String hoverSound = "resources/menuhover.wav";
-			Media hit = new Media(new File(hoverSound).toURI().toString());
+			String hoverSound = "/menuhover.wav";
+	        String mediaURL = getClass().getResource(hoverSound).toExternalForm();
+			Media hit = new Media(mediaURL);
 			
-			String selectSound = "resources/menuselect.wav";
-			Media hit2 = new Media(new File(selectSound).toURI().toString());
-			
-			String exitSound = "resources/exit.wav";
-			Media music1 = new Media(new File(exitSound).toURI().toString());
-			
-			JLabel label = new JLabel(new ImageIcon(stanza1)); 
+			String exitSound = "/exit.wav";
+	        String mediaURL3 = getClass().getResource(exitSound).toExternalForm();
+			Media music1 = new Media(mediaURL3);
 			
 			exit = new JButton();
 		    exit.setLocation(width*95/100,0);
@@ -83,7 +89,7 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 		    exit.setContentAreaFilled(false);
 		    exit.setFocusPainted(false);
 		    exit.setBorderPainted(false);
-		    exit.setIcon(new ImageIcon(exit1));
+		    exit.setIcon((ImageHandler.setImageScreen("resources/button.png",2,(int)(2*ratio),width,height)).getIcon());
 	        f.add(exit);
 	        
 	        exit.addMouseListener(new MouseAdapter()
@@ -107,7 +113,7 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 	            {
 	            	MediaPlayer mediaPlayer3 = new MediaPlayer(music1);
 	        		mediaPlayer3.play();
-	                f.dispose();
+	                close();
 	            }
 	            
 	        });
@@ -117,6 +123,7 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 	        coins.setSize(width*4/100,(int)(height*4/100));
 	        coins.setOpaque(false);
 	        coins.setFont(font);
+	        coins.setEditable(false);
 	        coins.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 	        f.add(coins);
 	        
@@ -125,6 +132,7 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 	        woods.setSize(width*4/100,(int)(height*4/100));
 	        woods.setOpaque(false);
 	        woods.setFont(font);
+	        woods.setEditable(false);
 	        woods.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 	        f.add(woods);
 	        
@@ -133,6 +141,7 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 	        stones.setSize(width*4/100,(int)(height*4/100));
 	        stones.setOpaque(false);
 	        stones.setFont(font);
+	        stones.setEditable(false);
 	        stones.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 	        f.add(stones);
 	        
@@ -141,6 +150,7 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 	        servants.setSize(width*4/100,(int)(height*4/100));
 	        servants.setOpaque(false);
 	        servants.setFont(font);
+	        servants.setEditable(false);
 	        servants.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 	        f.add(servants);
 	        
@@ -149,6 +159,7 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 	        victory.setSize(width*4/100,(int)(height*4/100));
 	        victory.setOpaque(false);
 	        victory.setFont(font);
+	        victory.setEditable(false);
 	        victory.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 	        f.add(victory);
 	        
@@ -157,6 +168,7 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 	        military.setSize(width*4/100,(int)(height*4/100));
 	        military.setOpaque(false);
 	        military.setFont(font);
+	        military.setEditable(false);
 	        military.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 	        f.add(military);
 	        
@@ -165,6 +177,7 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 	        faith.setSize(width*4/100,(int)(height*4/100));
 	        faith.setOpaque(false);
 	        faith.setFont(font);
+	        faith.setEditable(false);
 	        faith.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 	        f.add(faith);
 	        
@@ -174,9 +187,8 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 	        territories = setLabels(territories);
 	        buildings = setLabels(buildings);
 	        
-        	territories = locatePersonalCards(territories,false);
-        	buildings = locatePersonalCards(buildings,true);
-	          
+	        buildings = locatePersonalCards(buildings,false);
+        	territories = locatePersonalCards(territories,true);
 	        
 	        JButton[] bonusTile = new JButton[1];
 	        bonusTile = initializeButtons(bonusTile);
@@ -196,19 +208,21 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 			for(int j=0; j<buildings.length;j++){ f.add(buildings[j]); }
 			f.add(bonusTile[0]);
 			
-			
-	        f.getContentPane().add(label);
-	        f.setUndecorated(true);
+	        f.getContentPane().add(stanza);
+	        
+	        if(!(f.isUndecorated())) {f.setUndecorated(true);}
+	        
 	        f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	        
 	        f.setSize(width, height);
-			f.setLocation((int)((screenSize.getWidth()-f.getWidth())/2), (int)((screenSize.getHeight()-f.getHeight())/2)- (int)(screenSize.getHeight()/182.4));
-	        
+			
 	        f.setResizable(false);
-	        //f.setLocationRelativeTo(null);
 	        f.setVisible(true);  
 	        
+	        f.setLocation((int)((screenSize.getWidth()-f.getWidth())/2), -height);
+	        Animations.AnimationPV(f);
 	        
+	        hasLoaded();
 		}
 		
 		public void setPersonalView(){
@@ -251,61 +265,58 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 				btn.setOpaque(false);
 				btn.setContentAreaFilled(false);
 				btn.setFocusPainted(false);
-		        //btn.setBorderPainted(false);
 			}
 			
 			return btns;
 		}
 		
 		private JButton[] locatePersonalCards(JButton[] btns, boolean buildings){
-			double x=6.5;
-			double y=3;
+			double x=7.3;
+			double y=9;
 			
-			if(buildings)y=y+40;
+			if(buildings)y=y+35;
 			
 			for(int j=0;j<btns.length;j++){
 				
 				btns[j].setLocation((int)(width*x/100),(int)(height*y/100));
-				btns[j].setSize((int)(width*15.4/100),height*32/100);
+				btns[j].setSize((int)(width*14.3/100),(int)(height*27/100));
 				x=x+15.3;		
 			}
 			return btns;
 		}
 		
 		public void close(){
-			notifyExit();
-			f.dispose();
+			
+			//f.setLocation((int)((screenSize.getWidth()-f.getWidth())/2), (int)((screenSize.getHeight()-f.getHeight())/2)- (int)(screenSize.getHeight()/182.4));
+			Animations.AnimationPV2(f);
+				
 		}
 		
-		
-		
-		@Override
 		public void setResources(int coin, int wood, int stone, int servant, int victory, int military, int faith) {
 			
 			coins.setText(String.valueOf(coin));
-			woods.setText(String.valueOf(coin));
-			stones.setText(String.valueOf(coin));
-			servants.setText(String.valueOf(coin));
-			this.victory.setText(String.valueOf(coin));
-			this.military.setText(String.valueOf(coin));
-			this.faith.setText(String.valueOf(coin));
-			
+			woods.setText(String.valueOf(wood));
+			stones.setText(String.valueOf(stone));
+			servants.setText(String.valueOf(servant));
+			this.victory.setText(String.valueOf(victory));
+			this.military.setText(String.valueOf(military));
+			this.faith.setText(String.valueOf(faith));
 		}
 
-		@Override
+
 		public void setTerritoryCard(int id, int index) {
 			try {
-				territories[index].setIcon((ImageHandler.setImageScreen("resources/cards/devcards_f_en_c_"+id+".png",9,(int)(13*ratio),width,height)).getIcon());
+				territories[index].setIcon((ImageHandler.setImage("resources/cards/devcards_f_en_c_"+id+".png",17,(int)( 17.5 * 1.77 ),width,height)).getIcon());
 			} catch (IOException e) {
 				e.printStackTrace();}
 			
 			territories[index].setDisabledIcon( territories[index].getIcon());
 		}
 		
-		@Override
+		
 		public void setBuildingCard(int id, int index) {
 			try {
-				buildings[index].setIcon((ImageHandler.setImageScreen("resources/cards/devcards_f_en_c_"+id+".png",9,(int)(13*ratio),width,height)).getIcon());
+				buildings[index].setIcon((ImageHandler.setImage("resources/cards/devcards_f_en_c_"+id+".png",17,(int)( 17.5 * 1.77  ),width,height)).getIcon());
 			} catch (IOException e) {
 				e.printStackTrace();}
 			
@@ -314,17 +325,9 @@ public class PersonalViewGUI extends Observable implements PersonalView {
 		}
 		
 
-		@Override
-		public void addNewObserver(Observer o) {
-			addObserver(o);
+		public void hasLoaded() {
 			
+			boardView.hasLoadedPersonalView();
 		}
-
-		@Override
-		public void notifyExit() {
-			setChanged();
-			EventClose close = new EventClose();
-			notifyObservers(close);
-			
-		}	
+		
 }

@@ -1,8 +1,9 @@
 package it.polimi.ingsw.ps06.model;
 
-import java.util.ArrayList;
-
 import it.polimi.ingsw.ps06.model.Types.Action;
+import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
+import it.polimi.ingsw.ps06.model.cards.Building;
+import it.polimi.ingsw.ps06.model.cards.Territory;
 
 /**
 * Classe per la gestione delle azioni di produzione/raccolto
@@ -15,19 +16,8 @@ import it.polimi.ingsw.ps06.model.Types.Action;
 
 public class Gathering extends Actions {
 	
-	private int value;
-	private boolean production;
-	Action chosenAction;
-	
-	private Player p;
-	
-	public void setValue(int value) {
-		this.value = value;
-	}
-	
-	public int getValue() {
-		return (this.value);
-	}
+	private Action chosenAction;	
+	private FamilyMember member;
 	
 	/**
 	* Costruttore della classe
@@ -36,14 +26,11 @@ public class Gathering extends Actions {
 	* @param 	chosenAction	Codice dell'azione da eseguire	
 	* @return 					Nothing
 	*/
-	public Gathering (Action chosenAction, int value, Player p) {
+	public Gathering (Action chosenAction, FamilyMember member, int servants) {
+		super(servants);
 		
-		this.chosenAction=chosenAction;
-		this.value=value;
-		checkIfProduction();
-		
-		setChanged();
-        notifyObservers(p);
+		this.chosenAction = chosenAction;
+		this.member = member;
 	}
 	
 	/**
@@ -52,24 +39,12 @@ public class Gathering extends Actions {
 	* @param 	p		Giocatore a cui attivare l'azione
 	* @return 			Nothing
 	*/
-	private void checkIfProduction(){
+	private boolean isProduction() {
 		
-		switch (chosenAction){
-			
-			case HARVEST_1:
-			case HARVEST_2:
-				production=false;
-				break;
-			
-			case PRODUCTION_1:
-			case PRODUCTION_2:
-				production=true;
-				break;
-
-			default:
-				throw new IllegalArgumentException();
+		if (chosenAction == Action.PRODUCTION_1 || chosenAction == Action.PRODUCTION_2)
+			return true;
 		
-		}
+		return false;
 	}
 	
 	/**
@@ -80,9 +55,11 @@ public class Gathering extends Actions {
 	* 
 	* @throws InterruptedException 
 	*/
-	private void checkGatheringBonus (Player p) {
-		// malus = EffectsActive.gatheringBonus(p);
-		// value = value + malus;
+	private int getGatheringBonus(Player p) {
+		if (! member.getPlayer().getBonusMalusCollection().contains(chosenAction.getActionCategory())) 
+			return 0;
+		
+		return ( member.getPlayer().getBonusMalusCollection().getBonusMalus(chosenAction.getActionCategory()).getValue() );
 	}
 	
 	/**
@@ -93,20 +70,21 @@ public class Gathering extends Actions {
 	*/
 	@Override
 	public void activate() {
-		checkGatheringBonus(p);
 		
-		if(production==true)
-		{
-			for (Building b : p.getPersonalBoard().getBuildings())
-				b.activateEffect(p);
-		}
+		if (servants > 0)
+			member.getPlayer().getPersonalBoard().reduceResource(MaterialsKind.SERVANT, servants);
+		
+		if( isProduction() == true)
+		
+			for (Building b : member.getPlayer().getPersonalBoard().getBuildings())
+				if ( b.check_dice( member.getValue() + servants + getGatheringBonus(member.getFakePlayer())) )
+						b.activateEffect(member.getPlayer());
+		
 		else
-		{	
-			for (Territory t : p.getPersonalBoard().getTerritories())
-				t.activateEffect(p);
-		}
-		
-		
+			
+			for (Territory t : member.getPlayer().getPersonalBoard().getTerritories())
+				if ( t.check_dice( member.getValue() + servants + getGatheringBonus(member.getFakePlayer())) )
+					t.activateEffect(member.getPlayer());
 	}
 
 }

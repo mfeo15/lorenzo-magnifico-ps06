@@ -1,6 +1,8 @@
 package it.polimi.ingsw.ps06.view;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Scanner;
@@ -9,41 +11,78 @@ import it.polimi.ingsw.ps06.controller.MenuController;
 import it.polimi.ingsw.ps06.model.events.EventClose;
 import it.polimi.ingsw.ps06.model.events.StoryBoard2Room;
 
+
 public class MenuCLI extends Observable implements Menu {
 	
-	private Scanner input;
+	private BufferedReader input;
+	private boolean cond = true;
 	
-	public MenuCLI(Scanner input) {
+	public MenuCLI(BufferedReader input) {
 		
 		this.input = input;
 	}
-	
-	public Scanner getScanner() {
+
+	public BufferedReader getScanner() {
 		return input;
 	}
 	
+
 	public void addNewControllerObserver(MenuController controller) {
 		addObserver(controller);
 	}
 	
-	public void show() {
+	@Override
+	public void show() throws IOException{
 		
-		System.out.println();
-		System.out.println(" --- Lorenzo il Magnifio --- ");
+		System.out.println("\n\n\n\n");
+		
+		
+		System.out.println("   ▄█        ▄██████▄     ▄████████    ▄████████ ███▄▄▄▄    ▄███████▄   ▄██████▄  ");     
+		System.out.println("  ███       ███    ███   ███    ███   ███    ███ ███▀▀▀██▄ ██▀     ▄██ ███    ███ ");    
+		System.out.println("  ███       ███    ███   ███    ███   ███    █▀  ███   ███       ▄███▀ ███    ███ ");     
+		System.out.println("  ███       ███    ███  ▄███▄▄▄▄██▀  ▄███▄▄▄     ███   ███  ▀█▀▄███▀▄▄ ███    ███ ");     
+		System.out.println("  ███       ███    ███ ▀▀███▀▀▀▀▀   ▀▀███▀▀▀     ███   ███   ▄███▀   ▀ ███    ███ ");     
+		System.out.println("  ███       ███    ███ ▀███████████   ███    █▄  ███   ███ ▄███▀       ███    ███ ");     
+		System.out.println("  ███▌    ▄ ███    ███   ███    ███   ███    ███ ███   ███ ███▄     ▄█ ███    ███ ");     
+		System.out.println("  █████▄▄██  ▀██████▀    ███    ███   ██████████  ▀█   █▀   ▀████████▀  ▀██████▀  ");     
+		System.out.println("  ▀                      ███    ███                                               ");
+
+		
+		System.out.println("\t\t\t    ▄█   ▄█              ▄▄▄▄███▄▄▄▄      ▄████████    ▄██████▄  ███▄▄▄▄    ▄█     ▄████████  ▄█   ▄████████  ▄██████▄  ");     
+		System.out.println("\t\t\t   ███  ███            ▄██▀▀▀███▀▀▀██▄   ███    ███   ███    ███ ███▀▀▀██▄ ███    ███    ███ ███  ███    ███ ███    ███ ");    
+		System.out.println("\t\t\t   ███▌ ███            ███   ███   ███   ███    ███   ███    █▀  ███   ███ ███▌   ███    █▀  ███▌ ███    █▀  ███    ███ ");     
+		System.out.println("\t\t\t   ███▌ ███            ███   ███   ███   ███    ███  ▄███        ███   ███ ███▌  ▄███▄▄▄     ███▌ ███        ███    ███ ");     
+		System.out.println("\t\t\t   ███▌ ███            ███   ███   ███ ▀███████████ ▀▀███ ████▄  ███   ███ ███▌ ▀▀███▀▀▀     ███▌ ███        ███    ███ ");     
+		System.out.println("\t\t\t   ███  ███            ███   ███   ███   ███    ███   ███    ███ ███   ███ ███    ███        ███  ███    █▄  ███    ███ ");     
+		System.out.println("\t\t\t   ███  ███▌    ▄      ███   ███   ███   ███    ███   ███    ███ ███   ███ ███    ███        ███  ███    ███ ███    ███ ");     
+		System.out.println("\t\t\t   █▀   █████▄▄██       ▀█   ███   █▀    ███    █▀    ████████▀   ▀█   █▀  █▀     ███        █▀   ████████▀   ▀██████▀  ");     
+		System.out.println("\t\t\t        ▀          																									  ");
+		
+		System.out.println(" █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ ");
+
 		System.out.println();
 		System.out.println(" 1) Nuova Partita");
 		System.out.println(" 2) Esci");
 		System.out.println();
 		System.out.print(" > ");
-		
-		while(true) readInput();
+
+		while (cond)
+			try {
+				readInput();
+			} catch (NumberFormatException | IOException e) {
+				e.printStackTrace();
+			}
 	}
 	
-	public void readInput() {
-		int i = Integer.parseInt(input.nextLine());
+	public void readInput() throws NumberFormatException, IOException {
 		
-		if(i==1) startGame();
-		if(i==2) notifyExit();
+		int i = Integer.parseInt(input.readLine());
+
+		switch (i) {
+			case 1: startGame(); break;
+			case 2: notifyExit(); break;
+			default: System.out.println("ERRORE");
+		}
 	}
 	
 	public void showErrorMessage(String messageError) {
@@ -54,15 +93,13 @@ public class MenuCLI extends Observable implements Menu {
 	@Override
 	public void addNewObserver(Observer o) {
 		addObserver(o);
-		
 	}
 
 	@Override
 	public void startGame() {
-		//(new RoomCLI(input)).show();  
+		cond=false;
 		setChanged();
-		StoryBoard2Room storyBoard;
-		storyBoard = new StoryBoard2Room(new RoomCLI(input));
+		StoryBoard2Room storyBoard = new StoryBoard2Room(new RoomCLI(input));
 		notifyObservers(storyBoard);
 		
 	}
@@ -73,13 +110,15 @@ public class MenuCLI extends Observable implements Menu {
 		setChanged();
 		EventClose close = new EventClose();
 		notifyObservers(close);
-		
+	} 
+	
+	public static void main(String[] args) {
+		MenuCLI m = new MenuCLI( new BufferedReader(new InputStreamReader(System.in)));
+		try {
+			m.show();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
-	
-	public static void main(String[] args) throws IOException
-    {   
-        MenuCLI a = new MenuCLI(new Scanner(System.in));
-        a.show();
-    }  
-	
 }

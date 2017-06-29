@@ -38,7 +38,6 @@ public class Warehouse {
 		status.setResourceValue(MaterialsKind.STONE, 2);
 		status.setResourceValue(MaterialsKind.WOOD, 2);
 		status.setResourceValue(MaterialsKind.SERVANT, 3);
-		return;
 	}
 	
 	/**

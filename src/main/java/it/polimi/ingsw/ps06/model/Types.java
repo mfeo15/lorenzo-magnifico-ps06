@@ -54,7 +54,36 @@ public class Types {
 			return index;
 		}
 		
+		public ActionCategory getActionCategory() {
+			if ( this.index >= 1 && this.index <= 4 )
+				return ActionCategory.TOWER_GREEN;
+			
+			if ( this.index >= 5 && this.index <= 8 )
+				return ActionCategory.TOWER_BLUE;
+			
+			if ( this.index >= 9 && this.index <= 12 )
+				return ActionCategory.TOWER_YELLOW;
+			
+			if ( this.index >= 13 && this.index <= 16 )
+				return ActionCategory.TOWER_PURPLE;
+			
+			if ( this.index == 17 )
+				return ActionCategory.COUNCIL;
+			
+			if ( this.index == 18 || this.index == 19 )
+				return ActionCategory.HARVEST;
+			
+			if ( this.index == 20 || this.index == 21 )
+				return ActionCategory.PRODUCTION;
+			
+			if ( this.index >= 22 && this.index <= 26 )
+				return ActionCategory.MARKET;
+			
+			return null;
+		}
 	}
+	
+	public enum ActionCategory { TOWER_GREEN, TOWER_BLUE, TOWER_YELLOW, TOWER_PURPLE, MARKET, PRODUCTION, HARVEST, COUNCIL }
 	
 	public enum ColorPalette 
 	{
@@ -85,14 +114,6 @@ public class Types {
 		SERVANT	
 	}
 	
-	public enum Privileges
-	{
-		BONUS_1,
-		BONUS_2,
-		BONUS_3,
-		BONUS_4
-	}
-	
 	public enum CardType {
 		LEADER,
 		BUILDING,
@@ -104,11 +125,31 @@ public class Types {
 	
 	public enum CouncilPrivilege {
 		
-		BONUS_1, //Wood e Stone
-		BONUS_2, // 2 Servants
-		BONUS_3, // 2 Coins
-		BONUS_4, // 2 Military
-		BONUS_5 // 1 Faith
+		BONUS_1(0), //Wood e Stone
+		BONUS_2(1), // 2 Servants
+		BONUS_3(2), // 2 Coins
+		BONUS_4(3), // 2 Military
+		BONUS_5(4); // 1 Faith
 
+		private int index;
+		private CouncilPrivilege(int index) { this.index=index; }
+		
+		public static CouncilPrivilege getPrivilege(int index){
+			for (CouncilPrivilege a : CouncilPrivilege.values()) {
+				if(a.index == index) return a;
+			}
+			throw new IllegalArgumentException("Action not found");
+		}
+		
+		public int getIndex(){
+			return index;
+		}
+	}
+	
+	public enum LeaderStates {
+		IN_HAND, 
+		ON_TABLE_FACE_DOWN, 
+		ON_TABLE_FACE_UP, 
+		DISCARDED
 	}
 }

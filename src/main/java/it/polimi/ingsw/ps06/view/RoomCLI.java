@@ -1,35 +1,65 @@
 package it.polimi.ingsw.ps06.view;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Scanner;
 
+import it.polimi.ingsw.ps06.controller.MenuController;
 import it.polimi.ingsw.ps06.controller.RoomController;
 import it.polimi.ingsw.ps06.model.events.BoardHasLoaded;
 import it.polimi.ingsw.ps06.model.events.EventClose;
 import it.polimi.ingsw.ps06.model.events.RoomHasLoaded;
-import it.polimi.ingsw.ps06.model.messages.MessageUser;
 import it.polimi.ingsw.ps06.model.events.StoryBoard2Board;
 import it.polimi.ingsw.ps06.model.events.StoryBoard2Room;
+import it.polimi.ingsw.ps06.networking.messages.MessageGameStart;
+import it.polimi.ingsw.ps06.networking.messages.MessageUser;
 
 public class RoomCLI extends Observable implements Room {
 	
-	private Scanner input;
+	private BufferedReader input;
+
+	private boolean cond = true;
 	
-	public RoomCLI(Scanner input) {
+	
+	public RoomCLI(BufferedReader input) {
 		
 		this.input = input;
 	}
 	
-	public Scanner getScanner() {
+	public BufferedReader getScanner() {
 		return input;
 	}
 	
-	public void addNewControllerObserver(RoomController controller) {
-		addObserver(controller);
+	public void read() throws IOException {
+		
+			String s = input.readLine();
+			
+		if(cond){
+			if( ("start").equals(s) ) {
+				startGame();
+				return;
+			}
+			
+			if( ("?").equals(s) ) {
+				giveInfo();
+				return;
+			}
+			
+			if( ("login").equals(s) ) {
+				System.out.print(" Username > ");
+				String s1 = input.readLine();
+				System.out.print(" Password > ");
+				String s2 = input.readLine();
+				giveCredentials(s1,s2);
+				return;
+			}
+		}
 	}
 	
-	public void show() {
+	@Override
+	public void show() throws IOException{
 		System.out.println();
 		System.out.println("----- THE ROOM -----");
 		System.out.println();
@@ -38,22 +68,13 @@ public class RoomCLI extends Observable implements Room {
 		System.out.print(" > ");
 		
 		hasLoaded();
-		while(true) readInput();
-	}
-	
-	public void readInput() {
-		String s = input.nextLine();
 		
-		if(s.equals("start")) startGame();
-		if(s.equals("?")) giveInfo();
-		if(s.equals("exit")) notifyExit();
-		if(s.equals("login")){
-			System.out.print(" > ");
-			String s1 = String.valueOf(input.nextLine());
-			System.out.print(" > ");
-			String s2 = String.valueOf(input.nextLine());
-			giveCredentials(s1,s2);
-		}
+		while (cond)
+			try {
+				read();
+			} catch (NumberFormatException | IOException e) {
+				e.printStackTrace();
+			}
 	}
 
 	public void giveInfo() {
@@ -61,11 +82,9 @@ public class RoomCLI extends Observable implements Room {
 		System.out.println();
 		System.out.println(" Usa il comando \"start\" per partire");
 		System.out.println(" Usa il comando \"exit\" per uscire");
-		System.out.println(" Usa il comando \"login Username Password\" per fare il login");
+		System.out.println(" Usa il comando \"login\" per fare il login");
 		System.out.println();
 		System.out.print(" > ");
-
-		while(true) readInput();
 	}
 	
 	@Override
@@ -73,7 +92,6 @@ public class RoomCLI extends Observable implements Room {
 		System.out.println("--> "+name+" Si è connesso alla stanza!");
 		System.out.println();
 		System.out.print(" > ");
-		
 	}
 
 	@Override
@@ -81,7 +99,6 @@ public class RoomCLI extends Observable implements Room {
 		System.out.println("--> La stanza è ora vuota!");
 		System.out.println();
 		System.out.print(" > ");
-		
 	}
 
 	@Override
@@ -89,12 +106,10 @@ public class RoomCLI extends Observable implements Room {
 		System.out.println("--> Login Effettuato!");
 		System.out.println();
 		System.out.print(" > ");
+		
 		setChanged();
-		MessageUser userMessage;
-		
-		userMessage = new MessageUser(username);
+		MessageUser userMessage = new MessageUser(username);
 		notifyObservers(userMessage);
-		
 	}
 
 	@Override
@@ -110,18 +125,17 @@ public class RoomCLI extends Observable implements Room {
 
 	@Override
 	public void startGame() {
-		//(new BoardCLI(input)).show();  
 		
-		setChanged();
-		StoryBoard2Board storyBoard;
-		storyBoard = new StoryBoard2Board(new BoardCLI(input));
-		notifyObservers(storyBoard);
-		
+		setChanged();		
+		MessageGameStart gameStart;
+		gameStart = new MessageGameStart();
+		notifyObservers(gameStart);
 	}
 
 
 	@Override
 	public void notifyExit() {
+		
 		setChanged();
 		EventClose close = new EventClose();
 		notifyObservers(close);
@@ -130,20 +144,21 @@ public class RoomCLI extends Observable implements Room {
 
 	@Override
 	public void hasStarted() {
-		// TODO Auto-generated method stub
 		
+		cond=false;
+		
+		setChanged();
+		StoryBoard2Board storyBoard = new StoryBoard2Board(new BoardCLI(input));
+		notifyObservers(storyBoard);
 	}
 
 	@Override
 	public void hasLoaded() {
+		
 		setChanged();
 		RoomHasLoaded roomLoaded = new RoomHasLoaded();
 		notifyObservers(roomLoaded);
-		
 	}
-	
-	
-	
-	
+
 	
 }
