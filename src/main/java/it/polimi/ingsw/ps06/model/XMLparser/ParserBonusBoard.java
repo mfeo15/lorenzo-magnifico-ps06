@@ -65,28 +65,26 @@ public class ParserBonusBoard {
 	    		NodeList bonus_type = bonuses.getChildNodes();
 	    		for(int j=0; j<bonus_type.getLength(); j++){
 	    			Node current=bonus_type.item(j);
-	    			if(current.getNodeName().equals("bonustorreverde"))
+	    			if(current.getNodeName().equals("bonustorreverde"));
 	    			
 	    		}
 	    		
 	    		
-	    		
-	    		
-	    		
-	    		
-	    		
-	    		
-	    		for(int j = 0; j < carte.getLength(); j++){
-	    			Node node = carte.item(j); 
+	    		//for(int j = 0; j < carte.getLength(); j++){
+	    			//Node node = carte.item(j); 
+	    		for(int j=0; j<3 ; j++){
+	    			Node node=null;
+	    			
+	    			
 	    			Element carta = (Element)node; 
 			        if(carta.getAttribute("kind").equals("territory")) {
 			        	Territory a=new Territory();
 			        	NodeList attributes=node.getChildNodes();
 		    			for(int k = 0; k < attributes.getLength(); k++){
 		        			Node nodo = attributes.item(k); 
-		        		 setAttributes(nodo,a);
+		        		 //setAttributes(nodo,a);
 		    			}
-		    			dev=(Territory)a;		        	
+		    			//dev=(Territory)a;		        	
 			        }
 			        	
 			        else if (carta.getAttribute("kind").equals("building")){
@@ -94,9 +92,9 @@ public class ParserBonusBoard {
 			        	NodeList attributes=node.getChildNodes();
 		    			for(int k = 0; k < attributes.getLength(); k++){
 		        			Node nodo = attributes.item(k); 
-		        			setAttributes(nodo,a);
+		        			//setAttributes(nodo,a);
 		    			}
-		    			dev=(Building)a;
+		    			//dev=(Building)a;
 			        	}
 			        	
 			        else if(carta.getAttribute("kind").equals("venture")){
@@ -104,9 +102,9 @@ public class ParserBonusBoard {
 			        	NodeList attributes=node.getChildNodes();
 		    			for(int k = 0; k < attributes.getLength(); k++){
 		        			Node nodo = attributes.item(k); 
-		        			setAttributes(nodo,a);
+		        			//setAttributes(nodo,a);
 		    			}
-		    			dev=(Venture)a;
+		    			//dev=(Venture)a;
 			        	}
 
 			        else if(carta.getAttribute("kind").equals("character")){
@@ -114,11 +112,11 @@ public class ParserBonusBoard {
 			        	NodeList attributes=node.getChildNodes();
 		    			for(int k = 0; k < attributes.getLength(); k++){
 		        			Node nodo = attributes.item(k); 
-		        			setAttributes(nodo,a);
+		        			//setAttributes(nodo,a);
 		    			}
-		    			dev=(Character)a;
+		    			//dev=(Character)a;
 			        }	
-		    		cards.add(dev);
+		    		//cards.add(dev);
 	    		}
 			}
 			catch(Exception e){
