@@ -163,19 +163,21 @@ public class ParserXMLCards {
 				int x=Integer.parseInt(a.getTextContent());
 				((Building) d).setDiceReq(x);
 				}
-			if(d instanceof Territory){
+			else if(d instanceof Territory){
 				int x=Integer.parseInt(a.getTextContent());
 				((Territory) d).setDiceReq(x);
 				}
 		}
-			else if(a.getNodeName().equals("requirement")){/*
+		
+		/* else if(a.getNodeName().equals("requirement")){
 			int x=Integer.parseInt(a.getFirstChild().getTextContent());
 			if(d instanceof Venture){
 				((Venture) d).setMilRequirement(x);
 			}*/
-		}
 		return d;
-	}
+
+		}
+	
 	
 	/**
 	* Metodo per creare un elemento risorsa quando nel file xml si va a leggere un nodo che imposti delle risorse nelle carte
@@ -384,7 +386,16 @@ public class ParserXMLCards {
 		return cards;
 	}
 
+	public static void main(String[] args){
 
+	ParserXMLCards c = new ParserXMLCards("resources/XML/DevelopementCards.xml");
+	ArrayList<DevelopementCard> a = new  ArrayList<DevelopementCard>();
+	a = c.getCards();
+
+	for(int i=0; i<a.size();i++){
+		System.out.println("code:"+a.get(i).getCode()+", "+a.get(i).getTitle()+ " periodo: "+a.get(i).getPeriod());
+	}	
+}
 
 	
 }
