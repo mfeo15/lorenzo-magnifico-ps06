@@ -25,13 +25,14 @@ public class PersonalViewGUI  {
 	private JTextField coins, woods, stones, servants, victory, military, faith;
 	private Font font;
 	private BoardGUI boardView;
-	
+	private JLabel bonusTileLabel = new JLabel(); 
+	private JButton[] bonusTile = new JButton[1];
     
     private JButton[] territories = new JButton[6];
     private JButton[] buildings = new JButton[6];
 	
     private double ratio;
-	private int btCode;
+	private int btCode=1;
 	private Dimension screenSize;
 
 	public PersonalViewGUI(int id, BoardGUI v){
@@ -178,19 +179,10 @@ public class PersonalViewGUI  {
 	        buildings = locatePersonalCards(buildings,false);
         	territories = locatePersonalCards(territories,true);
 	        
-	        JButton[] bonusTile = new JButton[1];
 	        bonusTile = initializeButtons(bonusTile);
 	        bonusTile=setLabels(bonusTile);
 	        bonusTile[0].setLocation((int)(width*0.07/100),(int)(height*4.38/100));
 	        bonusTile[0].setSize((int)(width*5.8/100),(int)(height*72.8/100));
-	        
-	        
-	        JLabel bonusTileLabel = new JLabel();       
-	        bonusTileLabel = ImageHandler.setImage("resources/tile/pb"+btCode+".png",5.8,73.1,width,height);
-	        
-	        bonusTile[0].setIcon(bonusTileLabel.getIcon());
-			bonusTile[0].setDisabledIcon( bonusTile[0].getIcon() );
-			
 	        
 			for(int j=0; j<territories.length;j++){ f.add(territories[j]); }
 			for(int j=0; j<buildings.length;j++){ f.add(buildings[j]); }
@@ -303,6 +295,14 @@ public class PersonalViewGUI  {
 			
 		}
 		
+		public void setTileCode(int code) throws IOException{
+			this.btCode=code;
+			
+			bonusTileLabel = ImageHandler.setImage("resources/tile/pb"+btCode+".png",5.8,73.1,width,height);
+	        
+	        bonusTile[0].setIcon(bonusTileLabel.getIcon());
+			bonusTile[0].setDisabledIcon( bonusTile[0].getIcon() );
+		}
 
 		public void hasLoaded() {
 			

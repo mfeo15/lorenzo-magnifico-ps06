@@ -2403,6 +2403,11 @@ public class BoardGUI extends Observable implements Board {
 		view.setBuildingCard(id, index);
 		
 	}
+	
+	@Override
+	public void setBonusTilePersonalView(int code) throws IOException{
+		view.setTileCode(code);
+	}
 
 	@Override
 	public void hasLoadedPersonalView() {

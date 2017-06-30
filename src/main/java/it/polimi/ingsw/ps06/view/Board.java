@@ -78,5 +78,7 @@ public interface Board {
 	
 	void hasLoadedPersonalView();
 	
+	void setBonusTilePersonalView(int code) throws IOException;
+	
 	void setRound();
 }

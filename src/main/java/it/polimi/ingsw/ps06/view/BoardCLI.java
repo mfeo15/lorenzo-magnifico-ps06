@@ -21,8 +21,8 @@ import it.polimi.ingsw.ps06.model.events.EventLeaderPlayed;
 import it.polimi.ingsw.ps06.model.events.EventMemberPlaced;
 import it.polimi.ingsw.ps06.networking.messages.MessageObtainPersonalBoardStatus;
 
-public class BoardCLI extends Observable implements Board {
-		
+public class BoardCLI extends Observable implements Board,Runnable {
+
 	private String[] player = new String[5];
 	private int[] cardsCodes = new int[16];
 	
@@ -46,20 +46,15 @@ public class BoardCLI extends Observable implements Board {
     private BufferedReader input;
     
     private boolean cond = true;
-	
-	public BoardCLI(BufferedReader input) {
-		
-		this.input = input;
-	}
-	
-	
+
+    public BoardCLI(BufferedReader input){
+    	this.input=input;
+    }
+
 	public void read () throws IOException {
 		
 		String s = input.readLine();
 		
-		if (s == null)
-			return;
-
 		if(("spots").equals(s)) giveSpots();
 		if(("actions").equals(s)) giveActions();
 		if(("?").equals(s)) giveInfo();
@@ -72,7 +67,8 @@ public class BoardCLI extends Observable implements Board {
 		if(("info3").equals(s)) printPoints(3);
 		if(("info4").equals(s)) printPoints(4);
 		if(("info5").equals(s)) printPoints(5);
-
+		
+		
 		if(("attiva1").equals(s)) notifyLeaderActivation(1);
 		if(("attiva2").equals(s)) notifyLeaderActivation(2);
 		if(("attiva3").equals(s)) notifyLeaderActivation(3);
@@ -103,11 +99,11 @@ public class BoardCLI extends Observable implements Board {
 					notifyAction(Action.valueOf(s1.toUpperCase()),index,servants);
 				}
 		}
+		
 	}
 	
-    @Override
-	public void show() throws IOException{
-		
+	@Override
+	public void show() throws IOException {
 		printTowers();
 		System.out.println();
 		System.out.println(" --- Firenze, 1500. Benvenuto in questa magnifica città. --- ");
@@ -117,14 +113,12 @@ public class BoardCLI extends Observable implements Board {
 		System.out.print(" > ");
 		
 		hasLoaded();
-		
-		while (cond)
-			try {
-				read();
-			} catch (NumberFormatException | IOException e) {
-				e.printStackTrace();
-			}
+
+		//BoardCLI boardCLI = new BoardCLI(input);
+		Thread t = new Thread(this);
+        t.start();
 	}
+
 	
 	public void giveTowerStatus() {
 		
@@ -163,6 +157,7 @@ public class BoardCLI extends Observable implements Board {
 	}
 
 	public void giveInfo() {
+
 		System.out.println("----- LISTA COMANDI -----");
 		System.out.println();
 		System.out.println("Per eseguire un azione digita il comando \"action\"");
@@ -274,7 +269,7 @@ public class BoardCLI extends Observable implements Board {
 	
 	public void printPoints(int index) {
 		if (index==0) System.out.println("--> Coin: "+coinV+" Wood: "+woodV+" Stone: "+stoneV+" Servant:"+servantV+" Victory:"+victoryV+" Military:"+militaryV+" Faith:"+faithV);
-		startGame(index);
+		else startGame(index);
 	}
 
 	@Override
@@ -299,7 +294,7 @@ public class BoardCLI extends Observable implements Board {
 	public void setPeriodRound(int period, int round) {
 		this.periodNumber=period;
 		this.roundNumber=round;
-		
+
 	}
 
 	@Override
@@ -615,4 +610,67 @@ public class BoardCLI extends Observable implements Board {
 		
 	}
 
+
+	@Override
+	public void setBonusTilePersonalView(int code) throws IOException {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void run() {
+		while(cond){
+			String s;
+			try { s = input.readLine(); 
+			
+			if(("spots").equals(s)) giveSpots();
+			if(("actions").equals(s)) giveActions();
+			if(("?").equals(s)) giveInfo(); 
+			if(("status").equals(s)) giveGameStatus();
+			if(("towers").equals(s)) giveTowerStatus();
+	
+			if(("info").equals(s)) printPoints(0);
+			if(("info1").equals(s)) printPoints(1);
+			if(("info2").equals(s)) printPoints(2);
+			if(("info3").equals(s)) printPoints(3);
+			if(("info4").equals(s)) printPoints(4);
+			if(("info5").equals(s)) printPoints(5);
+			
+			
+			if(("attiva1").equals(s)) notifyLeaderActivation(1);
+			if(("attiva2").equals(s)) notifyLeaderActivation(2);
+			if(("attiva3").equals(s)) notifyLeaderActivation(3);
+			if(("attiva4").equals(s)) notifyLeaderActivation(4);
+	
+			if(("scarta1").equals(s)) notifyLeaderDiscard(1);
+			if(("scarta2").equals(s)) notifyLeaderDiscard(2);
+			if(("scarta3").equals(s)) notifyLeaderDiscard(3);
+			if(("scarta4").equals(s)) notifyLeaderDiscard(4);
+	
+			if(("piazza1").equals(s)) notifyLeaderPlacement(1);
+			if(("piazza2").equals(s)) notifyLeaderPlacement(2);
+			if(("piazza3").equals(s)) notifyLeaderPlacement(3);
+			if(("piazza4").equals(s)) notifyLeaderPlacement(4);
+	
+			if(("action").equals(s))
+			{
+				System.out.print("Che azione? > ");
+				String s1 = String.valueOf(input.readLine());
+				for(int j=0; j<25; j++)
+					if( s1.equalsIgnoreCase(( ((Action.getAction(j)).toString())) )){
+						System.out.print("Che familiare? (Numero) > ");
+	
+							
+							String s2 = input.readLine();
+							int index = Integer.parseInt(s2.replaceAll("[\\D]", "")); 
+							
+							System.out.print("Quanti servi vuoi usare? > ");
+							int servants = Integer.parseInt(input.readLine());
+							notifyAction(Action.valueOf(s1.toUpperCase()),index,servants); 
+					}
+				} 
+						
+			}catch (IOException e) {}
+		}
+	}
 }
