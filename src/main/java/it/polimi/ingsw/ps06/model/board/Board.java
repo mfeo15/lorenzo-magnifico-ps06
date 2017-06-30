@@ -68,7 +68,7 @@ public class Board {
 	* @return 		order	ordine dei familiari
 	*/ 
 	public ArrayList<Player> getOrder() {
-		return order;
+		return councilPalaceZone.checkOrder();
 	}
 	
 	/**
@@ -93,7 +93,7 @@ public class Board {
 		marketZone.cleanMarket();
 		towersZone.cleanTowers();
 		harvestProductionZone.cleanZone();
-		order = councilPalaceZone.checkOrder();
+		//order = councilPalaceZone.checkOrder();
 		councilPalaceZone.cleanPalace();
 	}
 	

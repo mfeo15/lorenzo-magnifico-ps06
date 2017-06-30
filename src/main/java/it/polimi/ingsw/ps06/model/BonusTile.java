@@ -22,7 +22,10 @@ public class BonusTile {
 	 * @return 	nothing
 	**/
 	
-	public BonusTile(){
+	public BonusTile(int code) {
+		
+		this.code = code;
+		
 		//da file dovrà ottenere le info da inserire
 		harvest_bonus = new Resources();
 		production_bonus = new Resources();
@@ -31,6 +34,13 @@ public class BonusTile {
 		//this.dice_required=numero; valore da ottenere dal file	
 	}
 	
+	public int getCode() {
+		return code;
+	}
+
+	public void setCode(int code) {
+		this.code = code;
+	}
 	
 	/**
 	* Metodo per controllare che il valore del familiare sia sufficiente per avere bonus

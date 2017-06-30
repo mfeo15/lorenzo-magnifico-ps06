@@ -156,7 +156,7 @@ public class MessageParser implements MessageVisitor {
 	public void visit(MessagePersonalBoardStatus pbStatus) {
 		Board b = ((Board) supporter);
 		
-		
+		b.setBonusTilePersonalView( pbStatus.getBonusTileCode() );
 		
 		b.setResourcesPersonalView(pbStatus.getResourceValue(MaterialsKind.COIN), 
 										pbStatus.getResourceValue(MaterialsKind.WOOD), 
@@ -195,7 +195,13 @@ public class MessageParser implements MessageVisitor {
 			ArrayList<Integer> venturesCode = new ArrayList<Integer>();
 			pb.getVentures().forEach(v -> venturesCode.add( v.getCode() ));
 			
-			MessagePersonalBoardStatus pbStatus = new MessagePersonalBoardStatus(territoriesCode, buildingsCode, charactersCode, venturesCode);
+			MessagePersonalBoardStatus pbStatus = new MessagePersonalBoardStatus ( 
+														pb.getBonusTile().getCode(), 
+														territoriesCode, 
+														buildingsCode, 
+														charactersCode, 
+														venturesCode
+													);
 			for (MaterialsKind m : MaterialsKind.values()) pbStatus.setResourceValue(m, pb.getInventory().getResourceValue(m));
 			for (PointsKind p : PointsKind.values()) pbStatus.setResourceValue(p, pb.getInventory().getResourceValue(p));
 			connection.asyncSend(pbStatus);

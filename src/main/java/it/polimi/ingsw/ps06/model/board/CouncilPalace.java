@@ -98,7 +98,7 @@ public class CouncilPalace extends Observable implements PlaceSpace {
 	*
 	* @return 	players		array di players nell'ordine giusto
 	*/
-	public ArrayList<Player> checkOrder(){
+	public ArrayList<Player> checkOrder() {
 		
 		if (memberSpaces.size() == 0)
 			return null;

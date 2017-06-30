@@ -9,6 +9,8 @@ import it.polimi.ingsw.ps06.model.Types.PointsKind;
 
 public class MessagePersonalBoardStatus extends Server2Client {
 
+	private int bonusTileCode;
+	
 	private EnumMap<MaterialsKind, Integer> materialsValues;
 	private EnumMap<PointsKind, Integer> pointsValues;
 	
@@ -18,8 +20,10 @@ public class MessagePersonalBoardStatus extends Server2Client {
 	private ArrayList<Integer> venture;
 	
 	
-	public MessagePersonalBoardStatus(ArrayList<Integer> territory, 
+	public MessagePersonalBoardStatus(int bonusTileCode, ArrayList<Integer> territory, 
 			ArrayList<Integer> building, ArrayList<Integer> character, ArrayList<Integer> venture) {
+		
+		this.bonusTileCode = bonusTileCode;
 		
 		this.materialsValues = new EnumMap<MaterialsKind, Integer>(MaterialsKind.class);
 		this.pointsValues = new EnumMap<PointsKind, Integer>(PointsKind.class);
@@ -28,6 +32,14 @@ public class MessagePersonalBoardStatus extends Server2Client {
 		this.building = building;
 		this.character = character;
 		this.venture = venture;
+	}
+	
+	public int getBonusTileCode() {
+		return this.bonusTileCode;
+	}
+	
+	public void setBonusTileCode(int bonusTileCode) {
+		this.bonusTileCode = bonusTileCode;
 	}
 	
 	public void setResourceValue(MaterialsKind kind, int value) {

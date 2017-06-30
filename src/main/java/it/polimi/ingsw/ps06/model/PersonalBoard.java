@@ -45,7 +45,10 @@ public class PersonalBoard extends Observable {
 		characters = new ArrayList<Character>();
 		ventures = new ArrayList<Venture>();
 		inventory = new Warehouse();
-		bonusTile = new BonusTile();
+	}
+	
+	public void setBonusTile(int code) {
+		bonusTile = new BonusTile(code);
 	}
 	
 	/**

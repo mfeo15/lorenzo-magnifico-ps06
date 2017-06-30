@@ -43,6 +43,7 @@ public class Game extends Observable implements Observer {
 	private int numberPlayers;
 	private ArrayList<Player> players;
 	private ArrayList<Leader> leaders;
+	private ArrayList<Integer> bonusTiles;
 	
 	private Board board;
 	
@@ -91,6 +92,12 @@ public class Game extends Observable implements Observer {
 			this.leaders.add(l);
 		}
 		
+		Collections.shuffle( leaders, new Random(System.nanoTime()) );
+		
+		bonusTiles = new ArrayList<Integer>();
+		for (int j = 1; j <= 4; j++) bonusTiles.add(j);
+		Collections.shuffle( bonusTiles, new Random(System.nanoTime()) );
+		
 		period = 1;
 		round = 1;
 		
@@ -107,6 +114,7 @@ public class Game extends Observable implements Observer {
 	}
 	
 	public void addPlayer(Player newPlayer) {
+		newPlayer.getPersonalBoard().setBonusTile( bonusTiles.remove(0) );
 		players.add(newPlayer);
 	}
 	
