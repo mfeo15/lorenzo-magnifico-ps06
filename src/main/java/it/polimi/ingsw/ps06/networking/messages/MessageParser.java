@@ -156,7 +156,12 @@ public class MessageParser implements MessageVisitor {
 	public void visit(MessagePersonalBoardStatus pbStatus) {
 		Board b = ((Board) supporter);
 		
-		b.setBonusTilePersonalView( pbStatus.getBonusTileCode() );
+		try {
+			b.setBonusTilePersonalView( pbStatus.getBonusTileCode() );
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		b.setResourcesPersonalView(pbStatus.getResourceValue(MaterialsKind.COIN), 
 										pbStatus.getResourceValue(MaterialsKind.WOOD), 
