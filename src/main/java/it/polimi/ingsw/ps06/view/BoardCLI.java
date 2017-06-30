@@ -22,9 +22,7 @@ import it.polimi.ingsw.ps06.model.events.EventMemberPlaced;
 import it.polimi.ingsw.ps06.networking.messages.MessageObtainPersonalBoardStatus;
 
 public class BoardCLI extends Observable implements Board {
-	
-	//private Scanner input;
-	
+		
 	private String[] player = new String[5];
 	private int[] cardsCodes = new int[16];
 	
@@ -611,22 +609,10 @@ public class BoardCLI extends Observable implements Board {
 		
 	}
 
-	
-	
 	@Override
 	public void setTimer(int seconds) {
 		// TODO Auto-generated method stub
 		
 	}
 
-
-	public static void main(String[] args) {
-		BoardCLI m = new BoardCLI( new BufferedReader(new InputStreamReader(System.in)));
-		try {
-			m.show();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 }

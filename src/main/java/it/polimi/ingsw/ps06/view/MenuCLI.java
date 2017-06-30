@@ -2,10 +2,8 @@ package it.polimi.ingsw.ps06.view;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Scanner;
 
 import it.polimi.ingsw.ps06.controller.MenuController;
 import it.polimi.ingsw.ps06.model.events.EventClose;
@@ -112,13 +110,4 @@ public class MenuCLI extends Observable implements Menu {
 		notifyObservers(close);
 	} 
 	
-	public static void main(String[] args) {
-		MenuCLI m = new MenuCLI( new BufferedReader(new InputStreamReader(System.in)));
-		try {
-			m.show();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 }

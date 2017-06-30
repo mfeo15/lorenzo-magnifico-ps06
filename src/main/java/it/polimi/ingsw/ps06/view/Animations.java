@@ -21,7 +21,6 @@ public class Animations {
 	private static int runTime = 1000;
     private static long startTime = -1;
     private static double smooth;
-    private static boolean ok=true;
 	private static int phase=1;
 	private static boolean change=true;
 	private static Dimension screenSize;
@@ -50,8 +49,6 @@ public class Animations {
                 } catch (Exception ex) {
                 }
 
-                ok = false;
-                
                 Timer timer = new Timer(40, new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -177,8 +174,6 @@ public class Animations {
         		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         		distance = 2.2*((screenSize.getHeight()/1080));
         		smooth = 1 * ((screenSize.getHeight()/1080));
-                ok = false;
-                
                 
                 Timer timer = new Timer(40, new ActionListener() {
                     @Override

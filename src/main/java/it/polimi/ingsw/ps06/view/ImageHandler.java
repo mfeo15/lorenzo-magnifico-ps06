@@ -1,18 +1,11 @@
 package it.polimi.ingsw.ps06.view;
 
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -23,9 +16,7 @@ public class ImageHandler {
 	
 
 	public static JLabel setImage(String s,double xMod, double yMod, int width, int height) throws IOException{
-		
-		//BufferedImage image = ImageIO.read(new File(s)); 
-		
+				
 	    s =s.replaceFirst("resources", "");
 		BufferedImage image = ImageIO.read( ImageHandler.class.getResourceAsStream(s) );
 		
