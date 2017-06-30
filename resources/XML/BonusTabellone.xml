@@ -70,4 +70,68 @@
 		<posto15>30</posto15>
 	</bonusfede>
 	
+	<bonustiles>
+
+		<bonustile type="0">
+			<production>
+				<military>1</military>
+				<coin>2</coin>
+			</production>
+			<harvest>
+				<wood>1</wood>
+				<stone>1</stone>
+				<servant>1</servant>
+			</harvest>
+		</bonustile>
+	
+		<bonustile type="1">
+			<production>
+				<servant>1</servant>
+				<coin>2</coin>
+			</production>
+			<harvest>
+				<wood>1</wood>
+				<stone>1</stone>
+				<military>1</military>
+			</harvest>
+		</bonustile>
+	
+		<bonustile type="2">
+			<production>
+				<servant>1</servant>
+				<military>2</military>
+			</production>
+			<harvest>
+				<wood>1</wood>
+				<stone>1</stone>
+				<coin>1</coin>
+			</harvest>
+		</bonustile>
+		
+		<bonustile type="3">
+			<production>
+				<servant>2</servant>
+				<coin>1</coin>
+			</production>
+			<harvest>
+				<wood>1</wood>
+				<stone>1</stone>
+				<military>1</military>
+			</harvest>
+		</bonustile>
+		
+		<bonustile type="4">
+			<production>
+				<military>2</military>
+				<coin>1</coin>
+			</production>
+			<harvest>
+				<wood>1</wood>
+				<stone>1</stone>
+				<servant>1</servant>
+			</harvest>
+		</bonustile>
+	
+	</bonustiles>
+	
 </bonustabellone>

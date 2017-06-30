@@ -1,13 +1,6 @@
 package it.polimi.ingsw.ps06.model.XMLparser;
-import it.polimi.ingsw.ps06.model.Resources;
-import it.polimi.ingsw.ps06.model.Types;
-import it.polimi.ingsw.ps06.model.Types.Action;
-import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
-import it.polimi.ingsw.ps06.model.Types.PointsKind;
-import it.polimi.ingsw.ps06.model.cards.Building;
-import it.polimi.ingsw.ps06.model.cards.Character;
-import it.polimi.ingsw.ps06.model.cards.Territory;
-import it.polimi.ingsw.ps06.model.cards.Venture;
+import java.util.ArrayList;
+import java.util.EnumMap;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -17,8 +10,11 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import java.util.ArrayList;
-import java.util.EnumMap;
+import it.polimi.ingsw.ps06.model.BonusTile;
+import it.polimi.ingsw.ps06.model.Resources;
+import it.polimi.ingsw.ps06.model.Types.Action;
+import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
+import it.polimi.ingsw.ps06.model.Types.PointsKind;
 
 /**
  * Classe per la lettura del file xml delle carte territorio, edificio, impresa e personaggio
@@ -31,7 +27,9 @@ import java.util.EnumMap;
 public class ParserBonusBoard {
 
 	private ArrayList<Integer> faith_points;
-	public EnumMap<Action, Resources> actionSpaces;
+	private EnumMap<Action, Resources> actionSpaces;
+	private ArrayList<BonusTile> bonusTiles;
+	
 	private String XML_sourceFile;
 
 	/**
@@ -43,9 +41,14 @@ public class ParserBonusBoard {
 	public ParserBonusBoard(String source) {
 		this.XML_sourceFile = source;
 		faith_points = new ArrayList<Integer>();
+		bonusTiles = new ArrayList<BonusTile>();
 		actionSpaces = new EnumMap<Action, Resources>(Action.class);
 
 		parse( buildDocument() );
+	}
+	
+	public BonusTile getBonusTile(int code) {
+		return bonusTiles.get(code);
 	}
 
 	public Resources getBonusRescourcesForActionSpace(Action a) {
@@ -151,6 +154,28 @@ public class ParserBonusBoard {
 			}
 		}
 	}
+	
+	private void parserBonusTiles(NodeList bonus_tiles) {
+		
+		for(int j=0; j < bonus_tiles.getLength(); j++) 
+		{
+			Node current = bonus_tiles.item(j);
+
+			if (current.getNodeType() == Node.ELEMENT_NODE) 
+			{	
+				int code = Integer.parseInt(current.getAttributes().getNamedItem("type").getNodeValue());
+				
+				Node harvest = ((Element) current).getElementsByTagName("harvest").item(0);
+				Resources harvest_bonus = parseResourceNode(harvest);
+				
+				Node production = ((Element) current).getElementsByTagName("production").item(0);
+				Resources production_bonus = parseResourceNode(production);
+				
+				BonusTile b = new BonusTile(code, harvest_bonus, production_bonus);
+				bonusTiles.add(code, b);
+			}
+		}
+	}
 
 	private void parse(Document d) {
 
@@ -174,6 +199,9 @@ public class ParserBonusBoard {
 
 		NodeList bonus_fede = ((Element) bonuses).getElementsByTagName("bonusfede").item(0).getChildNodes();
 		parserFaithBonus(bonus_fede);
+		
+		NodeList bonus_tiles = ((Element) bonuses).getElementsByTagName("bonustiles").item(0).getChildNodes();
+		parserBonusTiles(bonus_tiles);
 	}
 
 	/**

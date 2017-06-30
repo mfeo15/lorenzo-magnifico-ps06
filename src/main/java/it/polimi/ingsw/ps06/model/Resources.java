@@ -21,7 +21,7 @@ public class Resources implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 9193388048987531889L;
-	
+
 	private EnumMap<MaterialsKind, Integer> materials;
 	private EnumMap<PointsKind, Integer> points;
 	
@@ -233,5 +233,18 @@ public class Resources implements Serializable {
 		
 		Set<PointsKind> pointsSet = points.keySet();
 		for (PointsKind currentpoint : pointsSet) decreaseResourceValue(currentpoint, r.getResourceValue(currentpoint));
+	}
+	
+	@Override
+	public String toString() {
+		String s = "Coin:" + materials.get(MaterialsKind.COIN) 
+				+ " Wood:" + materials.get(MaterialsKind.WOOD)
+				+ " Stone:" + materials.get(MaterialsKind.STONE)
+				+ " Servant:" + materials.get(MaterialsKind.SERVANT)
+				+ " Faith:" + points.get(PointsKind.FAITH_POINTS)
+				+ " Military:" + points.get(PointsKind.MILITARY_POINTS)
+				+ " Victory:" + points.get(PointsKind.VICTORY_POINTS);
+		
+		return s;
 	}
 }

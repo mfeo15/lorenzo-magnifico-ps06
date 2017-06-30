@@ -21,17 +21,11 @@ public class BonusTile {
 	 * 
 	 * @return 	nothing
 	**/
-	
-	public BonusTile(int code) {
+	public BonusTile(int code, Resources harvest_bonus, Resources production_bonus) {
 		
 		this.code = code;
-		
-		//da file dovrà ottenere le info da inserire
-		harvest_bonus = new Resources();
-		production_bonus = new Resources();
-		//harvest_bonus.add(valori);  valori da ottenere dal file
-		//production_bonus.add(valori);  valori da ottenere dal file
-		//this.dice_required=numero; valore da ottenere dal file	
+		this.harvest_bonus = harvest_bonus;
+		this.production_bonus = production_bonus;
 	}
 	
 	public int getCode() {
@@ -42,11 +36,26 @@ public class BonusTile {
 		this.code = code;
 	}
 	
+	public Resources getHarvest_bonus() {
+		return harvest_bonus;
+	}
+
+	public void setHarvest_bonus(Resources harvest_bonus) {
+		this.harvest_bonus = harvest_bonus;
+	}
+
+	public Resources getProduction_bonus() {
+		return production_bonus;
+	}
+
+	public void setProduction_bonus(Resources production_bonus) {
+		this.production_bonus = production_bonus;
+	}
+	
 	/**
 	* Metodo per controllare che il valore del familiare sia sufficiente per avere bonus
 	* @return 	Boolean
 	**/
-	
 	public boolean check_dice(Dice dice){
 		if( dice.getValue() >= dice_required)
 			return true;
@@ -59,7 +68,6 @@ public class BonusTile {
 	* 
 	* @return 	Nothing
 	*/
-	
 	public void activate_productionBonus(Player player){
 		player.getPersonalBoard().addResource(production_bonus);
 		return;
@@ -70,7 +78,6 @@ public class BonusTile {
 	* 
 	* @return 	Nothing
 	*/
-	
 	public void activate_harvestBonus(Player player){
 		player.getPersonalBoard().addResource(harvest_bonus);
 		return;
