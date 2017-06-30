@@ -14,6 +14,7 @@ import it.polimi.ingsw.ps06.model.Types;
 import it.polimi.ingsw.ps06.model.Types.Action;
 import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
 import it.polimi.ingsw.ps06.model.Types.PointsKind;
+import it.polimi.ingsw.ps06.model.XMLparser.ParserBonusBoard;
 import it.polimi.ingsw.ps06.model.XMLparser.ParserXMLCards;
 import it.polimi.ingsw.ps06.model.cards.Building;
 import it.polimi.ingsw.ps06.model.cards.Character;
@@ -257,28 +258,14 @@ public class Towers extends Observable implements PlaceSpace {
 			
 	}
 	
-	private void giveBonus(Action chosenAction, FamilyMember member){
+	private void giveBonus(Action chosenAction, FamilyMember member) {
 		
-		EffectsResources er;
-		Player player = member.getPlayer();
+		ParserBonusBoard p = new ParserBonusBoard("resources/XML/BonusTabellone.xml");
 		
-		switch (chosenAction) {
-			case TOWER_GREEN_4 : er = new EffectsResources(new Resources(MaterialsKind.WOOD,2)); break;
-			case TOWER_GREEN_3 : er = new EffectsResources(new Resources(MaterialsKind.WOOD,1)); break;
+		Resources r = p.getBonusRescourcesForActionSpace(chosenAction);
 		
-			case TOWER_BLUE_4 : er = new EffectsResources(new Resources(MaterialsKind.STONE,2)); break;
-			case TOWER_BLUE_3 : er = new EffectsResources(new Resources(MaterialsKind.STONE,1)); break;
-		
-			case TOWER_YELLOW_4 : er = new EffectsResources(new Resources(PointsKind.MILITARY_POINTS,2)); break;
-			case TOWER_YELLOW_3 : er = new EffectsResources(new Resources(PointsKind.MILITARY_POINTS,1)); break;
-		
-			case TOWER_PURPLE_4 : er = new EffectsResources(new Resources(MaterialsKind.COIN,2)); break;
-			case TOWER_PURPLE_3 : er = new EffectsResources(new Resources(MaterialsKind.COIN,1)); break;
-		
-			default: er = null;
-		}
-		
-		if (er != null) er.activate(player);
+		if ( r != null)
+			(new EffectsResources( r )).activate( member.getPlayer() );
 	}
 	
 	/**

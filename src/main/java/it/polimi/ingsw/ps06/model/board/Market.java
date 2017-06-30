@@ -12,6 +12,7 @@ import it.polimi.ingsw.ps06.model.Types;
 import it.polimi.ingsw.ps06.model.Types.Action;
 import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
 import it.polimi.ingsw.ps06.model.Types.PointsKind;
+import it.polimi.ingsw.ps06.model.XMLparser.ParserBonusBoard;
 import it.polimi.ingsw.ps06.model.effects.Effect;
 import it.polimi.ingsw.ps06.model.effects.EffectsResources;
 import it.polimi.ingsw.ps06.networking.SocketServer;
@@ -178,15 +179,22 @@ public class Market extends Observable implements PlaceSpace {
 	*/
 	private void giveBonus(FamilyMember member, Action chosenAction) {
 		
-		Player player = member.getPlayer();
+		ParserBonusBoard p = new ParserBonusBoard("resources/XML/BonusTabellone.xml");
+		Resources r = p.getBonusRescourcesForActionSpace(chosenAction);
 		
+		if ( r != null)
+			(new EffectsResources( r )).activate( member.getPlayer() );
+		
+		/*
 		e = bonus.get( chosenAction.ordinal() - marketIndex );
 		e.activate(player);
+		*/
 		
-		if( (chosenAction.ordinal() - marketIndex) == 3 ) e.activate(player);
+		//if( (chosenAction.ordinal() - marketIndex) == 3 ) e.activate(player);
 		
 		//Tell the view what happened
-		MessageBoardMemberHasBeenPlaced newMember = new MessageBoardMemberHasBeenPlaced(chosenAction, member.getColor(), player.getID() );
+		MessageBoardMemberHasBeenPlaced newMember 
+				= new MessageBoardMemberHasBeenPlaced(chosenAction, member.getColor(), member.getPlayer().getID() );
 		notifyChangement(newMember);
 		
 		//Tell the model what happened
