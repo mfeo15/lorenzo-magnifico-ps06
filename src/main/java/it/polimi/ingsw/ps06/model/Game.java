@@ -66,8 +66,6 @@ public class Game extends Observable implements Observer {
 	*/
 	public Game(int numberPlayers) {
 		
-		System.out.println("NEW GAME FOR " + numberPlayers + " PLAYERS");
-		
 		this.numberPlayers = numberPlayers;
 		
 		diceBlack = new Dice(ColorPalette.DICE_BLACK);
@@ -106,8 +104,6 @@ public class Game extends Observable implements Observer {
 	
 	public void setCurrentPlayerIndex(int currentPlayerIndex) {
 		this.currentPlayerIndex = currentPlayerIndex;
-		
-		System.out.println("CURRENT: " + this.currentPlayerIndex);
 		
 		MessageCurrentPlayer messageCurrentP = new MessageCurrentPlayer( getCurrentPlayer().getID() );
 		notifyChangement(messageCurrentP);
@@ -364,12 +360,6 @@ public class Game extends Observable implements Observer {
 			Player p = players.get(i);
 			p.getPersonalBoard().addResource(MaterialsKind.COIN, STANDARD_AMOUNT_COINS_FIRST_PLAYER + i);
 			p.addLeaders( new ArrayList<Leader>( leaders.subList( (4 * p.getID()) , (4 + 4 * p.getID()) ) ) );
-			
-			System.out.println("Giocatore " + p.getColorAssociatedToID() + " ha leaders "  + 
-									p.getLeaders().get(0).getCode() + ", " + 
-									p.getLeaders().get(1).getCode() + ", " + 
-									p.getLeaders().get(2).getCode() + ", " +
-									p.getLeaders().get(3).getCode() + "\n" );
 		}
 		
 		setupRound();

@@ -18,6 +18,10 @@ import it.polimi.ingsw.ps06.model.effects.Effect;
 		protected int code;
 		protected String title;
 		protected ArrayList<Effect> effect;
+		
+		public Card() {
+			effect = new ArrayList<Effect>();
+		}
 	
 		/**
 		 * Metodo per settare il codice della carta
@@ -25,7 +29,6 @@ import it.polimi.ingsw.ps06.model.effects.Effect;
 		 * @param	code	codice da inserire
 		 * @return	nothing
 		 */
-	  
 		public void setCode(int code){
 			this.code=code;
 			return;
@@ -36,7 +39,6 @@ import it.polimi.ingsw.ps06.model.effects.Effect;
 		 * @param	titolo	nome della carta
 		 * @return	nothing
 		 */
-	   
 		public void setTitle(String title){
 			this.title=title;
 			return;
@@ -47,7 +49,6 @@ import it.polimi.ingsw.ps06.model.effects.Effect;
 		 * @param	player	giocatore su cui attivare l'effetto
 		 * @return	nothing
 		 */
-		
 		public void activateEffect(Player player){
 			for(Effect i : effect){
 			i.activate(player);
@@ -60,20 +61,17 @@ import it.polimi.ingsw.ps06.model.effects.Effect;
 		 * @param	none
 		 * @return	title	nome della carta
 		 */
-		
 		public String getTitle(){
 			return title;
 		}
 		
 		/**Metodo per settare il periodo della carta
 		 * 
-		 * @param	effect	effetto da aggiungere
+		 * @param	arrayList	effetto da aggiungere
 		 * @return	nothing
 		 */
-		
-		public void setPermEffect(Effect effect){
-			this.effect.add(effect);
-			return;
+		public void setPermEffect(ArrayList<Effect> arrayList) {
+			this.effect.addAll(arrayList);
 		}
 		
 		/**Metodo che restituisce il codice della carta
@@ -81,7 +79,6 @@ import it.polimi.ingsw.ps06.model.effects.Effect;
 		 * @param	none
 		 * @return	code	codice della carta
 		 */
-		
 		public int getCode(){
 			return code;
 		}

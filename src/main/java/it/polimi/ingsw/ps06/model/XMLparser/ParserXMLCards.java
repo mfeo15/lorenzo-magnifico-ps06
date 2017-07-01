@@ -1,17 +1,5 @@
 package it.polimi.ingsw.ps06.model.XMLparser;
-import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
-import it.polimi.ingsw.ps06.model.Types.PointsKind;
-import it.polimi.ingsw.ps06.model.cards.Building;
-import it.polimi.ingsw.ps06.model.cards.Character;
-import it.polimi.ingsw.ps06.model.cards.DevelopementCard;
-import it.polimi.ingsw.ps06.model.cards.Territory;
-import it.polimi.ingsw.ps06.model.cards.Venture;
-import it.polimi.ingsw.ps06.model.effects.EffectsResources;
-import it.polimi.ingsw.ps06.model.effects.EffectsResourcesByCard;
-import it.polimi.ingsw.ps06.model.effects.EffectsResourcesByPoint;
-import it.polimi.ingsw.ps06.model.effects.EffectsResourcesSwap;
-import it.polimi.ingsw.ps06.model.Resources;
-import it.polimi.ingsw.ps06.model.Types.ColorPalette;
+import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -21,7 +9,23 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import java.util.ArrayList;
+import it.polimi.ingsw.ps06.model.Resources;
+import it.polimi.ingsw.ps06.model.Types.ActionCategory;
+import it.polimi.ingsw.ps06.model.Types.ColorPalette;
+import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
+import it.polimi.ingsw.ps06.model.Types.PointsKind;
+import it.polimi.ingsw.ps06.model.cards.Building;
+import it.polimi.ingsw.ps06.model.cards.Character;
+import it.polimi.ingsw.ps06.model.cards.DevelopementCard;
+import it.polimi.ingsw.ps06.model.cards.Territory;
+import it.polimi.ingsw.ps06.model.cards.Venture;
+import it.polimi.ingsw.ps06.model.effects.Effect;
+import it.polimi.ingsw.ps06.model.effects.EffectsBonusMalusActions;
+import it.polimi.ingsw.ps06.model.effects.EffectsBonusMalusNoTowersEffects;
+import it.polimi.ingsw.ps06.model.effects.EffectsResources;
+import it.polimi.ingsw.ps06.model.effects.EffectsResourcesByCard;
+import it.polimi.ingsw.ps06.model.effects.EffectsResourcesByPoint;
+import it.polimi.ingsw.ps06.model.effects.EffectsResourcesSwap;
 
 /**
 * Classe per la lettura del file xml delle carte territorio, edificio, impresa e personaggio
@@ -43,76 +47,68 @@ public class ParserXMLCards {
 	*/	
 	public ParserXMLCards(String source) {
 		this.XML_sourceFile = source;
-		cards=new ArrayList<DevelopementCard>();
-		buildDocument();
+		cards = new ArrayList<DevelopementCard>();
+		
+		parse( buildDocument() );
 	}
 	
 	/**
-	*Metodo per costruire il parser
+	* Metodo per costruire il parser
 	*
 	* @param none
 	* @return nothing 
 	* 
 	*/	
-	
-	public void buildDocument(){
+	public Document buildDocument(){
 		try{
 			DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
-    		DocumentBuilder builder = documentFactory.newDocumentBuilder(); 
-    		
-    		XML_sourceFile = XML_sourceFile.replaceFirst("resources", "");
-    		Document document = builder.parse( getClass().getResourceAsStream(XML_sourceFile) ); 
-    		
-    		
-    		NodeList carte = document.getElementsByTagName("card");
-    		DevelopementCard dev=new DevelopementCard();
-    		for(int j = 0; j < carte.getLength(); j++){
-    			Node node = carte.item(j); 
-    			Element carta = (Element)node; 
-		        if(carta.getAttribute("kind").equals("territory")) {
-		        	Territory a=new Territory();
-		        	NodeList attributes=node.getChildNodes();
-	    			for(int k = 0; k < attributes.getLength(); k++){
-	        			Node nodo = attributes.item(k); 
-	        		 setAttributes(nodo,a);
-	    			}
-	    			dev=(Territory)a;		        	
-		        }
-		        	
-		        else if (carta.getAttribute("kind").equals("building")){
-		        	Building a=new Building();
-		        	NodeList attributes=node.getChildNodes();
-	    			for(int k = 0; k < attributes.getLength(); k++){
-	        			Node nodo = attributes.item(k); 
-	        			setAttributes(nodo,a);
-	    			}
-	    			dev=(Building)a;
-		        	}
-		        	
-		        else if(carta.getAttribute("kind").equals("venture")){
-		        	Venture a=new Venture();		        	
-		        	NodeList attributes=node.getChildNodes();
-	    			for(int k = 0; k < attributes.getLength(); k++){
-	        			Node nodo = attributes.item(k); 
-	        			setAttributes(nodo,a);
-	    			}
-	    			dev=(Venture)a;
-		        	}
+			DocumentBuilder builder = documentFactory.newDocumentBuilder(); 
 
-		        else if(carta.getAttribute("kind").equals("character")){
-		        	Character a=new Character();
-		        	NodeList attributes=node.getChildNodes();
-	    			for(int k = 0; k < attributes.getLength(); k++){
-	        			Node nodo = attributes.item(k); 
-	        			setAttributes(nodo,a);
-	    			}
-	    			dev=(Character)a;
-		        }	
-	    		cards.add(dev);
-    		}
+			XML_sourceFile = XML_sourceFile.replaceFirst("resources", "");
+			return builder.parse( getClass().getResourceAsStream(XML_sourceFile) );
 		}
 		catch(Exception e) {
 			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	public void parse(Document d) {
+
+		Node deck = d.getFirstChild();
+		NodeList carte = ((Element) deck).getElementsByTagName("card");
+
+		//NodeList carte = d.getElementsByTagName("card");
+
+		for(int j = 0; j < carte.getLength(); j++) 
+		{
+			DevelopementCard dev = null;
+			Node carta_attuale = carte.item(j); 
+
+			if (carta_attuale.getNodeType() == Node.ELEMENT_NODE) 
+			{
+				if( ((Element) carta_attuale).getAttribute("kind").equals("territory") )
+					dev = new Territory();
+
+				if ( ((Element) carta_attuale).getAttribute("kind").equals("building") )
+					dev = new Building();
+
+				if( ((Element) carta_attuale).getAttribute("kind").equals("venture") )
+					dev = new Venture();		        	
+
+				if( ((Element) carta_attuale).getAttribute("kind").equals("character") )
+					dev = new Character();
+
+				
+				if (dev != null) 
+				{
+					NodeList attributes = carta_attuale.getChildNodes();
+					setAttributes(attributes, dev);
+					
+					cards.add(dev);
+				}
+			}
 		}
 	}
 	
@@ -125,195 +121,123 @@ public class ParserXMLCards {
 	* @return d		Carta impostata
 	* 
 	*/	
-	
-	public DevelopementCard setAttributes(Node a, DevelopementCard d){
-		
-		if(a.getNodeName().equals("title")){
-			d.setTitle(a.getTextContent());
-		}
-		else if(a.getNodeName().equals("code")){
-			int x=Integer.parseInt(a.getTextContent());
-			d.setCode(x);
-		}
-		else if(a.getNodeName().equals("period")){
-			int x=Integer.parseInt(a.getTextContent());
-			d.setPeriod(x);
-		}
-		else if(a.getNodeName().equals("cost")){
-			if(d instanceof Building){
-				((Building) d).setRequirement(setResourceBonus(a));
-			}
-			if(d instanceof Character){
-				((Character) d).setRequirement(setResourceBonus(a));
-			}
-			if(d instanceof Venture){
-				Resources res=setResourceBonus(a);
-				((Venture) d).setRequirement(res);
-			}
-		}
-		else if(a.getNodeName().equals("permanent_effect")){
-			generatePermanentEffect(d, a);
-		}
-		else if(a.getNodeName().equals("instant_effects")){
-			generateInstantEffect(d, a);
-		}
-		
-		else if(a.getNodeName().equals("production_requirement")){
-			if(d instanceof Building){
-				int x=Integer.parseInt(a.getTextContent());
-				((Building) d).setDiceReq(x);
-				}
-			else if(d instanceof Territory){
-				int x=Integer.parseInt(a.getTextContent());
-				((Territory) d).setDiceReq(x);
-				}
-		}
-		
-		/* else if(a.getNodeName().equals("requirement")){
-			int x=Integer.parseInt(a.getFirstChild().getTextContent());
-			if(d instanceof Venture){
-				((Venture) d).setMilRequirement(x);
-			}*/
-		return d;
+	public void setAttributes(NodeList attributes, DevelopementCard card) {
 
+		for(int j=0; j < attributes.getLength(); j++) 
+		{
+			Node current_attribute = attributes.item(j);
+
+			if (current_attribute.getNodeType() == Node.ELEMENT_NODE) 
+			{
+				if ( current_attribute.getNodeName().equals("title") )
+					card.setTitle( current_attribute.getFirstChild().getNodeValue() );
+
+				if ( current_attribute.getNodeName().equals("code") ) 
+					card.setCode( Integer.parseInt( current_attribute.getFirstChild().getNodeValue() ));
+
+				if ( current_attribute.getNodeName().equals("period") )
+					card.setPeriod( Integer.parseInt( current_attribute.getFirstChild().getNodeValue() ));
+
+				if ( current_attribute.getNodeName().equals("cost") ) 
+				{
+					if (card instanceof Building)
+						((Building) card).setRequirement( parseResourceNode(current_attribute) );
+
+					if (card instanceof Character) 
+						((Character) card).setRequirement( parseResourceNode(current_attribute) );
+
+					if (card instanceof Venture) 
+						((Venture) card).setRequirement( parseResourceNode(current_attribute) );
+				}
+
+				if ( current_attribute.getNodeName().equals("permanent_effect") )
+					card.setPermEffect( parseEffectNode(current_attribute) );
+
+				if ( current_attribute.getNodeName().equals("instant_effects") )
+					card.setEffect( parseEffectNode(current_attribute) );
+
+				/*
+				if(a.getNodeName().equals("production_requirement")){
+					if(d instanceof Building){
+						int x=Integer.parseInt(a.getTextContent());
+						((Building) d).setDiceReq(x);
+						}
+					else if(d instanceof Territory){
+						int x=Integer.parseInt(a.getTextContent());
+						((Territory) d).setDiceReq(x);
+						}
+				}
+				 */
+			}
 		}
-	
-	
-	/**
-	* Metodo per creare un elemento risorsa quando nel file xml si va a leggere un nodo che imposti delle risorse nelle carte
-	*
-	* @param bonus		Nodo contenente i valori dei vari tipi di risorsa da allocare
-	* @return c			risorsa da impostare nella carta in questione 
-	* 
-	*/	
-	
-	public Resources setResourceBonus(Node bonus){
-		Resources c= new Resources();
-		NodeList bon=bonus.getChildNodes();
-		for(int j=0; j<bon.getLength(); j++){
-			Node b=bon.item(j);
-			String x=b.getNodeName();
-			if(x.equals("wood")){
-				int z=Integer.parseInt(b.getTextContent());
-				c.setResourceValue(MaterialsKind.WOOD, z);
-			}
-			else if(x.equals("stone")){
-				int z=Integer.parseInt(b.getTextContent());
-				c.setResourceValue(MaterialsKind.STONE, z);
-			}
-			else if(x.equals("coin")){
-				int z=Integer.parseInt(b.getTextContent());
-				c.setResourceValue(MaterialsKind.COIN, z);
-			}
-			else if(x.equals("servant")){
-				int z=Integer.parseInt(b.getTextContent());
-				c.setResourceValue(MaterialsKind.SERVANT, z);
-			}
-			else if(x.equals("faith")){
-				int z=Integer.parseInt(b.getTextContent());
-				c.setResourceValue(PointsKind.FAITH_POINTS, z);
-			}
-			else if(x.equals("victory")){
-				int z=Integer.parseInt(b.getTextContent());
-				c.setResourceValue(PointsKind.VICTORY_POINTS, z);
-			}
-			else if(x.equals("military")){
-				int z=Integer.parseInt(b.getTextContent());
-				c.setResourceValue(PointsKind.MILITARY_POINTS, z);
-			}
-		}
-		return c;		
 	}
-	
-	/**
-	* Metodo che genera l'effetto istantaneo delle carte
-	*
-	* @param effetto	Nodo contenente l'effetto e i suoi valori da impostare
-	* @param card		Carta della quale bisogna impostare l'effetto
-	* 
-	* @return nothing
-	* 
-	*/	
-	
-	public void generateInstantEffect(DevelopementCard card, Node effetto ){
-		Element c=(Element)effetto;
-		NodeList d=c.getElementsByTagName("effect");
-		for(int k=0; k<d.getLength();k++){
-			Node eff1=d.item(k);
-			Node eff = ((Element) eff1).getElementsByTagName("kind").item(0);
-			if(eff.getTextContent().equals("resources")) {
-					Node bonus = ((Element) eff1).getElementsByTagName("bonus").item(0);
-					Resources res=new Resources();
-					//res=setResourceBonus(bonus);
-					EffectsResources eff_res=new EffectsResources(res);
-					card.setEffect(eff_res);
-			}	
-			else if(eff.getTextContent().equals("byCard")){
-				Node col = ((Element) eff1).getElementsByTagName("color").item(0);
-				String color = col.getTextContent();
-				Node bonus = ((Element) eff1).getElementsByTagName("bonus").item(0);
-				Resources res=new Resources();
-				//res=setResourceBonus(bonus);
-				EffectsResourcesByCard e = new EffectsResourcesByCard(res, parseColorCard(color) );
-				card.setEffect(e);
-			}
-			else if(eff.getTextContent().equals("byPoints")){
-				//Node poi = ((Element) eff1).getElementsByTagName("military").item(0);
-				//String points = poi.getTextContent();
-				Node bonus = ((Element) eff1).getElementsByTagName("bonus").item(0);
-				Resources res=new Resources();
-				//res=setResourceBonus(bonus);
-				EffectsResourcesByPoint ef = new EffectsResourcesByPoint(res, PointsKind.MILITARY_POINTS);
-				card.setEffect(ef);
-			}
-			else if(eff.getTextContent().equals("privilege")){
-				//EffectsPrivilege effec = new EffectPrivilege();
-				//card.setEffect(effec);
-				//Integer x = Integer.parseInt(effect.getElementsByTagName("amount").item(0).getTextContent());   qtà di privilegi
-			}			
-			else if(eff.getTextContent().equals("colorful")){
-				//nuovo effeto colorful? EffectsAction
-				//Integer x = Integer.parseInt(effect.getElementsByTagName("value").item(0).getTextContent());
-			}
-			else if(eff.getTextContent().equals("green")){
-				//new EffectsActive qlcs....
-				//Integer x1 = Integer.parseInt(effect.getElementsByTagName("value").item(0).getTextContent());
-			}
-			else if(eff.getTextContent().equals("yellow")){
-				//new EffectsActive qlcs....
-				//Integer x2 = Integer.parseInt(effect.getElementsByTagName("value").item(0).getTextContent());
-			}
-			else if(eff.getTextContent().equals("blue")){
-				//new EffectsActive qlcs....
-				//Integer x3 = Integer.parseInt(effect.getElementsByTagName("value").item(0).getTextContent());
-			}
-			else if(eff.getTextContent().equals("purple")){
-				//new EffectsActive qlcs....
-				//Integer x4 = Integer.parseInt(effect.getElementsByTagName("value").item(0).getTextContent());
-			}
-			else if(eff.getTextContent().equals("discount")){
-				//Effect eff= new EffectsActive();
-				//String b=effect.getAttribute("color");
-				//Integer y = Integer.parseInt(effect.getElementsByTagName("amount").item(0).getTextContent());
-				//settare amount per carta
-				//EffectsActive.qualcosa per risorsa da togliere(setResourceBonus(effect);
-				//card.setPermEffect(eff);
+
+	private Resources parseResourceNode(Node n) {
+
+		Resources r = new Resources();
+		NodeList resourcesList = n.getChildNodes();
+
+		for (int i = 0; i < resourcesList.getLength(); i++ ) 
+		{
+			Node currentResource = resourcesList.item(i);
+			if (currentResource.getNodeType() == Node.ELEMENT_NODE) 
+			{
+				int valueResource = Integer.parseInt( currentResource.getFirstChild().getNodeValue() );
+
+				switch (currentResource.getNodeName()) {
+				case "coin" : 
+					r.setResourceValue(MaterialsKind.COIN, valueResource);
+					break;
+				case "stone" : 
+					r.setResourceValue(MaterialsKind.STONE, valueResource);
+					break;
+				case "wood" :
+					r.setResourceValue(MaterialsKind.WOOD, valueResource);
+					break;
+				case "servant" : 
+					r.setResourceValue(MaterialsKind.SERVANT, valueResource);
+					break;
+				case "faith" : 
+					r.setResourceValue(PointsKind.FAITH_POINTS, valueResource);
+					break;
+				case "military" :
+					r.setResourceValue(PointsKind.MILITARY_POINTS, valueResource);
+					break;
+				case "victory" :
+					r.setResourceValue(PointsKind.VICTORY_POINTS, valueResource);
+					break;
+				}
 			}
 		}
+
+		return r;
 	}
 	
 	private ColorPalette parseColorCard(String color) {
 		
-		if (color.equals("verde")) return ColorPalette.CARD_GREEN;
+		if (color.equals("verde")) 	return ColorPalette.CARD_GREEN;
 		if (color.equals("giallo")) return ColorPalette.CARD_YELLOW;
-		if (color.equals("blu")) return ColorPalette.CARD_BLUE;
-		if (color.equals("viola")) return ColorPalette.CARD_PURPLE;
+		if (color.equals("blu")) 	return ColorPalette.CARD_BLUE;
+		if (color.equals("viola")) 	return ColorPalette.CARD_PURPLE;
+		
+		return null;
+	}
+	
+	private ActionCategory parseAction(String action) {
+		
+		if (action.equals("verde")) 	return ActionCategory.TOWER_GREEN;
+		if (action.equals("giallo")) 	return ActionCategory.TOWER_YELLOW;
+		if (action.equals("blu")) 		return ActionCategory.TOWER_BLUE;
+		if (action.equals("viola")) 	return ActionCategory.TOWER_PURPLE;
+		
+		if (action.equals("raccolto")) 		return ActionCategory.HARVEST;
+		if (action.equals("produzione")) 	return ActionCategory.PRODUCTION;
 		
 		return null;
 	}
 	
 	/**
-	* Metodo che genera l'effetto permanente delle carte
+	* Metodo che genera l'effetto delle carte
 	*
 	* @param effetto	Nodo contenente l'effetto e i suoi valori da impostare
 	* @param card		Carta della quale bisogna impostare l'effetto
@@ -321,57 +245,61 @@ public class ParserXMLCards {
 	* @return nothing
 	* 
 	*/	
-	public void generatePermanentEffect(DevelopementCard card, Node effetto){
-		Element c=(Element)effetto;
-		NodeList d=c.getElementsByTagName("effect");
-		for(int k=0; k<d.getLength();k++){
-			Node eff1=d.item(k);
-			Node eff=eff1.getFirstChild();
+	public ArrayList<Effect> parseEffectNode(Node effetto) {
 
-			if(eff1.getTextContent().equals("resources")){
-				Node bonus=eff.getNextSibling();
-				Resources res=new Resources();
-				res=setResourceBonus(bonus);
-				EffectsResources eff_res=new EffectsResources(res);
-				card.setEffect(eff_res);
-			}
-			else if(eff1.getTextContent().equals("swapResources")){	
-				Node input=eff.getFirstChild();
-				Resources res=new Resources();
-				res=setResourceBonus(input);
-				Node bonus=input.getNextSibling();
-				Resources res1=new Resources();
-				res1=setResourceBonus(bonus);
-				EffectsResourcesSwap swap=new EffectsResourcesSwap(res1, res);
-				card.setPermEffect(swap);
-			}
-			else if(eff1.getTextContent().equals("bmMember")){
-			//Effect eff= new EffectsActive();
-			//String a=effect.getAttribute("color");
-			//Integer x = Integer.parseInt(effect.getElementsByTagName("amount").item(0).getTextContent());
-			//settare amount per carta
-			//card.setPermEffect(eff);
-			}
-			else if(eff1.getTextContent().equals("bmMember")){
-			//Effect eff= new EffectsActive();
-			//String b=effect.getAttribute("color");
-			//Integer x1 = Integer.parseInt(effect.getElementsByTagName("amount").item(0).getTextContent());
-			//settare amount per carta
-			//EffectsActive.qualcosa per risorsa da togliere(setResourceBonus(effect);
-			//card.setPermEffect(eff);
-			}
-			else if(eff1.getTextContent().equals("harvest")){
-			//Integer x2 = Integer.parseInt(effect.getElementsByTagName("amount").item(0).getTextContent());
-			//Effect eff=new EffectsActiveGathering(Observable cosa mettere??, x2);
-			}
-			else if(eff1.getTextContent().equals("production")){  //produzione e gathering sono uguali?
-			//Integer x3 = Integer.parseInt(effect.getElementsByTagName("amount").item(0).getTextContent());
-			//Effect eff=new EffectsActiveGathering(Observable cosa mettere??, x3);
-			}
-			else if(eff1.getTextContent().equals("noEffettoTorri")){
-			//new effetto cosa?
+		ArrayList<Effect> effects_collection = new ArrayList<Effect>();
+		NodeList effects = ((Element) effetto).getElementsByTagName("effect");
+
+		for(int k = 0; k < effects.getLength(); k++) {
+			Node current_effect = effects.item(k);
+
+			if (current_effect.getNodeType() == Node.ELEMENT_NODE) 
+			{	
+				Effect e = null;
+				Node kind = ((Element) current_effect).getElementsByTagName("kind").item(0);
+				
+				switch ( kind.getTextContent() ) {
+				case "resources" :
+					Node bonus_res_effect = ((Element) effetto).getElementsByTagName("bonus").item(0);
+					e = new EffectsResources( parseResourceNode(bonus_res_effect) );
+					break;
+					
+				case "byCard" :	
+					String color = ((Element) current_effect).getElementsByTagName("color").item(0).getTextContent();
+					Node bonus_byCard_effect = ((Element) current_effect).getElementsByTagName("bonus").item(0);
+					e = new EffectsResourcesByCard( parseResourceNode(bonus_byCard_effect) , parseColorCard(color) );
+				break;
+					
+				case "byPoints" :	
+					int weight =  Integer.parseInt( ((Element) current_effect).getElementsByTagName("military").item(0).getTextContent() );
+					Node bonus_byPoints_effect = ((Element) current_effect).getElementsByTagName("bonus").item(0);
+					e = new EffectsResourcesByPoint(parseResourceNode(bonus_byPoints_effect), PointsKind.MILITARY_POINTS, weight);
+					break;
+					
+				case "swapResources" :	
+					Node bonus_swap_effect = ((Element) current_effect).getElementsByTagName("bonus").item(0);
+					Node input_swap_effect = ((Element) current_effect).getElementsByTagName("input").item(0);
+					e = new EffectsResourcesSwap( parseResourceNode(bonus_swap_effect), parseResourceNode(input_swap_effect) );
+					break;
+					
+				case "bmAction" :	
+					
+					String action = ((Element) current_effect).getElementsByTagName("action").item(0).getTextContent();
+					int amount =  Integer.parseInt( ((Element) current_effect).getElementsByTagName("amount").item(0).getTextContent() );
+					e = new EffectsBonusMalusActions( amount, parseAction(action) );
+					break;
+					
+				case "noEffettoTorri" :	
+					e = new EffectsBonusMalusNoTowersEffects();
+					break;
+					
+				default :
+				}
+
+				effects_collection.add(e);
 			}
 		}
+		return effects_collection;
 	}
 	 
 
@@ -391,10 +319,6 @@ public class ParserXMLCards {
 	ParserXMLCards c = new ParserXMLCards("resources/XML/DevelopementCards.xml");
 	ArrayList<DevelopementCard> a = new  ArrayList<DevelopementCard>();
 	a = c.getCards();
-
-	for(int i=0; i<a.size();i++){
-		System.out.println("code:"+a.get(i).getCode()+", "+a.get(i).getTitle()+ " periodo: "+a.get(i).getPeriod());
-	}	
 }
 
 	

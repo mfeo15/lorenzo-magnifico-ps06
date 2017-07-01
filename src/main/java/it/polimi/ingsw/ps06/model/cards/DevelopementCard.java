@@ -18,7 +18,7 @@ public class DevelopementCard extends Card {
 
 	protected int color;
 	protected int period;
-	protected ArrayList<Effect> instant_effect; 
+	public ArrayList<Effect> instant_effect;  // <== TO CHANGE ASAP!!!
 
 	
 	public DevelopementCard() {
@@ -50,18 +50,24 @@ public class DevelopementCard extends Card {
 	 * @param	effect	effetto da aggiungere
 	 * @return	nothing
 	 */
-
 	public void setEffect(Effect effect) {
 		this.instant_effect.add(effect);
 	}
 
+	/**Metodo per settare il periodo della carta
+	 * 
+	 * @param	effect	effetto da aggiungere
+	 * @return	nothing
+	 */
+	public void setEffect(ArrayList<Effect> effects) {
+		this.instant_effect.addAll(effects);
+	}
 
 	/**Metodo per attivare gli effetti istantanei
 	 * 
 	 * @param	player	giocatore su cui attivare l'effetto
 	 * @return	nothing
 	 */
-
 	public void activateIstantEffect(Player player) {
 		for( Effect i : instant_effect )
 			i.activate(player);

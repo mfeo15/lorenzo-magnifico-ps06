@@ -21,7 +21,6 @@ public class LeaderInHand implements LeaderState {
 
 	@Override
 	public String deactivateLeader() {	
-		System.out.println("LEADER MUST BE PLAYIED AND ACTIVATED BEFORE DEACTIVATE");
 		return "La carta Leader " + leader.getTitle() + "deve essere giocata ed attivata prima di capovolgerla";
 	}
 

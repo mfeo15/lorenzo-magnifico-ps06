@@ -220,7 +220,6 @@ public class SocketServer implements Server {
 		        new java.util.TimerTask() {
 		            @Override
 		            public void run() {
-		            	System.out.println("TIME!!!!");
 		            	startNewGame();
 		            }
 		        }, 

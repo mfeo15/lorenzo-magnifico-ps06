@@ -95,27 +95,23 @@ public class CardAcquisition extends Actions {
 		if (extraCost)
 			p.getPersonalBoard().reduceResource(MaterialsKind.COIN, 3);
 		
-		if(card instanceof Territory) {
+		if(card instanceof Territory)
 			p.getPersonalBoard().addCard( (Territory) card);
-			return;
-		}
 		
 		if(card instanceof Building) {
 			p.getPersonalBoard().addCard( (Building) card);
 			p.getPersonalBoard().reduceResource( ((Building) card).getRequirement() );
-			return;
 		}
 		
 		if(card instanceof Character) {
 			p.getPersonalBoard().addCard( (Character) card);
 			p.getPersonalBoard().reduceResource( ((Character) card).getRequirement() );
-			return;
+			((Character) card).activateEffect(p);
 		}
 		
 		if(card instanceof Venture) {
 			p.getPersonalBoard().addCard( (Venture) card);
 			p.getPersonalBoard().reduceResource( ((Venture) card).getRequirements().get(0) );
-			return;
 		}
 		
 		card.activateIstantEffect(p);

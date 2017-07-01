@@ -16,6 +16,7 @@ import it.polimi.ingsw.ps06.model.Types.PointsKind;
 public class EffectsResourcesByPoint extends EffectsResources {
 	
 	private PointsKind pointsKind;
+	private int weight = 1;
 
 	/**
 	* Costruttore della classe Effetto per assegnazione di risorse in base al numero di Punti accumulati.
@@ -29,6 +30,11 @@ public class EffectsResourcesByPoint extends EffectsResources {
 		this.pointsKind = pointsKind;
 	}
 	
+	public EffectsResourcesByPoint(Resources bonus, PointsKind pointsKind, int weight) {
+		this(bonus, pointsKind);
+		this.weight = weight;
+	}
+	
 	/**
 	* Implementazione del metodo astratto activate().
 	* Dato un Player su cui attivare l'effetto, il metodo quanitifica un certo punteggio
@@ -40,7 +46,7 @@ public class EffectsResourcesByPoint extends EffectsResources {
 	@Override
 	public void activate(Player p) {
 
-		int pointsAmountOwned = p.getPersonalBoard().getAmount(pointsKind);
+		int pointsAmountOwned = p.getPersonalBoard().getAmount(pointsKind) / weight;
 		
 		for (int i=0; i < pointsAmountOwned; i++) {
 			p.getPersonalBoard().addResource(bonus);

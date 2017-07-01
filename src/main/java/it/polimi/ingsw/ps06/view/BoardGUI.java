@@ -118,7 +118,8 @@ public class BoardGUI extends Observable implements Board {
 	private JButton servants = new JButton();
 	
 	private JTextField servantsCount = new JTextField();
-	private int[] cardsCodes = new int[16];
+	//private int[] cardsCodes = new int[16];
+	private int[] cardsCodes = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
     
     private JLabel membersLabel[] = new JLabel[4];
     private JButton[] members = new JButton[4];
@@ -1250,7 +1251,7 @@ public class BoardGUI extends Observable implements Board {
 			if (cardsCodes[j] == -1)
 				btns[j].setIcon(null);
 			else {
-				btns[j].setIcon((ImageHandler.setImage("resources/cards/devcards_f_en_c_"+(cardsCodes[j]+1)+".png",14,(int)( 14.5 * ratio * (1.77 /ratio) ),width,height)).getIcon());
+				btns[j].setIcon((ImageHandler.setImage("resources/cards/devcards_f_en_c_"+(cardsCodes[j])+".png",14,(int)( 14.5 * ratio * (1.77 /ratio) ),width,height)).getIcon());
 				btns[j].setDisabledIcon( btns[j].getIcon());
 			}
 		}
@@ -1796,8 +1797,6 @@ public class BoardGUI extends Observable implements Board {
 		this.faithV=faith;
 		
 		resourcesInfo.setText(coinV+" Coin   "+woodV+" Wood   "+stoneV+" Wood   "+servantV+" Servant     |    " +victoryV+" Victory   "+militaryV+" Military   "+faithV+" Faith");
-		
-		System.out.println("PERSONALBOARD UPDATE FROM VIEW C:" + coin + " W:" + wood + " St:" + stone + " Se:" + servant + " F:" + faith + " M:" + military + " V:" + victory);
 	}
 
 	
@@ -2066,8 +2065,6 @@ public class BoardGUI extends Observable implements Board {
 	}
 	
 	private void setBoardPlayers(){
-		
-		System.out.println("BOARD SETUP PLAYERS: " + playerNumber);
 		
 		switch(playerNumber){
 		

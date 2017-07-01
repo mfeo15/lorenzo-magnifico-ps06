@@ -225,8 +225,6 @@ public class MessageParser implements MessageVisitor {
 		int victory = resStatus.getResourceValue(PointsKind.VICTORY_POINTS);
 		int military = resStatus.getResourceValue(PointsKind.MILITARY_POINTS);
 		
-		System.out.println("PERSONALBOARD UPDATE FROM PARSER C:" + coin + " W:" + wood + " St:" + stone + " Se:" + servant + " F:" + faith + " M:" + military + " V:" + victory);
-		
 		b.setPersonalResources(coin, wood, stone, servant, victory, military, faith);
 	}
 
