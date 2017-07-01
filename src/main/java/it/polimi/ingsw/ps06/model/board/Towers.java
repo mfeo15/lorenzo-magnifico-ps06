@@ -260,6 +260,9 @@ public class Towers extends Observable implements PlaceSpace {
 	
 	private void giveBonus(Action chosenAction, FamilyMember member) {
 		
+		if ( member.getPlayer().getBonusMalusCollection().containsNowTowersEffects() )
+			return;
+		
 		ParserBonusBoard p = new ParserBonusBoard("resources/XML/BonusTabellone.xml");
 		
 		Resources r = p.getBonusRescourcesForActionSpace(chosenAction);

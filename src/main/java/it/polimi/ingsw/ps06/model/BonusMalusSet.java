@@ -15,7 +15,7 @@ public class BonusMalusSet {
 		bonusMalus = new ArrayList<BonusMalus>();
 	}
 	
-	public void add(BonusMalusAction bm) {
+	public void add(BonusMalus bm) {
 		if (contains(bm))
 			return;
 		
@@ -54,6 +54,15 @@ public class BonusMalusSet {
 					result = true;
 				
 			} catch(Exception e) { }
+		}
+		
+		return result;
+	}
+	
+	public boolean containsNowTowersEffects() {
+		boolean result = false;
+		for (BonusMalus element : this.bonusMalus ) {
+			if (element instanceof BonusMalusNoTowersEffects) result = true;
 		}
 		
 		return result;
