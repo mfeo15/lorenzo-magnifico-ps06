@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.TimerTask;
@@ -136,6 +137,10 @@ public class BoardGUI extends Observable implements Board {
     
     private JButton pass = new JButton();
     
+    private boolean[] leaderPlayed = new boolean[5];
+    private boolean[] leaderTable = new boolean[5];
+    private boolean[] leaderHand = new boolean[5];
+    
     private String[] playersName = new String[5]; 
     
     private JInternalFrame towers;
@@ -162,6 +167,7 @@ public class BoardGUI extends Observable implements Board {
     
     private int excomm1Count=0, excomm2Count=0, excomm3Count=0;
     private Media hit2;
+    private Media exc;
     
     PersonalViewGUI view= new PersonalViewGUI(0,this);
 	private JFXPanel fxPanel = new JFXPanel();
@@ -285,6 +291,10 @@ public class BoardGUI extends Observable implements Board {
 	    String mediaURL5 = getClass().getResource(switchSounds).toExternalForm();
 		Media switchSound = new Media(mediaURL5);
 		 
+		String excommunicate = "/excommunicate.wav";
+		String mediaURL6 = getClass().getResource(excommunicate).toExternalForm();
+		exc = new Media(mediaURL6);
+		
         //Inizializzazione dei componenti
 		
 		playerInfo = new JTextField("Loading...");
@@ -404,6 +414,9 @@ public class BoardGUI extends Observable implements Board {
         pass.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
         
+            	MediaPlayer mediaPlayer3 = new MediaPlayer(hit2);
+        		mediaPlayer3.play();
+            	
 		        setChanged();
 				MessagePlayerPassed playerPass = new MessagePlayerPassed();
 				notifyObservers(playerPass);
@@ -725,7 +738,9 @@ public class BoardGUI extends Observable implements Board {
         timer.schedule(new Repeat(production,productions,2), 0, 5000);
         timer.schedule(new Repeat(council,councils,3), 0, 5000);
        
-         
+        Arrays.fill(leaderHand, true);
+        Arrays.fill(leaderTable, false);
+        Arrays.fill(leaderPlayed, false);
         
         //KeyBinding per tasto ESC
         Action esc = new AbstractAction() {
@@ -1368,17 +1383,17 @@ public class BoardGUI extends Observable implements Board {
 	    
 	    public desktopPopUp(int value, boolean allowed){
 	    	
-	    	if(allowed){
-		        gioca = new JMenuItem("Gioca!");
+	    	gioca = new JMenuItem("Gioca!");
 		        
-		        gioca.addActionListener(new ActionListener() {
-		            public void actionPerformed(ActionEvent e) {
-		              leaders[value].setEnabled(true);
-		              notifyLeaderPlacement(value);
-		            }
-	          });
+	    	gioca.addActionListener(new ActionListener() {
+	    		public void actionPerformed(ActionEvent e) {
+	    			leaders[value].setEnabled(true);
+	    			notifyLeaderPlacement(value);
+	    			leaderHand[value]=false;
+	    			leaderTable[value]=true;
+	    		}
+	    	});
 		        
-	    	}
 	    		
 	    	scarta = new JMenuItem("Scarta!");
 		        
@@ -1398,27 +1413,27 @@ public class BoardGUI extends Observable implements Board {
 		        }
 		    });
 	        
-	    	if(allowed){
-	    		
-		        attiva = new JMenuItem("Attiva!");
+
+		   attiva = new JMenuItem("Attiva!");
 		        
-		        attiva.addActionListener(new ActionListener() {
-		            public void actionPerformed(ActionEvent e) {
+		   attiva.addActionListener(new ActionListener() {
+			   public void actionPerformed(ActionEvent e) {
 		            
-		            	notifyLeaderActivation(value);
+				   notifyLeaderActivation(value);
 		            	
-		            	if(leaders[value].isEnabled()){
-		            		leaders[value].setIcon(leaderBack.getIcon());
-		  	              	leaders[value].setDisabledIcon(leaderBack.getIcon());
-		            	}
+				   if(leaders[value].isEnabled()){
+					   leaders[value].setIcon(leaderBack.getIcon());
+					   leaders[value].setDisabledIcon(leaderBack.getIcon());
+					   leaderPlayed[value]=true;
+					   leaderTable[value]=false;
+				   }
 	
-		            }
-		          });
-	    	}
+			   }
+		   });
 	        
-	        if(allowed) add(attiva);
-	        if(allowed) add(gioca);
-	        add(scarta);
+	        if(allowed && leaderTable[value]) add(attiva);
+	        if(allowed && leaderHand[value]) add(gioca);
+	        if(leaderHand[value]) add(scarta);
 	    }
 	    
 	}
@@ -1710,6 +1725,7 @@ public class BoardGUI extends Observable implements Board {
 			pass.setEnabled(true);
 		}
 		
+	
 		startTimer();
 	}
 
@@ -2152,6 +2168,8 @@ public class BoardGUI extends Observable implements Board {
 		if(tileNumber==2) excomm2Count++;
 		if(tileNumber==3) excomm3Count++;
 		
+		MediaPlayer mediaPlayer2 = new MediaPlayer(exc);
+		mediaPlayer2.play();
 	}
 
 	@Override
@@ -2171,6 +2189,20 @@ public class BoardGUI extends Observable implements Board {
 		
 		for(int j=0; j<harvests.length ; j++){harvests[j].setIcon(null);}
 		for(int j=0; j<productions.length ; j++){productions[j].setIcon(null);}
+		
+		for(int j=0; j<5; j++){
+			
+			if(leaderPlayed[j]==true){
+				leaderPlayed[j]=false;
+				leaderTable[j]=true;
+			}
+		}
+		
+		try {
+			refresh();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override

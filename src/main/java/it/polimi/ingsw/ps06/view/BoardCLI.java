@@ -20,11 +20,15 @@ import it.polimi.ingsw.ps06.model.events.EventLeaderDiscarded;
 import it.polimi.ingsw.ps06.model.events.EventLeaderPlayed;
 import it.polimi.ingsw.ps06.model.events.EventMemberPlaced;
 import it.polimi.ingsw.ps06.networking.messages.MessageObtainPersonalBoardStatus;
+import it.polimi.ingsw.ps06.networking.messages.MessagePlayerPassed;
 
 public class BoardCLI extends Observable implements Board,Runnable {
 
 	private String[] player = new String[5];
 	private int[] cardsCodes = new int[16];
+	
+	private boolean allowed;
+	private int playerID;
 	
     private String playerColor="G";
     private int blackValue;
@@ -183,7 +187,7 @@ public class BoardCLI extends Observable implements Board,Runnable {
 		System.out.println("----- LISTA AZIONI EXTRA -----");
 		System.out.println();
 		System.out.println("--LEADER-- Scarta1 ~ Scarta4 (Leader) | Attiva1 ~ Attiva4 (Leader) | Piazza1 ~ Piazza4 ");
-		System.out.println("--ALTRO-- Info1 ~ Info5 (Per controllare carte e risorse di un avversario)");
+		System.out.println("--ALTRO--  Passa (Salta il turno) | Info1 ~ Info5 (Per controllare carte e risorse di un avversario)");
 		System.out.println("Se non conosci il tuo codice giocatore puoi usare semplicemente il comando Info !");
 		System.out.println();
 		System.out.print(" > ");
@@ -314,6 +318,14 @@ public class BoardCLI extends Observable implements Board,Runnable {
 	public void setCurrentPlayerID(int id) {
 		this.roundPlayerID=id;
 		
+		if(id != playerID){
+			allowed=false;
+		}
+		
+		if(id == playerID){
+			allowed=true;
+		}
+		
 	}
 
 	@Override
@@ -442,6 +454,12 @@ public class BoardCLI extends Observable implements Board,Runnable {
 		
 	}
 
+	public void skipRound(){
+		setChanged();
+		MessagePlayerPassed playerPass = new MessagePlayerPassed();
+		notifyObservers(playerPass);
+	}
+	
 	@Override
 	public void addNewObserver(Observer o) {
 		addObserver(o);
@@ -530,14 +548,12 @@ public class BoardCLI extends Observable implements Board,Runnable {
 	}
 	
 	
-
 	@Override
 	public void setOwnerPlayerIndex(int index) {
-		// TODO Auto-generated method stub
+		playerID = index;
 		
 	}
 
-	
 	
 	@Override
 	public void setRound() {
@@ -636,40 +652,44 @@ public class BoardCLI extends Observable implements Board,Runnable {
 			if(("info4").equals(s)) printPoints(4);
 			if(("info5").equals(s)) printPoints(5);
 			
+			if(allowed){
 			
-			if(("attiva1").equals(s)) notifyLeaderActivation(1);
-			if(("attiva2").equals(s)) notifyLeaderActivation(2);
-			if(("attiva3").equals(s)) notifyLeaderActivation(3);
-			if(("attiva4").equals(s)) notifyLeaderActivation(4);
-	
-			if(("scarta1").equals(s)) notifyLeaderDiscard(1);
-			if(("scarta2").equals(s)) notifyLeaderDiscard(2);
-			if(("scarta3").equals(s)) notifyLeaderDiscard(3);
-			if(("scarta4").equals(s)) notifyLeaderDiscard(4);
-	
-			if(("piazza1").equals(s)) notifyLeaderPlacement(1);
-			if(("piazza2").equals(s)) notifyLeaderPlacement(2);
-			if(("piazza3").equals(s)) notifyLeaderPlacement(3);
-			if(("piazza4").equals(s)) notifyLeaderPlacement(4);
-	
-			if(("action").equals(s))
-			{
-				System.out.print("Che azione? > ");
-				String s1 = String.valueOf(input.readLine());
-				for(int j=0; j<25; j++)
-					if( s1.equalsIgnoreCase(( ((Action.getAction(j)).toString())) )){
-						System.out.print("Che familiare? (Numero) > ");
-	
-							
-							String s2 = input.readLine();
-							int index = Integer.parseInt(s2.replaceAll("[\\D]", "")); 
-							
-							System.out.print("Quanti servi vuoi usare? > ");
-							int servants = Integer.parseInt(input.readLine());
-							notifyAction(Action.valueOf(s1.toUpperCase()),index,servants); 
-					}
-				} 
-						
+				if(("passa").equals(s)) skipRound();
+				
+				if(("attiva1").equals(s)) notifyLeaderActivation(1);
+				if(("attiva2").equals(s)) notifyLeaderActivation(2);
+				if(("attiva3").equals(s)) notifyLeaderActivation(3);
+				if(("attiva4").equals(s)) notifyLeaderActivation(4);
+		
+				if(("scarta1").equals(s)) notifyLeaderDiscard(1);
+				if(("scarta2").equals(s)) notifyLeaderDiscard(2);
+				if(("scarta3").equals(s)) notifyLeaderDiscard(3);
+				if(("scarta4").equals(s)) notifyLeaderDiscard(4);
+		
+				if(("piazza1").equals(s)) notifyLeaderPlacement(1);
+				if(("piazza2").equals(s)) notifyLeaderPlacement(2);
+				if(("piazza3").equals(s)) notifyLeaderPlacement(3);
+				if(("piazza4").equals(s)) notifyLeaderPlacement(4);
+		
+				if(("action").equals(s))
+				{
+					System.out.print("Che azione? > ");
+					String s1 = String.valueOf(input.readLine());
+					for(int j=0; j<25; j++)
+						if( s1.equalsIgnoreCase(( ((Action.getAction(j)).toString())) )){
+							System.out.print("Che familiare? (Numero) > ");
+		
+								
+								String s2 = input.readLine();
+								int index = Integer.parseInt(s2.replaceAll("[\\D]", "")); 
+								
+								System.out.print("Quanti servi vuoi usare? > ");
+								int servants = Integer.parseInt(input.readLine());
+								notifyAction(Action.valueOf(s1.toUpperCase()),index,servants); 
+						}
+					} 
+			}
+			
 			}catch (IOException e) {}
 		}
 	}
