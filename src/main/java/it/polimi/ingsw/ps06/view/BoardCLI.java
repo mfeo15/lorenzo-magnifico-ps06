@@ -594,8 +594,7 @@ public class BoardCLI extends Observable implements Board,Runnable {
 
 	@Override
 	public void setOrder(int[] players) {
-		// TODO Auto-generated method stub
-		
+		System.out.println("--> Inizia il round il giocatore: "+players[0]);
 	}
 	
 	
@@ -640,7 +639,7 @@ public class BoardCLI extends Observable implements Board,Runnable {
 
 	@Override
 	public void setBonusTilePersonalView(int code) throws IOException {
-		// TODO Auto-generated method stub
+		System.out.println("--> Il giocatore sta usando la bonus Tile numero: "+code);
 		
 	}
 	

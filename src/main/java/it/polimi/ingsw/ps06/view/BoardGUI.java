@@ -147,7 +147,7 @@ public class BoardGUI extends Observable implements Board {
     private JInternalFrame towers;
     private JInternalFrame others;
     
-    private int TimerValue=30;
+    private int TimerValue=70;
     
     private boolean allowed = true;
     private boolean[] member = new boolean[4];
@@ -259,9 +259,6 @@ public class BoardGUI extends Observable implements Board {
         
         leaderBack = new JLabel();
         leaderBack = ImageHandler.setImageScreen("resources/leader/leaderBack.jpg", 9,(int)(13.23*ratio),width,height);
-        
-        
-        //JLabel stone = ImageHandler.setImage("resources/"+color+",3,3,width,height);
         		
         //Creazione DesktopPane con Background
         desktop = new JDesktopPane(){
@@ -273,8 +270,6 @@ public class BoardGUI extends Observable implements Board {
         
 	    
         //Caricamento suoni del gioco
-        //String hoverSound = "resources/menuhover.wav";
-		//Media hit = new Media(new File(hoverSound).toURI().toString());
 		
 		String selectSound = "/menuselect.wav";
 	    String mediaURL2 = getClass().getResource(selectSound).toExternalForm();
@@ -1796,7 +1791,10 @@ public class BoardGUI extends Observable implements Board {
 		this.militaryV=military;
 		this.faithV=faith;
 		
-		resourcesInfo.setText(coinV+" Coin   "+woodV+" Wood   "+stoneV+" Wood   "+servantV+" Servant     |    " +victoryV+" Victory   "+militaryV+" Military   "+faithV+" Faith");
+		resourcesInfo.setText(coinV+" Coin   "+woodV+" Wood   "+stoneV+" Stone   "+servantV+" Servant     |    " +victoryV+" Victory   "+militaryV+" Military   "+faithV+" Faith");
+		
+		System.out.println("PERSONALBOARD UPDATE FROM VIEW C:" + coin + " W:" + wood + " St:" + stone + " Se:" + servant + " F:" + faith + " M:" + military + " V:" + victory);
+
 	}
 
 	
