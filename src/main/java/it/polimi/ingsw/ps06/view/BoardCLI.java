@@ -118,7 +118,6 @@ public class BoardCLI extends Observable implements Board,Runnable {
 		
 		hasLoaded();
 
-		//BoardCLI boardCLI = new BoardCLI(input);
 		Thread t = new Thread(this);
         t.start();
 	}
@@ -130,7 +129,7 @@ public class BoardCLI extends Observable implements Board,Runnable {
 		System.out.println("");
 		System.out.println("	 Territori		Personaggi	     Edifici		Sviluppo");
 		System.out.println("");
-		System.out.println("	     "+cardsCodes[4]+"			    "+cardsCodes[7]+"			"+cardsCodes[11]+"		    "+cardsCodes[15]);
+		System.out.println("	     "+cardsCodes[3]+"			    "+cardsCodes[7]+"			"+cardsCodes[11]+"		    "+cardsCodes[15]);
 		System.out.println("");
 		System.out.println("	     "+cardsCodes[2]+"			    "+cardsCodes[6]+"			"+cardsCodes[10]+"		    "+cardsCodes[14]);
 		System.out.println("");
@@ -139,7 +138,8 @@ public class BoardCLI extends Observable implements Board,Runnable {
 		System.out.println("	     "+cardsCodes[0]+"			    "+cardsCodes[4]+"			"+cardsCodes[8]+"		    "+cardsCodes[12]);
 		System.out.println("");
 		System.out.println(" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-		
+		System.out.println();
+		System.out.print(" > ");
 		
 	}
 	
@@ -187,8 +187,8 @@ public class BoardCLI extends Observable implements Board,Runnable {
 		System.out.println("----- LISTA AZIONI EXTRA -----");
 		System.out.println();
 		System.out.println("--LEADER-- Scarta1 ~ Scarta4 (Leader) | Attiva1 ~ Attiva4 (Leader) | Piazza1 ~ Piazza4 ");
-		System.out.println("--ALTRO--  Passa (Salta il turno) | Info1 ~ Info5 (Per controllare carte e risorse di un avversario)");
-		System.out.println("Se non conosci il tuo codice giocatore puoi usare semplicemente il comando Info !");
+		System.out.println("--ALTRO--  Passa (Salta il turno) | info1 ~ info5 (Per controllare carte e risorse di un avversario)");
+		System.out.println("Se non conosci il tuo codice giocatore puoi usare semplicemente il comando info !");
 		System.out.println();
 		System.out.print(" > ");
 	}
@@ -272,8 +272,18 @@ public class BoardCLI extends Observable implements Board,Runnable {
 	}
 	
 	public void printPoints(int index) {
-		if (index==0) System.out.println("--> Coin: "+coinV+" Wood: "+woodV+" Stone: "+stoneV+" Servant:"+servantV+" Victory:"+victoryV+" Military:"+militaryV+" Faith:"+faithV);
-		else startGame(index);
+		if (index==0) 
+		{
+			System.out.println();
+			System.out.println(" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
+			System.out.println("|| Coin: "+coinV+" Wood: "+woodV+" Stone: "+stoneV+" Servant:"+servantV+" || Victory:"+victoryV+" Military:"+militaryV+" Faith:"+faithV + " ||");
+			System.out.println();
+			System.out.print(" > ");
+		}
+		else 
+		{
+			startGame(index);
+		}
 	}
 
 	@Override
@@ -326,6 +336,8 @@ public class BoardCLI extends Observable implements Board,Runnable {
 			allowed=true;
 		}
 		
+		System.out.println();
+		System.out.println("--> ");
 	}
 
 	@Override
@@ -400,16 +412,16 @@ public class BoardCLI extends Observable implements Board,Runnable {
 		EventMemberPlaced memberPlaced=null;
 		
 		switch(memberIndex){
-		case 0:
+		case 1:
 			memberPlaced = new EventMemberPlaced(chosenAction,ColorPalette.DICE_BLACK,servants);
 			break;
-		case 1:
+		case 2:
 			memberPlaced = new EventMemberPlaced(chosenAction,ColorPalette.DICE_WHITE,servants);
 			break;
-		case 2:
+		case 3:
 			memberPlaced = new EventMemberPlaced(chosenAction,ColorPalette.DICE_ORANGE,servants);
 			break;
-		case 3:
+		case 4:
 			memberPlaced = new EventMemberPlaced(chosenAction,ColorPalette.UNCOLORED,servants);
 			break;
 		}
@@ -472,7 +484,6 @@ public class BoardCLI extends Observable implements Board,Runnable {
 		setChanged();
 		MessageObtainPersonalBoardStatus obtainPbStatus = new MessageObtainPersonalBoardStatus(index); 
 		notifyObservers(obtainPbStatus);
-		
 	}
 
 	@Override
@@ -652,7 +663,7 @@ public class BoardCLI extends Observable implements Board,Runnable {
 			if(("info4").equals(s)) printPoints(4);
 			if(("info5").equals(s)) printPoints(5);
 			
-			if(allowed){
+			if(allowed) {
 			
 				if(("passa").equals(s)) skipRound();
 				
@@ -688,6 +699,9 @@ public class BoardCLI extends Observable implements Board,Runnable {
 								notifyAction(Action.valueOf(s1.toUpperCase()),index,servants); 
 						}
 					} 
+			} else {
+				System.out.println();
+				System.out.println("Attendi il tuo turno per eseguire questo comando!");
 			}
 			
 			}catch (IOException e) {}

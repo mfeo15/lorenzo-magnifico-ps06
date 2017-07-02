@@ -12,9 +12,10 @@ import it.polimi.ingsw.ps06.model.Types.ColorPalette;
 import it.polimi.ingsw.ps06.model.Types.CouncilPrivilege;
 import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
 import it.polimi.ingsw.ps06.model.Types.PointsKind;
-import it.polimi.ingsw.ps06.model.XMLparser.ParserXMLLeaders;
+import it.polimi.ingsw.ps06.model.XMLparser.ParserLeaders;
 import it.polimi.ingsw.ps06.model.board.Board;
 import it.polimi.ingsw.ps06.model.cards.leader.Leader;
+import it.polimi.ingsw.ps06.networking.Connection;
 import it.polimi.ingsw.ps06.networking.messages.MessageBoardSetupDice;
 import it.polimi.ingsw.ps06.networking.messages.MessageCurrentPlayer;
 import it.polimi.ingsw.ps06.networking.messages.MessageCurrentPlayerOrder;
@@ -32,7 +33,6 @@ public class Game extends Observable implements Observer {
 	
 	private final int NUMBER_OF_PERIODS	= 3;
 	private final int NUMBER_OF_ROUNDS	= 2;
-	private final int NUMBER_OF_PHASES 	= 4;
 	
 	private final int VATICAN_REQUIREMENT_PERIOD_1 = 3;
 	private final int VATICAN_REQUIREMENT_PERIOD_2 = 4;
@@ -76,20 +76,8 @@ public class Game extends Observable implements Observer {
 		board.addNewObserver(this);
 		
 		players = new ArrayList<Player>();
-
-		/*
-		leaders = (new ParserXMLLeaders("resources/XML/DevelopementCards.xml")).getCards();
-		Collections.shuffle( leaders, new Random(System.nanoTime()) );
-		*/
 		
-		this.leaders = new ArrayList<Leader>();
-
-		for (int i=1; i <= 20; i++) {
-			Leader l = new Leader();
-			l.setCode(i);
-			this.leaders.add(l);
-		}
-		
+		leaders = (new ParserLeaders("resources/XML/Leaders.xml")).getCards();
 		Collections.shuffle( leaders, new Random(System.nanoTime()) );
 		
 		bonusTiles = new ArrayList<Integer>();
@@ -360,6 +348,10 @@ public class Game extends Observable implements Observer {
 			Player p = players.get(i);
 			p.getPersonalBoard().addResource(MaterialsKind.COIN, STANDARD_AMOUNT_COINS_FIRST_PLAYER + i);
 			p.addLeaders( new ArrayList<Leader>( leaders.subList( (4 * p.getID()) , (4 + 4 * p.getID()) ) ) );
+			System.out.println("PLAYER_" + p.getID() +": " + p.getLeaders().get(0).getCode() + " " 
+									+ p.getLeaders().get(1).getCode() + " " 
+									+ p.getLeaders().get(2).getCode() + " " 
+									+ p.getLeaders().get(3).getCode() + " ");
 		}
 		
 		setupRound();

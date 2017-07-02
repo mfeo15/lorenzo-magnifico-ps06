@@ -54,7 +54,7 @@ public class FamilyMember {
 	   * @return 	Current value associated
 	   */
 	public int getValue() {
-		return value;
+		return (value + ownerPlayer.getBonusMalusCollection().getBonusMalus(rappresentativeDiceColor).getValue());
 	}
 	
 	/**

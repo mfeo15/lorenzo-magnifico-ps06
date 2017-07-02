@@ -24,13 +24,11 @@ import it.polimi.ingsw.ps06.model.Types.PointsKind;
  * @since   2017-05-28
  */
 
-public class ParserBonusBoard {
+public class ParserBonusBoard extends XMLParser {
 
 	private ArrayList<Integer> faith_points;
 	private EnumMap<Action, Resources> actionSpaces;
 	private ArrayList<BonusTile> bonusTiles;
-	
-	private String XML_sourceFile;
 
 	/**
 	 * Costruttore della classe
@@ -39,7 +37,7 @@ public class ParserBonusBoard {
 	 * 
 	 */	
 	public ParserBonusBoard(String source) {
-		this.XML_sourceFile = source;
+		super(source);
 		faith_points = new ArrayList<Integer>();
 		bonusTiles = new ArrayList<BonusTile>();
 		actionSpaces = new EnumMap<Action, Resources>(Action.class);
@@ -56,47 +54,6 @@ public class ParserBonusBoard {
 			return null;
 
 		return actionSpaces.get(a);
-	}
-
-	private Resources parseResourceNode(Node n) {
-
-		Resources r = new Resources();
-		NodeList resourcesList = n.getChildNodes();
-
-		for (int i = 0; i < resourcesList.getLength(); i++ ) 
-		{
-			Node currentResource = resourcesList.item(i);
-			if (currentResource.getNodeType() == Node.ELEMENT_NODE) 
-			{
-				int valueResource = Integer.parseInt( currentResource.getFirstChild().getNodeValue() );
-
-				switch (currentResource.getNodeName()) {
-				case "coin" : 
-					r.setResourceValue(MaterialsKind.COIN, valueResource);
-					break;
-				case "stone" : 
-					r.setResourceValue(MaterialsKind.STONE, valueResource);
-					break;
-				case "wood" :
-					r.setResourceValue(MaterialsKind.WOOD, valueResource);
-					break;
-				case "servant" : 
-					r.setResourceValue(MaterialsKind.SERVANT, valueResource);
-					break;
-				case "faith" : 
-					r.setResourceValue(PointsKind.FAITH_POINTS, valueResource);
-					break;
-				case "military" :
-					r.setResourceValue(PointsKind.MILITARY_POINTS, valueResource);
-					break;
-				case "victory" :
-					r.setResourceValue(PointsKind.VICTORY_POINTS, valueResource);
-					break;
-				}
-			}
-		}
-
-		return r;
 	}
 
 	private void parserActionSpacesBonus(NodeList bonus_action_zone, Action actionSpace3, Action actionSpace4) {
@@ -177,7 +134,8 @@ public class ParserBonusBoard {
 		}
 	}
 
-	private void parse(Document d) {
+	@Override
+	protected void parse(Document d) {
 
 		Node bonuses = d.getFirstChild();
 
@@ -202,28 +160,5 @@ public class ParserBonusBoard {
 		
 		NodeList bonus_tiles = ((Element) bonuses).getElementsByTagName("bonustiles").item(0).getChildNodes();
 		parserBonusTiles(bonus_tiles);
-	}
-
-	/**
-	 *Metodo per costruire il parser
-	 *
-	 * @param none
-	 * @return nothing 
-	 * 
-	 */	
-	public Document buildDocument() 
-	{
-		try {
-			DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder builder = documentFactory.newDocumentBuilder(); 
-
-			XML_sourceFile = XML_sourceFile.replaceFirst("resources", "");
-			return builder.parse( getClass().getResourceAsStream(XML_sourceFile) ); 
-		}
-		catch(Exception e){
-			e.printStackTrace();
-		}
-
-		return null;
 	}
 }

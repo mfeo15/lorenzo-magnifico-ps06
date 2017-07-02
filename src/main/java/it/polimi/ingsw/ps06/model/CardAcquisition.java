@@ -1,13 +1,15 @@
 package it.polimi.ingsw.ps06.model;
 
-import it.polimi.ingsw.ps06.model.Types.Action;
 import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
 import it.polimi.ingsw.ps06.model.Types.PointsKind;
+import it.polimi.ingsw.ps06.model.bonus_malus.BonusMalusDoubleMaterialsFromDevCards;
 import it.polimi.ingsw.ps06.model.cards.Building;
 import it.polimi.ingsw.ps06.model.cards.Character;
 import it.polimi.ingsw.ps06.model.cards.DevelopementCard;
 import it.polimi.ingsw.ps06.model.cards.Territory;
 import it.polimi.ingsw.ps06.model.cards.Venture;
+import it.polimi.ingsw.ps06.model.effects.Effect;
+import it.polimi.ingsw.ps06.model.effects.EffectsResources;
 
 /**
 * Classe per la gestione delle azioni che comportano un acquisizione di una carta
@@ -115,6 +117,19 @@ public class CardAcquisition extends Actions {
 		}
 		
 		card.activateIstantEffect(p);
+		
+		if (p.getBonusMalusCollection().contains(BonusMalusDoubleMaterialsFromDevCards.class)) 
+		{
+			for (Effect e : card.instant_effect) {
+				if (e instanceof EffectsResources) {
+					int bonus_faith = ((EffectsResources) e).getBonus().getResourceValue(PointsKind.FAITH_POINTS);
+					int bonus_military = ((EffectsResources) e).getBonus().getResourceValue(PointsKind.MILITARY_POINTS);
+					int bonus_victory = ((EffectsResources) e).getBonus().getResourceValue(PointsKind.VICTORY_POINTS);
+					if ( bonus_faith == 0 && bonus_military == 0 && bonus_victory == 0 )
+						e.activate(p);
+				}
+			}
+		}
 	}
 
 }

@@ -19,8 +19,6 @@ import it.polimi.ingsw.ps06.networking.messages.MessageModel2ViewNotification;
 public class Leader extends Card {
 	
 	private LeaderRequirement requirement;
-	private boolean used=false;
-	private boolean active=false;
 	
 	private boolean OncePerRoundEffect;
 
@@ -170,60 +168,4 @@ public class Leader extends Card {
 	public void deleteAnObserver(Observer obs) {
 		deleteObserver(obs);
 	}
-	 
-	/*
-	/**
-	* metodo per verificare se il leader è stato già utilizzato o meno in questo turno
-	* 
-	* @param 	none
-	* 
-	* @return	used	valore boolean che mi dice se è stata utilizzata o no
-	*/
-	/*
-	public Boolean checkUsed(){
-		return used;
-	}
-	*/
-	
-	/*
-	/**
-	* metodo per resettare la carta leader e renderla disponibile all'utilizzo all'inizio di un nuovo turno
-	* 
-	* @param 	none
-	* 
-	* @return 	Nothing
-	*/
-	/*
-	 public void resetUsed(){
-		 if(used)
-			 used=false;
-	 }
-	 */
-	/*
-	/**
-	* metodo per attivare la carta leader
-	* 
-	* @param	giocatore che utilizza la carta 
-	* 
-	* @return 	Nothing
-	*/
-	/*
-	public void activateleader(){
-		//verifica i requistiti da definire
-		active=true;
-	}
-	
-	/**
-	* metodo per verificare se il leader è stato già utilizzato o meno in questo turno
-	* 
-	* @param 	none
-	* 
-	* @return	used	valore boolean che mi dice se è stata utilizzata o no
-	*/
-	/*
-	public Boolean checkActive(){
-		return active;
-	}
-	 */
-	
 }

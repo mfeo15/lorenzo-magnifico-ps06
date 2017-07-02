@@ -8,6 +8,7 @@ import java.util.Observer;
 import it.polimi.ingsw.ps06.model.Types.ColorPalette;
 import it.polimi.ingsw.ps06.model.Types.LeaderStates;
 import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
+import it.polimi.ingsw.ps06.model.bonus_malus.BonusMalusSet;
 import it.polimi.ingsw.ps06.model.cards.leader.Leader;
 import it.polimi.ingsw.ps06.networking.messages.MessageLeaderCards;
 import it.polimi.ingsw.ps06.networking.messages.MessagePersonalBoardResourcesStatus;
@@ -52,7 +53,7 @@ public class Player extends Observable implements Observer {
 		memberOrange = new FamilyMember(this, ColorPalette.DICE_ORANGE);
 		memberUncolored = new FamilyMember(this);
 		
-		this.personalBoard = new PersonalBoard();
+		this.personalBoard = new PersonalBoard(this);
 		this.leaders = new ArrayList<Leader>();
 		
 		this.bonusMalusCollection = new BonusMalusSet();

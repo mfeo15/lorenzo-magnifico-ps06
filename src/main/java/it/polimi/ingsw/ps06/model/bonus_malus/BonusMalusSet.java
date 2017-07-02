@@ -1,8 +1,10 @@
-package it.polimi.ingsw.ps06.model;
+package it.polimi.ingsw.ps06.model.bonus_malus;
 
 import java.util.ArrayList;
 
+import it.polimi.ingsw.ps06.model.Types;
 import it.polimi.ingsw.ps06.model.Types.ActionCategory;
+import it.polimi.ingsw.ps06.model.Types.ColorPalette;
 
 public class BonusMalusSet {
 	
@@ -16,13 +18,13 @@ public class BonusMalusSet {
 	}
 	
 	public void add(BonusMalus bm) {
-		if (contains(bm))
-			return;
-		
 		bonusMalus.add(bm);
 	}
 	
 	public BonusMalusAction getBonusMalus(ActionCategory a) {
+		
+		if (! contains(BonusMalusAction.class))
+			return null;
 		
 		if (! contains(a))
 			return null;
@@ -36,13 +38,18 @@ public class BonusMalusSet {
 		return null;
 	}
 	
-	public boolean contains(BonusMalus bm) {
-		boolean result = false;
-		for (BonusMalus element : this.bonusMalus ) {
-			if (element.equals(bm)) result = true;
+	public BonusMalusAction getBonusMalus(ColorPalette c) {
+		
+		if (! contains(BonusMalusMember.class))
+			return null;
+		
+		for (BonusMalus bm : this.bonusMalus) {
+			if (bm instanceof BonusMalusMember)
+				if ( ((BonusMalusMember) bm).getMemberColors().contains(c) ) 
+					return ((BonusMalusAction) bm);
 		}
 		
-		return result;
+		return null;
 	}
 	
 	public boolean contains(ActionCategory a) {
@@ -59,10 +66,10 @@ public class BonusMalusSet {
 		return result;
 	}
 	
-	public boolean containsNowTowersEffects() {
+	public boolean contains(Class<?> cls) {
 		boolean result = false;
 		for (BonusMalus element : this.bonusMalus ) {
-			if (element instanceof BonusMalusNoTowersEffects) result = true;
+			if (element.getClass() == cls) result = true;
 		}
 		
 		return result;

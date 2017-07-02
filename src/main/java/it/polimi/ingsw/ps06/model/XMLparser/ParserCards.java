@@ -34,10 +34,9 @@ import it.polimi.ingsw.ps06.model.effects.EffectsResourcesSwap;
 * @version 1.0
 * @since   2017-05-28
 */
-public class ParserXMLCards {
+public class ParserCards extends XMLParser {
 
 	private ArrayList<DevelopementCard> cards;
-	private String XML_sourceFile;
 	
 	/**
 	* Costruttore della classe
@@ -45,41 +44,18 @@ public class ParserXMLCards {
 	* @param source		Stringa corrispondente al percorso del file 
 	* 
 	*/	
-	public ParserXMLCards(String source) {
-		this.XML_sourceFile = source;
+	public ParserCards(String source) {
+		super(source);
 		cards = new ArrayList<DevelopementCard>();
 		
 		parse( buildDocument() );
 	}
-	
-	/**
-	* Metodo per costruire il parser
-	*
-	* @param none
-	* @return nothing 
-	* 
-	*/	
-	public Document buildDocument(){
-		try{
-			DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder builder = documentFactory.newDocumentBuilder(); 
 
-			XML_sourceFile = XML_sourceFile.replaceFirst("resources", "");
-			return builder.parse( getClass().getResourceAsStream(XML_sourceFile) );
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-		}
-
-		return null;
-	}
-
-	public void parse(Document d) {
+	@Override
+	protected void parse(Document d) {
 
 		Node deck = d.getFirstChild();
 		NodeList carte = ((Element) deck).getElementsByTagName("card");
-
-		//NodeList carte = d.getElementsByTagName("card");
 
 		for(int j = 0; j < carte.getLength(); j++) 
 		{
@@ -156,61 +132,17 @@ public class ParserXMLCards {
 				if ( current_attribute.getNodeName().equals("instant_effects") )
 					card.setEffect( parseEffectNode(current_attribute) );
 
-				/*
-				if(a.getNodeName().equals("production_requirement")){
-					if(d instanceof Building){
-						int x=Integer.parseInt(a.getTextContent());
-						((Building) d).setDiceReq(x);
-						}
-					else if(d instanceof Territory){
-						int x=Integer.parseInt(a.getTextContent());
-						((Territory) d).setDiceReq(x);
-						}
-				}
-				 */
-			}
-		}
-	}
 
-	private Resources parseResourceNode(Node n) {
+				if ( current_attribute.getNodeName().equals("harvest_requirement")) {
+					if (card instanceof Territory) 
+						((Territory) card).setDiceReq( Integer.parseInt( current_attribute.getFirstChild().getNodeValue()) );
 
-		Resources r = new Resources();
-		NodeList resourcesList = n.getChildNodes();
-
-		for (int i = 0; i < resourcesList.getLength(); i++ ) 
-		{
-			Node currentResource = resourcesList.item(i);
-			if (currentResource.getNodeType() == Node.ELEMENT_NODE) 
-			{
-				int valueResource = Integer.parseInt( currentResource.getFirstChild().getNodeValue() );
-
-				switch (currentResource.getNodeName()) {
-				case "coin" : 
-					r.setResourceValue(MaterialsKind.COIN, valueResource);
-					break;
-				case "stone" : 
-					r.setResourceValue(MaterialsKind.STONE, valueResource);
-					break;
-				case "wood" :
-					r.setResourceValue(MaterialsKind.WOOD, valueResource);
-					break;
-				case "servant" : 
-					r.setResourceValue(MaterialsKind.SERVANT, valueResource);
-					break;
-				case "faith" : 
-					r.setResourceValue(PointsKind.FAITH_POINTS, valueResource);
-					break;
-				case "military" :
-					r.setResourceValue(PointsKind.MILITARY_POINTS, valueResource);
-					break;
-				case "victory" :
-					r.setResourceValue(PointsKind.VICTORY_POINTS, valueResource);
-					break;
+					if ( current_attribute.getNodeName().equals("production_requirement"))
+						if (card instanceof Building) 
+							((Building) card).setDiceReq( Integer.parseInt( current_attribute.getFirstChild().getNodeValue()) );
 				}
 			}
 		}
-
-		return r;
 	}
 	
 	private ColorPalette parseColorCard(String color) {
@@ -316,10 +248,10 @@ public class ParserXMLCards {
 
 	public static void main(String[] args){
 
-	ParserXMLCards c = new ParserXMLCards("resources/XML/DevelopementCards.xml");
-	ArrayList<DevelopementCard> a = new  ArrayList<DevelopementCard>();
-	a = c.getCards();
-}
+		ParserCards c = new ParserCards("resources/XML/DevelopementCards.xml");
+		ArrayList<DevelopementCard> a = new  ArrayList<DevelopementCard>();
+		a = c.getCards();
+	}
 
 	
 }

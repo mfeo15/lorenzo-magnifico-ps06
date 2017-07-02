@@ -15,7 +15,8 @@ import it.polimi.ingsw.ps06.model.Types.Action;
 import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
 import it.polimi.ingsw.ps06.model.Types.PointsKind;
 import it.polimi.ingsw.ps06.model.XMLparser.ParserBonusBoard;
-import it.polimi.ingsw.ps06.model.XMLparser.ParserXMLCards;
+import it.polimi.ingsw.ps06.model.XMLparser.ParserCards;
+import it.polimi.ingsw.ps06.model.bonus_malus.BonusMalusNoTowersEffects;
 import it.polimi.ingsw.ps06.model.cards.Building;
 import it.polimi.ingsw.ps06.model.cards.Character;
 import it.polimi.ingsw.ps06.model.cards.DevelopementCard;
@@ -147,7 +148,7 @@ public class Towers extends Observable implements PlaceSpace {
 		
 		memberSpaces = new FamilyMember[CARTE_TORRE];
 		
-		this.deck = shuffleDeck( (new ParserXMLCards("resources/XML/DevelopementCards.xml")).getCards() );
+		this.deck = shuffleDeck( (new ParserCards("resources/XML/DevelopementCards.xml")).getCards() );
 		
 		this.deckIndex = - CARTE_TORRE;
 	}
@@ -260,7 +261,7 @@ public class Towers extends Observable implements PlaceSpace {
 	
 	private void giveBonus(Action chosenAction, FamilyMember member) {
 		
-		if ( member.getPlayer().getBonusMalusCollection().containsNowTowersEffects() )
+		if ( member.getPlayer().getBonusMalusCollection().contains(BonusMalusNoTowersEffects.class) )
 			return;
 		
 		ParserBonusBoard p = new ParserBonusBoard("resources/XML/BonusTabellone.xml");

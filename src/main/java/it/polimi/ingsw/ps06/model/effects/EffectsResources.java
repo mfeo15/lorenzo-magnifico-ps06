@@ -24,6 +24,10 @@ public class EffectsResources extends Effect {
 		this.bonus = bonus;
 	}
 	
+	public Resources getBonus() {
+		return this.bonus;
+	}
+	
 	/**
 	* Implementazione del metodo astratto activate().
 	* Dato un Player su cui attivare l'effetto, il metodo aggiunge al Warehouse il bonus

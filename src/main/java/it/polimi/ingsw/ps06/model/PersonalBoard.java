@@ -7,10 +7,12 @@ import java.util.Observer;
 import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
 import it.polimi.ingsw.ps06.model.Types.PointsKind;
 import it.polimi.ingsw.ps06.model.XMLparser.ParserBonusBoard;
+import it.polimi.ingsw.ps06.model.bonus_malus.BonusMalusNoMilitaryRequirement;
 import it.polimi.ingsw.ps06.model.cards.Building;
 import it.polimi.ingsw.ps06.model.cards.Character;
 import it.polimi.ingsw.ps06.model.cards.Territory;
 import it.polimi.ingsw.ps06.model.cards.Venture;
+import it.polimi.ingsw.ps06.networking.messages.MessageModel2ViewNotification;
 import it.polimi.ingsw.ps06.networking.messages.MessagePersonalBoardResourcesStatus;
 
 /**
@@ -31,6 +33,8 @@ public class PersonalBoard extends Observable {
 	
 	private Warehouse inventory;
 	
+	private Player owner;
+	
 	/**
 	* costruttore della plancia giocatore, alloca gli arraylist per le carte che si 
 	* aggiungono man mano, un warehouse contenitore delle risorse e una tessera bonus personale
@@ -40,12 +44,14 @@ public class PersonalBoard extends Observable {
 	* @return 	Nothing
 	*/
 	
-	public PersonalBoard() {
+	public PersonalBoard(Player owner) {
 		territories = new ArrayList<Territory>();
 		buildings = new ArrayList<Building>();
 		characters = new ArrayList<Character>();
 		ventures = new ArrayList<Venture>();
 		inventory = new Warehouse();
+		
+		this.owner = owner;
 	}
 	
 	public void setBonusTile(int code) {
@@ -190,50 +196,44 @@ public class PersonalBoard extends Observable {
 	*/
 	
 	public void addCard(Territory cardTerritory) {
-		
-			switch(territories.size()) {
-			case 0:
-			case 1:
+
+		boolean noMilitaryRequirement = owner.getBonusMalusCollection().contains(BonusMalusNoMilitaryRequirement.class);
+
+		switch(territories.size()) {
+		case 0:
+		case 1:
+			territories.add(cardTerritory);
+			break;
+		case 2:
+			if ( (inventory.getPoints(PointsKind.MILITARY_POINTS) >= 3) || noMilitaryRequirement )
 				territories.add(cardTerritory);
-				break;
-			case 2:
-				if(inventory.getPoints(PointsKind.MILITARY_POINTS)>=3){
-					territories.add(cardTerritory);
-				}
-				else {
-				//	controller.handleNotEnoughMILPoints();		da implementare ancora il controller
-				}
-				break;
-			case 3:
-				if(inventory.getPoints(PointsKind.MILITARY_POINTS)>=7){
-					territories.add(cardTerritory);
-				}
-				else {
-					//controller.handleNotEnoughMILPoints();
-				}
-				break;
-			case 4:
-				if(inventory.getPoints(PointsKind.MILITARY_POINTS)>=12){
-					territories.add(cardTerritory);
-				}
-				else {
-					//controller.handleNotEnoughMILPoints();
-				}
-				break;
-			case 5:
-				if(inventory.getPoints(PointsKind.MILITARY_POINTS)>=18) {
-					territories.add(cardTerritory);
-				}
-				else {
-					//controller.handleNotEnoughMILPoints(); 
-				}
-				break;		
-			default:
-				//Controller.handleMaxTerritories();  Controller ancora da implementare, dovrà gestire e informare la view che è stato raggiunto il numero massimo di territori
-				break;
-				}			
+			else 
+				notifyError("Ottenere la 3° carta territorio richiede 3 punti Militari");
+			break;
+		case 3:
+			if ( (inventory.getPoints(PointsKind.MILITARY_POINTS) >= 7) || noMilitaryRequirement )
+				territories.add(cardTerritory);
+			else 
+				notifyError("Ottenere la 4° carta territorio richiede 7 punti Militari");
+			break;
+		case 4:
+			if ( (inventory.getPoints(PointsKind.MILITARY_POINTS) >= 12) || noMilitaryRequirement )
+				territories.add(cardTerritory);
+			else 
+				notifyError("Ottenere la 5° carta territorio richiede 12 punti Militari");
+			break;
+		case 5:
+			if ( (inventory.getPoints(PointsKind.MILITARY_POINTS) >= 18) || noMilitaryRequirement )
+				territories.add(cardTerritory);
+			else 
+				notifyError("Ottenere la 6° carta territorio richiede 18 punti Militari");
+			break;		
+		default:
+			notifyError("Hai raggiunto il numero massimo di carte Territorio");
+			break;
+		}			
 	}
-	
+
 	/**
 	* Metodo che permette di aggiungere edifici sulla plancia giocatore
 	*
@@ -245,7 +245,7 @@ public class PersonalBoard extends Observable {
 		if (buildings.size() < 6)
 			buildings.add(cardBuilding);
 		else
-			//Controller.handleMaxBuildings();  controller ancora da implementare
+			notifyError("Hai raggiunto il numero massimo di carte Edifici");
 	return;
 	}
 	
@@ -307,6 +307,13 @@ public class PersonalBoard extends Observable {
 	public void reduceResource(PointsKind kind, int x){
 		inventory.decreasePoints(kind, x);
 		notifyChangement();
+	}
+	
+	public void notifyError(String e) {
+		
+		MessageModel2ViewNotification n = new MessageModel2ViewNotification(e);
+		setChanged();
+		notifyObservers(n);
 	}
 	
 	public void notifyChangement() {

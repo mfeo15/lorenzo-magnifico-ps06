@@ -1,8 +1,8 @@
 package it.polimi.ingsw.ps06.model.effects;
 
-import it.polimi.ingsw.ps06.model.BonusMalusAction;
 import it.polimi.ingsw.ps06.model.Player;
 import it.polimi.ingsw.ps06.model.Types.ActionCategory;
+import it.polimi.ingsw.ps06.model.bonus_malus.BonusMalusAction;
 
 public class EffectsBonusMalusActions extends EffectsBonusMalus {
 	
@@ -10,6 +10,7 @@ public class EffectsBonusMalusActions extends EffectsBonusMalus {
 	
 	public EffectsBonusMalusActions(int value, ActionCategory actionCategory) {
 		super(value);
+		this.actionCategory = actionCategory;
 	}
 
 	@Override

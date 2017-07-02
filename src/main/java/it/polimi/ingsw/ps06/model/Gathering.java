@@ -74,17 +74,18 @@ public class Gathering extends Actions {
 		if (servants > 0)
 			member.getPlayer().getPersonalBoard().reduceResource(MaterialsKind.SERVANT, servants);
 		
-		if( isProduction() == true)
+		if( isProduction() == true) {
 		
 			for (Building b : member.getPlayer().getPersonalBoard().getBuildings())
 				if ( b.check_dice( member.getValue() + servants + getGatheringBonus(member.getFakePlayer())) )
 						b.activateEffect(member.getPlayer());
-		
+		}
 		else
-			
+		{	
 			for (Territory t : member.getPlayer().getPersonalBoard().getTerritories())
 				if ( t.check_dice( member.getValue() + servants + getGatheringBonus(member.getFakePlayer())) )
 					t.activateEffect(member.getPlayer());
+		}
 	}
 
 }
