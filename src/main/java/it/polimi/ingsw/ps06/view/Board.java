@@ -81,4 +81,10 @@ public interface Board {
 	void setBonusTilePersonalView(int code) throws IOException;
 	
 	void setRound();
+	
+	void activateLeader(int value);
+	
+	void playLeader(int value);
+	
+	void discardLeader(int value);
 }

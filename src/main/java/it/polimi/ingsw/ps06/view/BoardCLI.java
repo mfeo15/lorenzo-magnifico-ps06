@@ -643,6 +643,25 @@ public class BoardCLI extends Observable implements Board,Runnable {
 		
 	}
 	
+	
+	@Override
+	public void activateLeader(int value) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void playLeader(int value) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void discardLeader(int value) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	@Override
 	public void run() {
 		while(cond){
