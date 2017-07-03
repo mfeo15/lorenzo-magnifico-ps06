@@ -9,25 +9,25 @@ public class LeaderInHand implements LeaderState {
 	}
 	
 	@Override
-	public String playLeader() {
+	public boolean playLeader() {
 		leader.setLeaderState( leader.getActivatedLeaderState() );		
-		return "La carta Leader " + leader.getTitle() + "è stata giocata";
+		return true;
 	}
 
 	@Override
-	public String activateLeader() {
-		return "La carta Leader " + leader.getTitle() + "deve essere giocata prima di capovolgerla";
+	public boolean activateLeader() {
+		return false;
 	}
 
 	@Override
-	public String deactivateLeader() {	
-		return "La carta Leader " + leader.getTitle() + "deve essere giocata ed attivata prima di capovolgerla";
+	public boolean deactivateLeader() {	
+		return false;
 	}
 
 	@Override
-	public String discardLeader() {	
+	public boolean discardLeader() {	
 		leader.setLeaderState( leader.getDiscardedLeaderState() );		
-		return "La carta Leader " + leader.getTitle() + "è stata scartata";
+		return true;
 	}
 
 }

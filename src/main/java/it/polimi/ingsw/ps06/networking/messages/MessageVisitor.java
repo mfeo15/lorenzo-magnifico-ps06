@@ -30,6 +30,9 @@ public interface MessageVisitor {
 	void visit(MessageBoardMemberHasBeenPlaced newMember);
 	
 	void visit(MessageLeaderCards leaderCards);
+	void visit(MessageLeaderHasBeenPlayed leaderPlayed);
+	void visit(MessageLeaderHasBeenActivated leaderActivated);
+	void visit(MessageLeaderHasBeenDiscarded leaderDiscarded);
 	
 	void visit(MessagePersonalBoardStatus pbStatus);
 	void visit(MessageObtainPersonalBoardStatus obtainPbStatus);

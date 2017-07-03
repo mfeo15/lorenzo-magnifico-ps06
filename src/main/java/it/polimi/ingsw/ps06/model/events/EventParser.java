@@ -2,6 +2,8 @@ package it.polimi.ingsw.ps06.model.events;
 
 import java.io.IOException;
 
+import org.omg.IOP.Codec;
+
 import it.polimi.ingsw.ps06.controller.BoardController;
 import it.polimi.ingsw.ps06.controller.RoomController;
 import it.polimi.ingsw.ps06.model.Game;
@@ -78,21 +80,21 @@ public class EventParser implements EventVisitor {
 	public void visit(EventLeaderDiscarded leaderDiscarded) {
 
 		Connection c = ((Connection) theModel);
-		c.getPlayer().getLeader( leaderDiscarded.getCode() ).discardLeader();
+		c.getPlayer().doLeaderDiscarding( leaderDiscarded.getCode() );
 	}
 
 	@Override
-	public void visit(EventLeaderActivated leaderActivated) {
+	public void visit(EventLeaderActivated leaderActivated) 
+	{
 		Connection c = ((Connection) theModel);
-		
-		c.getPlayer().getLeader( leaderActivated.getCode() ).activateLeader();
+		c.getPlayer().doLeaderActivating( leaderActivated.getCode() );
 	}
 
 	@Override
-	public void visit(EventLeaderPlayed leaderPlayed) {
+	public void visit(EventLeaderPlayed leaderPlayed) 
+	{
 		Connection c = ((Connection) theModel);
-		
-		c.getPlayer().getLeader( leaderPlayed.getCode() ).playLeader();
+		c.getPlayer().doLeaderPlaying( leaderPlayed.getCode() );
 	}
 
 	@Override

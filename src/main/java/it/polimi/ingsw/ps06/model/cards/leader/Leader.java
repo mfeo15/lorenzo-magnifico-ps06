@@ -19,7 +19,7 @@ import it.polimi.ingsw.ps06.networking.messages.MessageModel2ViewNotification;
 public class Leader extends Card {
 	
 	private LeaderRequirement requirement;
-	
+
 	private boolean OncePerRoundEffect;
 
 	private LeaderState leaderState;
@@ -41,6 +41,10 @@ public class Leader extends Card {
 		discarded = new LeaderDiscarded(this);
 		
 		leaderState = inHand;
+	}
+	
+	public LeaderRequirement getRequirement() {
+		return requirement;
 	}
 	
 	public boolean isOncePerRoundEffect() {
@@ -83,20 +87,20 @@ public class Leader extends Card {
 		this.leaderState = leaderState;
 	}
 	
-	public void playLeader() {
-		notifyChangement( leaderState.playLeader() );
+	public boolean playLeader() {
+		return( leaderState.playLeader() );
 	}
 	
-	public void activateLeader() {
-		notifyChangement( leaderState.activateLeader() );
+	public boolean activateLeader() {
+		return( leaderState.activateLeader() );
 	}
 
-	public void deactivateLeader() {
-		notifyChangement( leaderState.deactivateLeader() );
+	public boolean deactivateLeader() {
+		return( leaderState.deactivateLeader() );
 	}
 	
-	public void discardLeader() {
-		notifyChangement( leaderState.discardLeader() );
+	public boolean discardLeader() {
+		return( leaderState.discardLeader() );
 	}
 	
 	/**
@@ -150,22 +154,5 @@ public class Leader extends Card {
 	*/
 	public void setRequirement(LeaderRequirement requirement) {
 		this.requirement = requirement;
-	}
-	
-	
-	public void notifyChangement(String log) {
-		
-		MessageModel2ViewNotification notification = new MessageModel2ViewNotification(log);
-		
-		setChanged();
-		notifyObservers(notification);
-	}
-	
-	public void addNewObserver(Observer obs) {
-		addObserver(obs);;
-	}
-	
-	public void deleteAnObserver(Observer obs) {
-		deleteObserver(obs);
 	}
 }

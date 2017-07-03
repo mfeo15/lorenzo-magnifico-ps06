@@ -1,17 +1,20 @@
 package it.polimi.ingsw.ps06.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
 
+import it.polimi.ingsw.ps06.model.Types.CardType;
 import it.polimi.ingsw.ps06.model.Types.ColorPalette;
-import it.polimi.ingsw.ps06.model.Types.LeaderStates;
 import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
+import it.polimi.ingsw.ps06.model.Types.PointsKind;
 import it.polimi.ingsw.ps06.model.bonus_malus.BonusMalusSet;
 import it.polimi.ingsw.ps06.model.cards.leader.Leader;
 import it.polimi.ingsw.ps06.networking.messages.MessageLeaderCards;
-import it.polimi.ingsw.ps06.networking.messages.MessagePersonalBoardResourcesStatus;
+import it.polimi.ingsw.ps06.networking.messages.MessageLeaderHasBeenActivated;
+import it.polimi.ingsw.ps06.networking.messages.MessageLeaderHasBeenDiscarded;
+import it.polimi.ingsw.ps06.networking.messages.MessageLeaderHasBeenPlayed;
+import it.polimi.ingsw.ps06.networking.messages.MessageModel2ViewNotification;
 import it.polimi.ingsw.ps06.networking.messages.Server2Client;
 
 /**
@@ -35,8 +38,6 @@ public class Player extends Observable implements Observer {
 	private FamilyMember memberUncolored;
 	
 	private BonusMalusSet bonusMalusCollection;
-	
-	private Observer o;
 	 
 	/**
 	* Costruttore della classe
@@ -113,16 +114,14 @@ public class Player extends Observable implements Observer {
 	
 	public void addLeaders(ArrayList<Leader> list) {
 		this.leaders.addAll(list);
-		this.leaders.forEach(l -> l.addNewObserver(this.o));
 		
-		HashMap<Integer, LeaderStates> ls = new HashMap<Integer, LeaderStates>();
-		this.leaders.forEach(leader -> ls.put(leader.getCode(), leader.getLeaderState() ));
+		ArrayList<Integer> ls = new ArrayList<Integer>();
+		this.leaders.forEach(leader -> ls.add(leader.getCode() ));
 		
 		MessageLeaderCards leaderCards = new MessageLeaderCards(ls);
 		leaderCards.setRecipient(this.getID());
 		notifyChangement(leaderCards);
 	}
-	
 	
 	public PersonalBoard getPersonalBoard() {
 		return personalBoard;
@@ -135,8 +134,83 @@ public class Player extends Observable implements Observer {
 	* @param 	color	colore del familiare usato
 	* @return 	Nothing
 	*/
-	public void doLeaderDiscarding(int value, ColorPalette color){
+	public void doLeaderDiscarding(int code) {
+		Leader leader = this.leaders.get(code);
 		
+		boolean result = leader.discardLeader();
+		
+		if ( result == true ) 
+		{
+			MessageLeaderHasBeenDiscarded leaderDiscarded = new MessageLeaderHasBeenDiscarded( code );
+			leaderDiscarded.setRecipient(this.getID());
+			notifyChangement(leaderDiscarded);
+			
+		} else handleErrorLeader(-1, leader);
+	}
+	
+	public void doLeaderPlaying(int code) {
+		LeaderRequirement playerStats = generatePlayerStats();
+		Leader leader = this.leaders.get(code);
+		
+		if ( playerStats.isBiggerThan( leader.getRequirement() ) ) {
+			
+			boolean result = leader.playLeader();
+			if (result == true) 
+			{
+				MessageLeaderHasBeenPlayed leaderPlayed = new MessageLeaderHasBeenPlayed( code );
+				leaderPlayed.setRecipient(this.getID());
+				notifyChangement(leaderPlayed);
+				
+			} else handleErrorLeader(-1, leader);
+			
+		} else handleErrorLeader(1, leader);
+	}
+
+	public void doLeaderActivating(int code) {
+		Leader leader = this.leaders.get(code);
+		
+		boolean result = leader.activateLeader();
+		
+		if ( result == true) 
+		{
+			MessageLeaderHasBeenActivated leaderActivated = new MessageLeaderHasBeenActivated( code );
+			leaderActivated.setRecipient(this.getID());
+			notifyChangement(leaderActivated);
+			
+		} else handleErrorLeader(2, leader);
+	}
+	
+	private LeaderRequirement generatePlayerStats() {
+		LeaderRequirement r = new LeaderRequirement();
+		
+		for (MaterialsKind m : MaterialsKind.values())
+			r.setResourceValue(m, getPersonalBoard().getAmount(m));
+		
+		for (PointsKind p : PointsKind.values())
+			r.setResourceValue(p, getPersonalBoard().getAmount(p));
+		
+		r.setResourceValue(CardType.TERRITORY, getPersonalBoard().getTerritories().size());
+		r.setResourceValue(CardType.BUILDING, getPersonalBoard().getBuildings().size());
+		r.setResourceValue(CardType.CHARACTER, getPersonalBoard().getCharacters().size());
+		r.setResourceValue(CardType.VENTURE, getPersonalBoard().getVentures().size());
+		
+		return r;
+	}
+	
+	private void handleErrorLeader(int code, Leader l) {
+		
+		String notification = "Giocatore " + getColorAssociatedToID();
+		
+		switch(code) {
+		case 1: notification += " non è riuscito a giocare la carta " + l.getTitle() + " per mancanza di requisiti";
+			break;
+		case 2: notification += ": la carta " + l.getTitle() + " non ha effetto \"una volta per turno\"";
+			break;
+		default: notification = "UNKNOWN ERROR ON LEADERS HANDLING";
+		}
+		
+		MessageModel2ViewNotification m = new MessageModel2ViewNotification(notification);
+		notifyChangement(m);
 	}
 	
 	
@@ -147,8 +221,7 @@ public class Player extends Observable implements Observer {
 	
 	public void addNewObserver(Observer obs) {
 		addObserver(obs);
-		
-		this.o = obs;
+
 		this.personalBoard.addNewObserver(this);
 	}
 	

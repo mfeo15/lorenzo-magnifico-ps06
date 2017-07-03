@@ -1,5 +1,6 @@
 package it.polimi.ingsw.ps06.networking.messages;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import it.polimi.ingsw.ps06.model.Types.LeaderStates;
@@ -11,17 +12,17 @@ public class MessageLeaderCards extends Server2Client {
 	 */
 	private static final long serialVersionUID = -1599520886249943921L;
 	
-	private HashMap<Integer, LeaderStates> leaderCards;
+	private ArrayList<Integer> leaderCards;
 	
-	public MessageLeaderCards( HashMap<Integer, LeaderStates> leaderCards) {
+	public MessageLeaderCards( ArrayList<Integer> leaderCards) {
 		this.leaderCards = leaderCards;
 	}
 	
-	public HashMap<Integer, LeaderStates> getLeaderCards() {
+	public ArrayList<Integer> getLeaderCards() {
 		return this.leaderCards;
 	}
 	
-	public void setLeaderCards( HashMap<Integer, LeaderStates> leaderCards ) {
+	public void setLeaderCards( ArrayList<Integer> leaderCards ) {
 		this.leaderCards = leaderCards;
 	}
 

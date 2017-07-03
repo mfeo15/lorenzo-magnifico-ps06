@@ -240,7 +240,7 @@ public class LeaderRequirement {
 		* 
 		* @return 	true	se ogni risorsa corrente è almeno uguale alla risorsa confronto. 
 		*/
-		public boolean isBiggerThan(Resources r) {
+		public boolean isBiggerThan(LeaderRequirement r) {
 			
 			boolean flag = true;
 			
@@ -256,6 +256,13 @@ public class LeaderRequirement {
 	        {
 	        	PointsKind currentPoint = pointsIterator.next();	
 	        	if ( getResourceValue(currentPoint) < r.getResourceValue(currentPoint) ) flag = false;
+	        }
+	        
+	        Iterator<CardType> cardsIterator = cards.keySet().iterator();
+	        while(cardsIterator.hasNext() && flag==true)
+	        {
+	        	CardType currentCard = cardsIterator.next();	
+	        	if ( getResourceValue(currentCard) < r.getResourceValue(currentCard) ) flag = false;
 	        }
 			
 	        return flag;
