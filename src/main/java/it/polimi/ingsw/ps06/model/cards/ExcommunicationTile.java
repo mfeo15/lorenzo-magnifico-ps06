@@ -10,4 +10,13 @@ package it.polimi.ingsw.ps06.model.cards;
 
 public class ExcommunicationTile extends Card {
 	
+	private int period;
+	
+	public void setPeriod(int period) {
+		this.period = period;
+	}
+	
+	public int getPeriod() {
+		return this.period;
+	}
 }

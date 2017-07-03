@@ -251,6 +251,15 @@ public class MessageParser implements MessageVisitor {
 		Board b = ((Board) supporter);
 		b.setCards( boardSetupDevCards.getRoundCards() );
 	}
+	
+	@Override
+	public void visit(MessageBoardSetupExcomCards boardSetupExcomCards) {
+		Board b = ((Board) supporter);
+		b.setExcommunicationTiles(boardSetupExcomCards.getPeriodOne(), 
+								  boardSetupExcomCards.getPeriodTwo(), 
+								  boardSetupExcomCards.getPeriodThree()
+								 );
+	}
 
 	@Override
 	public void visit(MessageCurrentPlayerOrder currentPlayerOrder) 
@@ -315,6 +324,4 @@ public class MessageParser implements MessageVisitor {
 		Board b = ((Board) supporter);
 		b.discardLeader( leaderDiscarded.getCode() );
 	}
-	
-	
 }

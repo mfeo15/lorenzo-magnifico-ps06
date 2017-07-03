@@ -1750,6 +1750,11 @@ public class BoardGUI extends Observable implements Board {
 		this.ex2=code2;
 		this.ex3=code3;
 		
+		try {
+			refresh();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 

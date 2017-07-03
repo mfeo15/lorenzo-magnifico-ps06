@@ -17,11 +17,7 @@ public class Warehouse {
 	
 	/**
 	* Costruttore della classe, alloca l'attributo di tipo risorsa e setta il valore dei materiali iniziali
-	* 
-	* @param 	none
-	* @return 	nothing
 	*/
-	
 	public Warehouse() {
 		status = new Resources();		
 		initialSetup();	
@@ -33,42 +29,36 @@ public class Warehouse {
 	* @param 	none
 	* @return 	none
 	*/
-	
-	public void initialSetup(){
+	private void initialSetup(){
 		status.setResourceValue(MaterialsKind.STONE, 2);
 		status.setResourceValue(MaterialsKind.WOOD, 2);
 		status.setResourceValue(MaterialsKind.SERVANT, 3);
 	}
 	
 	/**
-	* Metodo che restituisce le risorse presenti nel warehouse
-	* 
-	* @param 	none
+	* Getter delle risorse presenti nel warehouse
 	* @return 	status   attributo di tipo risorsa
 	*/
-	
 	public Resources getStatus(){
 		return this.status;
 	}
 	
 	/**
-	* Metodo che restituisce la quantità presente nel warehouse della risorsa richiesta 
+	* Getter per una specifica quanità di tipo materiale 
 	* 
-	* @param 	kind	tipo di materiale richiesto
-	* @return 	quantità del materiale
+	* @param	kind	tipo di materiale richiesto
+	* @return 			quantità del materiale
 	*/
-	
 	public int getMaterial(MaterialsKind kind){
 		return status.getResourceValue(kind);
 	}
 	
 	/**
-	* Metodo che restituisce il numero di punti del tipo che ho richiesto 
+	* Getter per una specifica quanità di tipo punteggio 
 	* 
-	* @param 	type 	tipo di punti richiesto
-	* @return 	quantità di punti
+	* @param	kind	tipo di punteggio richiesto
+	* @return 			quantità del punteggio
 	*/
-	
 	public int getPoints(PointsKind type){
 		return status.getResourceValue(type);
 	}
@@ -76,74 +66,60 @@ public class Warehouse {
 	/**
 	* Metodo per aggiungere una certa quantità ad un materiale
 	* 
-	* @param 	kind	tipo del materiale da aumentare
-	* @param	int		quantità di cui aumentare il materiale
-	* @return 	nothing
+	* @param 	kind		tipo del materiale da aumentare
+	* @param	increase	quantità di cui aumentare il materiale
 	*/
-	
 	public void increaseMaterials(MaterialsKind kind, int increase){
 		status.increaseResourceValue(kind, increase);
 	}
 	
 	/**
-	* Metodo per aggiungere una certa quantità ad un materiale
+	* Metodo per aggiungere una certa quantità ad un punteggio
 	* 
-	* @param 	type	tipo di punti da aumentare
-	* @param	int		quantità di cui aumentare i punti
-	* @return 	nothing
+	* @param 	type		tipo di punteggio da aumentare
+	* @param	increase	quantità di cui aumentare i punteggio
 	*/
-	
 	public void increasePoints(PointsKind type, int increase){
 		status.increaseResourceValue(type, increase);
 	}
 	
 	/**
-	* Metodo per aggiungere una certa quantità di risorse al mio warehouse
+	* Metodo per aggiungere una risorsa intera al Warehouse
 	* 
-	* @param 	res		risorse da aggiungere 
-	* @return 	nothing
+	* @param	res		risorsa da aggiungere 
 	*/
-	
 	public void addResources(Resources res){
 		status.add(res);
-		return;
 	}
 	
 	/**
-	 * Metodo che permette di togliere da status un tipo risorsa
+	 * Metodo per rimuovere una risorsa intera al Warehouse
 	 * 
-	 * @param res	risorse da togliere
-	 * @return	nothing
+	 * @param	res		risorse da togliere
 	 */
-	
 	public void reduceRes(Resources res){
-		status.decreaseResources(res);
+		status.subtract(res);
+	}
+	
+	/**
+	* Metodo per sottrare una certa quantità ad un materiale
+	* 
+	* @param 	kind		tipo di materiale da sottrare
+	* @param	increase	quantità di cui sottrare il materiale
+	*/
+	public void decreaseMaterial(MaterialsKind kind, int decrese){
+		status.decreaseResourceValue(kind, decrese);
 		return;
 	}
 	
 	/**
-	 * Metodo che permette di togliere una certa quantità di un materiale da status
-	 * 
-	 * @param kind 	tipo di materiale da togliere
-	 * @param x		quantità di materiale
-	 * @return	nothing
-	 */
-
-	public void decreaseMaterial(MaterialsKind kind, int x){
-		status.decreaseResourceValue(kind, x);
-		return;
-	}
-	
-	/**
-	 * Metodo che permette di togliere una certa quantità di un tipo di punti da status
-	 * 
-	 * @param kind 	tipo di punti da togliere
-	 * @param x		quantità di punti
-	 * @return	nothing
-	 */
-
-	public void decreasePoints(PointsKind kind, int x){
-		status.decreaseResourceValue(kind, x);
+	* Metodo per sottrare una certa quantità ad un punteggio
+	* 
+	* @param 	kind		tipo di punteggio da sottrare
+	* @param	increase	quantità di cui sottrare il punteggio
+	*/
+	public void decreasePoints(PointsKind kind, int decrese){
+		status.decreaseResourceValue(kind, decrese);
 		return;
 	}
 	

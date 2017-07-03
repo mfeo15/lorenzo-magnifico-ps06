@@ -3,11 +3,11 @@ package it.polimi.ingsw.ps06.model;
 import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
 import it.polimi.ingsw.ps06.model.Types.PointsKind;
 import it.polimi.ingsw.ps06.model.bonus_malus.BonusMalusDoubleMaterialsFromDevCards;
-import it.polimi.ingsw.ps06.model.cards.Building;
-import it.polimi.ingsw.ps06.model.cards.Character;
-import it.polimi.ingsw.ps06.model.cards.DevelopementCard;
-import it.polimi.ingsw.ps06.model.cards.Territory;
-import it.polimi.ingsw.ps06.model.cards.Venture;
+import it.polimi.ingsw.ps06.model.cards.developement.Building;
+import it.polimi.ingsw.ps06.model.cards.developement.Character;
+import it.polimi.ingsw.ps06.model.cards.developement.DevelopementCard;
+import it.polimi.ingsw.ps06.model.cards.developement.Territory;
+import it.polimi.ingsw.ps06.model.cards.developement.Venture;
 import it.polimi.ingsw.ps06.model.effects.Effect;
 import it.polimi.ingsw.ps06.model.effects.EffectsResources;
 
@@ -25,6 +25,14 @@ public class CardAcquisition extends Actions {
 	
 	private boolean extraCost;
 	
+	/**
+	* Costruttore della classe
+	* 
+	* @param	card		carta da acquisire
+	* @param	p			giocatore che vuole acquisire la carta
+	* @param	servants	numero di servitori impiegati per concludere l'azione
+	* 
+	*/
 	public CardAcquisition(DevelopementCard card, Player p, int servants) {
 		super(servants);
 		this.card = card;
@@ -34,9 +42,10 @@ public class CardAcquisition extends Actions {
 	/**
 	* Metodo per verificare i costi dovuti all'azione che comporta l'acquisizione di una carta
 	*
-	* @param 	player			Giocatore su cui fare la verifica della disponibilità di risorse
-	* @param 	chosenAction	Codice dell'azione da eseguire	
-	* @return 	
+	* @param 	extraCost	flag per un extra costo di 3 COIN	
+	* 
+	* @return 	true		se il giocatore soddisfa tutti i costi per acquisire la carta
+	* 
 	*/
 	public boolean checkCosts(boolean extraCost) {
 		
@@ -60,11 +69,11 @@ public class CardAcquisition extends Actions {
 	}
 	
 	/**
-	* Metodo per verificare i costi dovuti all'azione che comporta l'acquisizione di una carta
-	*
-	* @param 	player			Giocatore su cui fare la verifica della disponibilità di risorse
-	* @param 	chosenAction	Codice dell'azione da eseguire	
-	* @return 	
+	* Metodo per verificare i requisiti di una carta (oltre al costo). Questo è necessario
+	* per tutte le carte di tipo Impresa
+	* 
+	* @return 	true		se il giocatore soddisfa tutti i requisiti per acquisire la carta
+	* 
 	*/
 	public boolean checkRequirements(){
 		
@@ -85,8 +94,6 @@ public class CardAcquisition extends Actions {
 	/**
 	* Metodo per assegnare la carta ad un giocatore
 	*
-	* @param 	player			Giocatore su cui fare la verifica della disponibilità di risorse
-	* @return 	
 	*/
 	@Override
 	public void activate() {

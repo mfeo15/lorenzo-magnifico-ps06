@@ -17,8 +17,13 @@ public class Privilege extends Actions {
 	private CouncilPrivilege privilege;
 	
 	/**
-	* Costruttore
-	* 	
+	* Costruttore della classe
+	* 
+	* @param	servants	numero di servitori impiegati per l'azione
+	* @param	member		Family Member impiegato per l'azione
+	* @param	privilege	tipo di privilegio da assegnare al giocatore
+	* 
+	* @see		it.polimi.ingsw.ps06.model.Types	
 	*/
 	public Privilege(int servants, FamilyMember member, CouncilPrivilege privilege) {
 		super(servants);
@@ -27,21 +32,7 @@ public class Privilege extends Actions {
 	}
 	
 	/**
-	* Metodo per chiedere la scelta all'utente
-	*
-	* @return 	
-	*/
-	public void askChoice(){
-		//listener
-		//if(...) chosen=BONUS_!;
-		
-	}
-	
-	/**
-	* Metodo di attivazione dell'azione
-	*
-	* @param 	p		Giocatore a cui attivare l'azione
-	* @return 	
+	* Metodo di assegnamento del bonus del consiglio al giocatore
 	*/
 	@Override
 	public void activate() {
@@ -72,6 +63,4 @@ public class Privilege extends Actions {
 		
 		member.getPlayer().getPersonalBoard().addResource(MaterialsKind.COIN, 1);
 	}
-
-
 }

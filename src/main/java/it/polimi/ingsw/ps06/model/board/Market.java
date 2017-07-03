@@ -13,6 +13,7 @@ import it.polimi.ingsw.ps06.model.Types.Action;
 import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
 import it.polimi.ingsw.ps06.model.Types.PointsKind;
 import it.polimi.ingsw.ps06.model.XMLparser.ParserBonusBoard;
+import it.polimi.ingsw.ps06.model.bonus_malus.BonusMalusNoMarket;
 import it.polimi.ingsw.ps06.model.effects.Effect;
 import it.polimi.ingsw.ps06.model.effects.EffectsResources;
 import it.polimi.ingsw.ps06.networking.SocketServer;
@@ -48,14 +49,17 @@ public class Market extends Observable implements PlaceSpace {
 		boolean multi = false; //attivi.getMulti();
 		int relativeIndex = chosenAction.ordinal() - marketIndex;
 		
-		// Gestire carta scomunica del mercato if(EffectsActive.checkNoMarket == true) handle();
+		// Gestione carta scomunica del mercato
+		if (member.getPlayer().getBonusMalusCollection().contains(BonusMalusNoMarket.class)) {
+			handle(3, member);
+			return;
+		}
 		
 		// Gestione condizione di selezione sbagliata
 		if ( ( relativeIndex > openedWindows ) || ( (member.getValue() + servants) < 1 ) ) {
 			handle(1, member);
 			return;
 		}
-		
 			
 		// Gestione condizione base in cui il campo è vuoto
 		if(memberSpaces[relativeIndex] == null){
@@ -105,6 +109,8 @@ public class Market extends Observable implements PlaceSpace {
 		case 1: notification += " di valore non sufficiente per l'azione";
 			break;
 		case 2: notification = ", ma non rispetta le regola del colore";
+			break;
+		case 3: notification = ", ma è stato precedentemente scomunicato";
 			break;
 		default: notification = "UNKNOWN ERROR ON MARKET";
 		}

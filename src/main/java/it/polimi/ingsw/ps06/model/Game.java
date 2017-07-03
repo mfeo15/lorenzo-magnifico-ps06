@@ -61,7 +61,7 @@ public class Game extends Observable implements Observer {
 	* Costruttore di una partita. 
 	* Vengono istanziati i componenti di base (dadi, board, players, ecc) ed impostati.
 	*
-	* @param 	numPlayers		numero di giocatori in una partita
+	* @param	numberPlayers	numero di giocatori in una partita
 	* 
 	*/
 	public Game(int numberPlayers) {
@@ -90,6 +90,12 @@ public class Game extends Observable implements Observer {
 		currentPlayerIndex = 0;
 	}
 	
+	/**
+	* Setter dell'indice del giocatore corrente 
+	*
+	* @param	currentPlayerIndex		nuovo indice del giocatore corrente
+	* 
+	*/
 	public void setCurrentPlayerIndex(int currentPlayerIndex) {
 		this.currentPlayerIndex = currentPlayerIndex;
 		
@@ -97,29 +103,61 @@ public class Game extends Observable implements Observer {
 		notifyChangement(messageCurrentP);
 	}
 	
+	/**
+	* Metodo per l'aggiunta di un nuovo giocatore alla partita.
+	* Si occupa di assegnare casualmente una BonusTile tra quelle ancora disponibili 
+	*
+	* @param	newPlayer	nuovo giocatore
+	* 
+	*/
 	public void addPlayer(Player newPlayer) {
 		newPlayer.getPersonalBoard().setBonusTile( bonusTiles.remove(0) );
 		players.add(newPlayer);
 	}
 	
+	/**
+	* Getter dell'intero Array di giocatori presenti nella partita 
+	*
+	* @return		l'array dei giocatori
+	* 
+	*/
 	public ArrayList<Player> getPlayerList() {
 		return players;
 	}
 	
+	/**
+	* Getter del giocatore tramite ricerca per identificativo ID 
+	*
+	* @param	ID		identificativo univoco del giocatore da trovare
+	* 
+	* @return			il gicatore il cui identificativo è pari a ID passato.
+	* 					In caso in cui il giocatore non ci fosse, ritorna null
+	* 
+	*/
 	public Player getPlayer(int ID) {
 		
 		for (Player p : players) 
 			if ( p.getID() == ID ) return p;
 		
 		return null;
-		
 	}
 	
+	/**
+	* Getter del giocatore corrente 
+	* 
+	* @return			il gicatore il giocatore corrent
+	* 
+	*/
 	public Player getCurrentPlayer() {
 		
 		return players.get( currentPlayerIndex % players.size() );
 	}
 	
+	/**
+	* Metodo per gestire l'avanzamento del turno al prossimo giocatore. Nel caso in cui
+	* tutti i FamilyMember siano stati piazzati viene fatto avanzare il Round
+	* 
+	*/
 	public void advanceCurrentPlayer() {
 		
 		int total_number_members = players.size() * 4;
@@ -132,6 +170,12 @@ public class Game extends Observable implements Observer {
 		setCurrentPlayerIndex(currentPlayerIndex + 1);
 	}
 	
+	/**
+	* Metodo per gestire l'avanzamento del Round. Nel caso in cui si sia
+	* raggiunto il numero massimo di Round (definito nella costante NUMBER_OF_ROUNDS)
+	* viene fatto avanzare il Periodo
+	* 
+	*/
 	public void advanceRound() {
 		
 		if (round + 1 > NUMBER_OF_ROUNDS) {
@@ -147,6 +191,14 @@ public class Game extends Observable implements Observer {
 		setupRound();
 	}
 	
+	/**
+	* Metodo per gestire l'avanzamento del Periodo. Nel caso in cui si sia
+	* raggiunto il numero massimo di Periodi (definito nella costante NUMBER_OF_PERIODS)
+	* viene fatto scattare il termine della partita.
+	* 
+	* Ogni avanzamento comporta il check del Vatican Report
+	* 
+	*/
 	public void advancePeriod() {
 		
 		if (period + 1 > NUMBER_OF_PERIODS) {
@@ -160,48 +212,64 @@ public class Game extends Observable implements Observer {
 		gameStatusUpdate();
 	}
 	
+	/**
+	* Metodo per inviare comunicare agli Observers lo stato attuale della partita (round e period)	
+	*  
+	*/
 	public void gameStatusUpdate() {
 		MessageGameStatus stat = new MessageGameStatus(period, round);
 		notifyChangement(stat);
 	}
 	
 	/**
-	 * @return the diceBlack
+	 * Getter del dado color nero
+	 * 
+	 * @return	valore del dado color nero
 	 */
 	public Dice getDiceBlack() {
 		return diceBlack;
 	}
 
 	/**
-	 * @param diceBlack the diceBlack to set
+	 * Setter del dado color nero
+	 * 
+	 * @param 	diceBlack 	valore del dado nero da settare
 	 */
 	public void setDiceBlack(Dice diceBlack) {
 		this.diceBlack = diceBlack;
 	}
 
 	/**
-	 * @return the diceWhite
+	 * Getter del dado color bianco
+	 * 
+	 * @return valore del dado color bianco
 	 */
 	public Dice getDiceWhite() {
 		return diceWhite;
 	}
 
 	/**
-	 * @param diceWhite the diceWhite to set
+	 * Setter del dado color bianco
+	 * 
+	 * @param 	diceWhite 	valore del dado bianco da settare
 	 */
 	public void setDiceWhite(Dice diceWhite) {
 		this.diceWhite = diceWhite;
 	}
 
 	/**
-	 * @return the diceOrange
+	 * Setter del dado color arancione
+	 * 
+	 * @return	valore del dado color nero
 	 */
 	public Dice getDiceOrange() {
 		return diceOrange;
 	}
 
 	/**
-	 * @param diceOrange the diceOrange to set
+	 * Setter del dado color arancione
+	 * 
+	 * @param 	diceOrange	valore del dado arancione da settare
 	 */
 	public void setDiceOrange(Dice diceOrange) {
 		this.diceOrange = diceOrange;
@@ -209,10 +277,9 @@ public class Game extends Observable implements Observer {
 
 	/**
 	* Metodo invocato per il setup di ogni singolo nuovo round. 
-	* Si occupa di far partire la gestione del turno giocatore ed il setup
-	* della board.
-	* 
-	* @return 	Nothing
+	* Si occupa di far partire la gestione del turno giocatore, tirare i dadit 
+	* ed il setup della board.
+	*
 	*/
 	public void setupRound() 
 	{
@@ -220,9 +287,14 @@ public class Game extends Observable implements Observer {
 		
 		rollDices();
 		
-		board.setupRound();
+		board.setupRound(period, round);
 	}
 	
+	/**
+	* Metodo invocato per generare una nuova tirata di dadi. I nuovi valori vengono generati, 
+	* assegnati ai Family Member e condivisi con gli Observers
+	*
+	*/
 	public void rollDices() {
 		diceBlack.roll();
 		diceWhite.roll();
@@ -235,11 +307,10 @@ public class Game extends Observable implements Observer {
 	}
 	
 	/**
-	* Metodo invocato per la gestione della fase Vatican Report.
+	* Metodo invocato per la gestione della fase Vatican Report
 	*
 	* @param 	period	contatore del periodo
 	* 
-	* @return 	Nothing
 	*/
 	public void vaticanReport(int period) 
 	{
@@ -267,7 +338,8 @@ public class Game extends Observable implements Observer {
 	*
 	* @param 	period	contatore del periodo
 	* 
-	* @return 	int		requisito associato al periodo
+	* @return 			requisito associato al periodo o -1 in caso
+	* 					di input non accettato
 	*/
 	private int VaticanRequirementOnPeriod(int period) 
 	{
@@ -279,10 +351,11 @@ public class Game extends Observable implements Observer {
 	}
 	
 	/**
-	* Metodo utile al riordinamento dell'ordine di gioco. Ottiene dalla board l'ordine dei 
-	* Players posizionati nel consiglio ed aggiorna di conseguenza lo stato
+	* Metodo utile al riordinamento dei player. Ottiene dalla board l'ordine dei 
+	* Players posizionati nel consiglio ed aggiorna di conseguenza lo stato del current player.
 	* 
-	* @return 	Nothing.
+	* Le modifiche vengono comunicate agli Observers
+	* 
 	*/
 	private void reorderPlayers() 
 	{
@@ -310,11 +383,16 @@ public class Game extends Observable implements Observer {
 	}
 	
 	/**
-	* Metodo per l'esecuzione di un azione
+	* Metodo invocato per l'esecuzione di un piazzamento di un Family Member 
+	* da parte di un giocatore
 	*
-	* @param 	value	valore dell'azione
-	* @param 	color	colore del familiare usato
-	* @return 	Nothing
+	* @param	p			giocatore che ha eseguito il piazzamento
+	* @param 	action		azione eseguita dal giocatore 
+	* @param 	color		colore del familiare usato
+	* @param	servants	numero di servitori impiegati per alterare il valore del familiare
+	* 
+	* @see		it.polimi.ingsw.ps06.model.Types
+	* 
 	*/
 	public void doMemberPlacement(Player p, Action action, ColorPalette color, int servants) {
 		
@@ -323,11 +401,17 @@ public class Game extends Observable implements Observer {
 	}
 	
 	/**
-	* Metodo per l'esecuzione di un azione sul Palazzo del Consiglio
+	* Metodo invocato per l'esecuzione di un piazzamento di un Family Member 
+	* da parte di un giocatore all'interno del Palazzo del Consiglio
 	*
-	* @param 	value	valore dell'azione
-	* @param 	color	colore del familiare usato
-	* @return 	Nothing
+	* @param	p			giocatore che ha eseguito il piazzamento
+	* @param 	action		azione eseguita dal giocatore	
+	* @param 	color		colore del familiare usato
+	* @param	servants	numero di servitori impiegati per alterare il valore del familiare
+	* @param	privilege	tipo di privilegio richiesto al consiglio	
+	* 
+	* @see		it.polimi.ingsw.ps06.model.Types
+	* 
 	*/
 	public void doMemberPlacement(Player p, Action action, ColorPalette color, int servants, CouncilPrivilege privilege) {
 		
@@ -336,10 +420,9 @@ public class Game extends Observable implements Observer {
 	}
 	
 	/**
-	* Metodo di gestione dello stato della partita. Viene invocato per iniziare il gioco
-	* e scandisce il tempo di esecuzione delle varie fasi.
+	* Metodo per gestire, a seguito di una corretta inizializzazione della classe, l'inizio della partita.
+	* Vengono assegnate risorse e leader ai vari giocatori
 	*
-	* @return 	Nothing
 	*/
 	public void start() 
 	{
@@ -348,20 +431,27 @@ public class Game extends Observable implements Observer {
 			Player p = players.get(i);
 			p.getPersonalBoard().addResource(MaterialsKind.COIN, STANDARD_AMOUNT_COINS_FIRST_PLAYER + i);
 			p.addLeaders( new ArrayList<Leader>( leaders.subList( (4 * p.getID()) , (4 + 4 * p.getID()) ) ) );
-			System.out.println("PLAYER_" + p.getID() +": " + p.getLeaders().get(0).getCode() + " " 
-									+ p.getLeaders().get(1).getCode() + " " 
-									+ p.getLeaders().get(2).getCode() + " " 
-									+ p.getLeaders().get(3).getCode() + " ");
 		}
 		
 		setupRound();
 		gameStatusUpdate();
 	}
 	
+	/**
+	* Metodo per gestire il termine di una partita, occupandosi di comunicare l'avvenimento ai vari
+	* Observers e di computare il risultato finale del gioco
+	*
+	*/
 	public void end() {
 		//Notify controller that the game is over
 	}
 	
+	/**
+	* Metodo invocato per computare il punteggio finale e ritornare il vincitore della partita
+	* 
+	* @return	il giocatore vincente della partita
+	*
+	*/
 	public Player computeWinnerPlayer()
 	{
 		Player winnerPlayer = null;

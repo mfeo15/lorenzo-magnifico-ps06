@@ -8,10 +8,10 @@ import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
 import it.polimi.ingsw.ps06.model.Types.PointsKind;
 import it.polimi.ingsw.ps06.model.XMLparser.ParserBonusBoard;
 import it.polimi.ingsw.ps06.model.bonus_malus.BonusMalusNoMilitaryRequirement;
-import it.polimi.ingsw.ps06.model.cards.Building;
-import it.polimi.ingsw.ps06.model.cards.Character;
-import it.polimi.ingsw.ps06.model.cards.Territory;
-import it.polimi.ingsw.ps06.model.cards.Venture;
+import it.polimi.ingsw.ps06.model.cards.developement.Building;
+import it.polimi.ingsw.ps06.model.cards.developement.Character;
+import it.polimi.ingsw.ps06.model.cards.developement.Territory;
+import it.polimi.ingsw.ps06.model.cards.developement.Venture;
 import it.polimi.ingsw.ps06.networking.messages.MessageModel2ViewNotification;
 import it.polimi.ingsw.ps06.networking.messages.MessagePersonalBoardResourcesStatus;
 

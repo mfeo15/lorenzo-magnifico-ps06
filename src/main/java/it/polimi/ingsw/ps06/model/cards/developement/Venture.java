@@ -1,4 +1,4 @@
-package it.polimi.ingsw.ps06.model.cards;
+package it.polimi.ingsw.ps06.model.cards.developement;
 
 import java.util.ArrayList;
 

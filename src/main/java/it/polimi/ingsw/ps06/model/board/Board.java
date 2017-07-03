@@ -1,15 +1,19 @@
 package it.polimi.ingsw.ps06.model.board;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Observable;
 import java.util.Observer;
 import java.util.Random;
 
 import it.polimi.ingsw.ps06.model.FamilyMember;
 import it.polimi.ingsw.ps06.model.Player;
-import it.polimi.ingsw.ps06.model.Types;
 import it.polimi.ingsw.ps06.model.Types.Action;
 import it.polimi.ingsw.ps06.model.Types.CouncilPrivilege;
+import it.polimi.ingsw.ps06.model.XMLparser.ParserExcommunicationTiles;
 import it.polimi.ingsw.ps06.model.cards.ExcommunicationTile;
+import it.polimi.ingsw.ps06.networking.messages.MessageBoardSetupExcomCards;
 
 /**
 * Classe per la gestione del tabellone
@@ -19,7 +23,7 @@ import it.polimi.ingsw.ps06.model.cards.ExcommunicationTile;
 * @since   2017-05-10
 */
 
-public class Board {
+public class Board extends Observable{
 	
 	private Towers towersZone;
 	private Market marketZone;
@@ -28,7 +32,9 @@ public class Board {
 	
 	private ArrayList<Player> order;
 	
-	private ExcommunicationTile excommunicationTiles[];
+	private ExcommunicationTile excommunicationTilePeriodOne;
+	private ExcommunicationTile excommunicationTilePeriodTwo;
+	private ExcommunicationTile excommunicationTilePeriodThree;
 	
 	
 	/**
@@ -43,8 +49,6 @@ public class Board {
 		marketZone = new Market(numberPlayers);
 		councilPalaceZone = new CouncilPalace();
 		harvestProductionZone = new HarvestProduction(numberPlayers);
-	
-		drawExcommunicationTiles();
 	}
 	
 	/**
@@ -52,14 +56,29 @@ public class Board {
 	*
 	* @return 		order	ordine dei familiari
 	*/ 
-	private void drawExcommunicationTiles() {
-		int random1 = (new Random()).nextInt(8);
-		int random2 = 7 + (new Random()).nextInt(8);
-		int random3 = 14 + (new Random()).nextInt(8);
+	private void drawExcommunicationTiles() 
+	{
+		ArrayList<ExcommunicationTile> tiles = (new ParserExcommunicationTiles("resources/XML/ExcommunicationCards.xml")).getTiles();
+		excommunicationTilePeriodOne = tiles.get( (new Random()).nextInt(7) );
+		excommunicationTilePeriodTwo = tiles.get( 7 + (new Random()).nextInt(7) );
+		excommunicationTilePeriodThree = tiles.get( 14 + (new Random()).nextInt(7) );
+		
+		
+		MessageBoardSetupExcomCards excomCards = new MessageBoardSetupExcomCards(excommunicationTilePeriodOne.getCode(), 
+																				 excommunicationTilePeriodTwo.getCode(), 
+																				 excommunicationTilePeriodThree.getCode()
+																				);
+		System.out.println("SCOMUNICHE: " + excommunicationTilePeriodOne.getCode() + " " + excommunicationTilePeriodTwo.getCode() + " " + excommunicationTilePeriodThree.getCode());
+		notifyChangement(excomCards);
 	}
 	
-	public ExcommunicationTile getTiles(int period){
-		return excommunicationTiles[period - 1];
+	public ExcommunicationTile getTiles(int period) {
+		
+		if (period == 1) return excommunicationTilePeriodOne;
+		if (period == 2) return excommunicationTilePeriodTwo;
+		if (period == 3) return excommunicationTilePeriodThree;
+		
+		return null;
 	}
 	
 	/**
@@ -77,7 +96,10 @@ public class Board {
 	* @param 	giocatori	Numero di giocatori della partita
 	* @return 				Nothing
 	*/ 
-	public void setupRound() {
+	public void setupRound(int period, int round) {
+		if (round == 1 && period == 1)
+			drawExcommunicationTiles();
+		
 		clean();
 	}
 	
@@ -93,18 +115,8 @@ public class Board {
 		marketZone.cleanMarket();
 		towersZone.cleanTowers();
 		harvestProductionZone.cleanZone();
-		//order = councilPalaceZone.checkOrder();
 		councilPalaceZone.cleanPalace();
 	}
-	
-	public void addNewObserver(Observer obs) {
-		
-		marketZone.addNewObserver(obs);
-		towersZone.addNewObserver(obs);
-		harvestProductionZone.addNewObserver(obs);
-		councilPalaceZone.addNewObserver(obs);
-	}
-	
 	
 	public void placeMember(FamilyMember member, Action chosenAction, int servants, CouncilPrivilege privilege) {
 		if (chosenAction != Action.COUNCIL_SPACE)
@@ -152,5 +164,24 @@ public class Board {
 			break;
 		
 		}
+	}
+	
+	public void notifyChangement(Object o) {
+		setChanged();
+		notifyObservers(o);
+	}
+	
+	public void addNewObserver(Observer obs) {
+		
+		addObserver(obs);
+		
+		marketZone.addNewObserver(obs);
+		towersZone.addNewObserver(obs);
+		harvestProductionZone.addNewObserver(obs);
+		councilPalaceZone.addNewObserver(obs);
+	}
+	
+	public void deleteAnObserver(Observer obs) {
+		deleteObserver(obs);
 	}
 }

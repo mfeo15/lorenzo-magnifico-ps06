@@ -16,11 +16,15 @@ public class BonusTile {
 	private Resources production_bonus;
 	private int dice_required;
 
+	
 	/**
-	 * costruttore della classe tabella bonus personale
+	 * Costruttore della classe
 	 * 
-	 * @return 	nothing
-	**/
+	 * @param code				codice relativo al tipo di BonusTile creata
+	 * @param harvest_bonus		insieme di risorse bonus in caso di raccolto
+	 * @param production_bonus	insieme di risorse bonus in caso di produzione
+	 * 
+	 */
 	public BonusTile(int code, Resources harvest_bonus, Resources production_bonus) {
 		
 		this.code = code;
@@ -28,33 +32,71 @@ public class BonusTile {
 		this.production_bonus = production_bonus;
 	}
 	
+	/**
+	 * Getter del codice della BonusTile
+	 * 
+	 * @return	codice della BonusTiles
+	 * 
+	 */
 	public int getCode() {
 		return code;
 	}
 
+	/**
+	 * Setter del codice della BonusTile
+	 * 
+	 * @param code	codice della BonusTile da asseggnare
+	 * 
+	 */
 	public void setCode(int code) {
 		this.code = code;
 	}
 	
+	/**
+	 * Getter della risorsa associata all'azione di raccolto
+	 * 
+	 * @return	risorsa associata al raccolto
+	 * 
+	 */
 	public Resources getHarvest_bonus() {
 		return harvest_bonus;
 	}
 
+	/**
+	 * Setter della risorsa associata all'azione di raccolto
+	 * 
+	 * @param	harvest_bonus	risorsa raccolto da settare
+	 * 
+	 */
 	public void setHarvest_bonus(Resources harvest_bonus) {
 		this.harvest_bonus = harvest_bonus;
 	}
-
+	
+	/**
+	 * Getter della risorsa associata all'azione di produzione
+	 * 
+	 * @return	risorsa associata alla produzione
+	 * 
+	 */
 	public Resources getProduction_bonus() {
 		return production_bonus;
 	}
 
+	/**
+	 * Setter della risorsa associata all'azione di produzione
+	 * 
+	 * @param	harvest_bonus	risorsa produzione da settare
+	 * 
+	 */
 	public void setProduction_bonus(Resources production_bonus) {
 		this.production_bonus = production_bonus;
 	}
 	
 	/**
-	* Metodo per controllare che il valore del familiare sia sufficiente per avere bonus
-	* @return 	Boolean
+	* Metodo per controllare che il valore del familiare sia sufficiente per avere il bonus
+	* 
+	* @return	true	se il valore del dado soddisfa il requisito
+	* 
 	**/
 	public boolean check_dice(Dice dice){
 		if( dice.getValue() >= dice_required)
@@ -64,23 +106,19 @@ public class BonusTile {
 	}
 	
 	/**
-	* Metodo che attiva i bonus produzione e li da al giocatore
+	* Metodo che attiva i bonus produzione e li assegna al giocatore
 	* 
-	* @return 	Nothing
 	*/
-	public void activate_productionBonus(Player player){
+	public void activate_productionBonus(Player player) {
 		player.getPersonalBoard().addResource(production_bonus);
-		return;
-		}
+	}
 
 	/**
-	* Metodo che attiva i bonus raccolto e li da al giocatore
+	* Metodo che attiva i bonus produzione e li assegna al giocatore
 	* 
-	* @return 	Nothing
 	*/
-	public void activate_harvestBonus(Player player){
+	public void activate_harvestBonus(Player player) {
 		player.getPersonalBoard().addResource(harvest_bonus);
-		return;
 	}
 	
 }

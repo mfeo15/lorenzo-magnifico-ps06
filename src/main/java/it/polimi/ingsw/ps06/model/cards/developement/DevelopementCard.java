@@ -1,8 +1,9 @@
-package it.polimi.ingsw.ps06.model.cards;
+package it.polimi.ingsw.ps06.model.cards.developement;
 
 import java.util.ArrayList;
 
 import it.polimi.ingsw.ps06.model.Player;
+import it.polimi.ingsw.ps06.model.cards.Card;
 import it.polimi.ingsw.ps06.model.effects.Effect;
 
 

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.ps06.model.cards;
+package it.polimi.ingsw.ps06.model.cards.developement;
 
 import it.polimi.ingsw.ps06.model.Resources;
 

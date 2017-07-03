@@ -27,6 +27,7 @@ public interface MessageVisitor {
 	void visit(MessageBoardSetupTimeoutAction timeoutAction);
 	void visit(MessageBoardSetupDice boardSetupDice);
 	void visit(MessageBoardSetupDevCards boardSetupDevCards);
+	void visit(MessageBoardSetupExcomCards boardSetupExcomCards);
 	void visit(MessageBoardMemberHasBeenPlaced newMember);
 	
 	void visit(MessageLeaderCards leaderCards);

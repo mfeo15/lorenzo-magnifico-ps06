@@ -11,7 +11,7 @@ import it.polimi.ingsw.ps06.model.Types.CardType;
 import it.polimi.ingsw.ps06.model.Types.ColorPalette;
 import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
 import it.polimi.ingsw.ps06.model.Types.PointsKind;
-import it.polimi.ingsw.ps06.model.cards.DevelopementCard;
+import it.polimi.ingsw.ps06.model.cards.developement.DevelopementCard;
 import it.polimi.ingsw.ps06.model.cards.leader.Leader;
 import it.polimi.ingsw.ps06.model.effects.Effect;
 import it.polimi.ingsw.ps06.model.effects.EffectsBonusMalusDoubleMaterialsFromDevCards;

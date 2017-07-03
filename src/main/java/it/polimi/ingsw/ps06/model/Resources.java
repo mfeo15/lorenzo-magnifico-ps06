@@ -26,11 +26,11 @@ public class Resources implements Serializable {
 	private EnumMap<PointsKind, Integer> points;
 	
 	/**
-	* Costruttore della classe. Inizializzazione delle Mappe dipendente dalla classe Enum di definizione
+	* Costruttore di default della classe. Inizializzazione delle Mappe dipendente dalla classe Enum di definizione
 	*
 	*/
-	public Resources () {
-		
+	public Resources() 
+	{	
 		materials = new EnumMap<MaterialsKind, Integer>(MaterialsKind.class);
 		points = new EnumMap<PointsKind, Integer>(PointsKind.class);
 		
@@ -38,14 +38,29 @@ public class Resources implements Serializable {
 		for (PointsKind kind : PointsKind.values()) 		points.put(kind, 0);
 	}
 	
-	public Resources (MaterialsKind kind, int value) {
-		
+	
+	/**
+	 * Costruttore della classe nel quale viene preimpostato un valore ad un materiale
+	 * @param	kind	Tipo di materiale da settare	
+	 * @param	value	Quantità da assegnare al materiale
+	 * 
+	 * @see		it.polimi.ingsw.ps06.model.Types
+	 */
+	public Resources(MaterialsKind kind, int value) 
+	{	
 		this();
 		materials.put(kind, value);
 	}
 	
-	public Resources (PointsKind kind, int value) {
-		
+	/**
+	 * Costruttore della classe nel quale viene preimpostato un valore ad un punteggio
+	 * @param	kind	Tipo di punteggio da settare	
+	 * @param	value	Quantità da assegnare al punteggio
+	 * 
+	 * @see		it.polimi.ingsw.ps06.model.Types
+	 */
+	public Resources(PointsKind kind, int value) 
+	{	
 		this();
 		points.put(kind, value);
 	}
@@ -55,8 +70,6 @@ public class Resources implements Serializable {
 	*
 	* @param 	kind		Tipo di materiale a cui applicare l'operazione
 	* @param	value		Valore da impostare al materiale
-	* 
-	* @return 	Nothing
 	*/
 	public void setResourceValue(MaterialsKind kind, int value) {
 		materials.put(kind, value);
@@ -67,17 +80,13 @@ public class Resources implements Serializable {
 	*
 	* @param 	kind		Tipo di punteggio a cui applicare l'operazione
 	* @param	value		Valore da impostare al punteggio
-	* 
-	* @return 	Nothing
 	*/
 	public void setResourceValue(PointsKind kind, int value) {
 		points.put(kind, value);
 	}
 	
 	/**
-	*	Pulisce tutte le risorse
-	*
-	* @return 	Nothing
+	* Inizializzazione di tutte le risorse a zero
 	*/
 	public void clearResources() {
 		Set<MaterialsKind> materialsSet = materials.keySet();
@@ -91,9 +100,7 @@ public class Resources implements Serializable {
 	* Somma un valore ad una certa risorsa di tipo materiale (non distruttivo)
 	*
 	* @param 	kind			Tipo di materiale a cui applicare l'operazione
-	* @param	increaseValue	Valore da impostare al materiale
-	* 
-	* @return 	Nothing
+	* @param	increaseValue	Valore da sommare al materiale
 	*/
 	public void increaseResourceValue(MaterialsKind kind, int increaseValue) {
 		int currentValue = materials.get(kind);
@@ -104,9 +111,7 @@ public class Resources implements Serializable {
 	* Somma un valore ad una certa risorsa di tipo punteggio (non distruttivo)
 	*
 	* @param 	kind			Tipo di punteggio a cui applicare l'operazione
-	* @param	increaseValue	Valore da impostare al punteggio
-	* 
-	* @return 	Nothing
+	* @param	increaseValue	Valore da sommare al punteggio
 	*/
 	public void increaseResourceValue(PointsKind kind, int increaseValue) {
 		int currentValue = points.get(kind);
@@ -114,11 +119,49 @@ public class Resources implements Serializable {
 	}
 	
 	/**
+	* Sottrai un valore ad una certa risorsa di tipo materiale
+	*
+	* @param 	kind			Tipo di materiale a cui applicare l'operazione
+	* @param	decreaseValue	Valore da sottrarre al materiale
+	* 
+	* @return	false			Se sottranendo la risorsa finisce in negativo, 
+	* 							true in caso positivo
+	*/
+	public boolean decreaseResourceValue(MaterialsKind kind, int decreaseValue) {
+		
+		if (decreaseValue > materials.get(kind))
+			return false;
+		
+		int currentvalue = materials.get(kind);
+		materials.put(kind, currentvalue - decreaseValue);
+		return true;
+	}
+	
+	/**
+	* Sottrai un valore ad una certa risorsa di tipo punteggio
+	*
+	* @param 	kind			Tipo di punteggio a cui applicare l'operazione
+	* @param	decreaseValue	Valore da sottrarre al punteggio
+	* 
+	* @return	false			Se sottranendo la risorsa finisce in negativo, 
+	* 							true in caso positivo
+	*/
+	public boolean decreaseResourceValue(PointsKind kind, int decreaseValue) {
+		
+		if (decreaseValue > points.get(kind))
+			return false;
+		
+		int currentvalue = points.get(kind);
+		points.put(kind, currentvalue - decreaseValue);
+		return true;
+	}
+	
+	/**
 	* Ottieni il valore corrente di una certa risorsa di tipo materiale
 	*
-	* @param 	kind			Tipo di materiale interessato
+	* @param	kind	Tipo di materiale interessato
 	* 
-	* @return 	valore della risorsa 
+	* @return 			Valore della risorsa 
 	*/
 	public int getResourceValue(MaterialsKind kind) {
 		return (materials.get(kind));
@@ -127,9 +170,9 @@ public class Resources implements Serializable {
 	/**
 	* Ottieni il valore corrente di una certa risorsa di tipo punteggio
 	*
-	* @param 	kind			Tipo di punteggio interessato
+	* @param 	kind	Tipo di punteggio interessato
 	* 
-	* @return 	valore della risorsa 
+	* @return 			Valore della risorsa 
 	*/
 	public int getResourceValue(PointsKind kind) {
 		return (points.get(kind));
@@ -152,6 +195,21 @@ public class Resources implements Serializable {
         for(PointsKind currentPoint : pointsSet) increaseResourceValue(currentPoint, r.getResourceValue(currentPoint));
         
         return this;
+	}
+	
+	/**
+	 * Sottrai la risorsa corrente con una seconda risorsa, settando correttamente
+	 * ogni singolo campo opportunatamente
+	 * 
+	 * @param	r	risorse da togliere
+	 */
+	
+	public void subtract(Resources r){
+		Set<MaterialsKind> materialsSet = materials.keySet();
+		for (MaterialsKind currentmaterial : materialsSet) decreaseResourceValue(currentmaterial, r.getResourceValue(currentmaterial));
+		
+		Set<PointsKind> pointsSet = points.keySet();
+		for (PointsKind currentpoint : pointsSet) decreaseResourceValue(currentpoint, r.getResourceValue(currentpoint));
 	}
 	
 	/**
@@ -182,57 +240,6 @@ public class Resources implements Serializable {
         }
 		
         return (flagMaterials && flagPoints);
-	}
-	
-	/**
-	 * Metodo che permette di ridurre una certa risorse di tipo materiale di alcune unità
-	 * 
-	 * @param kind	tipo di materiale al quale applicare il metodo
-	 * @param x	quantità di unità da togliere
-	 * @return	nothing
-	 */
-	
-	public boolean decreaseResourceValue(MaterialsKind kind, int decreaseValue) {
-		
-		if (decreaseValue > materials.get(kind))
-			return false;
-		
-		int currentvalue = materials.get(kind);
-		materials.put(kind, currentvalue - decreaseValue);
-		return true;
-	}
-	
-	/**
-	 * Metodo che permette di ridurre una certa risorse di tipo punti di alcune unità
-	 * 
-	 * @param kind	tipo di punti al quale applicare il metodo
-	 * @param x	quantità di unità da togliere
-	 * @return	nothing
-	 */
-	
-	public boolean decreaseResourceValue(PointsKind kind, int decreaseValue) {
-		
-		if (decreaseValue > points.get(kind))
-			return false;
-		
-		int currentvalue = points.get(kind);
-		points.put(kind, currentvalue - decreaseValue);
-		return true;
-	}
-	
-	/**
-	 * Metodo che permette di ridurre le risorse di un tipo risorsa
-	 * 
-	 * @param r	risorse da togliere
-	 * @return	nothing
-	 */
-	
-	public void decreaseResources(Resources r){
-		Set<MaterialsKind> materialsSet = materials.keySet();
-		for (MaterialsKind currentmaterial : materialsSet) decreaseResourceValue(currentmaterial, r.getResourceValue(currentmaterial));
-		
-		Set<PointsKind> pointsSet = points.keySet();
-		for (PointsKind currentpoint : pointsSet) decreaseResourceValue(currentpoint, r.getResourceValue(currentpoint));
 	}
 	
 	@Override

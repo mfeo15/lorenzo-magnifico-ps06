@@ -12,7 +12,7 @@ import it.polimi.ingsw.ps06.controller.BoardController;
 import it.polimi.ingsw.ps06.controller.MenuController;
 import it.polimi.ingsw.ps06.model.Types.Action;
 import it.polimi.ingsw.ps06.model.Types.ColorPalette;
-import it.polimi.ingsw.ps06.model.cards.DevelopementCard;
+import it.polimi.ingsw.ps06.model.cards.developement.DevelopementCard;
 import it.polimi.ingsw.ps06.model.events.BoardHasLoaded;
 import it.polimi.ingsw.ps06.model.events.EventClose;
 import it.polimi.ingsw.ps06.model.events.EventLeaderActivated;

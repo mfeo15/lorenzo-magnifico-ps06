@@ -1,0 +1,231 @@
+<ExcommunicationTiles>
+
+	<tile>
+		<code>1</code>
+		<period>1</period>	 
+		<effect>
+			<kind>bmResources</kind>
+			<bonus>
+				<military>-1</military>
+			</bonus>
+		</effect>	  
+	</tile>
+
+	<tile>
+		<code>2</code>
+		<period>1</period>	 
+		<effect>
+			<kind>bmResources</kind>
+			<bonus>
+				<coin>-1</coin>
+			</bonus>
+		</effect>			  
+	</tile>
+
+	<tile>
+		<code>3</code>
+		<period>1</period>	 
+		<effect>
+			<kind>bmResources</kind>
+			<bonus>
+				<servant>-1</servant>
+			</bonus>
+		</effect>	  
+	</tile>
+
+	<tile>
+		<code>4</code>
+		<period>1</period>	 
+		<effect>
+			<kind>bmResources</kind>
+			<bonus>
+				<stone>-1</stone>
+				<wood>-1</wood>
+			</bonus>
+		</effect>
+	</tile>
+
+	<tile>
+		<code>5</code>
+		<period>1</period> 
+		<effect>
+			<kind>bmAction</kind>
+			<action>raccolto</action>
+			<amount>-3</amount>
+		</effect>	  
+	</tile>
+
+	<tile>
+		<code>6</code>
+		<period>1</period>
+		<effect>
+			<kind>bmAction</kind>
+			<action>produzione</action>
+			<amount>-3</amount>
+		</effect>	  
+	</tile>
+
+	<tile>
+		<code>7</code>
+		<period>1</period> 
+			<effect>
+				<kind>bmMember</kind>		
+				<member>colorful</member>
+				<value>-1</value>
+			</effect>  
+	</tile>
+
+	<tile>
+		<code>8</code>
+		<period>2</period>	 
+		<effect>
+			<kind>bmAction</kind>
+			<action>verde</action>
+			<amount>-4</amount>
+		</effect>	  
+	</tile>
+
+	<tile>
+		<code>9</code>
+		<period>2</period> 
+		<effect>
+			<kind>bmAction</kind>
+			<action>giallo</action>
+			<amount>-4</amount>
+		</effect>	  
+	</tile>
+
+	<tile>
+		<code>10</code>
+		<period>2</period> 
+		<effect>
+			<kind>bmAction</kind>
+			<action>blu</action>
+			<amount>-4</amount>
+		</effect>	  
+	</tile>
+
+	<tile>
+		<code>11</code>
+		<period>2</period> 
+		<effect>
+			<kind>bmAction</kind>
+			<action>viola</action>
+			<amount>-4</amount>
+		</effect>
+	</tile>
+
+	<tile>
+		<code>12</code>
+		<period>2</period> 
+		<effect>
+			<kind>NoMarket</kind>
+			<active>1</active>
+		</effect>	  
+	</tile>
+
+	<tile>
+		<code>13</code>
+		<period>2</period> 
+		<effect>
+					
+		</effect>	  
+	</tile>
+
+<tile>
+			<code>14</code>
+			<period>2</period>
+			 
+				<effect>
+					
+				</effect>
+			  
+</tile>
+
+<tile>
+			<code>15</code>
+			<period>3</period>
+			 
+				<effect>
+					<kind>noFinali</kind>
+					<color>blu</color>
+				</effect>
+			  
+</tile>
+
+<tile>
+			<code>16</code>
+			<period>3</period>
+			 
+				<effect>
+					<kind>noFinali</kind>
+					<color>viola</color>
+				</effect>
+			  
+</tile>
+
+<tile>
+			<code>17</code>
+			<period>3</period>
+			 
+				<effect>
+					<kind>noFinali</kind>
+					<color>verdi</color>
+				</effect>
+			  
+</tile>
+
+<tile>
+			<code>18</code>
+			<period>3</period>
+			 
+				<effect>
+					<kind>byPoint</kind>
+                    <victory>5</victory>
+                    <bonus>
+						<victory>-1</victory>
+					</bonus>
+				</effect>
+			  
+</tile>
+
+<tile>
+			<code>19</code>
+			<period>3</period>
+			 
+				<effect>
+					<kind>byPoint</kind>
+                    <military>1</military>
+                    <bonus>
+						<victory>-1</victory>
+					</bonus>
+				</effect>
+			  
+</tile>
+
+<tile>
+			<code>20</code>
+			<period>3</period>
+			 
+				<effect>
+					
+					
+				</effect>
+			  
+</tile>
+
+<tile>
+			<code>21</code>
+			<period>3</period>
+			 
+				<effect>
+					<kind>byPoint</kind>
+                    <anyResource>1</anyResource>
+                    <bonus>
+						<victory>-1</victory>
+					</bonus>
+				</effect>
+			  
+</tile>
+
+</ExcommunicationTiles>
