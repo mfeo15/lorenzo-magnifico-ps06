@@ -85,7 +85,7 @@ public class BonusTile {
 	/**
 	 * Setter della risorsa associata all'azione di produzione
 	 * 
-	 * @param	harvest_bonus	risorsa produzione da settare
+	 * @param	production_bonus	risorsa produzione da settare
 	 * 
 	 */
 	public void setProduction_bonus(Resources production_bonus) {
@@ -95,8 +95,9 @@ public class BonusTile {
 	/**
 	* Metodo per controllare che il valore del familiare sia sufficiente per avere il bonus
 	* 
-	* @return	true	se il valore del dado soddisfa il requisito
+	* @param	dice	dado attuale da confrontare
 	* 
+	* @return	true	se il valore del dado soddisfa il requisito
 	**/
 	public boolean check_dice(Dice dice){
 		if( dice.getValue() >= dice_required)
@@ -108,14 +109,16 @@ public class BonusTile {
 	/**
 	* Metodo che attiva i bonus produzione e li assegna al giocatore
 	* 
+	* @param	player	giocatore a cui assegnare il risulatato della produzione
 	*/
 	public void activate_productionBonus(Player player) {
 		player.getPersonalBoard().addResource(production_bonus);
 	}
 
 	/**
-	* Metodo che attiva i bonus produzione e li assegna al giocatore
+	* Metodo che attiva i bonus raccolto e li assegna al giocatore
 	* 
+	* @param	player	giocatore a cui assegnare il risulatato del raccolto
 	*/
 	public void activate_harvestBonus(Player player) {
 		player.getPersonalBoard().addResource(harvest_bonus);

@@ -65,8 +65,6 @@ public class LeaderRequirement {
 		*
 		* @param 	kind		Tipo di materiale a cui applicare l'operazione
 		* @param	value		Valore da impostare al materiale
-		* 
-		* @return 	Nothing
 		*/
 		public void setResourceValue(MaterialsKind kind, int value) {
 			materials.put(kind, value);
@@ -77,8 +75,6 @@ public class LeaderRequirement {
 		*
 		* @param 	kind		Tipo di punteggio a cui applicare l'operazione
 		* @param	value		Valore da impostare al punteggio
-		* 
-		* @return 	Nothing
 		*/
 		
 		public void setResourceValue(PointsKind kind, int value) {
@@ -90,8 +86,6 @@ public class LeaderRequirement {
 		*
 		* @param 	kind		Tipo di carta a cui applicare l'operazione
 		* @param	value		Valore da impostare alla carta
-		* 
-		* @return 	Nothing
 		*/
 		
 		public void setResourceValue(CardType kind, int value) {
@@ -102,8 +96,6 @@ public class LeaderRequirement {
 		* Imposta il valore del requisito di numero di carte totali
 		*
 		* @param 	x		quantità di carte da avere
-		* 
-		* @return 	Nothing
 		*/
 		
 		public void setAnyCardReq(int x){
@@ -123,8 +115,6 @@ public class LeaderRequirement {
 		}
 		/**
 		*	Pulisce tutte le risorse
-		*
-		* @return 	Nothing
 		*/
 		public void clearResources() {
 			Set<MaterialsKind> materialsSet = materials.keySet();
@@ -144,8 +134,6 @@ public class LeaderRequirement {
 		*
 		* @param 	kind			Tipo di materiale a cui applicare l'operazione
 		* @param	increaseValue	Valore da impostare al materiale
-		* 
-		* @return 	Nothing
 		*/
 		public void increaseResourceValue(MaterialsKind kind, int increaseValue) {
 			int currentValue = materials.get(kind);
@@ -157,8 +145,6 @@ public class LeaderRequirement {
 		*
 		* @param 	kind			Tipo di punteggio a cui applicare l'operazione
 		* @param	increaseValue	Valore da impostare al punteggio
-		* 
-		* @return 	Nothing
 		*/
 		public void increaseResourceValue(PointsKind kind, int increaseValue) {
 			int currentValue = points.get(kind);
@@ -170,8 +156,6 @@ public class LeaderRequirement {
 		*
 		* @param 	kind			Tipo di carta a cui applicare l'operazione
 		* @param	increaseValue	Valore da impostare alla carta
-		* 
-		* @return 	Nothing
 		*/
 		public void increaseResourceValue(CardType kind, int increaseValue) {
 			int currentValue = cards.get(kind);
@@ -217,8 +201,6 @@ public class LeaderRequirement {
 		* ogni singolo campo opportunatamente 
 		*
 		* @param 	r	Risorsa da sommare
-		* 
-		* @return 	Nothing. 
 		*/
 		public void add(LeaderRequirement r) {
 			

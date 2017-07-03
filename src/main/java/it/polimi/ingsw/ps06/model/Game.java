@@ -15,7 +15,6 @@ import it.polimi.ingsw.ps06.model.Types.PointsKind;
 import it.polimi.ingsw.ps06.model.XMLparser.ParserLeaders;
 import it.polimi.ingsw.ps06.model.board.Board;
 import it.polimi.ingsw.ps06.model.cards.leader.Leader;
-import it.polimi.ingsw.ps06.networking.Connection;
 import it.polimi.ingsw.ps06.networking.messages.MessageBoardSetupDice;
 import it.polimi.ingsw.ps06.networking.messages.MessageCurrentPlayer;
 import it.polimi.ingsw.ps06.networking.messages.MessageCurrentPlayerOrder;
