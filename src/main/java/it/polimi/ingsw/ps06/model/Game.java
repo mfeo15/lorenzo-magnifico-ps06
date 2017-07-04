@@ -442,7 +442,12 @@ public class Game extends Observable implements Observer {
 	*
 	*/
 	public void end() {
-		//Notify controller that the game is over
+		
+		Player winnerPlayer = computeWinnerPlayer();
+		int winnerPlayerCode = winnerPlayer.getID();
+		
+		MessageGameHasEnded endGame = new MessageGameHasEnded( winnerPlayerCode );
+		NotifyChangement(endGame);
 	}
 	
 	/**

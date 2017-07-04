@@ -45,7 +45,7 @@ public class SocketServer implements Server {
 	
 	private TimeSettings timeSettings = (new ParserTimeSettings("resources/XML/TimeSettings.xml")).getSettings();
 	
-	private Timer t = new Timer();
+	private Timer t;
 	
 	/**
 	 * Metodo invocato ogni qualvolta una nuova connessione viene instaurata. 
@@ -94,9 +94,7 @@ public class SocketServer implements Server {
 		if (waitingConnection.size() == 4) {
 			
 			stopCountdown();
-			startCountdown( 20 );
-			
-			startNewGame();
+			startCountdown( 10 );
 		}
 	}
 	
@@ -216,6 +214,9 @@ public class SocketServer implements Server {
 	}
 	
 	public void startCountdown(int seconds) {
+		
+		t = new Timer();
+		
 		t.schedule( 
 		        new java.util.TimerTask() {
 		            @Override

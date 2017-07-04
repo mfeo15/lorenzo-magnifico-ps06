@@ -1784,16 +1784,13 @@ public class BoardGUI extends Observable implements Board {
 		
 		this.coinV=coin;
 		this.woodV=wood;
-		this.stoneV=wood;
+		this.stoneV=stone;
 		this.servantV=servant;
 		this.victoryV=victory;
 		this.militaryV=military;
 		this.faithV=faith;
 		
 		resourcesInfo.setText(coinV+" Coin   "+woodV+" Wood   "+stoneV+" Stone   "+servantV+" Servant     |    " +victoryV+" Victory   "+militaryV+" Military   "+faithV+" Faith");
-		
-		System.out.println("PERSONALBOARD UPDATE FROM VIEW C:" + coin + " W:" + wood + " St:" + stone + " Se:" + servant + " F:" + faith + " M:" + military + " V:" + victory);
-
 	}
 
 	
