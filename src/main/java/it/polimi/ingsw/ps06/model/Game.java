@@ -18,6 +18,7 @@ import it.polimi.ingsw.ps06.model.cards.leader.Leader;
 import it.polimi.ingsw.ps06.networking.messages.MessageBoardSetupDice;
 import it.polimi.ingsw.ps06.networking.messages.MessageCurrentPlayer;
 import it.polimi.ingsw.ps06.networking.messages.MessageCurrentPlayerOrder;
+import it.polimi.ingsw.ps06.networking.messages.MessageGameHasEnded;
 import it.polimi.ingsw.ps06.networking.messages.MessageGameStatus;
 import it.polimi.ingsw.ps06.networking.messages.MessageVaticanReport;
 
@@ -179,8 +180,8 @@ public class Game extends Observable implements Observer {
 		
 		if (round + 1 > NUMBER_OF_ROUNDS) {
 			round = 1;
-			setupRound();
 			advancePeriod();
+			setupRound();
 			return;
 		}
 		
@@ -368,7 +369,7 @@ public class Game extends Observable implements Observer {
 			Iterator<Player> councilIterator = councilPlayers.iterator();
 			while (councilIterator.hasNext() && newOrderPlayers.size() < numberPlayers) {
 				Player p = councilIterator.next();
-				if ( players.contains(p) ) newOrderPlayers.add(p);	
+				if ( players.contains(p) && !(newOrderPlayers.contains(p))) newOrderPlayers.add(p);	
 			}
 
 			players.removeAll(newOrderPlayers);
@@ -447,7 +448,7 @@ public class Game extends Observable implements Observer {
 		int winnerPlayerCode = winnerPlayer.getID();
 		
 		MessageGameHasEnded endGame = new MessageGameHasEnded( winnerPlayerCode );
-		NotifyChangement(endGame);
+		notifyChangement(endGame);
 	}
 	
 	/**
@@ -458,7 +459,6 @@ public class Game extends Observable implements Observer {
 	*/
 	public Player computeWinnerPlayer()
 	{
-		Player winnerPlayer = null;
 		int[] finalScores = new int[ players.size() ];
 		
 		for (int i=0; i < players.size(); i++) {
@@ -508,7 +508,13 @@ public class Game extends Observable implements Observer {
 			finalScores[i] += p.getPersonalBoard().getAmount(PointsKind.VICTORY_POINTS);
 		}
 		
-		return winnerPlayer;
+		int index_of_max = 0;
+		for (int j=0; j < finalScores.length; j++) {
+			if (finalScores[j] > finalScores[index_of_max])
+				index_of_max = j;
+		}
+		
+		return players.get(index_of_max);
 	}
 
 

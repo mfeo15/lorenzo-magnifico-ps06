@@ -20,6 +20,7 @@ public interface MessageVisitor {
 	void visit(MessageGameStart gameStart);
 	void visit(MessageGameHasStarted hasStarted);
 	void visit(MessageGameStatus gameStat);
+	void visit(MessageGameHasEnded hasEnded);
 	
 	void visit(MessageVaticanReport vaticanRep);
 	

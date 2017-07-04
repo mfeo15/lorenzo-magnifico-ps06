@@ -13,6 +13,7 @@ import java.util.concurrent.Executors;
 
 import it.polimi.ingsw.ps06.model.TimeSettings;
 import it.polimi.ingsw.ps06.model.XMLparser.ParserTimeSettings;
+import it.polimi.ingsw.ps06.model.XMLparser.ParserUsers;
 import it.polimi.ingsw.ps06.networking.messages.Message;
 import it.polimi.ingsw.ps06.networking.messages.MessageGameHasStarted;
 import it.polimi.ingsw.ps06.networking.messages.MessageWaitingRoomConnections;

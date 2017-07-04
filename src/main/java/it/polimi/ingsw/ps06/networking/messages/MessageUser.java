@@ -8,9 +8,11 @@ public class MessageUser extends Client2Server {
 	private static final long serialVersionUID = -886537323937702140L;
 	
 	private String username;
+	private String password;
 	
-	public MessageUser(String username) {
+	public MessageUser(String username, String password) {
 		this.username = username;
+		this.password = password;
 	}
 	
 	public String getUsername() {
@@ -18,7 +20,15 @@ public class MessageUser extends Client2Server {
 	}
 	
 	public void setUsername(String username) {
-		this.username=username;
+		this.username = username;
+	}
+	
+	public String getPassword() {
+		return password;
+	}
+	
+	public void setPassword(String password) {
+		this.password = password;
 	}
 	
 	@Override

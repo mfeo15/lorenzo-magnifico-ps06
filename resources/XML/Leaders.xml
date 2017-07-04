@@ -63,223 +63,195 @@
 
 	<card>
 		<code>6</code>
-			<title>Michelangelo Buonarroti</title>
-			<cost>
-			    <stone>10</stone>
-			</cost>
-			 
-				<effect type="turno">
-					<kind>resources</kind>
-					<bonus>
-						<coin>3</coin>
-					</bonus>
-				</effect>
-			  
-</card>
+		<title>Michelangelo Buonarroti</title>
+		<cost>
+			<stone>10</stone>
+		</cost> 
+		<effect type="turno">
+			<kind>resources</kind>
+			<bonus>
+				<coin>3</coin>
+			</bonus>
+		</effect>	  
+	</card>
 
-<card>
-			<code>7</code>
-			<title>Giovanni dalle Bande Nere</title>
-			<cost>
-			    <military>12</military>
-			</cost>
-			 
-				<effect type="turno">
-					<kind>resources</kind>
-					<bonus>
-						<coin>1</coin>
-						<stone>1</stone>
-						<wood>1</wood>
-					</bonus>
-				</effect>
-			  
-</card>
+	<card>
+		<code>7</code>
+		<title>Giovanni dalle Bande Nere</title>
+		<cost>
+			<military>12</military>
+		</cost> 
+			<effect type="turno">
+				<kind>resources</kind>
+				<bonus>
+					<coin>1</coin>
+					<stone>1</stone>
+					<wood>1</wood>
+				</bonus>
+			</effect>  
+	</card>
 
-<card>
-			<code>8</code>
-			<title>Leonardo da Vinci</title>
-			<cost>
-			    <character>4</character>
-			    <territory>2</territory>
-			</cost>
-			 
-				<effect type="turno">
-					<kind>production</kind>
-					<amount>0</amount>
-				</effect>
-			  
-</card>
+	<card>
+		<code>8</code>
+		<title>Leonardo da Vinci</title>
+		<cost>
+			<character>4</character>
+			<territory>2</territory>
+		</cost> 
+		<effect type="turno">
+			<kind>production</kind>
+			<amount>0</amount>
+		</effect>	  
+	</card>
 
-<card>
-			<code>9</code>
-			<title>Sandro Botticelli</title>
-			<cost>
-			    <wood>10</wood>
-			</cost>
-			 
-				<effect type="turno">
-					<kind>resources</kind>
-					<bonus>
-						<military>2</military>
-						<victory>1</victory>
-					</bonus>
-				</effect>
-			  
-</card>
+	<card>
+		<code>9</code>
+		<title>Sandro Botticelli</title>
+		<cost>
+			<wood>10</wood>
+		</cost> 
+		<effect type="turno">
+			<kind>resources</kind>
+			<bonus>
+				<military>2</military>
+				<victory>1</victory>
+			</bonus>
+		</effect>  
+	</card>
 
-<card>
-			<code>10</code>
-			<title>Ludovico il Moro</title>
-			<cost>
-			    <venture>2</venture>
-			    <territory>2</territory>
-			    <building>2</building>
-			    <character>2</character>
-			</cost>
-			 
-				<effect type="permanente">
-					<kind>bmMember</kind>
-						<member>colorful</member>
-						<set>5</set>
-				</effect>
-			  
-</card>
+	<card>
+		<code>10</code>
+		<title>Ludovico il Moro</title>
+		<cost>
+			<venture>2</venture>
+		 	<territory>2</territory>
+			<building>2</building>
+			<character>2</character>
+		</cost>	 
+		<effect type="permanente">
+			<kind>bmMember</kind>
+			<member>colorful</member>
+			<set>5</set>
+		</effect>	  
+	</card>
 
-<card>
-			<code>11</code>
-			<title>Lucrezia Borgia</title>
-			<cost>
-			    <anyCard>6</anyCard>
-			</cost>
-			 
-				<effect type="permanente">
-					<kind>bmMember</kind>
-						<member>colorful</member>
-						<value>2</value>
-				</effect>
-			  
-</card>
+	<card>
+		<code>11</code>
+		<title>Lucrezia Borgia</title>
+		<cost>
+	  		<anyCard>6</anyCard>
+		</cost> 
+		<effect type="permanente">
+			<kind>bmMember</kind>
+			<member>colorful</member>
+			<value>2</value>
+		</effect>		  
+	</card>
 
-<card>
-			<code>12</code>
-			<title>Federico da Montefeltro</title>
-			<cost>
-			    <territory>5</territory>
-			</cost>
-			 
-				<effect type="turno">
-					<kind>bmMember</kind>
-						<member>one</member>
-						<set>6</set>
-				</effect>
-			  
-</card>
+	<card>
+		<code>12</code>
+		<title>Federico da Montefeltro</title>
+		<cost>
+	   		<territory>5</territory>
+		</cost>	 
+		<effect type="turno">
+			<kind>bmMember</kind>
+			<member>one</member>
+			<set>6</set>
+		</effect>	  
+	</card>
 
-<card>
-			<code>13</code>
-			<title>Lorenzo de' Merdici</title>
-			<cost>
-			    <victory>35</victory>
-			</cost>
-			 
-				<effect type="permanente">
-					<kind>copia</kind>
-				</effect>
-			  
-</card>
+	<card>
+		<code>13</code>
+		<title>Lorenzo de' Merdici</title>
+		<cost>
+	   		<victory>35</victory>
+		</cost>	 
+			<effect type="permanente">
+				<kind>copia</kind>
+		</effect>		  
+	</card>
 
-<card>
-			<code>14</code>
-			<title>Sisto IV</title>
-			<cost>
-			    <wood>6</wood>
-			    <stone>6</stone>
-			    <coin>6</coin>
-			    <servant>6</servant>
-			</cost>
-			 
-				<effect type="permanente">
-					<kind>faith</kind>
-				</effect>
-			  
-</card>
+	<card>
+		<code>14</code>
+		<title>Sisto IV</title>
+		<cost>
+			<wood>6</wood>
+		    <stone>6</stone>
+		    <coin>6</coin>
+		    <servant>6</servant>
+		</cost>	 
+		<effect type="permanente">
+			<kind>faith</kind>
+		</effect>	  
+	</card>
 
-<card>
-			<code>15</code>
-			<title>Cesare Borgia</title>
-			<cost>
-			    <building>3</building>
-			    <coin>12</coin>
-			    <faith>2</faith>
-			</cost>
-			 
-				<effect type="permanente">
-					<kind>noMilitary</kind>
-				</effect>
-			  
-</card>
+	<card>
+		<code>15</code>
+		<title>Cesare Borgia</title>
+		<cost>
+		    <building>3</building>
+		    <coin>12</coin>
+		    <faith>2</faith>
+		</cost>			 
+		<effect type="permanente">
+			<kind>noMilitary</kind>
+		</effect>		  
+	</card>
 
-<card>
-			<code>16</code>
-			<title>Santa Rita</title>
-			<cost>
-			    <faith>8</faith>
-			</cost>
-			 
-				<effect type="permanente">
-					<kind>double</kind>
-				</effect>
-			  
-</card>
+	<card>
+		<code>16</code>
+		<title>Santa Rita</title>
+		<cost>
+		    <faith>8</faith>
+		</cost>	 
+		<effect type="permanente">
+			<kind>double</kind>
+		</effect>	  
+	</card>
 
-<card>
-			<code>17</code>
-			<title>Cosimo de' Medici</title>
-			<cost>
-			    <building>4</building>
-			    <character>2</character>
-			</cost>
-			 
-				<effect type="turno">
-					<kind>resources</kind>
-					<bonus>
-						<servant>3</servant>
-						<victory>1</victory>
-					</bonus>
-				</effect>
-			  
-</card>
+	<card>
+		<code>17</code>
+		<title>Cosimo de' Medici</title>
+		<cost>
+		   <building>4</building>
+			<character>2</character>
+		</cost>	 
+		<effect type="turno">
+			<kind>resources</kind>
+			<bonus>
+				<servant>3</servant>
+				<victory>1</victory>
+			</bonus>
+		</effect>  
+	</card>
 
-<card>
-			<code>18</code>
-			<title>Bartolomeo Colleoni</title>
-			<cost>
-			    <venture>2</venture>
-			    <territory>4</territory>
-			</cost>
-			 
-				<effect type="turno">
-					<kind>resources</kind>
-					<bonus>
-						<victory>4</victory>
-					</bonus>
-				</effect>
-			  
-</card>
+	<card>
+		<code>18</code>
+		<title>Bartolomeo Colleoni</title>
+		<cost>
+		   <venture>2</venture>
+		    <territory>4</territory>
+		</cost>
+		<effect type="turno">
+			<kind>resources</kind>
+			<bonus>
+				<victory>4</victory>
+			</bonus>
+		</effect>	  
+	</card>
 
-<card>
-			<code>19</code>
-			<title>Cosimo de' Medici</title>
-			<cost>
-			    <servant>15</servant>
-			</cost>
-			 
-				<effect type="turno">
-					<kind>privilege</kind>
-					<amount>1</amount>
-				</effect>
-			  
-</card>
+	<card>
+		<code>19</code>
+		<title>Ludovico III Gonzaga</title>
+		<cost>
+		    <servant>15</servant>
+		</cost> 
+		<effect type="turno">
+			<kind>privilege</kind>
+			<amount>1</amount>
+		</effect>		  
+	</card>
 
 	<card>
 		<code>20</code>
@@ -288,14 +260,13 @@
 			<building>2</building>
 			<venture>4</venture>
 		</cost>
-		 
-			<effect type="turno">
-				<kind>resources</kind>
-				<bonus>
-					<servant>3</servant>
-					<victory>1</victory>
-				</bonus>
-			</effect>
-		  
+		<effect type="turno">
+			<kind>resources</kind>
+			<bonus>
+				<servant>3</servant>
+				<victory>1</victory>
+			</bonus>
+		</effect>  
 	</card>
+	
 </LeaderDeck>

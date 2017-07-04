@@ -347,7 +347,7 @@ public class RoomGUI extends Observable implements Room {
 		setChanged();
 		MessageUser userMessage;
 		
-		userMessage = new MessageUser(username);
+		userMessage = new MessageUser(username, "password");
 		notifyObservers(userMessage);
 		
 	}

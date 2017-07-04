@@ -177,6 +177,8 @@ public class Player extends Observable implements Observer {
 		ArrayList<Integer> ls = new ArrayList<Integer>();
 		this.leaders.forEach(leader -> ls.add(leader.getCode() ));
 		
+		System.out.println("LEADERS: " + ls.get(0) + " " + ls.get(1) + " " + ls.get(2) + " " + ls.get(3));
+		
 		MessageLeaderCards leaderCards = new MessageLeaderCards(ls);
 		leaderCards.setRecipient(this.getID());
 		notifyChangement(leaderCards);
@@ -225,6 +227,10 @@ public class Player extends Observable implements Observer {
 	public void doLeaderPlaying(int n) {
 		LeaderRequirement playerStats = generatePlayerStats();
 		Leader leader = this.leaders.get(n);
+		
+		System.out.println("PLAYER:\n" + playerStats.toString());
+		System.out.println("");
+		System.out.println("LEADER:\n" + leader.getRequirement().toString());
 		
 		if ( playerStats.isBiggerThan( leader.getRequirement() ) ) {
 			

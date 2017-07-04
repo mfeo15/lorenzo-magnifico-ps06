@@ -31,7 +31,9 @@ public class Connection implements Runnable, Observer {
 	
 	private Player player;
 	
-	private String username;
+	private User associatedUser;
+	
+	private String guestString;
 	
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
@@ -53,7 +55,7 @@ public class Connection implements Runnable, Observer {
 		this.out = new ObjectOutputStream(socket.getOutputStream());
 		this.in = new ObjectInputStream(socket.getInputStream());
 		
-		this.username = "Guest" + (new Random()).nextInt(9999);
+		this.guestString = "Guest" + (new Random()).nextInt(9999);
 	}
 	
 	public SocketAddress getID() {
@@ -151,17 +153,30 @@ public class Connection implements Runnable, Observer {
 	}
 
 	public String getUsername() {
-		return username;
+		if (associatedUser == null)
+			return guestString;
+		
+		return associatedUser.getUsername();
 	}
 	
 	public void setUsername(String username) {
-		this.username = username;
+		if (associatedUser == null)
+			guestString = username;
+		
+		this.associatedUser.setUsername(username);
 	}
 	
 	public String getInetAddress() {
 		return socket.getInetAddress().toString();
 	}
 
+	public User getAssociatedUser() {
+		return associatedUser;
+	}
+	
+	public void setAssociatedUser(User associatedUser) {
+		this.associatedUser = associatedUser;
+	}
 	
 	@Override
 	public void update(Observable o, Object arg) {

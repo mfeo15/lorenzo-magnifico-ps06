@@ -9,10 +9,12 @@ import it.polimi.ingsw.ps06.model.PersonalBoard;
 import it.polimi.ingsw.ps06.model.Player;
 import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
 import it.polimi.ingsw.ps06.model.Types.PointsKind;
+import it.polimi.ingsw.ps06.model.XMLparser.ParserUsers;
 import it.polimi.ingsw.ps06.model.events.EventParser;
 import it.polimi.ingsw.ps06.networking.Connection;
 import it.polimi.ingsw.ps06.networking.MatchSet;
 import it.polimi.ingsw.ps06.networking.SocketServer;
+import it.polimi.ingsw.ps06.networking.User;
 import it.polimi.ingsw.ps06.view.Board;
 import it.polimi.ingsw.ps06.view.Room;
 
@@ -39,7 +41,13 @@ public class MessageParser implements MessageVisitor {
 	public void visit(MessageUser userMessage) 
 	{
 		Connection c = ((Connection) supporter);
-		c.setUsername(userMessage.getUsername());
+		ParserUsers users = new ParserUsers("resources/XML/users.xml");
+		
+		if (users.contains( userMessage.getUsername() )) {
+			User u = users.getUser( userMessage.getUsername() );
+			if (u.autenticate(userMessage.getUsername(), userMessage.getPassword()))
+				c.setAssociatedUser(u);
+		}
 	
 		SocketServer.getInstance().sendWaitingConnectionsStats();
 	}
@@ -323,5 +331,15 @@ public class MessageParser implements MessageVisitor {
 	{
 		Board b = ((Board) supporter);
 		b.discardLeader( leaderDiscarded.getCode() );
+	}
+
+	@Override
+	public void visit(MessageGameHasEnded hasEnded) {
+		// TODO Auto-generated method stub
+		System.out.println("THE GAME IS NOW OVER");
+		System.out.println("The player_" + hasEnded.getWinnerPlayerCode() + " just won!");
+		
+		Board b = ((Board) supporter);
+		b.gameHasEnded( hasEnded.getWinnerPlayerCode() );
 	}
 }

@@ -246,9 +246,27 @@ public class LeaderRequirement {
 	        	CardType currentCard = cardsIterator.next();	
 	        	if ( getResourceValue(currentCard) < r.getResourceValue(currentCard) ) flag = false;
 	        }
-			
+
 	        return flag;
 		}	
-		
-		
+
+		@Override
+		public String toString() {
+			String s = "Coin:" + materials.get(MaterialsKind.COIN) 
+			+ " Wood:" + materials.get(MaterialsKind.WOOD)
+			+ " Stone:" + materials.get(MaterialsKind.STONE)
+			+ " Servant:" + materials.get(MaterialsKind.SERVANT)
+			+ " Faith:" + points.get(PointsKind.FAITH_POINTS)
+			+ " Military:" + points.get(PointsKind.MILITARY_POINTS)
+			+ " Victory:" + points.get(PointsKind.VICTORY_POINTS) 
+			+ "\n"
+			+ "Territory:" + cards.get(CardType.TERRITORY)
+			+ " Building:" + cards.get(CardType.BUILDING)
+			+ " Character:" + cards.get(CardType.CHARACTER)
+			+ " Venture:" + cards.get(CardType.VENTURE)
+			+ "\n"
+			+ "AnyCard:" + this.anyCard;
+
+			return s;
+		}	
 }

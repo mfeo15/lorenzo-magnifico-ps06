@@ -273,6 +273,7 @@ public class ParserLeaders extends XMLParser {
 			System.out.println("");
 			System.out.println("CODE: " + l.getCode());
 			System.out.println("TITLE: " + l.getTitle());
+			System.out.println("REQUIREMENT: " + l.getRequirement());
 			System.out.println("OncePerRound: " + l.isOncePerRoundEffect());
 		}
 	}
