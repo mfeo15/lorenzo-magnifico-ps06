@@ -50,6 +50,7 @@ import javax.swing.KeyStroke;
 import javax.swing.Timer;
 import javax.swing.TransferHandler;
 import javax.swing.UIManager;
+import javax.swing.plaf.DesktopPaneUI;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 
 import it.polimi.ingsw.ps06.model.Types.ColorPalette;
@@ -615,6 +616,7 @@ public class BoardGUI extends Observable implements Board {
         for(int j=0; j<harvests.length;j++){ others.add(harvests[j]); }
         for(int j=0; j<councils.length;j++){ others.add(councils[j]); }
         for(int j=0; j<players.length;j++){ desktop.add(players[j]); }
+        for(int j=0; j<players.length;j++){ players[j].setVisible(false); }
         for(int j=0; j<placements.length;j++){ towers.add(placements[j]); }
              
         for(int j=0; j<playersCheck.length;j++){ desktopFrame.add(playersCheck[j]); }
@@ -725,9 +727,9 @@ public class BoardGUI extends Observable implements Board {
 
         
         java.util.Timer timer = new java.util.Timer();
-        timer.schedule(new Repeat(harvest,harvests,1), 0, 5000);
-        timer.schedule(new Repeat(production,productions,2), 0, 5000);
-        timer.schedule(new Repeat(council,councils,3), 0, 5000);
+        timer.schedule(new Repeat(harvest,harvests,1), 0, 2000);
+        timer.schedule(new Repeat(production,productions,2), 0, 2000);
+        timer.schedule(new Repeat(council,councils,3), 0, 2000);
        
         Arrays.fill(leaderHand, true);
         Arrays.fill(leaderTable, false);
@@ -1656,6 +1658,8 @@ public class BoardGUI extends Observable implements Board {
 		playersName[index]=s;
 		playersInfo[index].setText(s);
 		
+		for(int j=0; j<players.length;j++){ if(! (players[j].isVisible())) players[j].setVisible(true); }
+		
 	}
 
 
@@ -2176,6 +2180,7 @@ public class BoardGUI extends Observable implements Board {
 			}
 		}
 		
+		
 		try {
 			refresh();
 		} catch (IOException e) {
@@ -2465,6 +2470,8 @@ public class BoardGUI extends Observable implements Board {
 	@Override
 	public void gameHasEnded(int ID){
 		JOptionPane.showMessageDialog(null, "Il giocatore "+ID+" ha vinto!" , "Vittoria!",  JOptionPane.INFORMATION_MESSAGE);
+		desktopFrame.dispose();
+		
 	}
 	
 }
