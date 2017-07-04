@@ -205,9 +205,9 @@ public class Game extends Observable implements Observer {
 			return;
 		}
 		
-		period++;	
 		vaticanReport(period);
 		
+		period++;	
 		gameStatusUpdate();
 	}
 	
@@ -358,7 +358,7 @@ public class Game extends Observable implements Observer {
 	*/
 	private void reorderPlayers() 
 	{
-		setCurrentPlayerIndex(6);
+		setCurrentPlayerIndex(0);
 		
 		ArrayList<Player> councilPlayers = board.getOrder();
 		if (councilPlayers != null) {
