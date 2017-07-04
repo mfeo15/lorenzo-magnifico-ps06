@@ -358,7 +358,7 @@ public class Game extends Observable implements Observer {
 	*/
 	private void reorderPlayers() 
 	{
-		setCurrentPlayerIndex(0);
+		setCurrentPlayerIndex(6);
 		
 		ArrayList<Player> councilPlayers = board.getOrder();
 		if (councilPlayers != null) {
@@ -454,9 +454,53 @@ public class Game extends Observable implements Observer {
 	public Player computeWinnerPlayer()
 	{
 		Player winnerPlayer = null;
+		int[] finalScores = new int[ players.size() ];
 		
-		for (Player p: players) {
+		for (int i=0; i < players.size(); i++) {
+			Player p = players.get(i);
 			
+			//Conquered Territories
+			switch ( p.getPersonalBoard().getTerritories().size() ) {
+				case 3 : finalScores[i] += 1;
+					break;
+				case 4 : finalScores[i] += 4;
+					break;
+				case 5 : finalScores[i] += 10;
+					break;
+				case 6 : finalScores[i] += 20;
+					break;
+			}
+			
+			//Influenced Characters
+			switch ( p.getPersonalBoard().getCharacters().size() ) {
+			case 1 : finalScores[i] += 1;
+				break;
+			case 2 : finalScores[i] += 3;
+				break;
+			case 3 : finalScores[i] += 6;
+				break;
+			case 4 : finalScores[i] += 10;
+				break;
+			case 5 : finalScores[i] += 15;
+				break;
+			case 6 : finalScores[i] += 21;
+				break;
+			}
+			
+			//Encouraged Ventures
+			p.getPersonalBoard().getVentures().forEach( v -> v.activateEffect(p)  );
+			
+			//Military Strength
+			
+			//Collected Resources
+			int materialsCollected = 0;
+			for (MaterialsKind m : MaterialsKind.values())
+				materialsCollected += p.getPersonalBoard().getAmount(m);
+			
+			finalScores[i] += materialsCollected / 5;
+			
+			//Sum the "during game vicotory points"
+			finalScores[i] += p.getPersonalBoard().getAmount(PointsKind.VICTORY_POINTS);
 		}
 		
 		return winnerPlayer;

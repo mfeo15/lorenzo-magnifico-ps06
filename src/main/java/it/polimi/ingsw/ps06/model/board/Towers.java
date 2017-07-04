@@ -318,7 +318,7 @@ public class Towers extends Observable implements PlaceSpace {
 			if (deck[ deckIndex + i ] == null)
 				roundCards[i] = -1;
 			else
-				roundCards[i] = deck[i].getCode();
+				roundCards[i] = deck[ deckIndex + i ].getCode();
 		}
 		
 		return roundCards;
