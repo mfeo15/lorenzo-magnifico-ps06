@@ -646,19 +646,27 @@ public class BoardCLI extends Observable implements Board,Runnable {
 	
 	@Override
 	public void activateLeader(int value) {
-		// TODO Auto-generated method stub
+		System.out.println("--> Hai attivato il leader: "+value);
 		
 	}
 
 	@Override
 	public void playLeader(int value) {
-		// TODO Auto-generated method stub
+		System.out.println("--> Hai giocato il leader: "+value);
 		
 	}
 
 	@Override
 	public void discardLeader(int value) {
-		// TODO Auto-generated method stub
+		System.out.println("--> Hai scartato il leader: "+value);
+		
+	}
+
+	@Override
+	public void gameHasEnded(int ID) {
+		System.out.println();
+		System.out.println("--> Il giocatore "+ID+" ha vinto! <--");
+		System.out.println();
 		
 	}
 

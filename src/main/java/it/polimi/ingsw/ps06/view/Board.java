@@ -87,4 +87,6 @@ public interface Board {
 	void playLeader(int value);
 	
 	void discardLeader(int value);
+	
+	void gameHasEnded(int ID);
 }

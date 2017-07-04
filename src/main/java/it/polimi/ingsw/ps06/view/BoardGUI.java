@@ -41,6 +41,7 @@ import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JRootPane;
@@ -159,7 +160,7 @@ public class BoardGUI extends Observable implements Board {
     private int playerNumber=1;
     private int roundNumber=1;
     private int periodNumber=1;
-    private int ex1=1, ex2=8, ex3=16;
+    private int ex1=-1, ex2=-1, ex3=-1;
     private int harvestIndex=1, productionIndex=1, councilIndex=0;
     private int lead1=-1, lead2=-1, lead3=-1, lead4=-1;
     private int coinV=0, woodV=0, stoneV=0, servantV=0, victoryV=0, militaryV=0, faithV=0;
@@ -247,10 +248,7 @@ public class BoardGUI extends Observable implements Board {
         playersLabel[2] = ImageHandler.setImage("resources/player/avatar3.jpg",7,9,width,height);
         playersLabel[3] = ImageHandler.setImage("resources/player/avatar4.jpg",7,9,width,height);
         playersLabel[4] = ImageHandler.setImage("resources/player/avatar5.jpg",7,9,width,height);
-        
-        excommunicationsLabel[0] = ImageHandler.setImage("resources/excomm/"+ex1+".png",9,23,width,height);
-        excommunicationsLabel[1] = ImageHandler.setImage("resources/excomm/"+ex2+".png",9,22,width,height);
-        excommunicationsLabel[2] = ImageHandler.setImage("resources/excomm/"+ex3+".png",9,23,width,height);
+
         
         marketCover1 = ImageHandler.setImage("resources/cover/cover1.png",10,12,width,height);
         marketCover2 = ImageHandler.setImage("resources/cover/cover3.png",10,12,width,height);
@@ -400,8 +398,8 @@ public class BoardGUI extends Observable implements Board {
         
         pass=new JButton("Passa");
         pass.setFont(fontSMALL);
-        pass.setLocation((int)(width*10/100),(int)(height*124.5/100));
-        pass.setSize((int)width*8/100,(int)height*4/100);
+        pass.setLocation((int)(width*9/100),(int)(height*124.5/100));
+        pass.setSize((int)width*10/100,(int)height*4/100);
         pass.setOpaque(false);
         pass.setContentAreaFilled(false);
         pass.setFocusPainted(false);
@@ -601,11 +599,8 @@ public class BoardGUI extends Observable implements Board {
 		playersInfo[3].setForeground(new Color(255,248,48));
 		playersInfo[4].setForeground(Color.WHITE);
         
-        //dices = fillLabels(dices,dicesLabel);
-        excommunications = fillLabels(excommunications, excommunicationsLabel);
         for(int j=0; j<players.length; j++){players[j].setDisabledIcon( players[j].getIcon() );}
         players = fillButtons(players,playersLabel);
-        //leaders = fillLeaders(leaders,leadersLabel,leadersLabelFade);
         cards = fillCards(cards);
         
         others.add(production[0]);
@@ -1383,9 +1378,8 @@ public class BoardGUI extends Observable implements Board {
 		        
 	    	gioca.addActionListener(new ActionListener() {
 	    		public void actionPerformed(ActionEvent e) {
+	    			
 	    			notifyLeaderPlacement(value);
-	    			leaderHand[value]=false;
-	    			leaderTable[value]=true;
 	    		}
 	    	});
 		        
@@ -1395,13 +1389,7 @@ public class BoardGUI extends Observable implements Board {
 		    scarta.addActionListener(new ActionListener() {
 		    	public void actionPerformed(ActionEvent e) {
 		              
-		    		notifyLeaderDiscard(value);
-		            	
-		           	MouseListener[] mouseListeners = leaders[value].getMouseListeners();
-		           	for (MouseListener mouseListener : mouseListeners) {
-		           		leaders[value].removeMouseListener(mouseListener);
-		           	}
-		            	
+		    		notifyLeaderDiscard(value);	
 		        }
 		    });
 	        
@@ -1412,12 +1400,6 @@ public class BoardGUI extends Observable implements Board {
 			   public void actionPerformed(ActionEvent e) {
 		            
 				   notifyLeaderActivation(value);
-		            	
-				   if(leaders[value].isEnabled()){
-					   leaderPlayed[value]=true;
-					   leaderTable[value]=false;
-				   }
-	
 			   }
 		   });
 	        
@@ -2007,7 +1989,9 @@ public class BoardGUI extends Observable implements Board {
         members = fillButtons(members,membersLabel);
         if(blackValue>=0) dices = fillLabels(dices,dicesLabel);
         if(lead1>=0) leaders = fillLeaders(leaders,leadersLabel,leadersLabelFade);
+        if(ex1>=0) excommunications = fillLabels(excommunications, excommunicationsLabel);
         cards = fillCards(cards);
+        
 	}
 	
 	public void getResources() throws IOException{
@@ -2042,6 +2026,9 @@ public class BoardGUI extends Observable implements Board {
         membersLabel[2] = ImageHandler.setImage("resources/member/"+playerColor+"A.png",5,7,width,height);
         membersLabel[3] = ImageHandler.setImage("resources/member/"+playerColor+"E.png",5,7,width,height);
         
+        if(ex1>=0) excommunicationsLabel[0] = ImageHandler.setImage("resources/excomm/"+ex1+".png",9,23,width,height);
+        if(ex2>=0) excommunicationsLabel[1] = ImageHandler.setImage("resources/excomm/"+ex2+".png",9,22,width,height);
+        if(ex3>=0) excommunicationsLabel[2] = ImageHandler.setImage("resources/excomm/"+ex3+".png",9,23,width,height);
 	}
 
 	private JTextField[] setFont(JTextField[] btns){
@@ -2443,8 +2430,11 @@ public class BoardGUI extends Observable implements Board {
 	@Override
 	public void activateLeader(int value) {
 		if(leaders[value].isEnabled()){
+			
 			   leaders[value].setIcon(leaderBack.getIcon());
 			   leaders[value].setDisabledIcon(leaderBack.getIcon());
+			   leaderPlayed[value]=true;
+			   leaderTable[value]=false;
 		}
 	}
 	
@@ -2453,15 +2443,28 @@ public class BoardGUI extends Observable implements Board {
 		
 		leaders[value].disable();
        	leaders[value].setIcon(null);
+       	
+       	MouseListener[] mouseListeners = leaders[value].getMouseListeners();
+       	for (MouseListener mouseListener : mouseListeners) {
+       		leaders[value].removeMouseListener(mouseListener);
+       	}
 	}
 	
 	@Override
 	public void playLeader(int value) {
+		
 		leaders[value].setEnabled(true);
+		leaderHand[value]=false;
+		leaderTable[value]=true;
 	}
 
 	public void turnLeader(int value) {
 		
+	}
+	
+	@Override
+	public void gameHasEnded(int ID){
+		JOptionPane.showMessageDialog(null, "Il giocatore "+ID+" ha vinto!" , "Vittoria!",  JOptionPane.INFORMATION_MESSAGE);
 	}
 	
 }
