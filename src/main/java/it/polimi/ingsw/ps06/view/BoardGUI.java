@@ -892,10 +892,10 @@ public class BoardGUI extends Observable implements Board {
         personalBoard.setResizable(false);
         personalBoard.setVisible(true); 
          
-        desktop.add(chat);
-		desktop.add(send);
-		desktop.add(message);
-		desktop.add(chatBox);
+        desktopFrame.add(chat);
+		desktopFrame.add(send);
+		desktopFrame.add(message);
+		desktopFrame.add(chatBox);
         
         desktop.add(servants);
         desktop.add(servantsCount);
@@ -2576,8 +2576,8 @@ public class BoardGUI extends Observable implements Board {
 	@Override
 	public void addChatText(int player, String s) {
 
-		String s1 = "["+player+"]: "+s;
-		chatBox.setText("\n"+chatBox.getText()+s1);
+		String s1 = "\n"+"["+player+"]: "+s;
+		chatBox.setText(chatBox.getText() + s1);
 		
 	}
 	
