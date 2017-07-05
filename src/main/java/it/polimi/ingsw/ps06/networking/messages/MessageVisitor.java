@@ -7,6 +7,9 @@ public interface MessageVisitor {
 	void visit(MessageConnectionStart startConnection);
 	void visit(MessageDisconnect disconnect);
 	
+	void visit(MessageTelegram tel);
+	void visit(MessageTelegramHasBeenSent telegramSent);
+	
 	void visit(MessagePlayerID messageID);
 	void visit(MessageCurrentPlayer currentPlayer);
 	void visit(MessageCurrentPlayerOrder currentPlayerOrder);

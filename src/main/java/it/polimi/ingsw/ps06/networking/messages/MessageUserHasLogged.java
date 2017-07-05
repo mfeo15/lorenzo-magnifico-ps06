@@ -1,6 +1,6 @@
 package it.polimi.ingsw.ps06.networking.messages;
 
-public class MessageUserHasLogged extends Broadcast {
+public class MessageUserHasLogged extends Server2Client {
 
 	/**
 	 * 

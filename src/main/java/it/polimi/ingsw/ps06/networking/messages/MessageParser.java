@@ -59,8 +59,7 @@ public class MessageParser implements MessageVisitor {
 																		  u.getWinCounder(), 
 																		  u.getSecondPlaceCounter(),
 																		  u.getMaxScore());
-						
-				SocketServer.getInstance().sendToPlayingConnections(c, usrLogged);
+				c.asyncSend(usrLogged);
 					
 				c.setAssociatedUser(u);
 			}
@@ -370,5 +369,23 @@ public class MessageParser implements MessageVisitor {
 							hasLogged.getSecondPlaceCounter(), 
 							hasLogged.getMaxScore() 
 						);
+	}
+
+	@Override
+	public void visit(MessageTelegram tel) 
+	{
+		Connection connection = ((Connection) supporter);
+		
+		if ( tel.getTelegram() != null ) {
+			
+			MessageTelegramHasBeenSent telegram = new MessageTelegramHasBeenSent( connection.getPlayer().getID(), tel.getTelegram() );
+			SocketServer.getInstance().sendToPlayingConnections(connection, telegram);
+		}
+	}
+
+	@Override
+	public void visit( MessageTelegramHasBeenSent telegramSent) {
+		// TODO Auto-generated method stub
+		
 	}
 }
