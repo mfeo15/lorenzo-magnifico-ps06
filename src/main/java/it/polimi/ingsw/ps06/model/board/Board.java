@@ -24,19 +24,19 @@ import it.polimi.ingsw.ps06.networking.messages.MessageBoardSetupExcomCards;
  * @since   2017-05-10
  */
 public class Board extends Observable{
-	
+
 	private Towers towersZone;
 	private Market marketZone;
 	private CouncilPalace councilPalaceZone;
 	private HarvestProduction harvestProductionZone;
-	
+
 	private ArrayList<Player> order;
-	
+
 	private ExcommunicationTile excommunicationTilePeriodOne;
 	private ExcommunicationTile excommunicationTilePeriodTwo;
 	private ExcommunicationTile excommunicationTilePeriodThree;
-	
-	
+
+
 	/**
 	 * Costruttore della Board. Si occupa dell'inizializzazione delle zone 
 	 * e la definizione delle carte scomunica per la partita in corso
@@ -49,7 +49,7 @@ public class Board extends Observable{
 		councilPalaceZone = new CouncilPalace();
 		harvestProductionZone = new HarvestProduction(numberPlayers);
 	}
-	
+
 	/**
 	 * Metodo per l'estrazione random delle tre carte scomuniche
 	 */ 
@@ -59,16 +59,16 @@ public class Board extends Observable{
 		excommunicationTilePeriodOne = tiles.get( (new Random()).nextInt(7) );
 		excommunicationTilePeriodTwo = tiles.get( 7 + (new Random()).nextInt(7) );
 		excommunicationTilePeriodThree = tiles.get( 14 + (new Random()).nextInt(7) );
-		
-		
+
+
 		MessageBoardSetupExcomCards excomCards = new MessageBoardSetupExcomCards(excommunicationTilePeriodOne.getCode(), 
-																				 excommunicationTilePeriodTwo.getCode(), 
-																				 excommunicationTilePeriodThree.getCode()
-																				);
+				excommunicationTilePeriodTwo.getCode(), 
+				excommunicationTilePeriodThree.getCode()
+				);
 		notifyChangement(excomCards);
 	}
-	
-	
+
+
 	/**
 	 * Getter per le carte scomuniche
 	 * 
@@ -77,14 +77,14 @@ public class Board extends Observable{
 	 * @return			carta scomunica relativa al periodo richiesto
 	 */
 	public ExcommunicationTile getTiles(int period) {
-		
+
 		if (period == 1) return excommunicationTilePeriodOne;
 		if (period == 2) return excommunicationTilePeriodTwo;
 		if (period == 3) return excommunicationTilePeriodThree;
-		
+
 		return null;
 	}
-	
+
 	/**
 	 * Metodo per ottenere la ricompensa in termini di punti vittoria a seguito del sostegno al Papa
 	 * 
@@ -93,10 +93,10 @@ public class Board extends Observable{
 	 * @return				quantità di punti associati
 	 */
 	public int getFaithTrackReward(int position) {
-		
+
 		return (new ParserBonusBoard("resources/XML/BonusTabellone.xml")).getFaithPoints().get(position);
 	}
-	
+
 	/**
 	 * Metodo per ritornare l'ordine dei familiari, per stabilire l'ordine di gioco
 	 *
@@ -105,7 +105,7 @@ public class Board extends Observable{
 	public ArrayList<Player> getOrder() {
 		return councilPalaceZone.checkOrder();
 	}
-	
+
 	/**
 	 * Metodo per impostare il gioco per un nuovo round
 	 *
@@ -115,23 +115,23 @@ public class Board extends Observable{
 	public void setupRound(int period, int round) {
 		if (round == 1 && period == 1)
 			drawExcommunicationTiles();
-		
+
 		clean();
 	}
-	
-	
+
+
 	/**
 	 * Metodo per ripulire il tabellone
 	 */
 	public void clean() {
-		
+
 		marketZone.cleanMarket();
 		towersZone.cleanTowers();
 		harvestProductionZone.cleanZone();
 		councilPalaceZone.cleanPalace();
 	}
-	
-	
+
+
 	/**
 	 * Metodo invocato per eseguire un piazzamento di un famigliare all'interno del consiglio
 	 * 
@@ -145,11 +145,11 @@ public class Board extends Observable{
 	public void placeMember(FamilyMember member, Action chosenAction, int servants, CouncilPrivilege privilege) {
 		if (chosenAction != Action.COUNCIL_SPACE)
 			return;
-		
+
 		councilPalaceZone.setChosenCouncilPrivilege(privilege);
 		councilPalaceZone.placeMember(member, chosenAction, servants);
 	}
-	
+
 	/**
 	 * Metodo invocato per eseguire un piazzamento di un famigliare
 	 * 
@@ -160,7 +160,7 @@ public class Board extends Observable{
 	 * @see						it.polimi.ingsw.ps06.model.Types
 	 */
 	public void placeMember(FamilyMember member, Action chosenAction, int servants) {
-		
+
 		switch (chosenAction) {
 		case MARKET_1:
 		case MARKET_2:
@@ -195,25 +195,25 @@ public class Board extends Observable{
 			break;
 		default:
 			break;
-		
+
 		}
 	}
-	
+
 	public void notifyChangement(Object o) {
 		setChanged();
 		notifyObservers(o);
 	}
-	
+
 	public void addNewObserver(Observer obs) {
-		
+
 		addObserver(obs);
-		
+
 		marketZone.addNewObserver(obs);
 		towersZone.addNewObserver(obs);
 		harvestProductionZone.addNewObserver(obs);
 		councilPalaceZone.addNewObserver(obs);
 	}
-	
+
 	public void deleteAnObserver(Observer obs) {
 		deleteObserver(obs);
 	}

@@ -2,16 +2,46 @@ package it.polimi.ingsw.ps06.networking.messages;
 
 public interface MessageVisitor {
 	
-	void visit(EventMessage event);
+	/**
+	 * 
+	 * 
+	 * @param message
+	 */
+	void visit(EventMessage message);
 	
-	void visit(MessageConnectionStart startConnection);
-	void visit(MessageDisconnect disconnect);
+	/**
+	 * @param message
+	 */
+	void visit(MessageConnectionStart message);
 	
-	void visit(MessageTelegram tel);
+	/**
+	 * @param message
+	 */
+	void visit(MessageDisconnect message);
+	
+	/**
+	 * @param message
+	 */
+	void visit(MessageTelegram message);
+	
+	/**
+	 * @param telegramSent
+	 */
 	void visit(MessageTelegramHasBeenSent telegramSent);
 	
+	/**
+	 * @param messageID
+	 */
 	void visit(MessagePlayerID messageID);
+	
+	/**
+	 * @param currentPlayer
+	 */
 	void visit(MessageCurrentPlayer currentPlayer);
+	
+	/**
+	 * @param currentPlayerOrder
+	 */
 	void visit(MessageCurrentPlayerOrder currentPlayerOrder);
 	
 	void visit(MessageUser userMessage);

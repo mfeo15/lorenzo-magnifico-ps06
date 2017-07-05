@@ -2,8 +2,6 @@ package it.polimi.ingsw.ps06.model.events;
 
 import java.io.IOException;
 
-import org.omg.IOP.Codec;
-
 import it.polimi.ingsw.ps06.controller.BoardController;
 import it.polimi.ingsw.ps06.controller.RoomController;
 import it.polimi.ingsw.ps06.model.Game;
@@ -13,16 +11,32 @@ import it.polimi.ingsw.ps06.networking.SocketServer;
 import it.polimi.ingsw.ps06.networking.messages.BoardReady;
 import it.polimi.ingsw.ps06.networking.messages.MessageDisconnect;
 
+
+/**
+ * Classe implementativa di EventVisitor, parsa l'evento da visitare seguendo
+ * le direttive del Visitor Pattern Design
+ * 
+ * @author ps06
+ * @since	2017-06-10
+ */
 public class EventParser implements EventVisitor {
 	
-	private Object theModel;
+	private Object theSupporter;
 	
+	/**
+	 * Costruttore di default della classe
+	 */
 	public EventParser() {
 		
 	}
 	
-	public EventParser(Object model) {
-		this.theModel = model;
+	/**
+	 * Costruttore della classe con parametro di supporto alle gestione delle attività
+	 * 
+	 * @param	theSupporter	oggetto di supporto alla visita
+	 */
+	public EventParser(Object theSupporter) {
+		this.theSupporter = theSupporter;
 	}
 	
 	@Override
@@ -59,7 +73,7 @@ public class EventParser implements EventVisitor {
 
 	@Override
 	public void visit(EventMemberPlaced memberPlaced) {
-		Connection c = ((Connection) theModel);
+		Connection c = ((Connection) theSupporter);
  		
 		Game game = SocketServer.getInstance().retrieveMatch(c).getGame();
 
@@ -79,21 +93,21 @@ public class EventParser implements EventVisitor {
 	@Override
 	public void visit(EventLeaderDiscarded leaderDiscarded) {
 
-		Connection c = ((Connection) theModel);
+		Connection c = ((Connection) theSupporter);
 		c.getPlayer().doLeaderDiscarding( leaderDiscarded.getCode() );
 	}
 
 	@Override
 	public void visit(EventLeaderActivated leaderActivated) 
 	{
-		Connection c = ((Connection) theModel);
+		Connection c = ((Connection) theSupporter);
 		c.getPlayer().doLeaderActivating( leaderActivated.getCode() );
 	}
 
 	@Override
 	public void visit(EventLeaderPlayed leaderPlayed) 
 	{
-		Connection c = ((Connection) theModel);
+		Connection c = ((Connection) theSupporter);
 		c.getPlayer().doLeaderPlaying( leaderPlayed.getCode() );
 	}
 

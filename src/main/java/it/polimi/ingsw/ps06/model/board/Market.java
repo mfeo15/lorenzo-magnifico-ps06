@@ -28,19 +28,12 @@ import it.polimi.ingsw.ps06.networking.messages.MessageModel2ViewNotification;
 * @since   2017-05-10 
 */
 public class Market extends Observable implements PlaceSpace {
+	
 	private FamilyMember[] memberSpaces;
-	private Effect e;
 	private int openedWindows;
 	private int marketIndex = Action.valueOf("MARKET_1").ordinal();
-	private boolean check;
 	
-	/**
-	* Metodo per il piazzamento di un familiare nel mercato, include controlli di posizionamento
-	*
-	* @param 	member			Familiare che si vuole piazzare
-	* @param 	chosenAction 	Codice dell'azione da eseguire
-	* @return 					Nothing
-	*/
+	
 	@Override
 	public void placeMember(FamilyMember member, Action chosenAction, int servants) throws IllegalArgumentException {
 		
@@ -49,13 +42,13 @@ public class Market extends Observable implements PlaceSpace {
 		
 		// Gestione carta scomunica del mercato
 		if (member.getPlayer().getBonusMalusCollection().contains(BonusMalusNoMarket.class)) {
-			handle(3, member);
+			handleBadPlacing(3, member);
 			return;
 		}
 		
 		// Gestione condizione di selezione sbagliata
 		if ( ( relativeIndex > openedWindows ) || ( (member.getValue() + servants) < 1 ) ) {
-			handle(1, member);
+			handleBadPlacing(1, member);
 			return;
 		}
 			
@@ -73,31 +66,25 @@ public class Market extends Observable implements PlaceSpace {
 				if(member.getFakePlayer()!=null) { memberSpaces[relativeIndex] = member;}
 				giveBonus(member, chosenAction);
 
-			} else handle(2, member);
+			} else handleBadPlacing(2, member);
 
 		}
 	}
 	
 	/**
-	* Costruttore del mercato. Si occupa di impostarlo in maniera adeguata
-	*
-	* @param 	numberPlayers	Numero di giocatori della partita
-	* @return 	Nothing
-	*/
-	public Market(int numberPlayers) {
-		
+	 * Costruttore del mercato. Si occupa di impostarlo in maniera adeguata
+	 *
+	 * @param 	numberPlayers	numero di giocatori della partita
+	 */
+	public Market(int numberPlayers) 
+	{	
 		memberSpaces = new FamilyMember[4];
 		
 		setSpaces(numberPlayers);
 	}
 	
-	/**
-	* Gestisci errori di posizionamento familiare
-	*
-	* @param	code		codice errore
-	* @return 	Nothing
-	*/
-	private void handle(int code, FamilyMember member) {
+	@Override
+	public void handleBadPlacing(int code, FamilyMember member) {
 		
 		String notification = "Il giocatore " + member.getPlayer().getColorAssociatedToID() + " ha piazzato un familiare ";
 		
@@ -116,14 +103,14 @@ public class Market extends Observable implements PlaceSpace {
 	}
 	
 	/**
-	* Metodo per rendere disponibli solo il numero di finestre di cui si hanno bisogno, a seconda del numero di giocatori
-	*
-	* @param 	numberPlayers	Numero di giocatori della partita
-	* @return 	Nothing
-	*/
-	private void setSpaces(int numberPlayers) {
-		// basta restringere le azioni!
-		
+	 * Metodo per rendere disponibli solo il numero di finestre di cui si hanno bisogno, a seconda del numero di giocatori
+	 *
+	 * @param	numberPlayers				numero di giocatori della partita
+	 * 
+	 * @throws 	IllegalArgumentException	se il numero di giocatori passato non ì compatibile con il model
+	 */
+	private void setSpaces(int numberPlayers) 
+	{	
 		switch (numberPlayers) {
 		case 2:
 		case 3:
@@ -141,11 +128,11 @@ public class Market extends Observable implements PlaceSpace {
 	}
 	
 	/**
-	* Metodo per assegnare le risorse ai giocatori
-	*
-	* @param 	player		Giocatore a cui dare il bonus
-	* @return 	Nothing
-	*/
+	 * Metodo per assegnare le risorse ai giocatori
+	 *
+	 * @param 	member			familiare che è stato piazzato nel mercato
+	 * @param	chosenAction	tipologia di azione
+	 */
 	private void giveBonus(FamilyMember member, Action chosenAction) {
 		
 		ParserBonusBoard p = new ParserBonusBoard("resources/XML/BonusTabellone.xml");
@@ -153,8 +140,6 @@ public class Market extends Observable implements PlaceSpace {
 		
 		if ( r != null)
 			(new EffectsResources( r )).activate( member.getPlayer() );
-		
-		//if( (chosenAction.ordinal() - marketIndex) == 3 ) e.activate(player);
 		
 		//Tell the view what happened
 		MessageBoardMemberHasBeenPlaced newMember 
@@ -167,22 +152,18 @@ public class Market extends Observable implements PlaceSpace {
 	}
 	
 	/**
-	* Metodo per rimuovere i familiari dagli spazi
-	*
-	* @return 	Nothing
-	*/
+	 * Metodo per rimuovere i familiari dagli spazi
+	 */
 	public void cleanMarket() {
 		for (int i=0; i < 4; i++) memberSpaces[i] = null;
 	}
 	
 	/**
-	* Metodo per ritornare l'arraylist di familiari
-	*
-	* @return 	memberSpaces	ArrayList familiari
-	*/
+	 * Getter l'arraylist di familiari
+	 *
+	 * @return 	familiare piazzati nel mercato
+	 */
 	public ArrayList<FamilyMember> getFamilyList(){
-		//return memberSpaces;
-		
 		return new ArrayList<FamilyMember>(Arrays.asList(memberSpaces));
 	}
 	

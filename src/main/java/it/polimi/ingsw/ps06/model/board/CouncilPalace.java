@@ -39,7 +39,7 @@ public class CouncilPalace extends Observable implements PlaceSpace {
 	public void placeMember(FamilyMember member, Action chosenAction, int servants) {
 		
 		if( (member.getValue() + servants) < 1) {
-			handle(1, member);
+			handleBadPlacing(1, member);
 			return;
 		}
 
@@ -84,13 +84,9 @@ public class CouncilPalace extends Observable implements PlaceSpace {
 		this.chosenCouncilPrivilege = chosen;
 	}
 	
-	/**
-	 * Gestisci errori di posizionamento familiare
-	 *
-	 * @param	code		codice errore
-	 * @param	member		famigliare che ha generato un errore nel piazzamento
-	 */
-	private void handle(int code, FamilyMember member) {
+	
+	@Override
+	public void handleBadPlacing(int code, FamilyMember member) {
 		
 		String notification = "Il giocatore " + member.getPlayer().getColorAssociatedToID() + " ha piazzato un familiare ";
 		

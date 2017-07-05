@@ -29,32 +29,23 @@ import it.polimi.ingsw.ps06.networking.messages.MessageBoardSetupDevCards;
 import it.polimi.ingsw.ps06.networking.messages.MessageModel2ViewNotification;
 
 /**
-* Classe per la gestione delle torri
-*
-* @author  ps06
-* @version 1.2
-* @since   2017-05-10
-*/
-
+ * Classe per la gestione delle torri
+ *
+ * @author  ps06
+ * @version 1.2
+ * @since   2017-05-10
+ */
 public class Towers extends Observable implements PlaceSpace {
 	
 	private FamilyMember[] memberSpaces;
 	private DevelopementCard[] deck;
 	
 	private static final int CARTE_TORRE = 16;
-	private EffectsBonusMalus attivi; // da modificare in listener
+
 	private int deckIndex=0;
 	private int towerIndex = 0;
 	private int baseFloorTower = 0;
 	private int topFloorTower = 0;
-	
-	/**
-	* Metodo per il piazzamento di un familiare su di una delle torri, include controlli di posizionamento
-	*
-	* @param 	member			Familiare che si vuole piazzare
-	* @param 	chosenAction 	Codice dell'azione da eseguire
-	* @return 					Nothing
-	*/
 	
 	@Override
 	public void placeMember(FamilyMember member, Action chosenAction, int servants) {
@@ -71,7 +62,7 @@ public class Towers extends Observable implements PlaceSpace {
 		
 		// Si può piazzare solo se il valore del membro supera quello richiesto
 		if( memberValue < checkRequirement(chosenAction) ) {
-			handle(1, member);
+			handleBadPlacing(1, member);
 			return;
 		}
 		
@@ -80,7 +71,7 @@ public class Towers extends Observable implements PlaceSpace {
 		
 		// Si può piazzare solo se la carta è ancora presente, se c'è sono sicuro che non c'è un familiare
 		if(  card == null ) {
-			handle(2, member);
+			handleBadPlacing(2, member);
 			return;
 		}
 		
@@ -108,7 +99,7 @@ public class Towers extends Observable implements PlaceSpace {
 		*/
 		// Caso in cui il familiare può essere piazzato
 		if(!colorRule) {
-			handle(-1, member);
+			handleBadPlacing(-1, member);
 			return;
 		}
 		
@@ -131,19 +122,35 @@ public class Towers extends Observable implements PlaceSpace {
 			Integer i = 1;
 			notifyChangement(i);
 			
-		} else handle(3, member);
+		} else handleBadPlacing(3, member);
 	
 
 		MessageBoardSetupDevCards setupCards = new MessageBoardSetupDevCards( getRoundCards() );
 		notifyChangement(setupCards);
 	}
 	
+	@Override
+	public void handleBadPlacing(int code, FamilyMember member) {
+		
+		String notification = "Il giocatore " + member.getPlayer().getColorAssociatedToID() + " ha piazzato un familiare ";
+		
+		switch(code) {
+		case 1: notification += " di valore non sufficiente per l'azione";
+			break;
+		case 2: notification += ", ma la carta sviluppo non c'era";
+			break;
+		case 3: notification += ", ma le risorse non sono sufficienti";
+			break;
+		default: notification = "UNKNOWN ERROR ON TOWERS";
+		}
+		
+		MessageModel2ViewNotification m = new MessageModel2ViewNotification(notification);
+		notifyChangement(m);
+	}
+	
 	/**
-	* Costruttore delle torri. Si occupa di disporre le carte
-	*
-	* @param 	deck		Mazzo di carte mischiato
-	* @return 	Nothing
-	*/
+	 * Costruttore delle torri. Si occupa di disporre le carte
+	 */
 	public Towers() {
 		
 		memberSpaces = new FamilyMember[CARTE_TORRE];
@@ -153,6 +160,15 @@ public class Towers extends Observable implements PlaceSpace {
 		this.deckIndex = - CARTE_TORRE;
 	}
 
+	
+	/**
+	 * Metodo per il mescolamento delle carte, 
+	 * la suddivisione in turno e preparazione completa del deck
+	 * 
+	 * @param	deck	insieme di carte su cui operare
+	 * 
+	 * @return			insieme mescolato e prento da usare
+	 */
 	private DevelopementCard[] shuffleDeck( ArrayList<DevelopementCard> deck ) {
 		
 		ArrayList<DevelopementCard> a = new ArrayList<DevelopementCard>();
@@ -175,46 +191,46 @@ public class Towers extends Observable implements PlaceSpace {
 		return c;
 	}
 	
+	
+	/**
+	 * Metodo per inizializzare l'array dei family member
+	 */
 	public void initializeArrayLists() {
 
 		for(int j=0; j < 16; j++)
 			memberSpaces[j] = null;
 	}
 
+	/**
+	 * Metodo per ottenere i riferimenti adeguati alla gestione della torre
+	 * richiesta dall'azione del giocatore
+	 * 
+	 * @param	chosenAction	tipo di azione richiesta
+	 * 
+	 * @see						it.polimi.ingsw.ps06.model.Types
+	 */
 	private void checkWhichTower(Action chosenAction) {
 		
-		switch(chosenAction){
-			case TOWER_GREEN_1:
-			case TOWER_GREEN_2:
-			case TOWER_GREEN_3:
-			case TOWER_GREEN_4:
+		switch(chosenAction.getActionCategory()){
+			case TOWER_GREEN:
 				towerIndex = 1;
 				baseFloorTower = 0;
 				topFloorTower = 3;
 				break;
 				
-			case TOWER_BLUE_1:
-			case TOWER_BLUE_2:
-			case TOWER_BLUE_3:
-			case TOWER_BLUE_4:
+			case TOWER_BLUE:
 				towerIndex = 2;
 				baseFloorTower = 4;
 				topFloorTower = 7;
 				break;
 				
-			case TOWER_YELLOW_1:
-			case TOWER_YELLOW_2:
-			case TOWER_YELLOW_3:
-			case TOWER_YELLOW_4:
+			case TOWER_YELLOW:
 				towerIndex = 3;
 				baseFloorTower=8;
 				topFloorTower = 11;
 				break;
 				
-			case TOWER_PURPLE_1:
-			case TOWER_PURPLE_2:
-			case TOWER_PURPLE_3:
-			case TOWER_PURPLE_4:
+			case TOWER_PURPLE:
 				towerIndex = 4;
 				baseFloorTower = 12;
 				topFloorTower = 15;
@@ -226,6 +242,16 @@ public class Towers extends Observable implements PlaceSpace {
 			
 	}
 	
+	/**
+	 * Metodo per ottenere il requisito di dado per accedere al livello
+	 * della torre richiesta dall'azione
+	 * 
+	 * @param	chosenAction	tipo di azione richiesta
+	 * 
+	 * @return					requisito di dado per il piano della torre d'interesse
+	 * 
+	 * @see						it.polimi.ingsw.ps06.model.Types
+	 */
 	private int checkRequirement(Action chosenAction){
 		
 		switch(chosenAction) {
@@ -259,6 +285,14 @@ public class Towers extends Observable implements PlaceSpace {
 			
 	}
 	
+	/**
+	 * Metodo per l'assegnamento al giocatore del bonus ottenuto a seguito del piazzamento
+	 * 
+	 * @param 	chosenAction	tipo di azione eseguita
+	 * @param 	member			familiare che ha eseguito l'azione corrente
+	 * 
+	 * @see						it.polimi.ingsw.ps06.model.Types
+	 */
 	private void giveBonus(Action chosenAction, FamilyMember member) {
 		
 		if ( member.getPlayer().getBonusMalusCollection().contains(BonusMalusNoTowersEffects.class) )
@@ -273,35 +307,8 @@ public class Towers extends Observable implements PlaceSpace {
 	}
 	
 	/**
-	* Gestisci errori di posizionamento familiare
-	*
-	* @param	code		codice errore
-	* @return 	Nothing
-	*/
-	private void handle(int code, FamilyMember member) {
-		
-		String notification = "Il giocatore " + member.getPlayer().getColorAssociatedToID() + " ha piazzato un familiare ";
-		
-		switch(code) {
-		case 1: notification += " di valore non sufficiente per l'azione";
-			break;
-		case 2: notification += ", ma la carta sviluppo non c'era";
-			break;
-		case 3: notification += ", ma le risorse non sono sufficienti";
-			break;
-		default: notification = "UNKNOWN ERROR ON TOWERS";
-		}
-		
-		MessageModel2ViewNotification m = new MessageModel2ViewNotification(notification);
-		notifyChangement(m);
-	}
-	
-	/**
-	* Metodo per togliere le carte rimaste sulla torre e i familiari utilizzati
-	*
-	* @param 	Unused
-	* @return 	Nothing
-	*/
+	 * Metodo per togliere le carte rimaste sulla torre e i familiari utilizzati
+	 */
 	public void cleanTowers() {
 		deckIndex = deckIndex + CARTE_TORRE;
 		initializeArrayLists();
@@ -310,6 +317,11 @@ public class Towers extends Observable implements PlaceSpace {
 		notifyChangement(setupCards);
 	}
 	
+	/**
+	 * Metodo per ottenere la porzione di deck d'interesse al turno corrente
+	 * 
+	 * @return	insieme di carte al turno corrente
+	 */
 	public int[] getRoundCards(){
 		
 		int[] roundCards = new int[16];
@@ -325,74 +337,21 @@ public class Towers extends Observable implements PlaceSpace {
 	}
 	
 	/**
-	* Metodo per ritornare l'arraylist di territori
-	*
-	* @return 	territories	ArrayList territori
-	*/
-	public ArrayList<Territory> getTerritories(){
-		
-		ArrayList<Territory> territories = new ArrayList<Territory>();
-		
-		for(int i=0; i<4; i++) {
-			territories.add( (Territory) deck[i] );
-		}
-		return territories;
-	}
+	 * Getter delle carte territorio di territori
+	 *
+	 * @return 	l'insieme delle carte territorio
+	 */
+	
 	
 	/**
-	* Metodo per ritornare l'arraylist di familiari
-	*
-	* @return 	memberSpaces	ArrayList familiari
-	*/
+	 * Getter dei familiari posizionati nella zona
+	 *
+	 * @return 	l'insieme dei familiari posizionati nella zona
+	 */
 	public ArrayList<FamilyMember> getFamilyList(){
-		//return memberSpaces;
 		return null;
 	}
 	
-	/**
-	* Metodo per ritornare l'arraylist di personaggi
-	*
-	* @return 	characters	ArrayList personaggi
-	*/
-	public ArrayList<Character> getCharacters(){
-		
-		ArrayList<Character> characters = new ArrayList<Character>();
-		
-		for(int i=8; i<12; i++) {
-			characters.add( (Character) deck[i] );
-		}
-		return characters;
-	}
-	
-	/**
-	* Metodo per ritornare l'arraylist di edifici
-	*
-	* @return 	buildings	ArrayList edifici
-	*/
-	public ArrayList<Building> getBuildings(){
-		
-		ArrayList<Building> buildings = new ArrayList<Building>();
-		
-		for(int i=4; i<8; i++) {
-			buildings.add( (Building) deck[i] );
-		}
-		return buildings;
-	}
-	
-	/**
-	* Metodo per ritornare l'arraylist di carte impresa
-	*
-	* @return 	territories	ArrayList imprese
-	*/
-	public ArrayList<Venture> getVentures(){
-		
-		ArrayList<Venture> ventures = new ArrayList<Venture>();
-		
-		for(int i=12; i<16; i++){
-			ventures.add( (Venture) deck[i] );
-		}
-		return ventures;
-	}
 	
 	public void notifyChangement(Object o) {
 		setChanged();
