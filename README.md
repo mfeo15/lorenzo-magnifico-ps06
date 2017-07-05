@@ -16,9 +16,9 @@ Gioco de Lorenzo il Magnifico sviluppato in Java, con un approccio client-server
 
 ...
 
-## Deployment
+## Documentazione Java
 
-...
+La documentazione completa in JavaDoc delle classi è disponibile [qui](https://mfeo15.github.io/lorenzo-magnifico-ps06/)
 
 ## Sviluppato con
 
