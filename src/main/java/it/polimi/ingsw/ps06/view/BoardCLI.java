@@ -670,6 +670,19 @@ public class BoardCLI extends Observable implements Board,Runnable {
 		
 	}
 
+	
+	@Override
+	public void sendChatText(String s) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addChatText(int player, String s) {
+		System.out.println("--> Il giocatore "+player+" dice: " +s);
+		
+	}
+
 	@Override
 	public void run() {
 		while(cond){

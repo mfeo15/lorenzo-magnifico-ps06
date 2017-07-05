@@ -89,4 +89,8 @@ public interface Board {
 	void discardLeader(int value);
 	
 	void gameHasEnded(int ID);
+	
+	void sendChatText(String s);
+	
+	void addChatText(int player, String s);
 }

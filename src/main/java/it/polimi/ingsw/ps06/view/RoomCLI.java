@@ -103,14 +103,10 @@ public class RoomCLI extends Observable implements Room {
 		System.out.print(" > ");
 		
 		setChanged();
-		MessageUser userMessage = new MessageUser(username);
+		MessageUser userMessage = new MessageUser(username,password);
 		notifyObservers(userMessage);
 	}
 
-	@Override
-	public boolean checkLogin() {
-		return false;
-	}
 
 	@Override
 	public void addNewObserver(Observer o) {
@@ -153,6 +149,12 @@ public class RoomCLI extends Observable implements Room {
 		setChanged();
 		RoomHasLoaded roomLoaded = new RoomHasLoaded();
 		notifyObservers(roomLoaded);
+	}
+
+	@Override
+	public void userHasLoggedIn(String username, int stat1, int stat2, int stat3, int stat4) {
+		System.out.println("--> L'utente "+username+" ha eseguito il login");
+		
 	}
 
 	

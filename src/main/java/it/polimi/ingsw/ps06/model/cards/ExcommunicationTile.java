@@ -8,6 +8,15 @@ package it.polimi.ingsw.ps06.model.cards;
 * @since   2017-05-10
 */
 public class ExcommunicationTile extends Card {
+	protected int period=1;
+	
+	public void setPeriod(int period){
+		this.period=period;
+	}
+	
+	public int getPeriod(){
+		return period;
+	}
 	
 	private int period;
 	

@@ -59,6 +59,7 @@ public class MessageParser implements MessageVisitor {
 																		  u.getWinCounder(), 
 																		  u.getSecondPlaceCounter(),
 																		  u.getMaxScore());
+
 				c.asyncSend(usrLogged);
 					
 				c.setAssociatedUser(u);

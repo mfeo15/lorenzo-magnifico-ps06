@@ -76,6 +76,7 @@ public class BoardGUI extends Observable implements Board {
 	private int height, escHeight;
 	private JLabel leaderBack;
 	private Font mediumBold;
+	private boolean chatOpen;
 	
 	private JButton scrollTowers = new JButton();
 	private JButton scrollOthers = new JButton();
@@ -118,6 +119,12 @@ public class BoardGUI extends Observable implements Board {
     private JButton[] council = new JButton[1];
 	private JButton[] leaders = new JButton[4];
 	private JButton servants = new JButton();
+	
+	//Componenti per chat
+	private JButton chat = new JButton();
+	private JButton send = new JButton();
+	private JTextField chatBox = new JTextField();
+	private JTextField message = new JTextField();
 	
 	private JTextField servantsCount = new JTextField();
 	//private int[] cardsCodes = new int[16];
@@ -735,6 +742,71 @@ public class BoardGUI extends Observable implements Board {
         Arrays.fill(leaderTable, false);
         Arrays.fill(leaderPlayed, false);
         
+        //Componenti per la chat
+        
+        chat.setLocation((int)(screenSize.getWidth()*90/100),(int)(screenSize.getHeight()*97/100));
+        chat.setSize((int)(screenSize.getWidth()*8/100),(int)(screenSize.getHeight()*3/100));
+        chat.setContentAreaFilled(false);
+        chat.setFocusPainted(false);
+        chat.setDisabledIcon( chat.getIcon() );
+        chat.setForeground(Color.BLUE);
+        chat.setVisible(true);
+        
+        send.setLocation((int)(screenSize.getWidth()*96/100),(int)(screenSize.getHeight()*98/100));
+        send.setSize((int)(screenSize.getWidth()*2/100),(int)(screenSize.getHeight()*2/100));
+        send.setContentAreaFilled(false);
+        send.setFocusPainted(false);
+        send.setDisabledIcon( send.getIcon() );
+        send.setForeground(Color.BLUE);
+        send.setVisible(false);
+        
+        message.setLocation((int)(screenSize.getWidth()*90/100),(int)(screenSize.getHeight()*98/100));
+        message.setSize((int)(screenSize.getWidth()*6/100),(int)(screenSize.getHeight()*2/100));
+        message.setEditable(true);
+        message.setForeground(Color.BLUE);
+        message.setVisible(false);
+        
+        chatBox.setLocation((int)(screenSize.getWidth()*90/100),(int)(screenSize.getHeight()*88/100));
+        chatBox.setSize((int)(screenSize.getWidth()*8/100),(int)(screenSize.getHeight()*10/100));
+        chatBox.setEditable(true);
+        chatBox.setForeground(Color.BLUE);
+        chatBox.setVisible(false);
+
+        
+        chat.addMouseListener(new MouseAdapter()
+       	{        		
+       		public void mousePressed(MouseEvent evt)
+	        {
+       			if(chatOpen=false){
+       				chat.setLocation((int)(screenSize.getWidth()*90/100),(int)(screenSize.getHeight()*85/100));
+       				send.setVisible(true);
+       				message.setVisible(true);
+       				chatBox.setVisible(true);
+       				
+       				chatOpen=true;
+       			}
+       			
+       			else{
+       				chat.setLocation((int)(screenSize.getWidth()*90/100),(int)(screenSize.getHeight()*97/100));
+       				send.setVisible(false);
+       				message.setVisible(false);
+       				chatBox.setVisible(false);
+       				chatOpen=false;
+       			}
+       			
+            }
+    	});
+        
+        send.addMouseListener(new MouseAdapter()
+       	{        		
+       		public void mousePressed(MouseEvent evt)
+	        {
+       			sendChatText(message.getText());
+	        }
+    	});
+	        
+        
+        
         //KeyBinding per tasto ESC
         Action esc = new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
@@ -817,6 +889,10 @@ public class BoardGUI extends Observable implements Board {
 	    
 		setRound();
 	    
+		desktop.add(chat);
+		desktop.add(send);
+		desktop.add(message);
+		desktop.add(chatBox);
 		desktopFrame.add(pass);
 	    desktopFrame.add(timerInfo);
 	    desktopFrame.add(resourcesInfo);
@@ -2014,6 +2090,7 @@ public class BoardGUI extends Observable implements Board {
         if(lead2>=0) leadersLabel[1] = ImageHandler.setImageScreen("resources/leader/leader"+lead2+".jpg",9,(int)(13.23*ratio),width,height);
         if(lead3>=0) leadersLabel[2] = ImageHandler.setImageScreen("resources/leader/leader"+lead3+".jpg",9,(int)(13.23*ratio),width,height);
         if(lead4>=0) leadersLabel[3] = ImageHandler.setImageScreen("resources/leader/leader"+lead4+".jpg",9,(int)(13.23*ratio),width,height);
+        System.out.print(" "+lead1+" "+lead2+" "+lead3+" "+lead4);
         
         leadersLabelFade[0] = new JLabel();
         leadersLabelFade[1] = new JLabel();
@@ -2473,5 +2550,26 @@ public class BoardGUI extends Observable implements Board {
 		desktopFrame.dispose();
 		
 	}
+
+	@Override
+	public void sendChatText(String s) {
+		
+		
+	}
+
+	@Override
+	public void addChatText(int player, String s) {
+		String s1 = "["+player+"]: "+s;
+		chatBox.setText(chatBox.getText()+s1);
+		
+	}
+	
+	
+	public static void main( String[] args ) throws IOException
+    {
+        BoardGUI b = new BoardGUI();
+        b.show();
+
+    }
 	
 }

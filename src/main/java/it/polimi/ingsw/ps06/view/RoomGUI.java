@@ -40,6 +40,7 @@ public class RoomGUI extends Observable implements Room {
 	private int height;
 	private AudioClip mediaPlayer4;
 	private Media hit2;
+
 		
 	@Override
 	public void show() throws IOException
@@ -120,7 +121,7 @@ public class RoomGUI extends Observable implements Room {
         stat1.setOpaque(false);
         stat1.setEditable(false);
         stat1.setBorder(null);
-        stat1.setFont(font);
+        stat1.setFont(font2);
         f.add(stat1);
         
         stat2 = new JTextField();
@@ -129,7 +130,7 @@ public class RoomGUI extends Observable implements Room {
         stat2.setOpaque(false);
         stat2.setEditable(false);
         stat2.setBorder(null);
-        stat2.setFont(font);
+        stat2.setFont(font2);
         f.add(stat2);
         
         stat3 = new JTextField();
@@ -138,7 +139,7 @@ public class RoomGUI extends Observable implements Room {
         stat3.setOpaque(false);
         stat3.setEditable(false);
         stat3.setBorder(null);
-        stat3.setFont(font);
+        stat3.setFont(font2);
         f.add(stat3);
         
         stat4 = new JTextField();
@@ -147,7 +148,7 @@ public class RoomGUI extends Observable implements Room {
         stat4.setOpaque(false);
         stat4.setEditable(false);
         stat4.setBorder(null);
-        stat4.setFont(font);
+        stat4.setFont(font2);
         f.add(stat4);
         
         logged = new JTextField("");
@@ -281,7 +282,6 @@ public class RoomGUI extends Observable implements Room {
             	MediaPlayer mediaPlayer3 = new MediaPlayer(hit2);
         		mediaPlayer3.play();
         		giveCredentials(username.getText(),String.valueOf(password.getPassword()));
-        		if(checkLogin()){logged.setText("Welcome: "+username.getText());}
         		
             }
             
@@ -347,14 +347,8 @@ public class RoomGUI extends Observable implements Room {
 		setChanged();
 		MessageUser userMessage;
 		
-		userMessage = new MessageUser(username, "password");
+		userMessage = new MessageUser(username, password);
 		notifyObservers(userMessage);
-		
-	}
-
-	@Override
-	public boolean checkLogin() {
-		return true;
 		
 	}
 
@@ -412,6 +406,16 @@ public class RoomGUI extends Observable implements Room {
 		RoomHasLoaded roomLoaded = new RoomHasLoaded();
 		notifyObservers(roomLoaded);
 	}
+
+
+	@Override
+	public void userHasLoggedIn(String username, int stat1, int stat2, int stat3, int stat4) {
+		logged.setText("Welcome: "+username);
+		this.stat1.setText(""+stat1);
+		this.stat2.setText(""+stat2);
+		this.stat3.setText(""+stat3);
+		this.stat4.setText(""+stat4);
+	}
 	
-		
+	
 }
