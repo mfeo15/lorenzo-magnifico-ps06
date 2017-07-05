@@ -17,13 +17,12 @@ import it.polimi.ingsw.ps06.model.cards.ExcommunicationTile;
 import it.polimi.ingsw.ps06.networking.messages.MessageBoardSetupExcomCards;
 
 /**
-* Classe per la gestione del tabellone
-*
-* @author  ps06
-* @version 1.1
-* @since   2017-05-10
-*/
-
+ * Classe per la gestione del tabellone
+ *
+ * @author  ps06
+ * @version 1.1
+ * @since   2017-05-10
+ */
 public class Board extends Observable{
 	
 	private Towers towersZone;
@@ -39,12 +38,11 @@ public class Board extends Observable{
 	
 	
 	/**
-	* Costruttore della Board. Si occupa dell'inizializzazione delle zone 
-	* e la definizione delle carte scomunica per la partita in corso
-	*
-	* @param 	numberPlayers	Numero di giocatori della partita
-	* @return 	Nothing
-	*/
+	 * Costruttore della Board. Si occupa dell'inizializzazione delle zone 
+	 * e la definizione delle carte scomunica per la partita in corso
+	 *
+	 * @param 	numberPlayers	Numero di giocatori della partita
+	 */
 	public Board(int numberPlayers) {
 		towersZone = new Towers();
 		marketZone = new Market(numberPlayers);
@@ -53,10 +51,8 @@ public class Board extends Observable{
 	}
 	
 	/**
-	* Metodo per ritornare l'ordine dei familiari, per stabilire l'ordine di gioco
-	*
-	* @return 		order	ordine dei familiari
-	*/ 
+	 * Metodo per l'estrazione random delle tre carte scomuniche
+	 */ 
 	private void drawExcommunicationTiles() 
 	{
 		ArrayList<ExcommunicationTile> tiles = (new ParserExcommunicationTiles("resources/XML/ExcommunicationCards.xml")).getTiles();
@@ -69,10 +65,17 @@ public class Board extends Observable{
 																				 excommunicationTilePeriodTwo.getCode(), 
 																				 excommunicationTilePeriodThree.getCode()
 																				);
-		System.out.println("SCOMUNICHE: " + excommunicationTilePeriodOne.getCode() + " " + excommunicationTilePeriodTwo.getCode() + " " + excommunicationTilePeriodThree.getCode());
 		notifyChangement(excomCards);
 	}
 	
+	
+	/**
+	 * Getter per le carte scomuniche
+	 * 
+	 * @param	period	periodo d'interessa della carta scomunica
+	 * 
+	 * @return			carta scomunica relativa al periodo richiesto
+	 */
 	public ExcommunicationTile getTiles(int period) {
 		
 		if (period == 1) return excommunicationTilePeriodOne;
@@ -82,26 +85,33 @@ public class Board extends Observable{
 		return null;
 	}
 	
+	/**
+	 * Metodo per ottenere la ricompensa in termini di punti vittoria a seguito del sostegno al Papa
+	 * 
+	 * @param	position	indice della posizione sul tracciato fede
+	 * 
+	 * @return				quantità di punti associati
+	 */
 	public int getFaithTrackReward(int position) {
 		
 		return (new ParserBonusBoard("resources/XML/BonusTabellone.xml")).getFaithPoints().get(position);
 	}
 	
 	/**
-	* Metodo per ritornare l'ordine dei familiari, per stabilire l'ordine di gioco
-	*
-	* @return 		order	ordine dei familiari
-	*/ 
+	 * Metodo per ritornare l'ordine dei familiari, per stabilire l'ordine di gioco
+	 *
+	 * @return	ordine dei familiari
+	 */ 
 	public ArrayList<Player> getOrder() {
 		return councilPalaceZone.checkOrder();
 	}
 	
 	/**
-	* Metodo per impostare il gioco per un nuovo round
-	*
-	* @param 	giocatori	Numero di giocatori della partita
-	* @return 				Nothing
-	*/ 
+	 * Metodo per impostare il gioco per un nuovo round
+	 *
+	 * @param	period		periodo del round da definire
+	 * @param	round		round da definire
+	 */ 
 	public void setupRound(int period, int round) {
 		if (round == 1 && period == 1)
 			drawExcommunicationTiles();
@@ -111,11 +121,8 @@ public class Board extends Observable{
 	
 	
 	/**
-	* Metodo per ripulire il tabellone alla fine di una fase
-	*
-	* @param 	Unused
-	* @return 	Nothing
-	*/
+	 * Metodo per ripulire il tabellone
+	 */
 	public void clean() {
 		
 		marketZone.cleanMarket();
@@ -124,6 +131,17 @@ public class Board extends Observable{
 		councilPalaceZone.cleanPalace();
 	}
 	
+	
+	/**
+	 * Metodo invocato per eseguire un piazzamento di un famigliare all'interno del consiglio
+	 * 
+	 * @param 	member			Family Member che vuole eseguire il piazzamento
+	 * @param 	chosenAction	tipo di azione eseguita (per verifica di correttezza)
+	 * @param 	servants		numero di servitori impiegati per completare l'azione
+	 * @param 	privilege		tipo di privilegio richiesto
+	 * 
+	 * @see						it.polimi.ingsw.ps06.model.Types
+	 */
 	public void placeMember(FamilyMember member, Action chosenAction, int servants, CouncilPrivilege privilege) {
 		if (chosenAction != Action.COUNCIL_SPACE)
 			return;
@@ -132,6 +150,15 @@ public class Board extends Observable{
 		councilPalaceZone.placeMember(member, chosenAction, servants);
 	}
 	
+	/**
+	 * Metodo invocato per eseguire un piazzamento di un famigliare
+	 * 
+	 * @param 	member			Family Member che vuole eseguire il piazzamento
+	 * @param 	chosenAction	tipo di azione eseguita
+	 * @param 	servants		numero di servitori impiegati per completare l'azione
+	 * 
+	 * @see						it.polimi.ingsw.ps06.model.Types
+	 */
 	public void placeMember(FamilyMember member, Action chosenAction, int servants) {
 		
 		switch (chosenAction) {

@@ -85,7 +85,7 @@ public class ParserUsers extends XMLParser {
 				if ( current_attribute.getNodeName().equals("second_place_counter") ) 
 					user.setSecondPlaceCounter( Integer.parseInt( current_attribute.getFirstChild().getNodeValue() ));
 				
-				if ( current_attribute.getNodeName().equals("max_score2") ) 
+				if ( current_attribute.getNodeName().equals("max_score") ) 
 					user.setMaxScore( Integer.parseInt( current_attribute.getFirstChild().getNodeValue() ));
 			}
 		}

@@ -386,7 +386,7 @@ public class MessageParser implements MessageVisitor {
 
 	@Override
 	public void visit( MessageTelegramHasBeenSent telegramSent) {
-		// TODO Auto-generated method stub
-		
+		Board b = ((Board) supporter);
+		b.addChatText( telegramSent.getPlayer() , telegramSent.getTelegram());
 	}
 }

@@ -636,10 +636,6 @@ public class BoardGUI extends Observable implements Board {
         for(int j=0; j<playersInfo.length;j++){ desktop.add(playersInfo[j]); }
         for(int j=0; j<excommunications.length;j++){ others.add(excommunications[j]); }
         for(int j=0; j<privileges.length;j++){ others.add(privileges[j]); }
-        for(int j=0; j<leaders.length;j++){ 
-        	desktop.add(leaders[j]); 
-        	leaders[j].addMouseListener(new PopClickListener(j));
-        }
         
         for(int j=0; j<privileges.length;j++){
         	privileges[j].setBorderPainted(false);
@@ -896,6 +892,11 @@ public class BoardGUI extends Observable implements Board {
 		desktopFrame.add(send);
 		desktopFrame.add(message);
 		desktopFrame.add(chatBox);
+		
+		for(int j=0; j<leaders.length;j++){ 
+        	desktop.add(leaders[j]); 
+        	leaders[j].addMouseListener(new PopClickListener(j));
+        }
         
         desktop.add(servants);
         desktop.add(servantsCount);

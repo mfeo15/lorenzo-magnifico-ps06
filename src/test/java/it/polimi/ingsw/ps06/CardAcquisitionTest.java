@@ -53,7 +53,7 @@ public class CardAcquisitionTest {
 		c.setCost(new Resources(MaterialsKind.COIN, charachter_coin_cost) ); 
 		
 		v = new Venture();
-		v.setRequirement(new Resources(MaterialsKind.COIN, venture_coin_cost) );
+		v.setCost(new Resources(MaterialsKind.COIN, venture_coin_cost) );
 	}
 
 	@Test

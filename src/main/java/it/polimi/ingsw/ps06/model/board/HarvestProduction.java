@@ -6,21 +6,18 @@ import java.util.Observer;
 
 import it.polimi.ingsw.ps06.model.FamilyMember;
 import it.polimi.ingsw.ps06.model.Gathering;
-import it.polimi.ingsw.ps06.model.Types;
 import it.polimi.ingsw.ps06.model.Types.Action;
-import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
 import it.polimi.ingsw.ps06.model.effects.EffectsBonusMalus;
 import it.polimi.ingsw.ps06.networking.messages.MessageBoardMemberHasBeenPlaced;
 import it.polimi.ingsw.ps06.networking.messages.MessageModel2ViewNotification;
 
 /**
-* Classe per la gestione degli spazi produzione e raccolto
-*
-* @author  ps06
-* @version 1.3
-* @since   2017-05-10
-*/
-
+ * Classe per la gestione degli spazi produzione e raccolto
+ *
+ * @author  ps06
+ * @version 1.3
+ * @since   2017-05-10
+ */
 public class HarvestProduction extends Observable implements PlaceSpace {
 	private ArrayList<FamilyMember> harvestSpaces1;;
 	private ArrayList<FamilyMember> harvestSpaces2;
@@ -32,12 +29,12 @@ public class HarvestProduction extends Observable implements PlaceSpace {
 	private int hs2index=0, ps2index=0;
 	
 	/**
-	* Metodo per il piazzamento di un familiare su di una zona Produzione o Raccolto, include controllo di posizionamento
-	*
-	* @param 	member			Familiare che si vuole piazzare
-	* @param 	chosenAction 	Codice dell'azione da eseguire
-	* @return 					Nothing
-	*/
+	 * Metodo per il piazzamento di un familiare su di una zona Produzione o Raccolto, include controllo di posizionamento
+	 *
+	 * @param 	member			Familiare che si vuole piazzare
+	 * @param 	chosenAction 	Codice dell'azione da eseguire
+	 * @return 					Nothing
+	 */
 	@Override
 	public void placeMember(FamilyMember member, Action chosenAction, int servants) throws IllegalStateException {
 		boolean multi = false;

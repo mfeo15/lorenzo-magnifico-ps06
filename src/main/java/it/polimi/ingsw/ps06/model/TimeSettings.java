@@ -10,54 +10,35 @@ package it.polimi.ingsw.ps06.model;
 **/
 
 public class TimeSettings {
+	
 	private int timeoutWaitingConnections;
 	private int timeoutAction;
 	
 	/**
-	* Costruttore della classe
-	*
-	*@return nothing 
-	*
-	**/
-	
-	public TimeSettings() {
-		
+	 * Costruttore della classe
+	 *
+	 * @param	timeoutWaitingConnections	valore del timeout del server dopo il raggiungimento numero minimo giocatori, in secondi
+	 * @param	timeoutAction				valore del timeout per ogni singola azione del giocatore, in secondi
+	 */	
+	public TimeSettings(int timeoutWaitingConnections, int timeoutAction) {
+		this.timeoutWaitingConnections = timeoutWaitingConnections;
+		this.timeoutAction = timeoutAction;
 	}
 	
 	/**
-	* Costruttore della classe
-	*
-	*@param x	valore del timeout del server dopo il raggiungimento numero minimo giocatori, in secondi
-	*@param y	numero minimo di giocatori
-	*@param z	valore del tempo limite per effettuare un'azione, in secondi
-	*
-	*@return nothing 
-	*
-	**/
-	
-	public TimeSettings(int x, int y) {
-		this.timeoutWaitingConnections = x;
-		this.timeoutAction = y;
-	}
-	
-	/**
-	* Getter del timeout del server
-	*
-	*@return timeoutServer	time out del server dopo raggiungimento numero giocatori
-	* 
-	**/
-	
+	 * Getter del timeout del server
+	 *
+	 * @return	timeout del server dopo raggiungimento numero giocatori
+	 */
 	public int getTimeoutWaitingConnections(){
 		return timeoutWaitingConnections;
 	}
 	
 	/**
-	* Getter del timeout azione
-	*
-	*@return timeoutAction	valore del tempo limite per effettuare un'azione, in secondi
-	* 
-	**/
-	
+	 * Getter del timeout di una azione
+	 *
+	 * @return	timeout per ogni singola azione del giocatore, in secondi
+	 */
 	public int getTimeoutAction(){
 		return timeoutAction;
 	}

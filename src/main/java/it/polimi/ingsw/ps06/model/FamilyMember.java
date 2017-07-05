@@ -35,7 +35,7 @@ public class FamilyMember {
 	 * @param 	rappresentativeDice 	colore del dado associato al member in creazione. I valori accettabili provengono
 	 * 									dal ColorPalette della classe Types
 	 * 
-	 * @see		it.polimi.ingsw..ps06.model.Types
+	 * @see		it.polimi.ingsw.ps06.model.Types
 	 */
 	public FamilyMember(Player p, ColorPalette rappresentativeDice)
 	{

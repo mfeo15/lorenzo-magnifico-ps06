@@ -9,7 +9,7 @@ import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
 import it.polimi.ingsw.ps06.model.Types.PointsKind;
 
 /**
-* Classe per la modelizzazione delle risorse (materiale & punteggi)
+* Classe per la modelizzazione delle risorse (materiale e punteggi)
 *
 * @author  ps06
 * @version 1.1
