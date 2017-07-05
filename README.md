@@ -8,9 +8,11 @@ Gioco de Lorenzo il Magnifico sviluppato in Java, con un approccio client-server
 
 ...
 
-## Installazione
+## Avvio
 
-...
+```shell
+> java -jar Lorenzo.jar
+```
 
 ## Testing
 
