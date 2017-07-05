@@ -129,7 +129,7 @@
 			<character>2</character>
 		</cost>	 
 		<effect type="permanente">
-			<kind>bmMember</kind>
+			<kind>bmMemberFixed</kind>
 			<member>colorful</member>
 			<set>5</set>
 		</effect>	  
@@ -155,7 +155,7 @@
 	   		<territory>5</territory>
 		</cost>	 
 		<effect type="turno">
-			<kind>bmMember</kind>
+			<kind>bmMemberFixed</kind>
 			<member>one</member>
 			<set>6</set>
 		</effect>	  

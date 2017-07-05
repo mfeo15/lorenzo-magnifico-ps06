@@ -31,10 +31,10 @@ public class ParserLeaders extends XMLParser {
 	private ArrayList<Leader> leaders;
 
 	/**
-	* Costruttore della classe
-	*
-	* @param	source		stringa corrispondente al percorso del file 
-	*/
+	 * Costruttore della classe
+	 *
+	 * @param	source		stringa corrispondente al percorso del file 
+	 */
 	public ParserLeaders(String source) {
 		super(source);
 		leaders = new ArrayList<Leader>();
@@ -64,11 +64,11 @@ public class ParserLeaders extends XMLParser {
 	}
 
 	/**
-	* Metodo per impostare una carta con tutti gli attributi presenti nel suo nodo
-	*
-	* @param	attributes		insieme di nodi rappresentanti i vari attributi della carta
-	* @param	card			carta della quale si devono impostare gli attributi
-	*/
+	 * Metodo per impostare una carta con tutti gli attributi presenti nel suo nodo
+	 *
+	 * @param	attributes		insieme di nodi rappresentanti i vari attributi della carta
+	 * @param	card			carta della quale si devono impostare gli attributi
+	 */
 	private void setAttributes(NodeList attributes, Leader card) {
 
 		for(int j=0; j < attributes.getLength(); j++) 
@@ -86,7 +86,7 @@ public class ParserLeaders extends XMLParser {
 				if ( current_attribute.getNodeName().equals("cost") ) 
 					card.setRequirement( parseLeaderRequirementNode(current_attribute) );
 
-				if ( current_attribute.getNodeName().equals("permanent_effect") ) 
+				if ( current_attribute.getNodeName().equals("effect") ) 
 				{
 					card.setOncePerRoundEffect( ((Element) current_attribute).getAttribute("type").equals("turno") );
 					card.setPermEffect( parseEffectNode(current_attribute) );
@@ -161,64 +161,60 @@ public class ParserLeaders extends XMLParser {
 	}
 
 	/**
-	* Metodo per generare l'insieme di effetti associati ad un Nodo radice
-	*
-	* @param	effetto		nodo radice i cui figli sono una definizione di vari effetti
-	* 
-	* @return 				insieme di effetti costruiti dal file XML
-	*/
+	 * Metodo per generare l'insieme di effetti associati ad un Nodo radice
+	 *
+	 * @param	effetto		nodo radice i cui figli sono una definizione di vari effetti
+	 * 
+	 * @return 				insieme di effetti costruiti dal file XML
+	 */
 	public ArrayList<Effect> parseEffectNode(Node effetto) {
 
 		ArrayList<Effect> effects_collection = new ArrayList<Effect>();
-		NodeList effects = ((Element) effetto).getElementsByTagName("effect");
 
-		for(int k = 0; k < effects.getLength(); k++) {
-			Node current_effect = effects.item(k);
+		Effect e = null;
+		Node kind = ((Element) effetto).getElementsByTagName("kind").item(0);
 
-			if (current_effect.getNodeType() == Node.ELEMENT_NODE) 
-			{	
-				Effect e = null;
-				Node kind = ((Element) current_effect).getElementsByTagName("kind").item(0);
+		switch ( kind.getTextContent() ) {
+		case "resources" :
+			Node bonus_res_effect = ((Element) effetto).getElementsByTagName("bonus").item(0);
+			e = new EffectsResources( parseResourceNode(bonus_res_effect) );
+			break;
 
-				switch ( kind.getTextContent() ) {
-				case "resources" :
-					Node bonus_res_effect = ((Element) effetto).getElementsByTagName("bonus").item(0);
-					e = new EffectsResources( parseResourceNode(bonus_res_effect) );
-					break;
+		case "bmMember" :
+			String member = ((Element) effetto).getElementsByTagName("member").item(0).getTextContent();
+			int value =  Integer.parseInt( ((Element) effetto).getElementsByTagName("value").item(0).getTextContent() );
+			e = new EffectsBonusMalusMember( value, parseMember(member) );
+			break;
+			
+		case "bmMemberFixed" :
 
-				case "bmMember" :
-					String member = ((Element) current_effect).getElementsByTagName("member").item(0).getTextContent();
-					int value =  Integer.parseInt( ((Element) current_effect).getElementsByTagName("value").item(0).getTextContent() );
-					e = new EffectsBonusMalusMember( value, parseMember(member) );
-					break;
+			break;
 
-				case "noMilitary" :
-					e = new EffectsBonusMalusNoMilitaryRequirement();
-					break;
+		case "noMilitary" :
+			e = new EffectsBonusMalusNoMilitaryRequirement();
+			break;
 
-				case "noExtraMoney" :
+		case "noExtraMoney" :
 
-					break;
+			break;
 
-				case "multi" :
+		case "multi" :
 
-					break;
+			break;
 
-				case "copia" :
+		case "copia" :
 
-					break;
+			break;
 
-				case "double" :
-					e = new EffectsBonusMalusDoubleMaterialsFromDevCards();
-					break;
+		case "double" :
+			e = new EffectsBonusMalusDoubleMaterialsFromDevCards();
+			break;
 
 
-				default :
-				}
-
-				effects_collection.add(e);
-			}
+		default :
 		}
+
+		effects_collection.add(e);
 		return effects_collection;
 	}
 
@@ -259,10 +255,10 @@ public class ParserLeaders extends XMLParser {
 	}
 
 	/**
-	* Getter della collezione di carte costruite dal file XML
-	* 
-	* @return	insieme di carte costruite   
-	*/
+	 * Getter della collezione di carte costruite dal file XML
+	 * 
+	 * @return	insieme di carte costruite   
+	 */
 	public ArrayList<Leader> getCards(){
 		return leaders;
 	}

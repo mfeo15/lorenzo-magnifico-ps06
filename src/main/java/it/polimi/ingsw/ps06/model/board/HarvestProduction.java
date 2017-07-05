@@ -94,7 +94,7 @@ public class HarvestProduction extends Observable implements PlaceSpace {
 				// Iterazione arrayList di raccolto
 				condition = true;
 				for(FamilyMember family : allHarvest){
-					if(member.getFakePlayer() == family.getPlayer()){
+					if ( (family != null) && (member.getFakePlayer() == family.getFakePlayer()) ) {
 						condition=false;
 					}
 				}
@@ -103,12 +103,14 @@ public class HarvestProduction extends Observable implements PlaceSpace {
 				if(member.getFakePlayer()==null) condition=true;
 				
 				// Aggiunta e produzione nel caso la regola del colore sia rispettata
-				if(condition){
+				if(condition)
+				{
 					harvestSpaces2.add(hs2index, member); 
 					hs2index++;
 					startGathering(chosenAction, member, servants);
 					allHarvest.clear();
-				}
+					
+				} else handleBadPlacing(2, member);
 				
 			} else handleBadPlacing(-1, member);
 		}
@@ -174,7 +176,7 @@ public class HarvestProduction extends Observable implements PlaceSpace {
 				// Iterazione arrayList di raccolto
 				condition = true;
 				for(FamilyMember family : allProduction){
-					if(member.getFakePlayer() == family.getFakePlayer()){
+					if ( (family != null) && (member.getFakePlayer() == family.getFakePlayer()) ) {
 						condition=false;
 					}
 				}
@@ -183,12 +185,14 @@ public class HarvestProduction extends Observable implements PlaceSpace {
 				if(member.getFakePlayer()==null) condition=true;
 				
 				// Aggiunta e produzione nel caso la regola del colore sia rispettata
-				if(condition){
+				if(condition) 
+				{
 					productionSpaces2.add(ps2index, member); 
 					ps2index++;
 					startGathering(chosenAction, member, servants);
 					allProduction.clear();
-				}
+					
+				} else handleBadPlacing(2, member);
 				
 			} else handleBadPlacing(-1, member);
 		}
@@ -237,6 +241,8 @@ public class HarvestProduction extends Observable implements PlaceSpace {
 		
 		switch(code) {
 		case 1: notification += " di valore non sufficiente per l'azione";
+			break;
+		case 2: notification += ", ma non rispetta la regola del colore";
 			break;
 		default: notification = "UNKNOWN ERROR ON HARVEST&PRODUCTION";
 		}

@@ -237,6 +237,9 @@ public class Player extends Observable implements Observer {
 			boolean result = leader.playLeader();
 			if (result == true) 
 			{
+				if (! leader.isOncePerRoundEffect() )
+					leader.activateEffect(this);
+				
 				MessageLeaderHasBeenPlayed leaderPlayed = new MessageLeaderHasBeenPlayed( n );
 				leaderPlayed.setRecipient(this.getID());
 				notifyChangement(leaderPlayed);
@@ -260,6 +263,8 @@ public class Player extends Observable implements Observer {
 		
 		if ( result == true) 
 		{
+			leader.activateEffect(this);		
+			
 			MessageLeaderHasBeenActivated leaderActivated = new MessageLeaderHasBeenActivated( n );
 			leaderActivated.setRecipient(this.getID());
 			notifyChangement(leaderActivated);

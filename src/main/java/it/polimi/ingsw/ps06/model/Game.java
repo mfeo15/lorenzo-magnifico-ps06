@@ -286,6 +286,8 @@ public class Game extends Observable implements Observer {
 		reorderPlayers();
 
 		rollDices();
+		
+		players.forEach( p -> p.getLeaders().forEach( l -> l.deactivateLeader() ));
 
 		board.setupRound(period, round);
 	}
@@ -319,11 +321,15 @@ public class Game extends Observable implements Observer {
 		for (Player p: players) {
 			int player_faith = p.getPersonalBoard().getAmount(PointsKind.FAITH_POINTS);
 
-			if (player_faith < VaticanRequirementOnPeriod(period)) {			
+			if (player_faith < VaticanRequirementOnPeriod(period)) 
+			{
+				//Giocatore scomunicato
 				board.getTiles(period).activateEffect(p);
+				excommunicatedPlayers.add( p.getID() );
+			} else {
+				//Giocatore NON scomunicato
 				p.getPersonalBoard().getInventory().increaseResourceValue(PointsKind.VICTORY_POINTS, board.getFaithTrackReward(player_faith));
 				p.getPersonalBoard().getInventory().setResourceValue(PointsKind.FAITH_POINTS, 0);
-				excommunicatedPlayers.add( p.getID() );
 			}
 		}
 
