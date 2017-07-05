@@ -19,17 +19,26 @@ public class Dice {
 	/**
 	* Costruttore della classe
 	* @param 	color 		Colore associato al dado
-	* @return 	Nothing.
 	*/
 	public Dice(ColorPalette color)
 	{
 		this.color = color;
 	}
 	
+	/**
+	 * Getter per il valore attuale del dado
+	 * 
+	 * @return	il valore attuale del dado
+	 * 
+	 */
 	public int getValue() {
 		return value;
 	}
 	
+	/**
+	 * Metodo invocato per generare un nuovo valore random
+	 * 
+	 */
 	public void roll() {
 		value = 1 + (new Random()).nextInt(6);
 	}

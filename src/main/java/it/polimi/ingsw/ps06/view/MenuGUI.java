@@ -2,25 +2,19 @@ package it.polimi.ingsw.ps06.view;
 
 
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
 
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import it.polimi.ingsw.ps06.model.events.EventClose;
-import it.polimi.ingsw.ps06.model.events.StoryBoard2Board;
 import it.polimi.ingsw.ps06.model.events.StoryBoard2Room;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.media.Media;

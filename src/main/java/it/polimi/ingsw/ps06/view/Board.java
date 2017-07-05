@@ -78,5 +78,19 @@ public interface Board {
 	
 	void hasLoadedPersonalView();
 	
+	void setBonusTilePersonalView(int code) throws IOException;
+	
 	void setRound();
+	
+	void activateLeader(int value);
+	
+	void playLeader(int value);
+	
+	void discardLeader(int value);
+	
+	void gameHasEnded(int ID);
+	
+	void sendChatText(String s);
+	
+	void addChatText(int player, String s);
 }

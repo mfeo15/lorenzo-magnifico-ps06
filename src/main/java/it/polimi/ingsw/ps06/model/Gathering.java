@@ -2,8 +2,8 @@ package it.polimi.ingsw.ps06.model;
 
 import it.polimi.ingsw.ps06.model.Types.Action;
 import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
-import it.polimi.ingsw.ps06.model.cards.Building;
-import it.polimi.ingsw.ps06.model.cards.Territory;
+import it.polimi.ingsw.ps06.model.cards.developement.Building;
+import it.polimi.ingsw.ps06.model.cards.developement.Territory;
 
 /**
 * Classe per la gestione delle azioni di produzione/raccolto
@@ -21,10 +21,9 @@ public class Gathering extends Actions {
 	
 	/**
 	* Costruttore della classe
-	*
-	* @param 	value			Valore dell'azione Produzione/raccolto
-	* @param 	chosenAction	Codice dell'azione da eseguire	
-	* @return 					Nothing
+	* @param 	chosenAction	tipo di azione da eseguire
+	* @param	member			Family Member utilizzato per l'azione
+	* @param	servants		numero di servitori impiegato per completare l'azione	
 	*/
 	public Gathering (Action chosenAction, FamilyMember member, int servants) {
 		super(servants);
@@ -35,9 +34,7 @@ public class Gathering extends Actions {
 	
 	/**
 	* Metodo per controllare se si tratta di Produzione o Raccolto
-	*
-	* @param 	p		Giocatore a cui attivare l'azione
-	* @return 			Nothing
+	* @return	true	se l'azione eseguita è di produzione
 	*/
 	private boolean isProduction() {
 		
@@ -50,10 +47,8 @@ public class Gathering extends Actions {
 	/**
 	* Metodo per controllare eventuali Malus/Bonus
 	*
-	* @param 	p		Giocatore a cui attivare l'azione
-	* @return 			Nothing
-	* 
-	* @throws InterruptedException 
+	* @param 	p	giocatore da verificare
+	* @return 		il bonus/malus in possesso dal giocatore, zero nel caso non ci siano
 	*/
 	private int getGatheringBonus(Player p) {
 		if (! member.getPlayer().getBonusMalusCollection().contains(chosenAction.getActionCategory())) 
@@ -63,10 +58,7 @@ public class Gathering extends Actions {
 	}
 	
 	/**
-	* Metodo di attivazione dell'azione
-	*
-	* @param 	p		Giocatore a cui attivare l'azione
-	* @return 			Nothing
+	* Metodo eseguire l'azione di raccolto o produzione
 	*/
 	@Override
 	public void activate() {
@@ -74,17 +66,18 @@ public class Gathering extends Actions {
 		if (servants > 0)
 			member.getPlayer().getPersonalBoard().reduceResource(MaterialsKind.SERVANT, servants);
 		
-		if( isProduction() == true)
+		if( isProduction() == true) {
 		
 			for (Building b : member.getPlayer().getPersonalBoard().getBuildings())
 				if ( b.check_dice( member.getValue() + servants + getGatheringBonus(member.getFakePlayer())) )
 						b.activateEffect(member.getPlayer());
-		
+		}
 		else
-			
+		{	
 			for (Territory t : member.getPlayer().getPersonalBoard().getTerritories())
 				if ( t.check_dice( member.getValue() + servants + getGatheringBonus(member.getFakePlayer())) )
 					t.activateEffect(member.getPlayer());
+		}
 	}
 
 }

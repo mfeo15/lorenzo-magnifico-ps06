@@ -9,22 +9,22 @@ public class LeaderDiscarded implements LeaderState {
 	}
 	
 	@Override
-	public String playLeader() {
-		return "La carta Leader " + leader.getTitle() + "è già stata scartata e non può essere rigiocata";
+	public boolean playLeader() {
+		return false;
 	}
 
 	@Override
-	public String activateLeader() {
-		return "La carta Leader " + leader.getTitle() + "è già stata scartata e non può essere rigiocata";
+	public boolean activateLeader() {
+		return false;
 	}
 
 	@Override
-	public String deactivateLeader() {
-		return "La carta Leader " + leader.getTitle() + "è già stata scartata e non può essere capovolta";
+	public boolean deactivateLeader() {
+		return false;
 	}
 
 	@Override
-	public String discardLeader() {
-		return "La carta Leader " + leader.getTitle() + "è già stata scartata";
+	public boolean discardLeader() {
+		return false;
 	}
 }

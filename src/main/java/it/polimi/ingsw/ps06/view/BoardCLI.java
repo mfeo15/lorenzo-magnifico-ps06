@@ -12,7 +12,7 @@ import it.polimi.ingsw.ps06.controller.BoardController;
 import it.polimi.ingsw.ps06.controller.MenuController;
 import it.polimi.ingsw.ps06.model.Types.Action;
 import it.polimi.ingsw.ps06.model.Types.ColorPalette;
-import it.polimi.ingsw.ps06.model.cards.DevelopementCard;
+import it.polimi.ingsw.ps06.model.cards.developement.DevelopementCard;
 import it.polimi.ingsw.ps06.model.events.BoardHasLoaded;
 import it.polimi.ingsw.ps06.model.events.EventClose;
 import it.polimi.ingsw.ps06.model.events.EventLeaderActivated;
@@ -20,13 +20,15 @@ import it.polimi.ingsw.ps06.model.events.EventLeaderDiscarded;
 import it.polimi.ingsw.ps06.model.events.EventLeaderPlayed;
 import it.polimi.ingsw.ps06.model.events.EventMemberPlaced;
 import it.polimi.ingsw.ps06.networking.messages.MessageObtainPersonalBoardStatus;
+import it.polimi.ingsw.ps06.networking.messages.MessagePlayerPassed;
 
-public class BoardCLI extends Observable implements Board {
-	
-	//private Scanner input;
-	
+public class BoardCLI extends Observable implements Board,Runnable {
+
 	private String[] player = new String[5];
 	private int[] cardsCodes = new int[16];
+	
+	private boolean allowed;
+	private int playerID;
 	
     private String playerColor="G";
     private int blackValue;
@@ -48,20 +50,15 @@ public class BoardCLI extends Observable implements Board {
     private BufferedReader input;
     
     private boolean cond = true;
-	
-	public BoardCLI(BufferedReader input) {
-		
-		this.input = input;
-	}
-	
-	
+
+    public BoardCLI(BufferedReader input){
+    	this.input=input;
+    }
+
 	public void read () throws IOException {
 		
 		String s = input.readLine();
 		
-		if (s == null)
-			return;
-
 		if(("spots").equals(s)) giveSpots();
 		if(("actions").equals(s)) giveActions();
 		if(("?").equals(s)) giveInfo();
@@ -74,7 +71,8 @@ public class BoardCLI extends Observable implements Board {
 		if(("info3").equals(s)) printPoints(3);
 		if(("info4").equals(s)) printPoints(4);
 		if(("info5").equals(s)) printPoints(5);
-
+		
+		
 		if(("attiva1").equals(s)) notifyLeaderActivation(1);
 		if(("attiva2").equals(s)) notifyLeaderActivation(2);
 		if(("attiva3").equals(s)) notifyLeaderActivation(3);
@@ -105,11 +103,11 @@ public class BoardCLI extends Observable implements Board {
 					notifyAction(Action.valueOf(s1.toUpperCase()),index,servants);
 				}
 		}
+		
 	}
 	
-    @Override
-	public void show() throws IOException{
-		
+	@Override
+	public void show() throws IOException {
 		printTowers();
 		System.out.println();
 		System.out.println(" --- Firenze, 1500. Benvenuto in questa magnifica città. --- ");
@@ -119,14 +117,11 @@ public class BoardCLI extends Observable implements Board {
 		System.out.print(" > ");
 		
 		hasLoaded();
-		
-		while (cond)
-			try {
-				read();
-			} catch (NumberFormatException | IOException e) {
-				e.printStackTrace();
-			}
+
+		Thread t = new Thread(this);
+        t.start();
 	}
+
 	
 	public void giveTowerStatus() {
 		
@@ -134,7 +129,7 @@ public class BoardCLI extends Observable implements Board {
 		System.out.println("");
 		System.out.println("	 Territori		Personaggi	     Edifici		Sviluppo");
 		System.out.println("");
-		System.out.println("	     "+cardsCodes[4]+"			    "+cardsCodes[7]+"			"+cardsCodes[11]+"		    "+cardsCodes[15]);
+		System.out.println("	     "+cardsCodes[3]+"			    "+cardsCodes[7]+"			"+cardsCodes[11]+"		    "+cardsCodes[15]);
 		System.out.println("");
 		System.out.println("	     "+cardsCodes[2]+"			    "+cardsCodes[6]+"			"+cardsCodes[10]+"		    "+cardsCodes[14]);
 		System.out.println("");
@@ -143,7 +138,8 @@ public class BoardCLI extends Observable implements Board {
 		System.out.println("	     "+cardsCodes[0]+"			    "+cardsCodes[4]+"			"+cardsCodes[8]+"		    "+cardsCodes[12]);
 		System.out.println("");
 		System.out.println(" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-		
+		System.out.println();
+		System.out.print(" > ");
 		
 	}
 	
@@ -165,6 +161,7 @@ public class BoardCLI extends Observable implements Board {
 	}
 
 	public void giveInfo() {
+
 		System.out.println("----- LISTA COMANDI -----");
 		System.out.println();
 		System.out.println("Per eseguire un azione digita il comando \"action\"");
@@ -190,8 +187,8 @@ public class BoardCLI extends Observable implements Board {
 		System.out.println("----- LISTA AZIONI EXTRA -----");
 		System.out.println();
 		System.out.println("--LEADER-- Scarta1 ~ Scarta4 (Leader) | Attiva1 ~ Attiva4 (Leader) | Piazza1 ~ Piazza4 ");
-		System.out.println("--ALTRO-- Info1 ~ Info5 (Per controllare carte e risorse di un avversario)");
-		System.out.println("Se non conosci il tuo codice giocatore puoi usare semplicemente il comando Info !");
+		System.out.println("--ALTRO--  Passa (Salta il turno) | info1 ~ info5 (Per controllare carte e risorse di un avversario)");
+		System.out.println("Se non conosci il tuo codice giocatore puoi usare semplicemente il comando info !");
 		System.out.println();
 		System.out.print(" > ");
 	}
@@ -275,8 +272,18 @@ public class BoardCLI extends Observable implements Board {
 	}
 	
 	public void printPoints(int index) {
-		if (index==0) System.out.println("--> Coin: "+coinV+" Wood: "+woodV+" Stone: "+stoneV+" Servant:"+servantV+" Victory:"+victoryV+" Military:"+militaryV+" Faith:"+faithV);
-		startGame(index);
+		if (index==0) 
+		{
+			System.out.println();
+			System.out.println(" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
+			System.out.println("|| Coin: "+coinV+" Wood: "+woodV+" Stone: "+stoneV+" Servant:"+servantV+" || Victory:"+victoryV+" Military:"+militaryV+" Faith:"+faithV + " ||");
+			System.out.println();
+			System.out.print(" > ");
+		}
+		else 
+		{
+			startGame(index);
+		}
 	}
 
 	@Override
@@ -301,7 +308,7 @@ public class BoardCLI extends Observable implements Board {
 	public void setPeriodRound(int period, int round) {
 		this.periodNumber=period;
 		this.roundNumber=round;
-		
+
 	}
 
 	@Override
@@ -321,6 +328,16 @@ public class BoardCLI extends Observable implements Board {
 	public void setCurrentPlayerID(int id) {
 		this.roundPlayerID=id;
 		
+		if(id != playerID){
+			allowed=false;
+		}
+		
+		if(id == playerID){
+			allowed=true;
+		}
+		
+		System.out.println();
+		System.out.println("--> ");
 	}
 
 	@Override
@@ -395,16 +412,16 @@ public class BoardCLI extends Observable implements Board {
 		EventMemberPlaced memberPlaced=null;
 		
 		switch(memberIndex){
-		case 0:
+		case 1:
 			memberPlaced = new EventMemberPlaced(chosenAction,ColorPalette.DICE_BLACK,servants);
 			break;
-		case 1:
+		case 2:
 			memberPlaced = new EventMemberPlaced(chosenAction,ColorPalette.DICE_WHITE,servants);
 			break;
-		case 2:
+		case 3:
 			memberPlaced = new EventMemberPlaced(chosenAction,ColorPalette.DICE_ORANGE,servants);
 			break;
-		case 3:
+		case 4:
 			memberPlaced = new EventMemberPlaced(chosenAction,ColorPalette.UNCOLORED,servants);
 			break;
 		}
@@ -449,6 +466,12 @@ public class BoardCLI extends Observable implements Board {
 		
 	}
 
+	public void skipRound(){
+		setChanged();
+		MessagePlayerPassed playerPass = new MessagePlayerPassed();
+		notifyObservers(playerPass);
+	}
+	
 	@Override
 	public void addNewObserver(Observer o) {
 		addObserver(o);
@@ -461,7 +484,6 @@ public class BoardCLI extends Observable implements Board {
 		setChanged();
 		MessageObtainPersonalBoardStatus obtainPbStatus = new MessageObtainPersonalBoardStatus(index); 
 		notifyObservers(obtainPbStatus);
-		
 	}
 
 	@Override
@@ -537,14 +559,12 @@ public class BoardCLI extends Observable implements Board {
 	}
 	
 	
-
 	@Override
 	public void setOwnerPlayerIndex(int index) {
-		// TODO Auto-generated method stub
+		playerID = index;
 		
 	}
 
-	
 	
 	@Override
 	public void setRound() {
@@ -574,8 +594,7 @@ public class BoardCLI extends Observable implements Board {
 
 	@Override
 	public void setOrder(int[] players) {
-		// TODO Auto-generated method stub
-		
+		System.out.println("--> Inizia il round il giocatore: "+players[0]);
 	}
 	
 	
@@ -611,8 +630,6 @@ public class BoardCLI extends Observable implements Board {
 		
 	}
 
-	
-	
 	@Override
 	public void setTimer(int seconds) {
 		// TODO Auto-generated method stub
@@ -620,13 +637,113 @@ public class BoardCLI extends Observable implements Board {
 	}
 
 
-	public static void main(String[] args) {
-		BoardCLI m = new BoardCLI( new BufferedReader(new InputStreamReader(System.in)));
-		try {
-			m.show();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	@Override
+	public void setBonusTilePersonalView(int code) throws IOException {
+		System.out.println("--> Il giocatore sta usando la bonus Tile numero: "+code);
+		
+	}
+	
+	
+	@Override
+	public void activateLeader(int value) {
+		System.out.println("--> Hai attivato il leader: "+value);
+		
+	}
+
+	@Override
+	public void playLeader(int value) {
+		System.out.println("--> Hai giocato il leader: "+value);
+		
+	}
+
+	@Override
+	public void discardLeader(int value) {
+		System.out.println("--> Hai scartato il leader: "+value);
+		
+	}
+
+	@Override
+	public void gameHasEnded(int ID) {
+		System.out.println();
+		System.out.println("--> Il giocatore "+ID+" ha vinto! <--");
+		System.out.println();
+		
+	}
+
+	
+	@Override
+	public void sendChatText(String s) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addChatText(int player, String s) {
+		System.out.println("--> Il giocatore "+player+" dice: " +s);
+		
+	}
+
+	@Override
+	public void run() {
+		while(cond){
+			String s;
+			try { s = input.readLine(); 
+			
+			if(("spots").equals(s)) giveSpots();
+			if(("actions").equals(s)) giveActions();
+			if(("?").equals(s)) giveInfo(); 
+			if(("status").equals(s)) giveGameStatus();
+			if(("towers").equals(s)) giveTowerStatus();
+	
+			if(("info").equals(s)) printPoints(0);
+			if(("info1").equals(s)) printPoints(1);
+			if(("info2").equals(s)) printPoints(2);
+			if(("info3").equals(s)) printPoints(3);
+			if(("info4").equals(s)) printPoints(4);
+			if(("info5").equals(s)) printPoints(5);
+			
+			if(allowed) {
+			
+				if(("passa").equals(s)) skipRound();
+				
+				if(("attiva1").equals(s)) notifyLeaderActivation(1);
+				if(("attiva2").equals(s)) notifyLeaderActivation(2);
+				if(("attiva3").equals(s)) notifyLeaderActivation(3);
+				if(("attiva4").equals(s)) notifyLeaderActivation(4);
+		
+				if(("scarta1").equals(s)) notifyLeaderDiscard(1);
+				if(("scarta2").equals(s)) notifyLeaderDiscard(2);
+				if(("scarta3").equals(s)) notifyLeaderDiscard(3);
+				if(("scarta4").equals(s)) notifyLeaderDiscard(4);
+		
+				if(("piazza1").equals(s)) notifyLeaderPlacement(1);
+				if(("piazza2").equals(s)) notifyLeaderPlacement(2);
+				if(("piazza3").equals(s)) notifyLeaderPlacement(3);
+				if(("piazza4").equals(s)) notifyLeaderPlacement(4);
+		
+				if(("action").equals(s))
+				{
+					System.out.print("Che azione? > ");
+					String s1 = String.valueOf(input.readLine());
+					for(int j=0; j<25; j++)
+						if( s1.equalsIgnoreCase(( ((Action.getAction(j)).toString())) )){
+							System.out.print("Che familiare? (Numero) > ");
+		
+								
+								String s2 = input.readLine();
+								int index = Integer.parseInt(s2.replaceAll("[\\D]", "")); 
+								
+								System.out.print("Quanti servi vuoi usare? > ");
+								int servants = Integer.parseInt(input.readLine());
+								notifyAction(Action.valueOf(s1.toUpperCase()),index,servants); 
+						}
+					} 
+			} else {
+				System.out.println();
+				System.out.println("Attendi il tuo turno per eseguire questo comando!");
+			}
+			
+			}catch (IOException e) {}
 		}
 	}
 }

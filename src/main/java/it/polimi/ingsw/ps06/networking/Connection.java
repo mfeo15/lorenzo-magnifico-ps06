@@ -18,108 +18,185 @@ import it.polimi.ingsw.ps06.networking.messages.MessageParser;
 import it.polimi.ingsw.ps06.networking.messages.Server2Client;
 
 /**
-* Classe per la gestione delle singole connessioni al Server.
-* Implementazione dell'interfaccia Runnable per la gestione tramite Threads
-*
-* @author  ps06
-* @version 1.0
-* @since   2017-06-03 
-*/
+ * Classe per la gestione delle singole connessioni al Server.
+ * Implementazione dell'interfaccia Runnable per la gestione tramite Threads
+ *
+ * @author  ps06
+ * @version 1.0
+ * @since   2017-06-03 
+ */
 public class Connection implements Runnable, Observer {
-	
+
 	private Socket socket;
-	
+
 	private Player player;
-	
-	private String username;
-	
+
+	private User associatedUser;
+
+	private String guestString;
+
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
-	
+
 	private boolean active = true;
-	
+
+
+	@Override
+	public void run() {
+		try 
+		{
+			SocketServer.getInstance().rednezvous(this);
+
+			while(isActive()) receive();
+
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}		
+	}
+
 	/**
 	 * Costruttore della classe
 	 * 
 	 * @param socket				Socket del Client di riferimento
-	 * @param connectedToServer		Server al quale le connessioni fanno riferimento
 	 * 
 	 * @throws UnknownHostException
 	 * @throws IOException
 	 */
 	public Connection(Socket socket) throws UnknownHostException, IOException {
 		this.socket = socket;
-		
+
 		this.out = new ObjectOutputStream(socket.getOutputStream());
 		this.in = new ObjectInputStream(socket.getInputStream());
-		
-		this.username = "Guest" + (new Random()).nextInt(9999);
+
+		this.guestString = "Guest" + (new Random()).nextInt(9999);
 	}
-	
+
+	/**
+	 * Getter per un identificativo univoco della connessione
+	 * 	
+	 * @return	identificativo univoco della connessione corrente
+	 */
 	public SocketAddress getID() {
 		return this.socket.getRemoteSocketAddress();
 	}
-	
+
+	/**
+	 * Getter per lo username associato alla connessione attuale
+	 * 
+	 * @return	lo username della conessione
+	 */
+	public String getUsername() {
+		if (associatedUser == null)
+			return guestString;
+
+		return associatedUser.getUsername();
+	}
+
+	/**
+	 * Setter per lo username associato alla connessione attuale
+	 * 
+	 * @param	username	lo username della conessione da settare
+	 */
+	public void setUsername(String username) {
+		if (associatedUser == null)
+			guestString = username;
+
+		this.associatedUser.setUsername(username);
+	}
+
+	/**
+	 * Getter per l'indirizzo di rete della connessione
+	 * 
+	 * @return	coordinate di rete della connessione attuale
+	 */
+	public String getInetAddress() {
+		return socket.getInetAddress().toString();
+	}
+
+	/**
+	 * Getter per lo User associato alla connessione
+	 * 
+	 * @return	l'untenza associata alla connessione
+	 */
+	public User getAssociatedUser() {
+		return associatedUser;
+	}
+
+	/**
+	 * Setter lo User associato alla connessione
+	 * 
+	 * @param	associatedUser		utenza da associare alla connessione
+	 */
+	public void setAssociatedUser(User associatedUser) {
+		this.associatedUser = associatedUser;
+	}
+
+	/**
+	 * Getter per il parametro active
+	 * 
+	 * @return	true	se il parametro è settato a true
+	 */
 	private synchronized boolean isActive(){
 		return active;
 	}
-	
+
+	/**
+	 * Setter per il player associato alla connessione
+	 * 
+	 * @param	player	giocatore da associare alla connessione
+	 */
 	public void setPlayer(Player player) {
 		this.player = player;
 	}
-	
+
+	/**
+	 * Getter per il player associato alla connesione
+	 * 
+	 * @return	il giocatore associato alla connesione
+	 */
 	public Player getPlayer() {
 		return this.player;
 	}
-	
-	@Override
-	public void run() {
-		try {
-			SocketServer.getInstance().rednezvous(this);
-			
-			while(isActive())
-				receive();
-						
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}		
-	}
-	
+
+	/**
+	 * Metodo per la ricezione di messaggi in entrata sullo stream in
+	 * 
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 */
 	public void receive() throws ClassNotFoundException, IOException {
 		Message m = (Message) in.readObject();
-		
+
 		System.out.println("[ SERVER ] Message received from " + getInetAddress() + " (" + getUsername() + "): " + m +"\n");
-		
+
 		if ( m instanceof EventMessage ) {
-			
+
 			((EventMessage) m).accept(new MessageParser( this ));
 			return;
 		}
-			
+
 		((Message) m).accept(new MessageParser(this));
 	}
-	
+
 	/**
-	 * Invio di un particolare Messaggio
+	 * Metodo per l'invio di messaggi sullo stream out
 	 * 
-	 * @param message	Messaggio da inviare al Client
+	 * @param	 message	messaggio da inviare al Client
 	 */
 	private void send(Message message) throws IOException {		
 		out.writeObject(message);
 		out.flush();
-		
+
 		System.out.println("[ SERVER ] Message sent to " + getInetAddress() + " (" + getUsername() + "): " + message +"\n");
 	}
-	
-	
+
+
 	/**
-	 * Gestione Asincrona dell'invio di un messaggio al Client
+	 * Gestione Asincrona dell'invio di un messaggio al Client tramite Thread secondario
 	 * 
-	 * @param message	Messaggio da inviare al Client
+	 * @param	message		messaggio da inviare al Client
 	 */
 	public void asyncSend(final Message message) {
 		new Thread(new Runnable() {			
@@ -127,48 +204,38 @@ public class Connection implements Runnable, Observer {
 			public void run() {
 				try {
 					send(message);
-					
+
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
 		}).start();
-		
-		try { Thread.sleep(1000); } catch (InterruptedException e1) { e1.printStackTrace(); } 
+
+		try { Thread.sleep(300); } catch (InterruptedException e1) { e1.printStackTrace(); } 
 	}
-	
-	
+
+
+	/**
+	 * Metodo per la chiusura della connessione a seguito di una disconnessione del Client
+	 */
 	public synchronized void closeConnection() {		
 		try {
 			SocketServer.getInstance().deregisterConnection(this);
 			socket.close();
-			
+
 			System.out.println("[ SERVER ] The Client " + getInetAddress() + " (" + getUsername() + "): has closed the connection \n");
-			
+
 		} catch (IOException e) {
 		}
 		active = false;
 	}
 
-	public String getUsername() {
-		return username;
-	}
-	
-	public void setUsername(String username) {
-		this.username = username;
-	}
-	
-	public String getInetAddress() {
-		return socket.getInetAddress().toString();
-	}
-
-	
 	@Override
 	public void update(Observable o, Object arg) {
-		
+
 		if (!(arg instanceof Message))
 			return;
-		
+
 		if (arg instanceof Server2Client)
 			if (arg instanceof Broadcast) {
 				asyncSend((Message) arg);

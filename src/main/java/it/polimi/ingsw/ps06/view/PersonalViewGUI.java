@@ -6,23 +6,14 @@ import java.awt.Graphics;
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.util.Observable;
-import java.util.Observer;
 
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 
-import it.polimi.ingsw.ps06.controller.BoardController;
-import it.polimi.ingsw.ps06.model.events.EventClose;
-import it.polimi.ingsw.ps06.networking.messages.MessageObtainPersonalBoardStatus;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
@@ -34,14 +25,14 @@ public class PersonalViewGUI  {
 	private JTextField coins, woods, stones, servants, victory, military, faith;
 	private Font font;
 	private BoardGUI boardView;
-	
+	private JLabel bonusTileLabel = new JLabel(); 
+	private JButton[] bonusTile = new JButton[1];
     
     private JButton[] territories = new JButton[6];
     private JButton[] buildings = new JButton[6];
 	
     private double ratio;
-	private int code1, code2, code3, code4;
-	private int btCode;
+	private int btCode=1;
 	private Dimension screenSize;
 
 	public PersonalViewGUI(int id, BoardGUI v){
@@ -59,8 +50,6 @@ public class PersonalViewGUI  {
 				UIManager.setLookAndFeel( UIManager.getCrossPlatformLookAndFeelClassName() );
 			} catch (Exception e) { e.printStackTrace();}
 		
-			setPersonalView();
-			
 			exit = new JButton();
 			
 			screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -190,19 +179,10 @@ public class PersonalViewGUI  {
 	        buildings = locatePersonalCards(buildings,false);
         	territories = locatePersonalCards(territories,true);
 	        
-	        JButton[] bonusTile = new JButton[1];
 	        bonusTile = initializeButtons(bonusTile);
 	        bonusTile=setLabels(bonusTile);
 	        bonusTile[0].setLocation((int)(width*0.07/100),(int)(height*4.38/100));
 	        bonusTile[0].setSize((int)(width*5.8/100),(int)(height*72.8/100));
-	        
-	        
-	        JLabel bonusTileLabel = new JLabel();       
-	        bonusTileLabel = ImageHandler.setImage("resources/tile/pb"+btCode+".png",5.8,73.1,width,height);
-	        
-	        bonusTile[0].setIcon(bonusTileLabel.getIcon());
-			bonusTile[0].setDisabledIcon( bonusTile[0].getIcon() );
-			
 	        
 			for(int j=0; j<territories.length;j++){ f.add(territories[j]); }
 			for(int j=0; j<buildings.length;j++){ f.add(buildings[j]); }
@@ -224,16 +204,7 @@ public class PersonalViewGUI  {
 	        
 	        hasLoaded();
 		}
-		
-		public void setPersonalView(){
-			
-			code1= 5;
-			code2= 7;
-			code3= 15;
-			code4=19;
-			btCode=1;
-			
-		}
+	
 		
 		private JButton[] initializeButtons(JButton...btns){
 			
@@ -324,6 +295,14 @@ public class PersonalViewGUI  {
 			
 		}
 		
+		public void setTileCode(int code) throws IOException{
+			this.btCode=code;
+			
+			bonusTileLabel = ImageHandler.setImage("resources/tile/pb"+btCode+".png",5.8,73.1,width,height);
+	        
+	        bonusTile[0].setIcon(bonusTileLabel.getIcon());
+			bonusTile[0].setDisabledIcon( bonusTile[0].getIcon() );
+		}
 
 		public void hasLoaded() {
 			

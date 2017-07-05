@@ -1,13 +1,15 @@
 package it.polimi.ingsw.ps06.model;
 
-import it.polimi.ingsw.ps06.model.Types.Action;
 import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
 import it.polimi.ingsw.ps06.model.Types.PointsKind;
-import it.polimi.ingsw.ps06.model.cards.Building;
-import it.polimi.ingsw.ps06.model.cards.Character;
-import it.polimi.ingsw.ps06.model.cards.DevelopementCard;
-import it.polimi.ingsw.ps06.model.cards.Territory;
-import it.polimi.ingsw.ps06.model.cards.Venture;
+import it.polimi.ingsw.ps06.model.bonus_malus.BonusMalusDoubleMaterialsFromDevCards;
+import it.polimi.ingsw.ps06.model.cards.developement.Building;
+import it.polimi.ingsw.ps06.model.cards.developement.Character;
+import it.polimi.ingsw.ps06.model.cards.developement.DevelopementCard;
+import it.polimi.ingsw.ps06.model.cards.developement.Territory;
+import it.polimi.ingsw.ps06.model.cards.developement.Venture;
+import it.polimi.ingsw.ps06.model.effects.Effect;
+import it.polimi.ingsw.ps06.model.effects.EffectsResources;
 
 /**
 * Classe per la gestione delle azioni che comportano un acquisizione di una carta
@@ -23,6 +25,14 @@ public class CardAcquisition extends Actions {
 	
 	private boolean extraCost;
 	
+	/**
+	* Costruttore della classe
+	* 
+	* @param	card		carta da acquisire
+	* @param	p			giocatore che vuole acquisire la carta
+	* @param	servants	numero di servitori impiegati per concludere l'azione
+	* 
+	*/
 	public CardAcquisition(DevelopementCard card, Player p, int servants) {
 		super(servants);
 		this.card = card;
@@ -32,9 +42,10 @@ public class CardAcquisition extends Actions {
 	/**
 	* Metodo per verificare i costi dovuti all'azione che comporta l'acquisizione di una carta
 	*
-	* @param 	player			Giocatore su cui fare la verifica della disponibilità di risorse
-	* @param 	chosenAction	Codice dell'azione da eseguire	
-	* @return 	
+	* @param 	extraCost	flag per un extra costo di 3 COIN	
+	* 
+	* @return 	true		se il giocatore soddisfa tutti i costi per acquisire la carta
+	* 
 	*/
 	public boolean checkCosts(boolean extraCost) {
 		
@@ -46,23 +57,23 @@ public class CardAcquisition extends Actions {
 			return p.getPersonalBoard().getInventory().isBiggerThan( extraMoney );
 		
 		if (card instanceof Building)
-			return p.getPersonalBoard().getInventory().isBiggerThan( extraMoney.add( ((Building) card).getRequirement() ) );
+			return p.getPersonalBoard().getInventory().isBiggerThan( extraMoney.add( ((Building) card).getCost() ) );
 		
 		if (card instanceof Character)
-			return p.getPersonalBoard().getInventory().isBiggerThan( extraMoney.add( ((Character) card).getRequirement() ) );
+			return p.getPersonalBoard().getInventory().isBiggerThan( extraMoney.add( ((Character) card).getCost() ) );
 		
 		if (card instanceof Venture)
-			return p.getPersonalBoard().getInventory().isBiggerThan( extraMoney.add( ((Venture) card).getRequirements().get(0) ) );
+			return p.getPersonalBoard().getInventory().isBiggerThan( extraMoney.add( ((Venture) card).getCosts().get(0) ) );
 		
 		return false;
 	}
 	
 	/**
-	* Metodo per verificare i costi dovuti all'azione che comporta l'acquisizione di una carta
-	*
-	* @param 	player			Giocatore su cui fare la verifica della disponibilità di risorse
-	* @param 	chosenAction	Codice dell'azione da eseguire	
-	* @return 	
+	* Metodo per verificare i requisiti di una carta (oltre al costo). Questo è necessario
+	* per tutte le carte di tipo Impresa
+	* 
+	* @return 	true		se il giocatore soddisfa tutti i requisiti per acquisire la carta
+	* 
 	*/
 	public boolean checkRequirements(){
 		
@@ -83,8 +94,6 @@ public class CardAcquisition extends Actions {
 	/**
 	* Metodo per assegnare la carta ad un giocatore
 	*
-	* @param 	player			Giocatore su cui fare la verifica della disponibilità di risorse
-	* @return 	
 	*/
 	@Override
 	public void activate() {
@@ -95,30 +104,39 @@ public class CardAcquisition extends Actions {
 		if (extraCost)
 			p.getPersonalBoard().reduceResource(MaterialsKind.COIN, 3);
 		
-		if(card instanceof Territory) {
+		if(card instanceof Territory)
 			p.getPersonalBoard().addCard( (Territory) card);
-			return;
-		}
 		
 		if(card instanceof Building) {
 			p.getPersonalBoard().addCard( (Building) card);
-			p.getPersonalBoard().reduceResource( ((Building) card).getRequirement() );
-			return;
+			p.getPersonalBoard().reduceResource( ((Building) card).getCost() );
 		}
 		
 		if(card instanceof Character) {
 			p.getPersonalBoard().addCard( (Character) card);
-			p.getPersonalBoard().reduceResource( ((Character) card).getRequirement() );
-			return;
+			p.getPersonalBoard().reduceResource( ((Character) card).getCost() );
+			((Character) card).activateEffect(p);
 		}
 		
 		if(card instanceof Venture) {
 			p.getPersonalBoard().addCard( (Venture) card);
-			p.getPersonalBoard().reduceResource( ((Venture) card).getRequirements().get(0) );
-			return;
+			p.getPersonalBoard().reduceResource( ((Venture) card).getCosts().get(0) );
 		}
 		
 		card.activateIstantEffect(p);
+		
+		if (p.getBonusMalusCollection().contains(BonusMalusDoubleMaterialsFromDevCards.class)) 
+		{
+			for (Effect e : card.getInstantEffects()) {
+				if (e instanceof EffectsResources) {
+					int bonus_faith = ((EffectsResources) e).getBonus().getResourceValue(PointsKind.FAITH_POINTS);
+					int bonus_military = ((EffectsResources) e).getBonus().getResourceValue(PointsKind.MILITARY_POINTS);
+					int bonus_victory = ((EffectsResources) e).getBonus().getResourceValue(PointsKind.VICTORY_POINTS);
+					if ( bonus_faith == 0 && bonus_military == 0 && bonus_victory == 0 )
+						e.activate(p);
+				}
+			}
+		}
 	}
 
 }

@@ -6,10 +6,13 @@ import java.util.Observer;
 
 import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
 import it.polimi.ingsw.ps06.model.Types.PointsKind;
-import it.polimi.ingsw.ps06.model.cards.Building;
-import it.polimi.ingsw.ps06.model.cards.Character;
-import it.polimi.ingsw.ps06.model.cards.Territory;
-import it.polimi.ingsw.ps06.model.cards.Venture;
+import it.polimi.ingsw.ps06.model.XMLparser.ParserBonusBoard;
+import it.polimi.ingsw.ps06.model.bonus_malus.BonusMalusNoMilitaryRequirement;
+import it.polimi.ingsw.ps06.model.cards.developement.Building;
+import it.polimi.ingsw.ps06.model.cards.developement.Character;
+import it.polimi.ingsw.ps06.model.cards.developement.Territory;
+import it.polimi.ingsw.ps06.model.cards.developement.Venture;
+import it.polimi.ingsw.ps06.networking.messages.MessageModel2ViewNotification;
 import it.polimi.ingsw.ps06.networking.messages.MessagePersonalBoardResourcesStatus;
 
 /**
@@ -30,250 +33,231 @@ public class PersonalBoard extends Observable {
 	
 	private Warehouse inventory;
 	
-	/**
-	* costruttore della plancia giocatore, alloca gli arraylist per le carte che si 
-	* aggiungono man mano, un warehouse contenitore delle risorse e una tessera bonus personale
-	*
-	* @param 	none
-	* 
-	* @return 	Nothing
-	*/
+	private Player owner;
 	
-	public PersonalBoard() {
+	/**
+	 * <p>Costruttore della plancia giocatore</p>
+	 * <p>alloca gli arraylist per le carte che si aggiungono man mano,
+	 *  un warehouse contenitore delle risorse e una tessera bonus personale </p>
+	 *
+	 * @param	owner	Player possessore di questa plancia
+	 */
+	public PersonalBoard(Player owner) {
 		territories = new ArrayList<Territory>();
 		buildings = new ArrayList<Building>();
 		characters = new ArrayList<Character>();
 		ventures = new ArrayList<Venture>();
 		inventory = new Warehouse();
-		bonusTile = new BonusTile();
+		
+		this.owner = owner;
 	}
 	
 	/**
-	* Metodo che restituisce le tessera bonus personale
-	* 
-	* @param 	none
-	* @return 	bonusTile	la tessera personale
-	*/
+	 * Setter per la Bonus Tile
+	 * 
+	 * @param	code	codice identificatore della tipologia di Bonus Tile richiesta
+	 */
+	public void setBonusTile(int code) {
+		bonusTile = (new ParserBonusBoard("resources/XML/BonusTabellone.xml")).getBonusTile(code);
+	}
 	
-	public BonusTile getBonusTile(){
+	/**
+	 * Getter per la Bonus Tile
+	 * 
+	 * @return 	la tessera personale associata
+	 */
+	public BonusTile getBonusTile() {
 		return bonusTile;
 	}
 	
 	/**
-	* Metodo che restituisce le risorse presenti nel warehouse
-	* 
-	* @param 	none
-	* @return 	inventory   attributo di tipo risorsa
-	*/
-	
-	public Resources getInventory(){
+	 * Getter per le risorse presenti nel Warehouse
+	 * 
+	 * @return 	risorse attuali del giocatore
+	 */
+	public Resources getInventory() {
 		return inventory.getStatus();
 	}
 	
 	/**
-	* Metodo che restituisce la quantità di pietre, servitori, legno o coins a seconda di ciò che è richiesto
-	*
-	* @param 	kind	Tipo di materiale a cui applicare l'operazione
-	* @return 	inventory.getMaterial(kind)  metodo di warehouse che restituisce la quantità del materiale che ho chiesto
-	*/
-	
-	public int getAmount(MaterialsKind kind){
+	 * Metodo che restituisce la quantità di pietre, servitori, legno o coins a seconda di ciò che è richiesto
+	 *
+	 * @param 	kind	Tipo di materiale a cui applicare l'operazione
+	 * 
+	 * @return 			quantità di un certo materiale presente nel Warehouse
+	 * 
+	 * @see				it.polimi.ingsw.ps06.model.Types
+	 */
+	public int getAmount(MaterialsKind kind) {
 		return inventory.getMaterial(kind);
 	}
 	
 	/**
-	* Metodo che restituisce la quantità di pietre, servitori, legno o coins a seconda di ciò che è richiesto
-	*
-	* @param 	type	Tipo di punti a cui applicare l'operazione
-	* @return 	inventory.getPoints(kind)  metodo di warehouse che restituisce il numero dei punti che ho chiesto
-	*/
-	
-	public int getAmount(PointsKind type){
-		return inventory.getPoints(type);
+	 * Metodo che restituisce la quantità di punteggi fede, militari o vittoria a seconda di ciò che è richiesto
+	 *
+	 * @param 	kind	Tipo di punteggio a cui applicare l'operazione
+	 * 
+	 * @return 			quantità di un certo punteggio presente nel Warehouse
+	 * 
+	 * @see				it.polimi.ingsw.ps06.model.Types
+	 */
+	public int getAmount(PointsKind kind) {
+		return inventory.getPoints(kind);
 	}	
 	
 	/**
-	* Metodo che restituisce i territori presenti sulla plancia giocatore
-	*
-	* @param 	none
-	* 
-	* @return 	territories		territori sulla plancia
-	*/
-	
-	public ArrayList<Territory> getTerritories(){
+	 * Metodo che restituisce i territori presenti sulla plancia giocatore
+	 * 
+	 * @return	territori sulla plancia
+	 */
+	public ArrayList<Territory> getTerritories() {
 		return territories;
 	}	
 	
 	/**
-	* Metodo che restituisce gli edifici presenti sulla plancia giocatore
-	*
-	* @param 	none
-	* 
-	* @return 	buildings	edifici sulla plancia
-	*/
-	
-	public ArrayList<Building> getBuildings(){
+	 * Metodo che restituisce gli edifici presenti sulla plancia giocatore
+	 * 
+	 * @return	edifici sulla plancia
+	 */
+	public ArrayList<Building> getBuildings() {
 		return buildings;
 	}	
 	
 	/**
-	* Metodo che restituisce le imprese presenti sulla plancia giocatore
-	*
-	* @param 	none
-	* 
-	* @return 	ventures	imprese sulla plancia
-	*/
-	
-	public ArrayList<Venture> getVentures(){
+	 * Metodo che restituisce le imprese presenti sulla plancia giocatore
+	 * 
+	 * @return	imprese sulla plancia
+	 */
+	public ArrayList<Venture> getVentures() {
 		return ventures;
 	}	
 	
 	/**
-	* Metodo che restituisce i personaggi presenti sulla plancia giocatore
-	*
-	* @param 	none
-	* 
-	* @return 	characters	personaggi sulla plancia
-	*/
-	
-	public ArrayList<Character> getCharacters(){
+	 * Metodo che restituisce i personaggi presenti sulla plancia giocatore
+	 * 
+	 * @return	personaggi sulla plancia
+	 */
+	public ArrayList<Character> getCharacters() {
 		return characters;
-	}	
-	/**
-	* Metodo che permette di aggiungere materiali al warehouse
-	*
-	* @param 	kind		Tipo di materiale a cui applicare l'operazione
-	* @param	quantity	quantità di materiale da aggiungere
-	* @return 	nothing
-	*/
+	}
 	
-	public void addResource(MaterialsKind kind, int quantity){
+	/**
+	 * Metodo che permette di aggiungere materiali al warehouse
+	 *
+	 * @param 	kind		tipo di materiale a cui applicare l'operazione
+	 * @param	quantity	quantità di materiale da aggiungere
+	 */
+	public void addResource(MaterialsKind kind, int quantity) {
 		inventory.increaseMaterials(kind, quantity);
 		notifyChangement();
 	}
 	
 	/**
-	* Metodo che permette di aggiungere punti al warehouse
-	*
-	* @param 	type		Tipo di punti a cui applicare l'operazione
-	* @param    amount 		Quantità di cui si vogliono incrementare i punti
-	* @return 	nothing
-	*/
-	
-	public void addResource(PointsKind kind, int quantity){
+	 * Metodo che permette di aggiungere punteggi al warehouse
+	 *
+	 * @param 	kind		tipo di punteggio a cui applicare l'operazione
+	 * @param	quantity	quantità di punti da aggiungere
+	 */
+	public void addResource(PointsKind kind, int quantity) {
 		inventory.increasePoints(kind, quantity);
 		notifyChangement();
 	}
 	
 
 	/**
-	* Metodo che permette di aggiungere un intero tipo risorsa al warehouse
-	*
-	* @param 	Resources	risorse da aggiungere al warehouse
-	* @return 	nothing
-	*/
-	
-	public void addResource(Resources r){
+	 * Metodo che permette di aggiungere un intero tipo risorsa al warehouse
+	 *
+	 * @param	r	risorsa da aggiungere al warehouse
+	 */
+	public void addResource(Resources r) {
 		inventory.addResources(r);
 		notifyChangement();
 	}
 	
 	/**
-	* Metodo che permette di aggiungere territory sulla plancia giocatore
-	*
-	* @param 	cardTerritory		carta da aggiungere alla carta
-	* @return 	nothing
-	*/
-	
+	 * <p>Metodo che permette di aggiungere territory sulla plancia giocatore</p>
+	 * <p>Vengono eseguiti i controlli sui requisiti militari per completare l'azione. In caso di
+	 * errore viene notificato l'Obeserver dell'accaduto</p>
+	 *
+	 * @param 	cardTerritory	carta da aggiungere
+	 */
 	public void addCard(Territory cardTerritory) {
-		
-			switch(territories.size()) {
-			case 0:
-			case 1:
-				territories.add(cardTerritory);
-				break;
-			case 2:
-				if(inventory.getPoints(PointsKind.MILITARY_POINTS)>=3){
-					territories.add(cardTerritory);
-				}
-				else {
-				//	controller.handleNotEnoughMILPoints();		da implementare ancora il controller
-				}
-				break;
-			case 3:
-				if(inventory.getPoints(PointsKind.MILITARY_POINTS)>=7){
-					territories.add(cardTerritory);
-				}
-				else {
-					//controller.handleNotEnoughMILPoints();
-				}
-				break;
-			case 4:
-				if(inventory.getPoints(PointsKind.MILITARY_POINTS)>=12){
-					territories.add(cardTerritory);
-				}
-				else {
-					//controller.handleNotEnoughMILPoints();
-				}
-				break;
-			case 5:
-				if(inventory.getPoints(PointsKind.MILITARY_POINTS)>=18) {
-					territories.add(cardTerritory);
-				}
-				else {
-					//controller.handleNotEnoughMILPoints(); 
-				}
-				break;		
-			default:
-				//Controller.handleMaxTerritories();  Controller ancora da implementare, dovrà gestire e informare la view che è stato raggiunto il numero massimo di territori
-				break;
-				}			
-	}
-	
-	/**
-	* Metodo che permette di aggiungere edifici sulla plancia giocatore
-	*
-	* @param 	cardBuilding		carta da aggiungere alla carta
-	* @return 	nothing
-	*/
 
+		boolean noMilitaryRequirement = owner.getBonusMalusCollection().contains(BonusMalusNoMilitaryRequirement.class);
+
+		switch(territories.size()) {
+		case 0:
+		case 1:
+			territories.add(cardTerritory);
+			break;
+		case 2:
+			if ( (inventory.getPoints(PointsKind.MILITARY_POINTS) >= 3) || noMilitaryRequirement )
+				territories.add(cardTerritory);
+			else 
+				notifyError("Ottenere la 3° carta territorio richiede 3 punti Militari");
+			break;
+		case 3:
+			if ( (inventory.getPoints(PointsKind.MILITARY_POINTS) >= 7) || noMilitaryRequirement )
+				territories.add(cardTerritory);
+			else 
+				notifyError("Ottenere la 4° carta territorio richiede 7 punti Militari");
+			break;
+		case 4:
+			if ( (inventory.getPoints(PointsKind.MILITARY_POINTS) >= 12) || noMilitaryRequirement )
+				territories.add(cardTerritory);
+			else 
+				notifyError("Ottenere la 5° carta territorio richiede 12 punti Militari");
+			break;
+		case 5:
+			if ( (inventory.getPoints(PointsKind.MILITARY_POINTS) >= 18) || noMilitaryRequirement )
+				territories.add(cardTerritory);
+			else 
+				notifyError("Ottenere la 6° carta territorio richiede 18 punti Militari");
+			break;		
+		default:
+			notifyError("Hai raggiunto il numero massimo di carte Territorio");
+			break;
+		}			
+	}
+
+	/**
+	 * <p>Metodo che permette di aggiungere building sulla plancia giocatore</p>
+	 * <p>Vengono eseguiti i controlli sulla dimensione massima dello spazio (max sei carte) e notificato
+	 * l'observer in caso di errore</p>
+	 *
+	 * @param 	cardBuilding	carta da aggiungere
+	 */
 	public void addCard(Building cardBuilding) {
 		if (buildings.size() < 6)
 			buildings.add(cardBuilding);
 		else
-			//Controller.handleMaxBuildings();  controller ancora da implementare
+			notifyError("Hai raggiunto il numero massimo di carte Edifici");
 	return;
 	}
 	
 	/**
-	* Metodo che permette di aggiungere personaggi sulla plancia giocatore
-	*
-	* @param 	cardTerritory		carta da aggiungere alla carta
-	* @return 	nothing
-	*/
-	
+	 * Metodo che permette di aggiungere personaggi sulla plancia giocatore
+	 *
+	 * @param 	cardCharacter	carta da aggiungere
+	 */
 	public void addCard(Character cardCharacter) {
 		characters.add(cardCharacter);
 	}
 
 	/**
-	* Metodo che permette di aggiungere imprese sulla plancia giocatore
-	*
-	* @param 	cardVenture		carta da aggiungere alla carta
-	* @return 	nothing
-	*/
-	
+	 * Metodo che permette di aggiungere imprese sulla plancia giocatore
+	 *
+	 * @param 	cardVenture	carta da aggiungere
+	 */
 	public void addCard(Venture cardVenture) {
 		ventures.add(cardVenture);		
 	}
 	
 	/**
-	 * Metodo che permette di togliere dall'inventory un tipo risorsa
+	 * Metodo che permette di togliere dall'inventory una risorsa inters
 	 * 
-	 * @param r	risorse da togliere
-	 * @return	nothing
+	 * @param	r	risorsa da togliere
 	 */
-
 	public void reduceResource(Resources r){
 		inventory.reduceRes(r);
 		notifyChangement();
@@ -282,27 +266,30 @@ public class PersonalBoard extends Observable {
 	/**
 	 * Metodo che permette di togliere una certa quantità di un materiale dell'inventory 
 	 * 
-	 * @param kind 	tipo di materiale da togliere
-	 * @param x		quantità di materiale
-	 * @return	nothing
+	 * @param 	kind 		tipo di materiale da togliere
+	 * @param 	decrese		quantità di materiale
 	 */
-
-	public void reduceResource(MaterialsKind kind, int x){
-		inventory.decreaseMaterial(kind, x);
+	public void reduceResource(MaterialsKind kind, int decrese) {
+		inventory.decreaseMaterial(kind, decrese);
 		notifyChangement();
 	}
 	
 	/**
 	 * Metodo che permette di togliere una certa quantità di un tipo di punti dell'inventory 
 	 * 
-	 * @param kind 	tipo di punti da togliere
-	 * @param x		quantità di punti
-	 * @return	nothing
+	 * @param	kind 		tipo di punti da togliere
+	 * @param 	decrease	quantità di punti
 	 */
-
-	public void reduceResource(PointsKind kind, int x){
-		inventory.decreasePoints(kind, x);
+	public void reduceResource(PointsKind kind, int decrease) {
+		inventory.decreasePoints(kind, decrease);
 		notifyChangement();
+	}
+	
+	public void notifyError(String e) {
+		
+		MessageModel2ViewNotification n = new MessageModel2ViewNotification(e);
+		setChanged();
+		notifyObservers(n);
 	}
 	
 	public void notifyChangement() {

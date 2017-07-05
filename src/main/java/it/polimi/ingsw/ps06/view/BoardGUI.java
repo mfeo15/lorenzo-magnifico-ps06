@@ -1,7 +1,7 @@
 package it.polimi.ingsw.ps06.view;
 
 // for Container
-import java.awt.CardLayout;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -21,18 +21,16 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.TimerTask;
 
-import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
-import javax.swing.AbstractButton;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.InputMap;
@@ -42,16 +40,18 @@ import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JRootPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.Timer;
 import javax.swing.TransferHandler;
 import javax.swing.UIManager;
+import javax.swing.plaf.DesktopPaneUI;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 
 import it.polimi.ingsw.ps06.model.Types.ColorPalette;
@@ -65,6 +65,7 @@ import it.polimi.ingsw.ps06.model.events.EventMemberPlaced;
 import it.polimi.ingsw.ps06.model.events.EventMemberPlacedWithPrivilege;
 import it.polimi.ingsw.ps06.networking.messages.MessageObtainPersonalBoardStatus;
 import it.polimi.ingsw.ps06.networking.messages.MessagePlayerPassed;
+import it.polimi.ingsw.ps06.networking.messages.MessageTelegram;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -75,13 +76,10 @@ public class BoardGUI extends Observable implements Board {
 	
 	private int width, escWidth;
 	private int height, escHeight;
-	private double screenWidth, screenHeight;
-    private JLayeredPane lp = new JLayeredPane();
-    private JPanel panel1 = new JPanel();
-    private JPanel panel2 = new JPanel();
-	private CardLayout cl = new CardLayout();
 	private JLabel leaderBack;
 	private Font mediumBold;
+	private Font extraSmall;
+	private boolean chatOpen=false;
 	
 	private JButton scrollTowers = new JButton();
 	private JButton scrollOthers = new JButton();
@@ -96,12 +94,8 @@ public class BoardGUI extends Observable implements Board {
 	private JButton escMenu2;
 	private Timer timer = createTimer(1000);
 	
-	private Direction direction;
-	
 	private int pvIndex;
-    
-    private String playerName;
-    
+
     private Font fontBIG, fontMEDIUM, fontSMALL, fontbig;
     private JDesktopPane desktop;
     private JFrame desktopFrame;
@@ -129,8 +123,15 @@ public class BoardGUI extends Observable implements Board {
 	private JButton[] leaders = new JButton[4];
 	private JButton servants = new JButton();
 	
+	//Componenti per chat
+	private JButton chat = new JButton("• Chat  ");
+	private JButton send = new JButton();
+	private JTextArea chatBox = new JTextArea();
+	private JTextField message = new JTextField();
+	
 	private JTextField servantsCount = new JTextField();
-	private int[] cardsCodes = new int[16];
+	//private int[] cardsCodes = new int[16];
+	private int[] cardsCodes = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
     
     private JLabel membersLabel[] = new JLabel[4];
     private JButton[] members = new JButton[4];
@@ -149,34 +150,37 @@ public class BoardGUI extends Observable implements Board {
     
     private JButton pass = new JButton();
     
+    private boolean[] leaderPlayed = new boolean[5];
+    private boolean[] leaderTable = new boolean[5];
+    private boolean[] leaderHand = new boolean[5];
+    
     private String[] playersName = new String[5]; 
     
     private JInternalFrame towers;
     private JInternalFrame others;
     
-    private int TimerValue=30;
+    private int TimerValue=70;
     
     private boolean allowed = true;
     private boolean[] member = new boolean[4];
     private int playerID=0;
-    private String player="";
     private String playerColor="G";
-    private int blackValue;
-    private int orangeValue;
-    private int whiteValue;
-    private int playerNumber;
-    private int roundNumber;
-    private int periodNumber;
-    private int ex1, ex2, ex3;
+    private int blackValue=-1;
+    private int orangeValue=-1;
+    private int whiteValue=-1;
+    private int playerNumber=1;
+    private int roundNumber=1;
+    private int periodNumber=1;
+    private int ex1=-1, ex2=-1, ex3=-1;
     private int harvestIndex=1, productionIndex=1, councilIndex=0;
-    private int lead1, lead2, lead3, lead4;
-    private int coinV, woodV, stoneV, servantV, victoryV, militaryV, faithV;
-    private int y;
+    private int lead1=-1, lead2=-1, lead3=-1, lead4=-1;
+    private int coinV=0, woodV=0, stoneV=0, servantV=0, victoryV=0, militaryV=0, faithV=0;
     private int usedMember;
     private int servantsCountNumber=0;
     
     private int excomm1Count=0, excomm2Count=0, excomm3Count=0;
     private Media hit2;
+    private Media exc, sendA, messageA, behaviourA;
     
     PersonalViewGUI view= new PersonalViewGUI(0,this);
 	private JFXPanel fxPanel = new JFXPanel();
@@ -203,10 +207,7 @@ public class BoardGUI extends Observable implements Board {
 		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		ratio= (screenSize.getWidth()/screenSize.getHeight());
-		
-		screenWidth = screenSize.getWidth();
-		screenHeight = screenSize.getHeight();
-		
+
 	    //Due frame interni al desktop per la parte delle torri e la sezione rimanente
 		towers = new JInternalFrame("frame", false, false, false, false);
 	    towers.putClientProperty("JInternalFrame.isPalette", Boolean.TRUE);
@@ -238,7 +239,8 @@ public class BoardGUI extends Observable implements Board {
 		
 		escWidth=(int)(width*60/100);
         escHeight=(int)(height*80/100);
-	
+        
+        extraSmall= new Font("Lucida Handwriting",Font.PLAIN,(int)(12*(screenSize.getHeight()/1080)) );
         fontSMALL = new Font("Lucida Handwriting",Font.PLAIN,(int)(20*(screenSize.getHeight()/1080)) );
 		fontMEDIUM = new Font("Lucida Handwriting",Font.PLAIN,(int)(25*(screenSize.getHeight()/1080)) );
 		mediumBold = new Font("Lucida Handwriting",Font.BOLD,(int)(25*(screenSize.getHeight()/1080)) );
@@ -258,10 +260,7 @@ public class BoardGUI extends Observable implements Board {
         playersLabel[2] = ImageHandler.setImage("resources/player/avatar3.jpg",7,9,width,height);
         playersLabel[3] = ImageHandler.setImage("resources/player/avatar4.jpg",7,9,width,height);
         playersLabel[4] = ImageHandler.setImage("resources/player/avatar5.jpg",7,9,width,height);
-        
-        excommunicationsLabel[0] = ImageHandler.setImage("resources/excomm/"+ex1+".png",9,23,width,height);
-        excommunicationsLabel[1] = ImageHandler.setImage("resources/excomm/"+ex2+".png",9,22,width,height);
-        excommunicationsLabel[2] = ImageHandler.setImage("resources/excomm/"+ex3+".png",9,23,width,height);
+
         
         marketCover1 = ImageHandler.setImage("resources/cover/cover1.png",10,12,width,height);
         marketCover2 = ImageHandler.setImage("resources/cover/cover3.png",10,12,width,height);
@@ -270,9 +269,6 @@ public class BoardGUI extends Observable implements Board {
         
         leaderBack = new JLabel();
         leaderBack = ImageHandler.setImageScreen("resources/leader/leaderBack.jpg", 9,(int)(13.23*ratio),width,height);
-        
-        
-        //JLabel stone = ImageHandler.setImage("resources/"+color+",3,3,width,height);
         		
         //Creazione DesktopPane con Background
         desktop = new JDesktopPane(){
@@ -284,8 +280,6 @@ public class BoardGUI extends Observable implements Board {
         
 	    
         //Caricamento suoni del gioco
-        //String hoverSound = "resources/menuhover.wav";
-		//Media hit = new Media(new File(hoverSound).toURI().toString());
 		
 		String selectSound = "/menuselect.wav";
 	    String mediaURL2 = getClass().getResource(selectSound).toExternalForm();
@@ -303,6 +297,22 @@ public class BoardGUI extends Observable implements Board {
 	    String mediaURL5 = getClass().getResource(switchSounds).toExternalForm();
 		Media switchSound = new Media(mediaURL5);
 		 
+		String excommunicate = "/excommunicate.wav";
+		String mediaURL6 = getClass().getResource(excommunicate).toExternalForm();
+		exc = new Media(mediaURL6);
+		
+		String sendS = "/send.wav";
+		String mediaURL7 = getClass().getResource(sendS).toExternalForm();
+		sendA = new Media(mediaURL7);
+		
+		String messageS = "/message.wav";
+		String mediaURL8 = getClass().getResource(messageS).toExternalForm();
+		messageA = new Media(mediaURL8);
+		
+		String behaviourS = "/behaviour.wav";
+		String mediaURL9 = getClass().getResource(behaviourS).toExternalForm();
+		behaviourA = new Media(mediaURL9);
+		
         //Inizializzazione dei componenti
 		
 		playerInfo = new JTextField("Loading...");
@@ -412,8 +422,8 @@ public class BoardGUI extends Observable implements Board {
         
         pass=new JButton("Passa");
         pass.setFont(fontSMALL);
-        pass.setLocation((int)(width*10/100),(int)(height*124.5/100));
-        pass.setSize((int)width*8/100,(int)height*4/100);
+        pass.setLocation((int)(width*9/100),(int)(height*124.5/100));
+        pass.setSize((int)width*10/100,(int)height*4/100);
         pass.setOpaque(false);
         pass.setContentAreaFilled(false);
         pass.setFocusPainted(false);
@@ -422,6 +432,9 @@ public class BoardGUI extends Observable implements Board {
         pass.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
         
+            	MediaPlayer mediaPlayer3 = new MediaPlayer(hit2);
+        		mediaPlayer3.play();
+            	
 		        setChanged();
 				MessagePlayerPassed playerPass = new MessagePlayerPassed();
 				notifyObservers(playerPass);
@@ -610,11 +623,8 @@ public class BoardGUI extends Observable implements Board {
 		playersInfo[3].setForeground(new Color(255,248,48));
 		playersInfo[4].setForeground(Color.WHITE);
         
-        dices = fillLabels(dices,dicesLabel);
-        excommunications = fillLabels(excommunications, excommunicationsLabel);
         for(int j=0; j<players.length; j++){players[j].setDisabledIcon( players[j].getIcon() );}
         players = fillButtons(players,playersLabel);
-        leaders = fillLeaders(leaders,leadersLabel,leadersLabelFade);
         cards = fillCards(cards);
         
         others.add(production[0]);
@@ -629,6 +639,7 @@ public class BoardGUI extends Observable implements Board {
         for(int j=0; j<harvests.length;j++){ others.add(harvests[j]); }
         for(int j=0; j<councils.length;j++){ others.add(councils[j]); }
         for(int j=0; j<players.length;j++){ desktop.add(players[j]); }
+        for(int j=0; j<players.length;j++){ players[j].setVisible(false); }
         for(int j=0; j<placements.length;j++){ towers.add(placements[j]); }
              
         for(int j=0; j<playersCheck.length;j++){ desktopFrame.add(playersCheck[j]); }
@@ -637,10 +648,6 @@ public class BoardGUI extends Observable implements Board {
         for(int j=0; j<playersInfo.length;j++){ desktop.add(playersInfo[j]); }
         for(int j=0; j<excommunications.length;j++){ others.add(excommunications[j]); }
         for(int j=0; j<privileges.length;j++){ others.add(privileges[j]); }
-        for(int j=0; j<leaders.length;j++){ 
-        	desktop.add(leaders[j]); 
-        	leaders[j].addMouseListener(new PopClickListener(j));
-        }
         
         for(int j=0; j<privileges.length;j++){
         	privileges[j].setBorderPainted(false);
@@ -739,11 +746,96 @@ public class BoardGUI extends Observable implements Board {
 
         
         java.util.Timer timer = new java.util.Timer();
-        timer.schedule(new Repeat(harvest,harvests,1), 0, 5000);
-        timer.schedule(new Repeat(production,productions,2), 0, 5000);
-        timer.schedule(new Repeat(council,councils,3), 0, 5000);
+        timer.schedule(new Repeat(harvest,harvests,1), 0, 2000);
+        timer.schedule(new Repeat(production,productions,2), 0, 2000);
+        timer.schedule(new Repeat(council,councils,3), 0, 2000);
        
-         
+        Arrays.fill(leaderHand, true);
+        Arrays.fill(leaderTable, false);
+        Arrays.fill(leaderPlayed, false);
+        
+        //Componenti per la chat
+        
+        chat.setLocation((int)(screenSize.getWidth()*84/100),(int)(screenSize.getHeight()*97/100));
+        chat.setSize((int)(screenSize.getWidth()*15/100),(int)(screenSize.getHeight()*3/100));
+        chat.setContentAreaFilled(false);
+        chat.setFocusPainted(false);
+        chat.setOpaque(true);
+        chat.setFont(fontSMALL);
+        chat.setBackground(new Color(78,52,46));
+        chat.setForeground(Color.WHITE);
+        chat.setVisible(true);
+        
+        send.setLocation((int)(screenSize.getWidth()*95/100),(int)(screenSize.getHeight()*97/100));
+        send.setSize((int)(screenSize.getWidth()*4/100),(int)(screenSize.getHeight()*3/100));
+        send.setContentAreaFilled(false);
+        send.setFocusPainted(false);
+        send.setOpaque(true);
+        send.setDisabledIcon( send.getIcon() );
+        send.setBackground(new Color(78,52,46));
+        send.setForeground(Color.BLUE);
+        send.setVisible(false);
+        
+        message.setLocation((int)(screenSize.getWidth()*84/100),(int)(screenSize.getHeight()*97/100));
+        message.setSize((int)(screenSize.getWidth()*11/100),(int)(screenSize.getHeight()*3/100));
+        message.setEditable(true);
+        message.setForeground(Color.BLACK);
+        message.setFont(extraSmall);
+        message.setBackground(new Color(235,235,235));
+        message.setVisible(false);
+        
+        chatBox.setLocation((int)(screenSize.getWidth()*84/100),(int)(screenSize.getHeight()*73/100));
+        chatBox.setSize((int)(screenSize.getWidth()*15/100),(int)(screenSize.getHeight()*24/100));
+        chatBox.setEditable(true);
+        chatBox.setForeground(Color.BLACK);
+        chatBox.setFont(extraSmall);
+        chatBox.setBackground(new Color(235,235,235));
+        chatBox.setVisible(false);
+
+        
+        chat.addMouseListener(new MouseAdapter()
+       	{        		
+       		public void mousePressed(MouseEvent evt)
+	        {
+       			
+       			MediaPlayer mediaPlayer10 = new MediaPlayer(sendA);
+				mediaPlayer10.play();
+       			
+       			if(chatOpen==false){
+       				chat.setLocation((int)(screenSize.getWidth()*84/100),(int)(screenSize.getHeight()*70/100));
+       				send.setVisible(true);
+       				message.setVisible(true);
+       				chatBox.setVisible(true);
+       				chat.setText("Chat");
+       				
+       				chatOpen=true;
+       			}
+       			
+       			else{
+       				chat.setLocation((int)(screenSize.getWidth()*84/100),(int)(screenSize.getHeight()*97/100));
+       				send.setVisible(false);
+       				message.setVisible(false);
+       				chatBox.setVisible(false);
+       				chat.setText("Chat");
+       				chatOpen=false;
+       			}
+       			
+            }
+    	});
+        
+        send.addMouseListener(new MouseAdapter()
+       	{        		
+       		public void mousePressed(MouseEvent evt)
+	        {
+       			MediaPlayer mediaPlayer11 = new MediaPlayer(sendA);
+				mediaPlayer11.play();
+       			
+       			sendChatText(message.getText());
+       			message.setText("");
+	        }
+    	});
+	        
+        
         
         //KeyBinding per tasto ESC
         Action esc = new AbstractAction() {
@@ -817,6 +909,16 @@ public class BoardGUI extends Observable implements Board {
         personalBoard.setResizable(false);
         personalBoard.setVisible(true); 
          
+        desktopFrame.add(chat);
+		desktopFrame.add(send);
+		desktopFrame.add(message);
+		desktopFrame.add(chatBox);
+		
+		for(int j=0; j<leaders.length;j++){ 
+        	desktop.add(leaders[j]); 
+        	leaders[j].addMouseListener(new PopClickListener(j));
+        }
+        
         desktop.add(servants);
         desktop.add(servantsCount);
         
@@ -864,7 +966,7 @@ public class BoardGUI extends Observable implements Board {
 	    try {
 		    UIManager.setLookAndFeel( UIManager.getCrossPlatformLookAndFeelClassName() );
 		 } catch (Exception e) { e.printStackTrace();}
-	    
+
 	    hasLoaded();
 	}
 
@@ -1253,7 +1355,7 @@ public class BoardGUI extends Observable implements Board {
 			if (cardsCodes[j] == -1)
 				btns[j].setIcon(null);
 			else {
-				btns[j].setIcon((ImageHandler.setImage("resources/cards/devcards_f_en_c_"+(cardsCodes[j]+1)+".png",14,(int)( 14.5 * ratio * (1.77 /ratio) ),width,height)).getIcon());
+				btns[j].setIcon((ImageHandler.setImage("resources/cards/devcards_f_en_c_"+(cardsCodes[j])+".png",14,(int)( 14.5 * ratio * (1.77 /ratio) ),width,height)).getIcon());
 				btns[j].setDisabledIcon( btns[j].getIcon());
 			}
 		}
@@ -1273,11 +1375,6 @@ public class BoardGUI extends Observable implements Board {
 	    }
 	}
 	
-	public static void main(String[] args) throws IOException
-    {   
-        (new BoardGUI()).show();  
-    }   
-
 
 	public static class ValueExportTransferHandler extends TransferHandler {
 	
@@ -1344,6 +1441,10 @@ public class BoardGUI extends Observable implements Board {
 		                    
 	                        accept = true;
 	                    }
+	                    else{
+	                    	MediaPlayer mediaPlayer1 = new MediaPlayer(behaviourA);
+	                		mediaPlayer1.play();
+	                    }
 	                }
 	            } catch (Exception exp) {
 	                exp.printStackTrace();
@@ -1391,57 +1492,38 @@ public class BoardGUI extends Observable implements Board {
 	    
 	    public desktopPopUp(int value, boolean allowed){
 	    	
-	    	if(allowed){
-		        gioca = new JMenuItem("Gioca!");
+	    	gioca = new JMenuItem("Gioca!");
 		        
-		        gioca.addActionListener(new ActionListener() {
-		            public void actionPerformed(ActionEvent e) {
-		              leaders[value].setEnabled(true);
-		              notifyLeaderPlacement(value);
-		            }
-	          });
+	    	gioca.addActionListener(new ActionListener() {
+	    		public void actionPerformed(ActionEvent e) {
+	    			
+	    			notifyLeaderPlacement(value);
+	    		}
+	    	});
 		        
-	    	}
 	    		
 	    	scarta = new JMenuItem("Scarta!");
 		        
 		    scarta.addActionListener(new ActionListener() {
 		    	public void actionPerformed(ActionEvent e) {
 		              
-		    		notifyLeaderDiscard(value);
-		    		
-		          	leaders[value].disable();
-		           	leaders[value].setIcon(null);
-		            	
-		           	MouseListener[] mouseListeners = leaders[value].getMouseListeners();
-		           	for (MouseListener mouseListener : mouseListeners) {
-		           		leaders[value].removeMouseListener(mouseListener);
-		           	}
-		            	
+		    		notifyLeaderDiscard(value);	
 		        }
 		    });
 	        
-	    	if(allowed){
-	    		
-		        attiva = new JMenuItem("Attiva!");
+
+		   attiva = new JMenuItem("Attiva!");
 		        
-		        attiva.addActionListener(new ActionListener() {
-		            public void actionPerformed(ActionEvent e) {
+		   attiva.addActionListener(new ActionListener() {
+			   public void actionPerformed(ActionEvent e) {
 		            
-		            	notifyLeaderActivation(value);
-		            	
-		            	if(leaders[value].isEnabled()){
-		            		leaders[value].setIcon(leaderBack.getIcon());
-		  	              	leaders[value].setDisabledIcon(leaderBack.getIcon());
-		            	}
-	
-		            }
-		          });
-	    	}
+				   notifyLeaderActivation(value);
+			   }
+		   });
 	        
-	        if(allowed) add(attiva);
-	        if(allowed) add(gioca);
-	        add(scarta);
+	        if(allowed && leaderTable[value]) add(attiva);
+	        if(allowed && leaderHand[value]) add(gioca);
+	        if(leaderHand[value]) add(scarta);
 	    }
 	    
 	}
@@ -1666,6 +1748,10 @@ public class BoardGUI extends Observable implements Board {
 		
 		roundInfo.setText("Turno: "+round+"  Periodo: "+period);
 		
+		councilIndex=0;
+		harvestIndex=1;
+		productionIndex=1;
+		
 		setRound();
 		
 	}
@@ -1691,6 +1777,8 @@ public class BoardGUI extends Observable implements Board {
 	public void setPlayersNames(String s, int index) {
 		playersName[index]=s;
 		playersInfo[index].setText(s);
+		
+		for(int j=0; j<players.length;j++){ if(! (players[j].isVisible())) players[j].setVisible(true); }
 		
 	}
 
@@ -1733,6 +1821,7 @@ public class BoardGUI extends Observable implements Board {
 			pass.setEnabled(true);
 		}
 		
+	
 		startTimer();
 	}
 
@@ -1767,6 +1856,11 @@ public class BoardGUI extends Observable implements Board {
 		this.ex2=code2;
 		this.ex3=code3;
 		
+		try {
+			refresh();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 
@@ -1796,15 +1890,13 @@ public class BoardGUI extends Observable implements Board {
 		
 		this.coinV=coin;
 		this.woodV=wood;
-		this.stoneV=wood;
+		this.stoneV=stone;
 		this.servantV=servant;
 		this.victoryV=victory;
 		this.militaryV=military;
 		this.faithV=faith;
 		
-		resourcesInfo.setText(coinV+" Coin   "+woodV+" Wood   "+stoneV+" Wood   "+servantV+" Servant     |    " +victoryV+" Victory   "+militaryV+" Military   "+faithV+" Faith");
-		
-		System.out.println("PERSONALBOARD UPDATE FROM VIEW C:" + coin + " W:" + wood + " St:" + stone + " Se:" + servant + " F:" + faith + " M:" + military + " V:" + victory);
+		resourcesInfo.setText(coinV+" Coin   "+woodV+" Wood   "+stoneV+" Stone   "+servantV+" Servant     |    " +victoryV+" Victory   "+militaryV+" Military   "+faithV+" Faith");
 	}
 
 	
@@ -2019,43 +2111,48 @@ public class BoardGUI extends Observable implements Board {
 		getResources();
 		
         members = fillButtons(members,membersLabel);
-        dices = fillLabels(dices,dicesLabel);
-        leaders = fillLeaders(leaders,leadersLabel,leadersLabelFade);
+        if(blackValue>=0) dices = fillLabels(dices,dicesLabel);
+        if(lead1>=0) leaders = fillLeaders(leaders,leadersLabel,leadersLabelFade);
+        if(ex1>=0) excommunications = fillLabels(excommunications, excommunicationsLabel);
         cards = fillCards(cards);
+        
 	}
 	
 	public void getResources() throws IOException{
 
         
-        dicesLabel[0] = ImageHandler.setImage("resources/dice/N"+blackValue+".png",6,8,width,height);
-        dicesLabel[1] = ImageHandler.setImage("resources/dice/B"+whiteValue+".png",6,8,width,height);
-        dicesLabel[2] = ImageHandler.setImage("resources/dice/A"+orangeValue+".png",6,8,width,height);
+		if(blackValue>=0) dicesLabel[0] = ImageHandler.setImage("resources/dice/N"+blackValue+".png",6,8,width,height);
+		if(whiteValue>=0) dicesLabel[1] = ImageHandler.setImage("resources/dice/B"+whiteValue+".png",6,8,width,height);
+		if(orangeValue>=0) dicesLabel[2] = ImageHandler.setImage("resources/dice/A"+orangeValue+".png",6,8,width,height);
 		
         leadersLabel[0] = new JLabel();
         leadersLabel[1] = new JLabel();
         leadersLabel[2] = new JLabel();
         leadersLabel[3] = new JLabel();
         
-        leadersLabel[0] = ImageHandler.setImageScreen("resources/leader/leader"+lead1+".jpg",9,(int)(13.23*ratio),width,height);
-        leadersLabel[1] = ImageHandler.setImageScreen("resources/leader/leader"+lead2+".jpg",9,(int)(13.23*ratio),width,height);
-        leadersLabel[2] = ImageHandler.setImageScreen("resources/leader/leader"+lead3+".jpg",9,(int)(13.23*ratio),width,height);
-        leadersLabel[3] = ImageHandler.setImageScreen("resources/leader/leader"+lead4+".jpg",9,(int)(13.23*ratio),width,height);
+        if(lead1>=0) leadersLabel[0] = ImageHandler.setImageScreen("resources/leader/leader"+lead1+".jpg",9,(int)(13.23*ratio),width,height);
+        if(lead2>=0) leadersLabel[1] = ImageHandler.setImageScreen("resources/leader/leader"+lead2+".jpg",9,(int)(13.23*ratio),width,height);
+        if(lead3>=0) leadersLabel[2] = ImageHandler.setImageScreen("resources/leader/leader"+lead3+".jpg",9,(int)(13.23*ratio),width,height);
+        if(lead4>=0) leadersLabel[3] = ImageHandler.setImageScreen("resources/leader/leader"+lead4+".jpg",9,(int)(13.23*ratio),width,height);
         
         leadersLabelFade[0] = new JLabel();
         leadersLabelFade[1] = new JLabel();
         leadersLabelFade[2] = new JLabel();
         leadersLabelFade[3] = new JLabel();
         
-        leadersLabelFade[0] = ImageHandler.setImageScreen("resources/leader/leader"+lead1+"fade.png",9,(int)(13.23*ratio),width,height);
-        leadersLabelFade[1] = ImageHandler.setImageScreen("resources/leader/leader"+lead2+"fade.png",9,(int)(13.23*ratio),width,height);
-        leadersLabelFade[2] = ImageHandler.setImageScreen("resources/leader/leader"+lead3+"fade.png",9,(int)(13.23*ratio),width,height);
-        leadersLabelFade[3] = ImageHandler.setImageScreen("resources/leader/leader"+lead4+"fade.png",9,(int)(13.23*ratio),width,height);
+        if(lead1>=0) leadersLabelFade[0] = ImageHandler.setImageScreen("resources/leader/leader"+lead1+"fade.png",9,(int)(13.23*ratio),width,height);
+        if(lead2>=0) leadersLabelFade[1] = ImageHandler.setImageScreen("resources/leader/leader"+lead2+"fade.png",9,(int)(13.23*ratio),width,height);
+        if(lead3>=0) leadersLabelFade[2] = ImageHandler.setImageScreen("resources/leader/leader"+lead3+"fade.png",9,(int)(13.23*ratio),width,height);
+        if(lead4>=0) leadersLabelFade[3] = ImageHandler.setImageScreen("resources/leader/leader"+lead4+"fade.png",9,(int)(13.23*ratio),width,height);
         
         membersLabel[0] = ImageHandler.setImage("resources/member/"+playerColor+"N.png",5,7,width,height);
         membersLabel[1] = ImageHandler.setImage("resources/member/"+playerColor+"B.png",5,7,width,height);
         membersLabel[2] = ImageHandler.setImage("resources/member/"+playerColor+"A.png",5,7,width,height);
         membersLabel[3] = ImageHandler.setImage("resources/member/"+playerColor+"E.png",5,7,width,height);
         
+        if(ex1>=0) excommunicationsLabel[0] = ImageHandler.setImage("resources/excomm/"+ex1+".png",9,23,width,height);
+        if(ex2>=0) excommunicationsLabel[1] = ImageHandler.setImage("resources/excomm/"+ex2+".png",9,22,width,height);
+        if(ex3>=0) excommunicationsLabel[2] = ImageHandler.setImage("resources/excomm/"+ex3+".png",9,23,width,height);
 	}
 
 	private JTextField[] setFont(JTextField[] btns){
@@ -2073,8 +2170,6 @@ public class BoardGUI extends Observable implements Board {
 	}
 	
 	private void setBoardPlayers(){
-		
-		System.out.println("BOARD SETUP PLAYERS: " + playerNumber);
 		
 		switch(playerNumber){
 		
@@ -2126,33 +2221,8 @@ public class BoardGUI extends Observable implements Board {
 	}
 	
 	private void setBoard(){
-	   		
-		player = "null";
-	    blackValue=1;
-	    orangeValue=1;
-	    whiteValue=1;
-		playerColor="G";
-	    playerNumber=2;
-	    ex1=5;
-	    ex2=9;
-	    ex3=17;
-	    lead1=1;
-	    lead2=9;
-	    lead3=18;
-	    lead4=12;
-	    coinV=5;
-	    woodV=5;
-	    stoneV=5;
-	    servantV=5;
-	    victoryV=5;
-	    militaryV=5;
-	    faithV=5;
-	    playerName="Gigi Scarfani";
-	    roundNumber=1;
-	    periodNumber=1;
 
         startTimer();
-
 	}
 	
 	private void blockedStatus(){
@@ -2200,6 +2270,8 @@ public class BoardGUI extends Observable implements Board {
 		if(tileNumber==2) excomm2Count++;
 		if(tileNumber==3) excomm3Count++;
 		
+		MediaPlayer mediaPlayer2 = new MediaPlayer(exc);
+		mediaPlayer2.play();
 	}
 
 	@Override
@@ -2212,6 +2284,8 @@ public class BoardGUI extends Observable implements Board {
 		for(int j=0; j<placements.length ; j++){placements[j].setIcon(null);}
 		for(int j=0; j<councils.length ; j++){councils[j].setIcon(null);}
 		
+		council[0].setIcon(null);
+		
 		for(int j=0; j<markets.length ; j++){
 				
 				if(markets[j].isEnabled()) markets[j].setIcon(null);
@@ -2219,6 +2293,21 @@ public class BoardGUI extends Observable implements Board {
 		
 		for(int j=0; j<harvests.length ; j++){harvests[j].setIcon(null);}
 		for(int j=0; j<productions.length ; j++){productions[j].setIcon(null);}
+		
+		for(int j=0; j<5; j++){
+			
+			if(leaderPlayed[j]==true){
+				leaderPlayed[j]=false;
+				leaderTable[j]=true;
+			}
+		}
+		
+		
+		try {
+			refresh();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
@@ -2451,6 +2540,11 @@ public class BoardGUI extends Observable implements Board {
 		view.setBuildingCard(id, index);
 		
 	}
+	
+	@Override
+	public void setBonusTilePersonalView(int code) throws IOException{
+		view.setTileCode(code);
+	}
 
 	@Override
 	public void hasLoadedPersonalView() {
@@ -2459,4 +2553,75 @@ public class BoardGUI extends Observable implements Board {
 		MessageObtainPersonalBoardStatus obtainPbStatus = new MessageObtainPersonalBoardStatus(pvIndex);
 		notifyObservers(obtainPbStatus);
 	}
+	
+	@Override
+	public void activateLeader(int value) {
+		if(leaders[value].isEnabled()){
+			
+			   leaders[value].setIcon(leaderBack.getIcon());
+			   leaders[value].setDisabledIcon(leaderBack.getIcon());
+			   leaderPlayed[value]=true;
+			   leaderTable[value]=false;
+		}
+	}
+	
+	@Override
+	public void discardLeader(int value) {
+		
+		leaders[value].disable();
+       	leaders[value].setIcon(null);
+       	
+       	MouseListener[] mouseListeners = leaders[value].getMouseListeners();
+       	for (MouseListener mouseListener : mouseListeners) {
+       		leaders[value].removeMouseListener(mouseListener);
+       	}
+	}
+	
+	@Override
+	public void playLeader(int value) {
+		
+		leaders[value].setEnabled(true);
+		leaderHand[value]=false;
+		leaderTable[value]=true;
+	}
+
+	public void turnLeader(int value) {
+		
+	}
+	
+	@Override
+	public void gameHasEnded(int ID){
+		JOptionPane.showMessageDialog(null, "Il giocatore "+ID+" ha vinto!" , "Vittoria!",  JOptionPane.INFORMATION_MESSAGE);
+		desktopFrame.dispose();
+		
+	}
+
+	@Override
+	public void sendChatText(String s) {
+		setChanged();
+		MessageTelegram msg = new MessageTelegram(s);
+		notifyObservers(msg);
+		
+	}
+
+	@Override
+	public void addChatText(int player, String s) {
+
+		String s1 = "\n"+"["+player+"]: "+s;
+		chatBox.setText(chatBox.getText() + s1);
+		chat.setText("• Chat  ");
+		
+		MediaPlayer mediaPlayer12 = new MediaPlayer(messageA);
+		mediaPlayer12.play();
+		
+	}
+	
+	
+	public static void main( String[] args ) throws IOException
+    {
+        BoardGUI b = new BoardGUI();
+        b.show();
+
+    }
+	
 }

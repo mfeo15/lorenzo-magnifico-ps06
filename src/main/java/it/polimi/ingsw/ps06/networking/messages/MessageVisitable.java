@@ -2,5 +2,10 @@ package it.polimi.ingsw.ps06.networking.messages;
 
 public interface MessageVisitable {
 
-	public void accept(MessageVisitor visitor);
+	/**
+	 * Metodo di parsing per un messaggio tramite il Visitor Pattern Design
+	 * 
+	 * @param	visitor		parser implementativo
+	 */
+	void accept(MessageVisitor visitor);
 }

@@ -1,8 +1,12 @@
 package it.polimi.ingsw.ps06.controller;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
+
+import javax.xml.bind.DatatypeConverter;
 
 import it.polimi.ingsw.ps06.model.events.Event;
 import it.polimi.ingsw.ps06.model.events.EventParser;
@@ -12,6 +16,7 @@ import it.polimi.ingsw.ps06.networking.messages.Client2Server;
 import it.polimi.ingsw.ps06.networking.messages.EventMessage;
 import it.polimi.ingsw.ps06.networking.messages.Message;
 import it.polimi.ingsw.ps06.networking.messages.MessageParser;
+import it.polimi.ingsw.ps06.networking.messages.MessageUser;
 import it.polimi.ingsw.ps06.networking.messages.Server2Client;
 import it.polimi.ingsw.ps06.view.Room;
 
@@ -66,6 +71,9 @@ public class RoomController extends Observable implements Observer {
 	
 	private void handleMessage(Message m) {
 		
+		if (m instanceof MessageUser)
+			((MessageUser) m).setPassword( encrypt( ((MessageUser) m).getPassword() ) );
+		
 		if (m instanceof Server2Client) {
 			//This is a normal SERVER -> CLIENT message 
 			((Server2Client) m).accept(new MessageParser(theView));
@@ -91,5 +99,22 @@ public class RoomController extends Observable implements Observer {
 			EventMessage m = new EventMessage(e);
 			notifyChangement(m);
 		}
+	}
+	
+	private String encrypt(String s) {
+		String hash = "";
+		try {
+			MessageDigest messageDigest = MessageDigest.getInstance("SHA-224");
+			messageDigest.update( s.getBytes() );
+			byte[] digestedBytes = messageDigest.digest();
+			hash = DatatypeConverter.printHexBinary(digestedBytes).toLowerCase();
+			
+			System.out.println(hash);
+			
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		
+		return hash;
 	}
 }

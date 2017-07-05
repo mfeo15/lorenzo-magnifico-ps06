@@ -3,23 +3,15 @@ package it.polimi.ingsw.ps06.view;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Insets;
-import java.awt.RenderingHints;
 import java.awt.Toolkit;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
 
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -42,12 +34,13 @@ public class RoomGUI extends Observable implements Room {
 	private JTextField username, stat1, stat2, stat3, stat4, logged;
 	private JTextField[] player = new JTextField[5];
 	private JPasswordField password;
-	private JButton login, start, ready;
+	private JButton login, start;
 	private Font font,font2;
 	private int width;
 	private int height;
 	private AudioClip mediaPlayer4;
-	private Media hit2;
+	private Media hit2,yes,no;
+
 		
 	@Override
 	public void show() throws IOException
@@ -90,6 +83,14 @@ public class RoomGUI extends Observable implements Room {
 		String menu = "/music1.mp3";
         String mediaURL4 = getClass().getResource(menu).toExternalForm();
 		Media menuMusic = new Media(mediaURL4);
+		
+		String yesS = "/yes.wav";
+		String mediaURL5 = getClass().getResource(yesS).toExternalForm();
+		yes = new Media(mediaURL5);
+		
+		String noS = "/no.wav";
+		String mediaURL6 = getClass().getResource(noS).toExternalForm();
+		no = new Media(mediaURL6);
 
 		
 		mediaPlayer4 = new AudioClip(menuMusic.getSource());
@@ -128,7 +129,7 @@ public class RoomGUI extends Observable implements Room {
         stat1.setOpaque(false);
         stat1.setEditable(false);
         stat1.setBorder(null);
-        stat1.setFont(font);
+        stat1.setFont(font2);
         f.add(stat1);
         
         stat2 = new JTextField();
@@ -137,7 +138,7 @@ public class RoomGUI extends Observable implements Room {
         stat2.setOpaque(false);
         stat2.setEditable(false);
         stat2.setBorder(null);
-        stat2.setFont(font);
+        stat2.setFont(font2);
         f.add(stat2);
         
         stat3 = new JTextField();
@@ -146,7 +147,7 @@ public class RoomGUI extends Observable implements Room {
         stat3.setOpaque(false);
         stat3.setEditable(false);
         stat3.setBorder(null);
-        stat3.setFont(font);
+        stat3.setFont(font2);
         f.add(stat3);
         
         stat4 = new JTextField();
@@ -155,7 +156,7 @@ public class RoomGUI extends Observable implements Room {
         stat4.setOpaque(false);
         stat4.setEditable(false);
         stat4.setBorder(null);
-        stat4.setFont(font);
+        stat4.setFont(font2);
         f.add(stat4);
         
         logged = new JTextField("");
@@ -229,19 +230,6 @@ public class RoomGUI extends Observable implements Room {
         login.setFont(font2);
         f.add(login);
         
-        /*	Work in Progress, please be patient
-        ready = new JButton("Pronto");
-        ready.setLocation(width*66/100,height*77/100);
-        ready.setSize(width*8/100,width*4/100);
-        ready.setOpaque(false);
-        ready.setContentAreaFilled(false);
-        ready.setFocusPainted(false);
-        ready.setMargin(new Insets(0,0,0,5));
-        ready.setForeground(Color.BLACK);
-        ready.setFont(font2);
-        f.add(ready);
-        */
-        
         start = new JButton("Avvia");
         start.setLocation(width*71/100,height*65/100);
         start.setSize(width*8/100,width*4/100);
@@ -289,7 +277,6 @@ public class RoomGUI extends Observable implements Room {
             	MediaPlayer mediaPlayer3 = new MediaPlayer(hit2);
         		mediaPlayer3.play();
         		giveCredentials(username.getText(),String.valueOf(password.getPassword()));
-        		if(checkLogin()){logged.setText("Welcome: "+username.getText());}
         		
             }
             
@@ -348,6 +335,11 @@ public class RoomGUI extends Observable implements Room {
         	 	start.removeMouseListener( al );
         	}
 		}
+		
+		if(index==3 && name!=null){
+			start.setEnabled(false);
+			
+		}
 	}
 
 	@Override
@@ -355,15 +347,11 @@ public class RoomGUI extends Observable implements Room {
 		setChanged();
 		MessageUser userMessage;
 		
-		userMessage = new MessageUser(username);
+		userMessage = new MessageUser(username, password);
 		notifyObservers(userMessage);
 		
-	}
-
-	@Override
-	public boolean checkLogin() {
-		return true;
-		
+		MediaPlayer mediaPlayer1 = new MediaPlayer(no);
+		mediaPlayer1.play();
 	}
 
 	@Override
@@ -420,6 +408,19 @@ public class RoomGUI extends Observable implements Room {
 		RoomHasLoaded roomLoaded = new RoomHasLoaded();
 		notifyObservers(roomLoaded);
 	}
-	
+
+
+	@Override
+	public void userHasLoggedIn(String username, int stat1, int stat2, int stat3, int stat4) {
+		logged.setText("Welcome: "+username);
+		this.stat1.setText(""+stat1);
+		this.stat2.setText(""+stat2);
+		this.stat3.setText(""+stat3);
+		this.stat4.setText(""+stat4);
 		
+		MediaPlayer mediaPlayer5 = new MediaPlayer(yes);
+		mediaPlayer5.play();
+	}
+	
+	
 }

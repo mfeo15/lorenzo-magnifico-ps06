@@ -9,25 +9,25 @@ public class LeaderOnTableFaceDown implements LeaderState {
 	}
 	
 	@Override
-	public String playLeader() {
-		return "La carta Leader " + leader.getTitle() + "è già stata giocata";
+	public boolean playLeader() {
+		return false;
 	}
 
 	@Override
-	public String activateLeader() {
-		return "La carta Leader " + leader.getTitle() + "è già a faccia in giù";
+	public boolean activateLeader() {
+		return false;
 	}
 
 	@Override
-	public String deactivateLeader() {
+	public boolean deactivateLeader() {
 		
 		leader.setLeaderState( leader.getDeactivatedLeaderState() );
-		return "La carta Leader " + leader.getTitle() + "è nuovamente a faccia in su";
+		return true;
 	}
 
 	@Override
-	public String discardLeader() {
-		return "La carta Leader " + leader.getTitle() + "è già stata giocata e non può più essere scartata";
+	public boolean discardLeader() {
+		return false;
 	}
 
 }

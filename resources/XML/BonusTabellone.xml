@@ -7,6 +7,7 @@
 			<wood>2</wood>	
 		</posto4>
 	</bonustorreverde>
+	
 	<bonustorregialla>
 		<posto3>
 			<military>1</military>
@@ -15,6 +16,7 @@
 			<military>2</military>
 		</posto4>
 	</bonustorregialla>
+	
 	<bonustorreviola>
 		<posto3>
 			<coin>1</coin>	
@@ -23,6 +25,7 @@
 			<coin>2</coin>		
 		</posto4>
 	</bonustorreviola>
+	
 	<bonustorreblu>
 		<posto3>
 			<stone>1</stone>	
@@ -31,6 +34,7 @@
 			<stone>2</stone>	
 		</posto4>
 	</bonustorreblu>
+	
 	<bonusmercato>
 		<posto1>
 			<coin>5</coin>
@@ -43,9 +47,10 @@
 			<coin>2</coin>
 		</posto3>
 		<posto4>
-			<privilege>2<privilege>
+			<privilege>2</privilege>
 		</posto4>
 	</bonusmercato>
+	
 	<bonusfede>
 		<posto0>0</posto0>
 		<posto1>1</posto1>
@@ -57,11 +62,76 @@
 		<posto7>9</posto7>
 		<posto8>11</posto8>
 		<posto9>13</posto9>
-		<posto10><15/posto10>
+		<posto10>15</posto10>
 		<posto11>17</posto11>
 		<posto12>19</posto12>
 		<posto13>22</posto13>
 		<posto14>25</posto14>
 		<posto15>30</posto15>
 	</bonusfede>
+	
+	<bonustiles>
+
+		<bonustile type="0">
+			<production>
+				<military>1</military>
+				<coin>2</coin>
+			</production>
+			<harvest>
+				<wood>1</wood>
+				<stone>1</stone>
+				<servant>1</servant>
+			</harvest>
+		</bonustile>
+	
+		<bonustile type="1">
+			<production>
+				<servant>1</servant>
+				<coin>2</coin>
+			</production>
+			<harvest>
+				<wood>1</wood>
+				<stone>1</stone>
+				<military>1</military>
+			</harvest>
+		</bonustile>
+	
+		<bonustile type="2">
+			<production>
+				<servant>1</servant>
+				<military>2</military>
+			</production>
+			<harvest>
+				<wood>1</wood>
+				<stone>1</stone>
+				<coin>1</coin>
+			</harvest>
+		</bonustile>
+		
+		<bonustile type="3">
+			<production>
+				<servant>2</servant>
+				<coin>1</coin>
+			</production>
+			<harvest>
+				<wood>1</wood>
+				<stone>1</stone>
+				<military>1</military>
+			</harvest>
+		</bonustile>
+		
+		<bonustile type="4">
+			<production>
+				<military>2</military>
+				<coin>1</coin>
+			</production>
+			<harvest>
+				<wood>1</wood>
+				<stone>1</stone>
+				<servant>1</servant>
+			</harvest>
+		</bonustile>
+	
+	</bonustiles>
+	
 </bonustabellone>

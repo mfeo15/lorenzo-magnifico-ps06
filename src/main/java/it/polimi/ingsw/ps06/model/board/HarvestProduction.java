@@ -6,21 +6,18 @@ import java.util.Observer;
 
 import it.polimi.ingsw.ps06.model.FamilyMember;
 import it.polimi.ingsw.ps06.model.Gathering;
-import it.polimi.ingsw.ps06.model.Types;
 import it.polimi.ingsw.ps06.model.Types.Action;
-import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
 import it.polimi.ingsw.ps06.model.effects.EffectsBonusMalus;
 import it.polimi.ingsw.ps06.networking.messages.MessageBoardMemberHasBeenPlaced;
 import it.polimi.ingsw.ps06.networking.messages.MessageModel2ViewNotification;
 
 /**
-* Classe per la gestione degli spazi produzione e raccolto
-*
-* @author  ps06
-* @version 1.3
-* @since   2017-05-10
-*/
-
+ * Classe per la gestione degli spazi produzione e raccolto
+ *
+ * @author  ps06
+ * @version 1.3
+ * @since   2017-05-10
+ */
 public class HarvestProduction extends Observable implements PlaceSpace {
 	private ArrayList<FamilyMember> harvestSpaces1;;
 	private ArrayList<FamilyMember> harvestSpaces2;
@@ -31,15 +28,8 @@ public class HarvestProduction extends Observable implements PlaceSpace {
 	private int numberPlayers;
 	private int hs2index=0, ps2index=0;
 	
-	/**
-	* Metodo per il piazzamento di un familiare su di una zona Produzione o Raccolto, include controllo di posizionamento
-	*
-	* @param 	member			Familiare che si vuole piazzare
-	* @param 	chosenAction 	Codice dell'azione da eseguire
-	* @return 					Nothing
-	*/
 	@Override
-	public void placeMember(FamilyMember member, Action chosenAction, int servants) throws IllegalStateException {
+	public void placeMember(FamilyMember member, Action chosenAction, int servants) {
 		boolean multi = false;
 		boolean condition; //Regola del colore
 		
@@ -51,7 +41,7 @@ public class HarvestProduction extends Observable implements PlaceSpace {
 		if(chosenAction == Action.HARVEST_1) {
 			
 			if (memberValue < 1) {
-				handle(1, member);
+				handleBadPlacing(1, member);
 				return;
 			}
 			
@@ -92,7 +82,7 @@ public class HarvestProduction extends Observable implements PlaceSpace {
 		if(chosenAction==Action.HARVEST_2) {
 			
 			if ((memberValue - 3) < 1) {
-				handle(1, member);
+				handleBadPlacing(1, member);
 				return;
 			}
 				
@@ -104,7 +94,7 @@ public class HarvestProduction extends Observable implements PlaceSpace {
 				// Iterazione arrayList di raccolto
 				condition = true;
 				for(FamilyMember family : allHarvest){
-					if(member.getFakePlayer() == family.getPlayer()){
+					if ( (family != null) && (member.getFakePlayer() == family.getFakePlayer()) ) {
 						condition=false;
 					}
 				}
@@ -113,14 +103,16 @@ public class HarvestProduction extends Observable implements PlaceSpace {
 				if(member.getFakePlayer()==null) condition=true;
 				
 				// Aggiunta e produzione nel caso la regola del colore sia rispettata
-				if(condition){
+				if(condition)
+				{
 					harvestSpaces2.add(hs2index, member); 
 					hs2index++;
 					startGathering(chosenAction, member, servants);
 					allHarvest.clear();
-				}
+					
+				} else handleBadPlacing(2, member);
 				
-			} else handle(-1, member);
+			} else handleBadPlacing(-1, member);
 		}
 		
 		
@@ -129,7 +121,7 @@ public class HarvestProduction extends Observable implements PlaceSpace {
 		if(chosenAction==Action.PRODUCTION_1) {
 			
 			if ((memberValue - 3) < 1) {
-				handle(1, member);
+				handleBadPlacing(1, member);
 				return;
 			}
 			
@@ -171,7 +163,7 @@ public class HarvestProduction extends Observable implements PlaceSpace {
 		if(chosenAction==Action.PRODUCTION_2) {
 			
 			if ((memberValue - 3) < 1) {
-				handle(1, member);
+				handleBadPlacing(1, member);
 				return;
 			}
 			
@@ -184,7 +176,7 @@ public class HarvestProduction extends Observable implements PlaceSpace {
 				// Iterazione arrayList di raccolto
 				condition = true;
 				for(FamilyMember family : allProduction){
-					if(member.getFakePlayer() == family.getFakePlayer()){
+					if ( (family != null) && (member.getFakePlayer() == family.getFakePlayer()) ) {
 						condition=false;
 					}
 				}
@@ -193,24 +185,25 @@ public class HarvestProduction extends Observable implements PlaceSpace {
 				if(member.getFakePlayer()==null) condition=true;
 				
 				// Aggiunta e produzione nel caso la regola del colore sia rispettata
-				if(condition){
+				if(condition) 
+				{
 					productionSpaces2.add(ps2index, member); 
 					ps2index++;
 					startGathering(chosenAction, member, servants);
 					allProduction.clear();
-				}
+					
+				} else handleBadPlacing(2, member);
 				
-			} else handle(-1, member);
+			} else handleBadPlacing(-1, member);
 		}
 		
 	}
 	
 	/**
-	* Costruttore della zona Produzione e Raccolto. Imposta la zona
-	*
-	* @param 	numberPlayers	Numero di giocatori della partita
-	* @return 	Nothing
-	*/
+	 * Costruttore della zona Produzione e Raccolto.
+	 *
+	 * @param 	numberPlayers	numero giocatori per cui predisporrere la zona
+	 */
 	public HarvestProduction(int numberPlayers) {
 		
 		harvestSpaces1 = new ArrayList<FamilyMember>();
@@ -218,37 +211,38 @@ public class HarvestProduction extends Observable implements PlaceSpace {
 		productionSpaces1 = new ArrayList<FamilyMember>();
 		productionSpaces2 = new ArrayList<FamilyMember>();
 		
-		this.numberPlayers=numberPlayers;
+		this.numberPlayers = numberPlayers;
 		
 		initializeArrayLists();
 	}
 	
-	public void initializeArrayLists(){
-		
-		for(int j=0; j<10; j++){
-			harvestSpaces1.add(null);
-			productionSpaces1.add(null);
-			}
-		
-		for(int j=0; j<20; j++){
-			harvestSpaces2.add(null);
-			productionSpaces2.add(null);
-			}
-		
-	}
+	
 	
 	/**
-	* Gestisci errori di posizionamento familiare
-	*
-	* @param	code		codice errore
-	* @return 	Nothing
-	*/
-	private void handle(int code, FamilyMember member){
+	 * Metodo per l'inizializzazione dei array di supporto
+	 */
+	private void initializeArrayLists(){
+
+		for(int j=0; j<10; j++) {
+			harvestSpaces1.add(null);
+			productionSpaces1.add(null);
+		}
+
+		for(int j=0; j<20; j++) {
+			harvestSpaces2.add(null);
+			productionSpaces2.add(null);
+		}
+	}
+	
+	@Override
+	public void handleBadPlacing(int code, FamilyMember member) {
 		
 		String notification = "Il giocatore " + member.getPlayer().getColorAssociatedToID() + " ha piazzato un familiare ";
 		
 		switch(code) {
 		case 1: notification += " di valore non sufficiente per l'azione";
+			break;
+		case 2: notification += ", ma non rispetta la regola del colore";
 			break;
 		default: notification = "UNKNOWN ERROR ON HARVEST&PRODUCTION";
 		}
@@ -258,12 +252,12 @@ public class HarvestProduction extends Observable implements PlaceSpace {
 	}
 	
 	/**
-	* Metodo per avviare il processo di Raccolto o di Produzione
-	*
-	* @param 	player			Giocatore che effettua Produzione o Raccolto
-	* @param 	chosenAction	Codice dell'azione da eseguire	
-	* @return 	
-	*/
+	 * Metodo per avviare il processo di Raccolto o di Produzione
+	 *
+	 * @param 	chosenAction	tipo di azione da eseguire
+	 * @param	member			familiare che esegue l'azione
+	 * @param	servantsUsed	numero di servitori impiegati nell'azione	
+	 */
 	private void startGathering(Action chosenAction, FamilyMember member, int servantsUsed) {
 
 		gathering = new Gathering(chosenAction, member, servantsUsed);
@@ -279,11 +273,8 @@ public class HarvestProduction extends Observable implements PlaceSpace {
 	}
 	
 	/**
-	* Metodo per ripulire i familiari allocati in queste zone
-	*
-	* @param 	Unused
-	* @return 	Nothing
-	*/
+	 * Metodo per ripulire i familiari allocati in queste zone
+	 */
 	public void cleanZone(){
 		harvestSpaces1.clear();
 		harvestSpaces2.clear();
@@ -294,37 +285,37 @@ public class HarvestProduction extends Observable implements PlaceSpace {
 	}
 	
 	/**
-	* Metodo per ritornare l'arraylist di familiari nella casella 1 del raccolto
-	*
-	* @return 	memberSpaces	ArrayList familiari
-	*/
+	 * Getter per l'arraylist di familiari nella casella 1 del raccolto
+	 *
+	 * @return 	familiari delle casella 1 del raccolto
+	 */
 	public ArrayList<FamilyMember> getHarvestSpace1(){
 		return harvestSpaces1;
 	}
 	
 	/**
-	* Metodo per ritornare l'arraylist di familiari nella casella 2 del raccolto
-	*
-	* @return 	memberSpaces	ArrayList familiari
-	*/
+	 * Getter per l'arraylist di familiari nella casella 2 del raccolto
+	 *
+	 * @return 	familiari delle casella 2 del raccolto
+	 */
 	public ArrayList<FamilyMember> getHarvestSpace2(){
 		return harvestSpaces2;
 	}
 	
 	/**
-	* Metodo per ritornare l'arraylist di familiari nella casella 1 della produzine
-	*
-	* @return 	memberSpaces	ArrayList bonus
-	*/
+	 * Getter per l'arraylist di familiari nella casella 1 della produzione
+	 *
+	 * @return 	familiari delle casella 1 della produzione
+	 */
 	public ArrayList<FamilyMember> getProductionSpace1(){
 		return productionSpaces1;
 	}
 	
 	/**
-	* Metodo per ritornare l'arraylist di familiari nella casella 2 della produzine
-	*
-	* @return 	memberSpaces	ArrayList bonus
-	*/
+	 * Getter per l'arraylist di familiari nella casella 2 della produzione
+	 *
+	 * @return 	familiari delle casella 2 della produzione
+	 */
 	public ArrayList<FamilyMember> getProductionSpace2(){
 		return productionSpaces1;
 	}
