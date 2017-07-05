@@ -39,7 +39,7 @@ public class RoomGUI extends Observable implements Room {
 	private int width;
 	private int height;
 	private AudioClip mediaPlayer4;
-	private Media hit2;
+	private Media hit2,yes,no;
 
 		
 	@Override
@@ -83,6 +83,14 @@ public class RoomGUI extends Observable implements Room {
 		String menu = "/music1.mp3";
         String mediaURL4 = getClass().getResource(menu).toExternalForm();
 		Media menuMusic = new Media(mediaURL4);
+		
+		String yesS = "/yes.wav";
+		String mediaURL5 = getClass().getResource(yesS).toExternalForm();
+		yes = new Media(mediaURL5);
+		
+		String noS = "/no.wav";
+		String mediaURL6 = getClass().getResource(noS).toExternalForm();
+		no = new Media(mediaURL6);
 
 		
 		mediaPlayer4 = new AudioClip(menuMusic.getSource());
@@ -222,19 +230,6 @@ public class RoomGUI extends Observable implements Room {
         login.setFont(font2);
         f.add(login);
         
-        /*	Work in Progress, please be patient
-        ready = new JButton("Pronto");
-        ready.setLocation(width*66/100,height*77/100);
-        ready.setSize(width*8/100,width*4/100);
-        ready.setOpaque(false);
-        ready.setContentAreaFilled(false);
-        ready.setFocusPainted(false);
-        ready.setMargin(new Insets(0,0,0,5));
-        ready.setForeground(Color.BLACK);
-        ready.setFont(font2);
-        f.add(ready);
-        */
-        
         start = new JButton("Avvia");
         start.setLocation(width*71/100,height*65/100);
         start.setSize(width*8/100,width*4/100);
@@ -355,6 +350,8 @@ public class RoomGUI extends Observable implements Room {
 		userMessage = new MessageUser(username, password);
 		notifyObservers(userMessage);
 		
+		MediaPlayer mediaPlayer1 = new MediaPlayer(no);
+		mediaPlayer1.play();
 	}
 
 	@Override
@@ -420,6 +417,9 @@ public class RoomGUI extends Observable implements Room {
 		this.stat2.setText(""+stat2);
 		this.stat3.setText(""+stat3);
 		this.stat4.setText(""+stat4);
+		
+		MediaPlayer mediaPlayer5 = new MediaPlayer(yes);
+		mediaPlayer5.play();
 	}
 	
 	

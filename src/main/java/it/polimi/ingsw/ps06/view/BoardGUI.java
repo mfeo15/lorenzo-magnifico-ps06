@@ -124,7 +124,7 @@ public class BoardGUI extends Observable implements Board {
 	private JButton servants = new JButton();
 	
 	//Componenti per chat
-	private JButton chat = new JButton("Chat");
+	private JButton chat = new JButton("• Chat  ");
 	private JButton send = new JButton();
 	private JTextArea chatBox = new JTextArea();
 	private JTextField message = new JTextField();
@@ -180,7 +180,7 @@ public class BoardGUI extends Observable implements Board {
     
     private int excomm1Count=0, excomm2Count=0, excomm3Count=0;
     private Media hit2;
-    private Media exc;
+    private Media exc, sendA, messageA, behaviourA;
     
     PersonalViewGUI view= new PersonalViewGUI(0,this);
 	private JFXPanel fxPanel = new JFXPanel();
@@ -300,6 +300,18 @@ public class BoardGUI extends Observable implements Board {
 		String excommunicate = "/excommunicate.wav";
 		String mediaURL6 = getClass().getResource(excommunicate).toExternalForm();
 		exc = new Media(mediaURL6);
+		
+		String sendS = "/send.wav";
+		String mediaURL7 = getClass().getResource(sendS).toExternalForm();
+		sendA = new Media(mediaURL7);
+		
+		String messageS = "/message.wav";
+		String mediaURL8 = getClass().getResource(messageS).toExternalForm();
+		messageA = new Media(mediaURL8);
+		
+		String behaviourS = "/behaviour.wav";
+		String mediaURL9 = getClass().getResource(behaviourS).toExternalForm();
+		behaviourA = new Media(mediaURL9);
 		
         //Inizializzazione dei componenti
 		
@@ -785,11 +797,16 @@ public class BoardGUI extends Observable implements Board {
        	{        		
        		public void mousePressed(MouseEvent evt)
 	        {
+       			
+       			MediaPlayer mediaPlayer10 = new MediaPlayer(sendA);
+				mediaPlayer10.play();
+       			
        			if(chatOpen==false){
        				chat.setLocation((int)(screenSize.getWidth()*84/100),(int)(screenSize.getHeight()*70/100));
        				send.setVisible(true);
        				message.setVisible(true);
        				chatBox.setVisible(true);
+       				chat.setText("Chat");
        				
        				chatOpen=true;
        			}
@@ -799,6 +816,7 @@ public class BoardGUI extends Observable implements Board {
        				send.setVisible(false);
        				message.setVisible(false);
        				chatBox.setVisible(false);
+       				chat.setText("Chat");
        				chatOpen=false;
        			}
        			
@@ -809,6 +827,9 @@ public class BoardGUI extends Observable implements Board {
        	{        		
        		public void mousePressed(MouseEvent evt)
 	        {
+       			MediaPlayer mediaPlayer11 = new MediaPlayer(sendA);
+				mediaPlayer11.play();
+       			
        			sendChatText(message.getText());
        			message.setText("");
 	        }
@@ -1419,6 +1440,10 @@ public class BoardGUI extends Observable implements Board {
 		                    usedMember= Integer.parseInt(value.toString());
 		                    
 	                        accept = true;
+	                    }
+	                    else{
+	                    	MediaPlayer mediaPlayer1 = new MediaPlayer(behaviourA);
+	                		mediaPlayer1.play();
 	                    }
 	                }
 	            } catch (Exception exp) {
@@ -2584,6 +2609,10 @@ public class BoardGUI extends Observable implements Board {
 
 		String s1 = "\n"+"["+player+"]: "+s;
 		chatBox.setText(chatBox.getText() + s1);
+		chat.setText("• Chat  ");
+		
+		MediaPlayer mediaPlayer12 = new MediaPlayer(messageA);
+		mediaPlayer12.play();
 		
 	}
 	
