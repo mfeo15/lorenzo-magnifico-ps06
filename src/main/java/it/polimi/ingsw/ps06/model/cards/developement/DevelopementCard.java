@@ -8,89 +8,88 @@ import it.polimi.ingsw.ps06.model.effects.Effect;
 
 
 /**
-* classe per la gestione delle carte sviluppo
+* Classe per la gestione delle carte sviluppo
 * 
 * @author ps06
 * @version 1.1
 * @since 13-05-2017
 */
-
 public class DevelopementCard extends Card {
 
 	protected int color;
 	protected int period;
-	public ArrayList<Effect> instant_effect;  // <== TO CHANGE ASAP!!!
-
+	private ArrayList<Effect> instant_effect;
 	
+
+	/**
+	 * Costruttore di default della classe
+	 */
 	public DevelopementCard() {
 		this.instant_effect = new ArrayList<Effect>();
 	}
 	
-	/**Metodo per settare il colore della carta	 
+	/**
+	 * Getter per il periodo della carta
 	 * 
-	 *@param	color	colore della carta
-	 *@return	nothing
+	 * @return	il periodo associato alla carta
 	 */
-	public void setColor(int color) {
-		this.color = color;
+	public int getPeriod() {
+		return period;
 	}
 
-
-	/**Metodo per settare il periodo della carta
+	/**
+	 * Setter per il periodo della carta
 	 * 
-	 * @param	code	periodo della carta
-	 * @return	nothing
+	 * @param	period	periodo della carta da settare
 	 */
-
 	public void setPeriod(int period) {
 		this.period = period;
 	}
+	
+	/**
+	 * Getter per la collezione di effetti istantanei
+	 * 
+	 * @return	tutti gli effetti istantanei
+	 */
+	public ArrayList<Effect> getInstantEffects() {
+		return instant_effect;
+	}
 
 	/**Metodo per settare il periodo della carta
 	 * 
-	 * @param	effect	effetto da aggiungere
-	 * @return	nothing
+	 * @param	effects		insieme di effetti da settare alla carta
 	 */
-	public void setEffect(Effect effect) {
+	public void setEffect(ArrayList<Effect> effects) {
+		this.instant_effect = effects;
+	}
+	
+	/**
+	 * Metodo per aggiungere alla collezione di effetti istantanei un gruppo
+	 * di nuovi effetti
+	 * 
+	 * @param	instant_effect	insieme di effetti da aggiungere alla carta
+	 */
+	public void addNewInstantEffects(ArrayList<Effect> instant_effect) {
+		this.instant_effect.addAll(instant_effect);
+	}
+	
+	/**
+	 * Metodo per aggiungere alla collezione di effetti istantanei
+	 * un singolo nuovo effetto
+	 * 
+	 * @param	effect	effetto da aggiungere
+	 */
+	public void addNewEffect(Effect effect) {
 		this.instant_effect.add(effect);
 	}
 
-	/**Metodo per settare il periodo della carta
-	 * 
-	 * @param	effect	effetto da aggiungere
-	 * @return	nothing
-	 */
-	public void setEffect(ArrayList<Effect> effects) {
-		this.instant_effect.addAll(effects);
-	}
-
-	/**Metodo per attivare gli effetti istantanei
+	/**
+	 * Metodo per attivare gli effetti istantanei associati alla carta
 	 * 
 	 * @param	player	giocatore su cui attivare l'effetto
-	 * @return	nothing
 	 */
 	public void activateIstantEffect(Player player) {
 		for( Effect i : instant_effect )
 			i.activate(player);
-	}
-
-	/**Metodo che restituisce il colore della carta
-	 * 
-	 * @param	none
-	 * @return	color	colore della carta
-	 */
-
-	public int getColor() {
-		return color;
-	}
-
-	/**Metodo che restituisce il periodo della carta
-	 * 
-	 * @param	none
-	 * @return	period	periodo della carta
-	 */
-
-	public int getPeriod() {
-		return period;
 	}
 }

@@ -15,21 +15,21 @@ import org.w3c.dom.NodeList;
  * @since   2017-06-16
  */
 public class ParserTimeSettings extends XMLParser {
+	
 	private TimeSettings sett;
 
 	/**
-	 * Costruttore della classe
-	 *
-	 * @param source		Stringa corrispondente al percorso del file 
-	 * 
-	 */	
-
+	* Costruttore della classe
+	*
+	* @param	source		stringa corrispondente al percorso del file 
+	*/
 	public ParserTimeSettings(String source) {
 		super(source);
 		
 		parse( buildDocument() );
 	}
 	
+	@Override
 	public void parse(Document d) {
 		Node settings = d.getFirstChild();
 		NodeList values = settings.getChildNodes();
@@ -54,12 +54,10 @@ public class ParserTimeSettings extends XMLParser {
 	}
 
 	/**
-	 *Metodo che restituisce i settaggi
-	 *
-	 * @return sett	i settaggi 
-	 * 
-	 **/
-
+	* Getter dell'oggeto timeSettings costruito dal file XML
+	* 
+	* @return	settings costruite dal file   
+	*/
 	public TimeSettings getSettings(){
 		return sett;
 	}

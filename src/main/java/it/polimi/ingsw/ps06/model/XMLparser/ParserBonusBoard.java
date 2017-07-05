@@ -45,6 +45,10 @@ public class ParserBonusBoard extends XMLParser {
 		parse( buildDocument() );
 	}
 	
+	public ArrayList<Integer> getFaithPoints() {
+		return faith_points;
+	}
+	
 	public BonusTile getBonusTile(int code) {
 		return bonusTiles.get(code);
 	}

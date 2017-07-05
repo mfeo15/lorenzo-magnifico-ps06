@@ -27,10 +27,8 @@ import it.polimi.ingsw.ps06.networking.messages.MessageModel2ViewNotification;
 * @version 1.2
 * @since   2017-05-10 
 */
-
 public class Market extends Observable implements PlaceSpace {
 	private FamilyMember[] memberSpaces;
-	private ArrayList<Effect> bonus = new ArrayList<Effect>();
 	private Effect e;
 	private int openedWindows;
 	private int marketIndex = Action.valueOf("MARKET_1").ordinal();
@@ -89,10 +87,8 @@ public class Market extends Observable implements PlaceSpace {
 	public Market(int numberPlayers) {
 		
 		memberSpaces = new FamilyMember[4];
-		bonus = new ArrayList<Effect>();
 		
 		setSpaces(numberPlayers);
-		initBonus(numberPlayers);
 	}
 	
 	/**
@@ -145,39 +141,6 @@ public class Market extends Observable implements PlaceSpace {
 	}
 	
 	/**
-	* Metodo per inizializzare i bonus del mercato
-	*
-	* @param 	numberPlayers	Numero di giocatori della partita
-	* @return 	Nothing
-	*/
-	private void initBonus(int numberPlayers){
-		
-		//Creazione del primo bonus del market
-		bonus.add(new EffectsResources(new Resources(MaterialsKind.COIN,5)));
-		//Creazione del secondo bonus del market
-		bonus.add(new EffectsResources(new Resources(MaterialsKind.SERVANT,5)));
-		
-		if(numberPlayers>3) { 
-
-			//Creazione del terzo bonus del market
-			Resources r = new Resources(MaterialsKind.COIN,2);
-			r.setResourceValue(PointsKind.MILITARY_POINTS, 3);
-			bonus.add(new EffectsResources(r));
-			
-			//Creazione del quarto bonus del market
-			//bonus.add(new EffectsActions(new Privilege())); //privilegi
-			
-			if(numberPlayers>4) { 
-				//Creazione del quinto bonus del market
-				r.clearResources();
-				r.setResourceValue(PointsKind.FAITH_POINTS,2);
-				r.setResourceValue(PointsKind.MILITARY_POINTS, 1);
-				bonus.add(new EffectsResources(r));
-			}
-		}	
-	}
-	
-	/**
 	* Metodo per assegnare le risorse ai giocatori
 	*
 	* @param 	player		Giocatore a cui dare il bonus
@@ -190,11 +153,6 @@ public class Market extends Observable implements PlaceSpace {
 		
 		if ( r != null)
 			(new EffectsResources( r )).activate( member.getPlayer() );
-		
-		/*
-		e = bonus.get( chosenAction.ordinal() - marketIndex );
-		e.activate(player);
-		*/
 		
 		//if( (chosenAction.ordinal() - marketIndex) == 3 ) e.activate(player);
 		
@@ -227,16 +185,6 @@ public class Market extends Observable implements PlaceSpace {
 		
 		return new ArrayList<FamilyMember>(Arrays.asList(memberSpaces));
 	}
-	
-	/**
-	* Metodo per ritornare l'arraylist di bonus
-	*
-	* @return 	memberSpaces	ArrayList bonus
-	*/
-	public ArrayList<Effect> getBonuses(){
-		return bonus;
-	}
-	
 	
 	public void notifyChangement(Object o) {
 		

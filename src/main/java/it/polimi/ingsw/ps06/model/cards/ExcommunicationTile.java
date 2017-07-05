@@ -11,10 +11,20 @@ public class ExcommunicationTile extends Card {
 	
 	private int period;
 	
+	/**
+	 * Setter per il periodo della tessera
+	 * 
+	 * @param period	periodo associato alla tessera
+	 */
 	public void setPeriod(int period) {
 		this.period = period;
 	}
 	
+	/**
+	 * Getter per il periodo della tessera
+	 * 
+	 * @return	periodo associato alla tessera
+	 */
 	public int getPeriod() {
 		return this.period;
 	}

@@ -10,29 +10,26 @@ import it.polimi.ingsw.ps06.model.Resources;
 * @since   2017-05-11
 */
 public class Character extends DevelopementCard {
-	private Resources requirement;
+	
+	private Resources cost;
 	
 	
-	/**Metodo per settare i requisiti della carta
+	/**
+	 * Setter per il costo della carta
 	 * 
-	 * @param	requirement		requisiti della carta
-	 * @return	nothing
+	 * @param	cost	costo della carta
 	 */
-	 
-	public void setRequirement(Resources requirement){
-		this.requirement=requirement;
-	 	return;
+	public void setCost(Resources cost) {
+		this.cost = cost;
 	}	
 	 
 	/**
-	* Metodo per la gestione degli effetti per quanto riguarda la singola carta
-	* 
-	* @param 	player			Giocatore interessato
-	* @return 					Nothing
-	*/
-	
-	public Resources getRequirement(){
-		return requirement;
+	 * Getter per il costo della carta
+	 * 
+	 * @return	costo della carta
+	 */
+	public Resources getCost() {
+		return cost;
 	}
 
 }

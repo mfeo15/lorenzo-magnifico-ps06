@@ -47,10 +47,10 @@ public class CardAcquisitionTest {
 		t = new Territory();
 		
 		b = new Building();
-		b.setRequirement( new Resources(MaterialsKind.COIN, building_coin_cost) );
+		b.setCost( new Resources(MaterialsKind.COIN, building_coin_cost) );
 		
 		c = new Character();
-		c.setRequirement(new Resources(MaterialsKind.COIN, charachter_coin_cost) ); 
+		c.setCost(new Resources(MaterialsKind.COIN, charachter_coin_cost) ); 
 		
 		v = new Venture();
 		v.setRequirement(new Resources(MaterialsKind.COIN, venture_coin_cost) );

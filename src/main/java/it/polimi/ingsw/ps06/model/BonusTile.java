@@ -2,13 +2,12 @@ package it.polimi.ingsw.ps06.model;
 
 
 /**
- * classe per la definizione e gestione della tessera bonus personale
+ * Classe per la definizione e gestione della tessera bonus personale
  * 
  * @author ps06
  * @version 1.1
  * @since 13-05-2017
  */
-
 public class BonusTile {
 	
 	private int code;
@@ -36,7 +35,6 @@ public class BonusTile {
 	 * Getter del codice della BonusTile
 	 * 
 	 * @return	codice della BonusTiles
-	 * 
 	 */
 	public int getCode() {
 		return code;
@@ -46,7 +44,6 @@ public class BonusTile {
 	 * Setter del codice della BonusTile
 	 * 
 	 * @param code	codice della BonusTile da asseggnare
-	 * 
 	 */
 	public void setCode(int code) {
 		this.code = code;
@@ -56,7 +53,6 @@ public class BonusTile {
 	 * Getter della risorsa associata all'azione di raccolto
 	 * 
 	 * @return	risorsa associata al raccolto
-	 * 
 	 */
 	public Resources getHarvest_bonus() {
 		return harvest_bonus;
@@ -66,7 +62,6 @@ public class BonusTile {
 	 * Setter della risorsa associata all'azione di raccolto
 	 * 
 	 * @param	harvest_bonus	risorsa raccolto da settare
-	 * 
 	 */
 	public void setHarvest_bonus(Resources harvest_bonus) {
 		this.harvest_bonus = harvest_bonus;
@@ -76,7 +71,6 @@ public class BonusTile {
 	 * Getter della risorsa associata all'azione di produzione
 	 * 
 	 * @return	risorsa associata alla produzione
-	 * 
 	 */
 	public Resources getProduction_bonus() {
 		return production_bonus;
@@ -86,7 +80,6 @@ public class BonusTile {
 	 * Setter della risorsa associata all'azione di produzione
 	 * 
 	 * @param	production_bonus	risorsa produzione da settare
-	 * 
 	 */
 	public void setProduction_bonus(Resources production_bonus) {
 		this.production_bonus = production_bonus;
@@ -98,7 +91,7 @@ public class BonusTile {
 	* @param	dice	dado attuale da confrontare
 	* 
 	* @return	true	se il valore del dado soddisfa il requisito
-	**/
+	*/
 	public boolean check_dice(Dice dice){
 		if( dice.getValue() >= dice_required)
 			return true;

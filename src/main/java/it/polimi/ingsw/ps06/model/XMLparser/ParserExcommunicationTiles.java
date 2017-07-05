@@ -16,22 +16,21 @@ import it.polimi.ingsw.ps06.model.effects.EffectsBonusMalusMember;
 import it.polimi.ingsw.ps06.model.effects.EffectsBonusMalusNoMarket;
 
 /**
- * Classe per la lettura del file xml delle carte leader
+ * Classe per la lettura del file xml delle carte tessere scomunica
  *
  * @author  ps06
  * @version 1.0
- * @since   2017-06-05
+ * @since   2017-07-03
  */
 public class ParserExcommunicationTiles extends XMLParser {
 
 	private ArrayList<ExcommunicationTile> excommunicationTiles;
 
 	/**
-	 * Costruttore della classe
-	 *
-	 * @param source		Stringa corrispondente al percorso del file 
-	 * 
-	 */	
+	* Costruttore della classe
+	*
+	* @param	source		stringa corrispondente al percorso del file 
+	*/	
 	public ParserExcommunicationTiles(String source) {
 		super(source);
 		excommunicationTiles = new ArrayList<ExcommunicationTile>();
@@ -61,15 +60,12 @@ public class ParserExcommunicationTiles extends XMLParser {
 	}
 
 	/**
-	 * Metodo che da un nodo che corrisponde ad un attributo, lo imposta sulla carta
-	 *
-	 * @param a		Nodo contenente l'attributo da inserire nella carta
-	 * @param d		Carta della quale si devono impostare gli attributi
-	 * 
-	 * @return d		Carta impostata
-	 * 
-	 */	
-	public void setAttributes(NodeList attributes, ExcommunicationTile tile) {
+	* Metodo per impostare una carta con tutti gli attributi presenti nel suo nodo
+	*
+	* @param	attributes		insieme di nodi rappresentanti i vari attributi della carta
+	* @param	tile			tessera della quale si devono impostare gli attributi
+	*/
+	private void setAttributes(NodeList attributes, ExcommunicationTile tile) {
 
 		for(int j=0; j < attributes.getLength(); j++) 
 		{
@@ -92,15 +88,13 @@ public class ParserExcommunicationTiles extends XMLParser {
 	}
 
 	/**
-	 * Metodo che genera l'effetto delle carte
-	 *
-	 * @param effetto	Nodo contenente l'effetto e i suoi valori da impostare
-	 * @param card		Carta della quale bisogna impostare l'effetto
-	 * 
-	 * @return nothing
-	 * 
-	 */	
-	public ArrayList<Effect> parseEffectNode(Node effetto) {
+	* Metodo per generare l'insieme di effetti associati ad un Nodo radice
+	*
+	* @param	effetto		nodo radice i cui figli sono una definizione di vari effetti
+	* 
+	* @return 				insieme di effetti costruiti dal file XML
+	*/
+	private ArrayList<Effect> parseEffectNode(Node effetto) {
 
 		ArrayList<Effect> effects_collection = new ArrayList<Effect>();
 		NodeList effects = ((Element) effetto).getElementsByTagName("effect");
@@ -150,6 +144,17 @@ public class ParserExcommunicationTiles extends XMLParser {
 		return effects_collection;
 	}
 	
+	/**
+	 * Metodo per associazione biunivoca tra una stringa del tipo di azione
+	 * ed il relativo elemento di ActionCategory
+	 * 
+	 * @param	action	stringa con il nome del'azione da associare
+	 * 
+	 * @return			<p>elemento di ActionCategory relativo alla stringa passata</p>
+	 * 					<p>null nel caso in cui la stringa non rappresentasse un dato noto</p>
+	 * 
+	 * @see				it.polimi.ingsw.ps06.model.Types
+	 */
 	private ActionCategory parseAction(String action) {
 		
 		if (action.equals("verde")) 	return ActionCategory.TOWER_GREEN;
@@ -163,6 +168,17 @@ public class ParserExcommunicationTiles extends XMLParser {
 		return null;
 	}
 
+	/**
+	 * Metodo per associazione biunivoca tra una stringa del colore del member
+	 * ed il relativo elemento di ColorPalette
+	 * 
+	 * @param	member	stringa con il nome del colore del member
+	 * 
+	 * @return			<p>elemento di ColorPalette relativo alla stringa passata</p>
+	 * 					<p>null nel caso in cui la stringa non rappresentasse un dato noto</p>
+	 * 
+	 * @see				it.polimi.ingsw.ps06.model.Types
+	 */
 	private ArrayList<ColorPalette> parseMember(String member) {
 
 		ArrayList<ColorPalette> a = new ArrayList<ColorPalette>();
@@ -189,26 +205,11 @@ public class ParserExcommunicationTiles extends XMLParser {
 	}
 
 	/**
-	 * Metodo che ritorna il mazzo di carte
-	 * 
-	 * @return cards   
-	 * 
-	 */	 
-
+	* Getter della collezione di carte costruite dal file XML
+	* 
+	* @return	insieme di tessere costruite   
+	*/
 	public ArrayList<ExcommunicationTile> getTiles(){
 		return excommunicationTiles;
-	}
-	
-	public static void main(String[] args){
-
-		ParserExcommunicationTiles c = new ParserExcommunicationTiles("resources/XML/ExcommunicationCards.xml");
-		ArrayList<ExcommunicationTile> a = new  ArrayList<ExcommunicationTile>();
-		a = c.getTiles();
-		
-		for (ExcommunicationTile l : a) {
-			System.out.println("");
-			System.out.println("CODE: " + l.getCode());
-			System.out.println("PERIOD: " + l.getPeriod());
-		}
 	}
 }

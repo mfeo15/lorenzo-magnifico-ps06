@@ -31,11 +31,10 @@ public class ParserLeaders extends XMLParser {
 	private ArrayList<Leader> leaders;
 
 	/**
-	 * Costruttore della classe
-	 *
-	 * @param source		Stringa corrispondente al percorso del file 
-	 * 
-	 */	
+	* Costruttore della classe
+	*
+	* @param	source		stringa corrispondente al percorso del file 
+	*/
 	public ParserLeaders(String source) {
 		super(source);
 		leaders = new ArrayList<Leader>();
@@ -65,15 +64,12 @@ public class ParserLeaders extends XMLParser {
 	}
 
 	/**
-	 * Metodo che da un nodo che corrisponde ad un attributo, lo imposta sulla carta
-	 *
-	 * @param a		Nodo contenente l'attributo da inserire nella carta
-	 * @param d		Carta della quale si devono impostare gli attributi
-	 * 
-	 * @return d		Carta impostata
-	 * 
-	 */	
-	public void setAttributes(NodeList attributes, Leader card) {
+	* Metodo per impostare una carta con tutti gli attributi presenti nel suo nodo
+	*
+	* @param	attributes		insieme di nodi rappresentanti i vari attributi della carta
+	* @param	card			carta della quale si devono impostare gli attributi
+	*/
+	private void setAttributes(NodeList attributes, Leader card) {
 
 		for(int j=0; j < attributes.getLength(); j++) 
 		{
@@ -101,12 +97,13 @@ public class ParserLeaders extends XMLParser {
 
 
 	/**
-	 * Metodo per creare un elemento risorsa quando nel file xml si va a leggere un nodo che imposti delle risorse nelle carte
-	 *
-	 * @param bonus		Nodo contenente i valori dei vari tipi di risorsa da allocare
-	 * @return c			risorsa da impostare nella carta in questione 
+	 * Metodo per la costruzione di un LeaderRequirement partendo da un Nodo i cui figli
+	 * rappresentino una definizione dei vari materials, points, cards, ecc
 	 * 
-	 */	
+	 * @param 	n	nodo radice del LeaderRequirement
+	 * 
+	 * @return		LeaderRequirement impostato coi valori del file XML
+	 */
 	private LeaderRequirement parseLeaderRequirementNode(Node n) {
 
 		LeaderRequirement lRequire = new LeaderRequirement();
@@ -164,14 +161,12 @@ public class ParserLeaders extends XMLParser {
 	}
 
 	/**
-	 * Metodo che genera l'effetto delle carte
-	 *
-	 * @param effetto	Nodo contenente l'effetto e i suoi valori da impostare
-	 * @param card		Carta della quale bisogna impostare l'effetto
-	 * 
-	 * @return nothing
-	 * 
-	 */	
+	* Metodo per generare l'insieme di effetti associati ad un Nodo radice
+	*
+	* @param	effetto		nodo radice i cui figli sono una definizione di vari effetti
+	* 
+	* @return 				insieme di effetti costruiti dal file XML
+	*/
 	public ArrayList<Effect> parseEffectNode(Node effetto) {
 
 		ArrayList<Effect> effects_collection = new ArrayList<Effect>();
@@ -227,6 +222,17 @@ public class ParserLeaders extends XMLParser {
 		return effects_collection;
 	}
 
+	/**
+	 * Metodo per associazione biunivoca tra una stringa del colore del member
+	 * ed il relativo elemento di ColorPalette
+	 * 
+	 * @param	member	stringa con il nome del colore del member
+	 * 
+	 * @return			<p>elemento di ColorPalette relativo alla stringa passata</p>
+	 * 					<p>null nel caso in cui la stringa non rappresentasse un dato noto</p>
+	 * 
+	 * @see				it.polimi.ingsw.ps06.model.Types
+	 */
 	private ArrayList<ColorPalette> parseMember(String member) {
 
 		ArrayList<ColorPalette> a = new ArrayList<ColorPalette>();
@@ -253,28 +259,11 @@ public class ParserLeaders extends XMLParser {
 	}
 
 	/**
-	 * Metodo che ritorna il mazzo di carte
-	 * 
-	 * @return cards   
-	 * 
-	 */	 
-
+	* Getter della collezione di carte costruite dal file XML
+	* 
+	* @return	insieme di carte costruite   
+	*/
 	public ArrayList<Leader> getCards(){
 		return leaders;
-	}
-	
-	public static void main(String[] args){
-
-		ParserLeaders c = new ParserLeaders("resources/XML/Leaders.xml");
-		ArrayList<Leader> a = new  ArrayList<Leader>();
-		a = c.getCards();
-		
-		for (Leader l : a) {
-			System.out.println("");
-			System.out.println("CODE: " + l.getCode());
-			System.out.println("TITLE: " + l.getTitle());
-			System.out.println("REQUIREMENT: " + l.getRequirement());
-			System.out.println("OncePerRound: " + l.isOncePerRoundEffect());
-		}
 	}
 }

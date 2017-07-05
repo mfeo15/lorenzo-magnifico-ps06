@@ -24,11 +24,10 @@ public class ParserUsers extends XMLParser {
 	private ArrayList<User> users;
 
 	/**
-	 * Costruttore della classe
-	 *
-	 * @param	source	Stringa corrispondente al percorso del file 
-	 * 
-	 */	
+	* Costruttore della classe
+	*
+	* @param	source		stringa corrispondente al percorso del file 
+	*/
 	public ParserUsers(String source) {
 		super(source);
 		this.users = new ArrayList<User>();
@@ -36,6 +35,7 @@ public class ParserUsers extends XMLParser {
 		parse( buildDocument() );
 	}
 	
+	@Override
 	public void parse(Document d) {
 		
 		Node root = d.getFirstChild();
@@ -56,6 +56,12 @@ public class ParserUsers extends XMLParser {
 		}
 	}
 	
+	/**
+	* Metodo per impostare un utente client con tutti gli attributi presenti nel suo nodo
+	*
+	* @param	attributes		insieme di nodi rappresentanti i vari attributi dell'utente
+	* @param	user			utente del quale si devono impostare gli attributi
+	*/
 	private void setAttributes(NodeList attributes, User user) 
 	{
 		for(int j=0; j < attributes.getLength(); j++) 
@@ -86,14 +92,22 @@ public class ParserUsers extends XMLParser {
 	}
 
 	/**
-	 *Metodo che restituisce tutti gli users
-	 *
-	 * @return	users caricati da file 
-	 **/
+	* Getter della collezione di utenti costruite dal file XML
+	* 
+	* @return	insieme di utenti costruiti 
+	*/
 	public ArrayList<User> getUsers(){
 		return users;
 	}
 	
+	/**
+	* Metodo che verifica se un particolare utente, identificato tramite stringa username, 
+	* sia contenuto all'interno della collezione costruita dal file XML
+	* 
+	* @param	username	username dell'utente ricercato
+	* 
+	* @return	true		se l'utente cercato è presente   
+	*/
 	public boolean contains(String username) {
 		
 		boolean flag = false;
@@ -103,6 +117,15 @@ public class ParserUsers extends XMLParser {
 		return flag;
 	}
 	
+	/**
+	* Metodo che permette di ottenere un particolare utente dalla collezione costruita da
+	* file XML, tramite la ricerca mediante stringa username
+	* 
+	* @param	username	username dell'utente ricercato
+	* 
+	* @return				<p>l'utente cercato all'interno della collezione</p>  
+	* 						<p>null se l'utente cercato non è stato trovato</p> 
+	*/
 	public User getUser(String username) {
 		
 		for (User u : users)

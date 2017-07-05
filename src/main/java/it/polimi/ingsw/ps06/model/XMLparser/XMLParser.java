@@ -20,11 +20,12 @@ public abstract class XMLParser {
 	}
 
 	/**
-	* Metodo per costruire il parser
-	*
-	* @param none
-	* @return nothing 
+	* Metodo per costruire il documento associato al path
+	* consegnato in fase di creazione dell'oggetto
 	* 
+	* @return	<p>documento costruito dal path associato</p>
+	* 			<p>null in caso di errori</p>
+	* 			
 	*/	
 	protected Document buildDocument(){
 		try{
@@ -41,8 +42,23 @@ public abstract class XMLParser {
 		return null;
 	}
 	
+	
+	/**
+	 * Metodo astratto per il parsing del documento. Implementazione specifica a 
+	 * seconda del parser sviluppato
+	 * 
+	 * @param	d	documento da parsare
+	 */
 	protected abstract void parse(Document d);
 	
+	/**
+	 * Metodo per la costruzione di una Risorsa partendo da un Nodo i cui figli
+	 * rappresentino una definizione dei vari materials e points
+	 * 
+	 * @param 	n	nodo radice della risorsa
+	 * 
+	 * @return		risorsa impostata coi valori del file XML
+	 */
 	protected Resources parseResourceNode(Node n) {
 
 		Resources r = new Resources();

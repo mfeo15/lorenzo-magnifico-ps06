@@ -41,8 +41,7 @@ public class ParserCards extends XMLParser {
 	/**
 	* Costruttore della classe
 	*
-	* @param source		Stringa corrispondente al percorso del file 
-	* 
+	* @param	source		stringa corrispondente al percorso del file 
 	*/	
 	public ParserCards(String source) {
 		super(source);
@@ -89,15 +88,12 @@ public class ParserCards extends XMLParser {
 	}
 	
 	/**
-	* Metodo che da un nodo che corrisponde ad un attributo, lo imposta sulla carta
+	* Metodo per impostare una carta con tutti gli attributi presenti nel suo nodo
 	*
-	* @param a		Nodo contenente l'attributo da inserire nella carta
-	* @param d		Carta della quale si devono impostare gli attributi
-	* 
-	* @return d		Carta impostata
-	* 
+	* @param	attributes		insieme di nodi rappresentanti i vari attributi della carta
+	* @param	card			carta della quale si devono impostare gli attributi
 	*/	
-	public void setAttributes(NodeList attributes, DevelopementCard card) {
+	private void setAttributes(NodeList attributes, DevelopementCard card) {
 
 		for(int j=0; j < attributes.getLength(); j++) 
 		{
@@ -117,13 +113,13 @@ public class ParserCards extends XMLParser {
 				if ( current_attribute.getNodeName().equals("cost") ) 
 				{
 					if (card instanceof Building)
-						((Building) card).setRequirement( parseResourceNode(current_attribute) );
+						((Building) card).setCost( parseResourceNode(current_attribute) );
 
 					if (card instanceof Character) 
-						((Character) card).setRequirement( parseResourceNode(current_attribute) );
+						((Character) card).setCost( parseResourceNode(current_attribute) );
 
 					if (card instanceof Venture) 
-						((Venture) card).setRequirement( parseResourceNode(current_attribute) );
+						((Venture) card).setCost( parseResourceNode(current_attribute) );
 				}
 
 				if ( current_attribute.getNodeName().equals("permanent_effect") )
@@ -145,6 +141,17 @@ public class ParserCards extends XMLParser {
 		}
 	}
 	
+	/**
+	 * Metodo per associazione biunivoca tra una stringa del colore
+	 * ed il relativo elemento di ColorPalette
+	 * 
+	 * @param	color	stringa con il nome del colore da associare
+	 * 
+	 * @return			<p>elemento di ColorPalette relativo alla stringa passata</p>
+	 * 					<p>null nel caso in cui la stringa non rappresentasse un dato noto</p>
+	 * 
+	 * @see				it.polimi.ingsw.ps06.model.Types
+	 */
 	private ColorPalette parseColorCard(String color) {
 		
 		if (color.equals("verde")) 	return ColorPalette.CARD_GREEN;
@@ -155,6 +162,17 @@ public class ParserCards extends XMLParser {
 		return null;
 	}
 	
+	/**
+	 * Metodo per associazione biunivoca tra una stringa del tipo di azione
+	 * ed il relativo elemento di ActionCategory
+	 * 
+	 * @param	action	stringa con il nome del'azione da associare
+	 * 
+	 * @return			<p>elemento di ActionCategory relativo alla stringa passata</p>
+	 * 					<p>null nel caso in cui la stringa non rappresentasse un dato noto</p>
+	 * 
+	 * @see				it.polimi.ingsw.ps06.model.Types
+	 */
 	private ActionCategory parseAction(String action) {
 		
 		if (action.equals("verde")) 	return ActionCategory.TOWER_GREEN;
@@ -169,15 +187,13 @@ public class ParserCards extends XMLParser {
 	}
 	
 	/**
-	* Metodo che genera l'effetto delle carte
+	* Metodo per generare l'insieme di effetti associati ad un Nodo radice
 	*
-	* @param effetto	Nodo contenente l'effetto e i suoi valori da impostare
-	* @param card		Carta della quale bisogna impostare l'effetto
+	* @param	effetto		nodo radice i cui figli sono una definizione di vari effetti
 	* 
-	* @return nothing
-	* 
+	* @return 				insieme di effetti costruiti dal file XML
 	*/	
-	public ArrayList<Effect> parseEffectNode(Node effetto) {
+	private ArrayList<Effect> parseEffectNode(Node effetto) {
 
 		ArrayList<Effect> effects_collection = new ArrayList<Effect>();
 		NodeList effects = ((Element) effetto).getElementsByTagName("effect");
@@ -236,22 +252,11 @@ public class ParserCards extends XMLParser {
 	 
 
 	/**
-	* Metodo che ritorna il mazzo di carte
+	* Getter della collezione di carte costruite dal file XML
 	* 
-	* @return cards   
-	* 
+	* @return	insieme di carte costruite   
 	*/	 
-	
 	public ArrayList<DevelopementCard> getCards(){
 		return cards;
 	}
-
-	public static void main(String[] args){
-
-		ParserCards c = new ParserCards("resources/XML/DevelopementCards.xml");
-		ArrayList<DevelopementCard> a = new  ArrayList<DevelopementCard>();
-		a = c.getCards();
-	}
-
-	
 }

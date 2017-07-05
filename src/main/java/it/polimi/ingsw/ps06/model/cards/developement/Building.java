@@ -12,43 +12,44 @@ import it.polimi.ingsw.ps06.model.Resources;
 public class Building extends DevelopementCard {
 	
 	private int dice_requirement;
-	private Resources requirement;
+	private Resources cost;
 	
-	/**Metodo per settare il requisito di dado
-	 * @param	code	periodo della carta
-	 * @return	nothing
+	/**
+	 * Setter per il requisito di dado per eseguire una produzione
+	 * 
+	 * @param	dice_requirement	valore del requisito da settare
 	 */
- 
 	public void setDiceReq(int dice_requirement){
 		this.dice_requirement=dice_requirement;
 		return;
  	}	
 	
-	/**Metodo per settare i requisiti della carta
+	/**
+	 * Setter per il costo della carta
 	 * 
-	 * @param	requirement		requisiti della carta
-	 * @return	nothing
+	 * @param	cost	costo della carta
 	 */
-	 
-	public void setRequirement(Resources requirements){
-		requirement=requirements;
-	 	return;
+	public void setCost(Resources cost){
+		this.cost = cost;
 	}	
 	
-	/**Metodo per ottenere i requisiti della carta
+	/**
+	 * Getter per il costo della carta
 	 * 
-	 * @return	Resources	requisiti associati alla carta
+	 * @return	costo della carta
 	 */
-	 
-	public Resources getRequirement(){
-	 	return this.requirement;
+	public Resources getCost(){
+	 	return this.cost;
 	}
 	
 	/**
-	* Metodo per controllare che il valore del familiare sia sufficiente per avere bonus
-	* @return 	Boolean
-	**/
-	
+	 * Metodo per controllare che il valore del familiare sia sufficiente 
+	 * ad attivare il l'effetto permanente
+	 * 
+	 * @param	dice	valore del familiare da confrontare
+	 * 
+	 * @return	true	se il familiare può attivare l'effetto
+	 */
 	public boolean check_dice(int dice){
 		if( dice >= dice_requirement)
 			return true;

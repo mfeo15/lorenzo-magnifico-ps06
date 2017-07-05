@@ -321,6 +321,8 @@ public class Game extends Observable implements Observer {
 			
 			if (player_faith < VaticanRequirementOnPeriod(period)) {			
 				board.getTiles(period).activateEffect(p);
+				p.getPersonalBoard().getInventory().increaseResourceValue(PointsKind.VICTORY_POINTS, board.getFaithTrackReward(player_faith));
+				p.getPersonalBoard().getInventory().setResourceValue(PointsKind.FAITH_POINTS, 0);
 				excommunicatedPlayers.add( p.getID() );
 			}
 		}

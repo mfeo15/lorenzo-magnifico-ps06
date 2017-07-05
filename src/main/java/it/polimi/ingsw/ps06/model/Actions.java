@@ -23,8 +23,8 @@ public abstract class Actions {
 	}
 
 	/**
-	* Metodo di attivazione dell'azione
-	*
-	*/
+	 * Metodo atratto di attivazione dell'azione
+	 *
+	 */
 	public abstract void activate();
 }

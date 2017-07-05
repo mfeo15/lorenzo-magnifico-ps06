@@ -11,6 +11,7 @@ import it.polimi.ingsw.ps06.model.FamilyMember;
 import it.polimi.ingsw.ps06.model.Player;
 import it.polimi.ingsw.ps06.model.Types.Action;
 import it.polimi.ingsw.ps06.model.Types.CouncilPrivilege;
+import it.polimi.ingsw.ps06.model.XMLparser.ParserBonusBoard;
 import it.polimi.ingsw.ps06.model.XMLparser.ParserExcommunicationTiles;
 import it.polimi.ingsw.ps06.model.cards.ExcommunicationTile;
 import it.polimi.ingsw.ps06.networking.messages.MessageBoardSetupExcomCards;
@@ -79,6 +80,11 @@ public class Board extends Observable{
 		if (period == 3) return excommunicationTilePeriodThree;
 		
 		return null;
+	}
+	
+	public int getFaithTrackReward(int position) {
+		
+		return (new ParserBonusBoard("resources/XML/BonusTabellone.xml")).getFaithPoints().get(position);
 	}
 	
 	/**

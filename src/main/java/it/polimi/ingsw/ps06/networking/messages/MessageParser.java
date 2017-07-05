@@ -46,6 +46,13 @@ public class MessageParser implements MessageVisitor {
 		if (users.contains( userMessage.getUsername() )) {
 			User u = users.getUser( userMessage.getUsername() );
 			if (u.autenticate(userMessage.getUsername(), userMessage.getPassword()))
+				
+			System.out.println("Login...");
+			System.out.println("usr: " + u.getUsername());
+			System.out.println("psw: " + u.getPassword());
+			System.out.println("total game  " + u.getGameCounter());
+			
+				
 				c.setAssociatedUser(u);
 		}
 	

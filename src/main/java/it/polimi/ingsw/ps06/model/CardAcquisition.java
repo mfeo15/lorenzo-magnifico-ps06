@@ -57,13 +57,13 @@ public class CardAcquisition extends Actions {
 			return p.getPersonalBoard().getInventory().isBiggerThan( extraMoney );
 		
 		if (card instanceof Building)
-			return p.getPersonalBoard().getInventory().isBiggerThan( extraMoney.add( ((Building) card).getRequirement() ) );
+			return p.getPersonalBoard().getInventory().isBiggerThan( extraMoney.add( ((Building) card).getCost() ) );
 		
 		if (card instanceof Character)
-			return p.getPersonalBoard().getInventory().isBiggerThan( extraMoney.add( ((Character) card).getRequirement() ) );
+			return p.getPersonalBoard().getInventory().isBiggerThan( extraMoney.add( ((Character) card).getCost() ) );
 		
 		if (card instanceof Venture)
-			return p.getPersonalBoard().getInventory().isBiggerThan( extraMoney.add( ((Venture) card).getRequirements().get(0) ) );
+			return p.getPersonalBoard().getInventory().isBiggerThan( extraMoney.add( ((Venture) card).getCosts().get(0) ) );
 		
 		return false;
 	}
@@ -109,25 +109,25 @@ public class CardAcquisition extends Actions {
 		
 		if(card instanceof Building) {
 			p.getPersonalBoard().addCard( (Building) card);
-			p.getPersonalBoard().reduceResource( ((Building) card).getRequirement() );
+			p.getPersonalBoard().reduceResource( ((Building) card).getCost() );
 		}
 		
 		if(card instanceof Character) {
 			p.getPersonalBoard().addCard( (Character) card);
-			p.getPersonalBoard().reduceResource( ((Character) card).getRequirement() );
+			p.getPersonalBoard().reduceResource( ((Character) card).getCost() );
 			((Character) card).activateEffect(p);
 		}
 		
 		if(card instanceof Venture) {
 			p.getPersonalBoard().addCard( (Venture) card);
-			p.getPersonalBoard().reduceResource( ((Venture) card).getRequirements().get(0) );
+			p.getPersonalBoard().reduceResource( ((Venture) card).getCosts().get(0) );
 		}
 		
 		card.activateIstantEffect(p);
 		
 		if (p.getBonusMalusCollection().contains(BonusMalusDoubleMaterialsFromDevCards.class)) 
 		{
-			for (Effect e : card.instant_effect) {
+			for (Effect e : card.getInstantEffects()) {
 				if (e instanceof EffectsResources) {
 					int bonus_faith = ((EffectsResources) e).getBonus().getResourceValue(PointsKind.FAITH_POINTS);
 					int bonus_military = ((EffectsResources) e).getBonus().getResourceValue(PointsKind.MILITARY_POINTS);
