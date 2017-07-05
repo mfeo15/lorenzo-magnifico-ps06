@@ -12,6 +12,7 @@ public interface MessageVisitor {
 	void visit(MessageCurrentPlayerOrder currentPlayerOrder);
 	
 	void visit(MessageUser userMessage);
+	void visit(MessageUserHasLogged hasLogged);
 	void visit(MessageWaitingRoomConnections waitingConnections);
 	void visit(MessagePlayingConnections playingConnections);
 	

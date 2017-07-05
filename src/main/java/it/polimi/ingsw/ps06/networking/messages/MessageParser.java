@@ -43,17 +43,27 @@ public class MessageParser implements MessageVisitor {
 		Connection c = ((Connection) supporter);
 		ParserUsers users = new ParserUsers("resources/XML/users.xml");
 		
-		if (users.contains( userMessage.getUsername() )) {
+		if (users.contains( userMessage.getUsername() )) 
+		{
 			User u = users.getUser( userMessage.getUsername() );
-			if (u.autenticate(userMessage.getUsername(), userMessage.getPassword()))
-				
-			System.out.println("Login...");
-			System.out.println("usr: " + u.getUsername());
-			System.out.println("psw: " + u.getPassword());
-			System.out.println("total game  " + u.getGameCounter());
 			
+			if (u.autenticate(userMessage.getUsername(), userMessage.getPassword())) 
+			{
+				System.out.println("Login...");
+				System.out.println("usr: " + u.getUsername());
+				System.out.println("psw: " + u.getPassword());
+				System.out.println("total game  " + u.getGameCounter());
 				
+				MessageUserHasLogged usrLogged = new MessageUserHasLogged(u.getUsername(), 
+																		  u.getGameCounter(), 
+																		  u.getWinCounder(), 
+																		  u.getSecondPlaceCounter(),
+																		  u.getMaxScore());
+						
+				SocketServer.getInstance().sendToPlayingConnections(c, usrLogged);
+					
 				c.setAssociatedUser(u);
+			}
 		}
 	
 		SocketServer.getInstance().sendWaitingConnectionsStats();
@@ -348,5 +358,17 @@ public class MessageParser implements MessageVisitor {
 		
 		Board b = ((Board) supporter);
 		b.gameHasEnded( hasEnded.getWinnerPlayerCode() );
+	}
+
+	@Override
+	public void visit(MessageUserHasLogged hasLogged) {
+		
+		Room r = ((Room) supporter);
+		r.userHasLoggedIn( hasLogged.getUsername(), 
+							hasLogged.getGameCounter(), 
+							hasLogged.getWinCounder(), 
+							hasLogged.getSecondPlaceCounter(), 
+							hasLogged.getMaxScore() 
+						);
 	}
 }

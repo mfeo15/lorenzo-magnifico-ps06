@@ -1,9 +1,13 @@
-package it.polimi.ingsw.ps06.networking;
+package it.polimi.ingsw.ps06.networking.messages;
 
-public class User {
+public class MessageUserHasLogged extends Broadcast {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	
 	private String username;
-	private String password;
 	
 	private int gameCounter;
 	private int winCounder;
@@ -11,28 +15,20 @@ public class User {
 	
 	private int maxScore;
 	
-	public User() {
-		this.gameCounter = 0;
-		this.winCounder = 0;
-		this.secondPlaceCounter = 0;
-		
-		this.maxScore = 0;
+	public MessageUserHasLogged(String username, int gameCounter, int winCounder, int secondPlaceCounter, int maxScore) {
+		this.username = username;
+		this.gameCounter = gameCounter;
+		this.winCounder = winCounder;
+		this.secondPlaceCounter = secondPlaceCounter;
+		this.maxScore = maxScore;
 	}
-	
+
 	public String getUsername() {
 		return username;
 	}
-
+	
 	public void setUsername(String username) {
 		this.username = username;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
 	}
 
 	public int getGameCounter() {
@@ -66,8 +62,10 @@ public class User {
 	public void setMaxScore(int maxScore) {
 		this.maxScore = maxScore;
 	}
-	
-	public boolean autenticate(String username, String password) {
-		return (this.username.equals(username) && this.password.equals(password));
+
+	@Override
+	public void accept(MessageVisitor visitor) {
+		visitor.visit(this);
 	}
+
 }
