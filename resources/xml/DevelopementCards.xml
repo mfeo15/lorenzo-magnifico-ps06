@@ -1,3 +1,4 @@
+﻿<deckCards>
 <card kind="territory">
 			<code>1</code>
 			
@@ -1374,11 +1375,9 @@
 			</instant_effects>
 			<permanent_effect>
 				<effect>
-					<kind>bmMember</kind>
-					<bonus>
-					    <color>verde</color>
-						<amount>2</amount>
-					</bonus>
+					<kind>bmAction</kind>
+					<action>verde</action>
+					<amount>2</amount>
 				</effect>
 			</permanent_effect>
 </card>
@@ -1393,9 +1392,9 @@
 			</cost>
 			<permanent_effect>
 				<effect>
-					<kind>bmMember</kind>
-					    <color>giallo</color>
-						<amount>2</amount>
+					<kind>bmAction</kind>
+					<action>giallo</action>
+					<amount>2</amount>
 				</effect>
 				<effect>
 					<kind>discount</kind>
@@ -1420,9 +1419,9 @@
 			</cost>
 			<permanent_effect>
 				<effect>
-					<kind>bmMember</kind>
-					    <color>blu</color>
-						<amount>2</amount>
+					<kind>bmAction</kind>
+					<action>blu</action>
+					<amount>2</amount>
 				</effect>
 				<effect>
 					<kind>discount</kind>
@@ -1448,9 +1447,9 @@
 			</instant_effects>
 			<permanent_effect>
 			    <effect>
-					<kind>bmMember</kind>
-					    <color>viola</color>
-						<amount>2</amount>
+			    	<kind>bmAction</kind>
+					<action>viola</action>
+					<amount>2</amount>
 				</effect>
 			</permanent_effect>
 </card>
@@ -1465,8 +1464,9 @@
 			</cost>
 			<permanent_effect>
 			    <effect>
-					<kind>harvest</kind>
-						<amount>2</amount>
+			    	<kind>bmAction</kind>
+					<action>raccolto</action>
+					<amount>2</amount>
 				</effect>
 			</permanent_effect>
 </card>
@@ -1481,8 +1481,9 @@
 			</cost>
 			<permanent_effect>
 				<effect>
-					<kind>production</kind>
-					    <amount>2</amount>
+					<kind>bmAction</kind>
+					<action>produzione</action>
+					<amount>2</amount>
 				</effect>
 			</permanent_effect>
 </card>
@@ -1631,8 +1632,9 @@
 			</cost>
 			<permanent_effect>
 			    <effect>
-					<kind>harvest</kind>
-					<value>3</value>
+					<kind>bmAction</kind>
+					<action>blu</action>
+					<amount>3</amount>
 				</effect>
 			</permanent_effect>
 </card>
@@ -1647,8 +1649,9 @@
 			</cost>
 			<permanent_effect>
 			    <effect>
-					<kind>production</kind>
-					<value>3</value>
+					<kind>bmAction</kind>
+					<action>produzione</action>
+					<amount>3</amount>
 				</effect>
 			</permanent_effect>
 </card>
@@ -1837,7 +1840,7 @@
 			<instant_effects>
 			    <effect>
 			    	<kind>privilege</kind>
-                    <amount>1</military>
+                    <amount>1</amount>
                 </effect>
                 <effect>
                     <kind>colorful</kind>
@@ -1970,7 +1973,7 @@
 			    <effect>
 			    	<kind>resources</kind>
 			    	<bonus>
-			    	    <coin></coin>
+			    	    <coin>3</coin>
 			    	</bonus>
                 </effect>
     		</instant_effects>
@@ -2542,4 +2545,5 @@
                 </effect>
 			</permanent_effect>
 </card>
+</deckCards>
 
