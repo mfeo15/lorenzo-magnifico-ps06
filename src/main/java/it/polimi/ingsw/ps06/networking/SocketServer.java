@@ -48,56 +48,8 @@ public class SocketServer implements Server {
 	private Timer t;
 
 	/**
-	 * Metodo invocato ogni qualvolta una nuova connessione viene instaurata. 
-	 * La connessione viene archiviata all'interno di una collezione per aggiornare
-	 * lo stato del server
-	 * 
-	 * @param c	Connessione da aggiungere alla collezione
+	 * Costruttore della classe con inizializzazione del Socket
 	 */
-	@Override
-	public synchronized void registerConnection(Connection c) {
-
-		connections.add(c);
-		System.out.println("[ SERVER ] Connection " + c.getInetAddress() + " registered \n");
-	}
-
-	/**
-	 * Metodo invocato quando una connessione si distacca dal Server.
-	 * La connessione viene rimossa dalla collezione per aggiornare lo stato.
-	 * 
-	 * @param c	Connessione da rimuovere
-	 */
-	@Override
-	public synchronized void deregisterConnection(Connection c) {
-		connections.remove(c);
-
-		if ( waitingConnection.contains(c) ) waitingConnection.remove(c);
-	}
-
-	/**
-	 * Metodo invocato a seguito di una nuova registrazione di connessione.
-	 * Le connessioni vengono posizionate in una collezione d'attesa fino
-	 * al momento di raggiungere abbastanza giocatori per instaurare una nuova partita
-	 * 
-	 * @param c	Connessione da aggiungere alla lista d'attesa
-	 */
-	public synchronized void rednezvous(Connection c) {
-
-		waitingConnection.add(c);
-		if (waitingConnection.size() == 2)
-			startCountdown( timeSettings.getTimeoutWaitingConnections() );
-
-		System.out.println("[ SERVER ] Connection " + c.getInetAddress() + " in Waiting Room \n");
-
-		sendWaitingConnectionsStats();
-
-		if (waitingConnection.size() == 4) {
-
-			stopCountdown();
-			startCountdown( 10 );
-		}
-	}
-
 	public SocketServer()  {
 
 		try {
@@ -114,6 +66,12 @@ public class SocketServer implements Server {
 		}
 	}
 
+	/**
+	 * <p>SINGLETON DESIGN PATTERN</p>
+	 * <p>Metodo per ottenere l'istanza statica della classe, in modo univoco</p>
+	 * 
+	 * @return	istanza dell'oggetto Client
+	 */
 	public static SocketServer getInstance() {
 		if (instance == null)
 			instance = new SocketServer();
@@ -146,21 +104,100 @@ public class SocketServer implements Server {
 		}
 	}
 
+	/**
+	 * Getter per il timeout Action
+	 * 
+	 * @return	il timeout Action
+	 */
+	public int getTimeoutAction() {
+		return timeSettings.getTimeoutAction();
+	}
 
+	/**
+	 * Metodo invocato ogni qualvolta una nuova connessione viene instaurata. 
+	 * La connessione viene archiviata all'interno di una collezione per aggiornare
+	 * lo stato del server
+	 * 
+	 * @param	c	Connessione da aggiungere alla collezione
+	 */
+	@Override
+	public synchronized void registerConnection(Connection c) {
+
+		connections.add(c);
+		System.out.println("[ SERVER ] Connection " + c.getInetAddress() + " registered \n");
+	}
+
+	/**
+	 * Metodo invocato quando una connessione si distacca dal Server.
+	 * La connessione viene rimossa dalla collezione per aggiornare lo stato.
+	 * 
+	 * @param	c	Connessione da rimuovere
+	 */
+	@Override
+	public synchronized void deregisterConnection(Connection c) {
+		connections.remove(c);
+
+		if ( waitingConnection.contains(c) ) waitingConnection.remove(c);
+	}
+
+	/**
+	 * Metodo invocato a seguito di una nuova registrazione di connessione.
+	 * Le connessioni vengono posizionate in una collezione d'attesa fino
+	 * al momento di raggiungere abbastanza giocatori per instaurare una nuova partita
+	 * 
+	 * @param	c	Connessione da aggiungere alla lista d'attesa
+	 */
+	public synchronized void rednezvous(Connection c) {
+
+		waitingConnection.add(c);
+		if (waitingConnection.size() == 2)
+			startCountdown( timeSettings.getTimeoutWaitingConnections() );
+
+		System.out.println("[ SERVER ] Connection " + c.getInetAddress() + " in Waiting Room \n");
+
+		sendWaitingConnectionsStats();
+
+		if (waitingConnection.size() == 4) {
+
+			stopCountdown();
+			startCountdown( 10 );
+		}
+	}
+
+	/**
+	 * Metodo per richiedere l'invio di un messaggio ad un insieme di connessioni
+	 * 
+	 * @param	cs	insieme di connessioni a cui delegare la spedizione
+	 * @param 	m	messaggio da inviare
+	 */
 	public void sendToConnections(ArrayList<Connection> cs, Message m) {
 		cs.forEach(connection -> connection.asyncSend(m));
 	}
 
+	/**
+	 * Metodo per richiedere l'invio di un messaggio ad ogni connessione che è
+	 * impegnato in una partita con la connessione passata come parametro
+	 * 
+	 * @param	c	connessione dalla quale determinare gli sfidanti
+	 * @param 	m	messaggio da inviare
+	 */
 	public void sendToPlayingConnections(Connection c, Message m) {	
 		retrieveMatch(c).getAll().forEach(connection -> connection.asyncSend(m));
 	}
 
+	/**
+	 * Metodo di supporto all'invio di updates sullo stato della WaitingRoom
+	 */
 	public void sendWaitingConnectionsStats() {
 		ArrayList<String> a = new ArrayList<String>();
 		waitingConnection.forEach(connection -> a.add(connection.getUsername()));		
 		sendToConnections(waitingConnection, new MessageWaitingRoomConnections(a) );
 	}
 
+	/**
+	 * <p>Metodo invocato per la creazione di una nuova partita</p>
+	 * <p>Si occupa di definire un nuovo Model, svuotare la waitingRoom ed aggiornare i client dell'accaduto</p>
+	 */
 	public void startNewGame() {
 
 		stopCountdown();
@@ -178,6 +215,14 @@ public class SocketServer implements Server {
 		}
 	}
 
+	/**
+	 * Metodo invocato per determinare il MatchSet a cui appartiene una connessione
+	 * 
+	 * @param	c	connessione di ricerca
+	 * 
+	 * @return		<p>il MatchSet contenente la connessione c</p>
+	 * 				<p>null nel caso in cui il MatchSet non sia presente</p>
+	 */
 	public MatchSet retrieveMatch(Connection c) {
 		Iterator<MatchSet> i = playingConnection.iterator();
 
@@ -190,10 +235,20 @@ public class SocketServer implements Server {
 		return null;
 	}
 
+	/**
+	 * Metodo per aggiungere un nuovo contatore alla coda
+	 * 
+	 * @param	m	matchSet di riferimento
+	 */
 	public void addElementQueue(MatchSet m) {
 		queuedMessageCounter.put(m, 0);
 	}
 
+	/**
+	 * Metodo per incrementare il contatore dei messaggi in coda
+	 * 
+	 * @param	m	matchSet di riferimento
+	 */
 	public void increaseQueue(MatchSet m) {
 		if (!(queuedMessageCounter.containsKey(m)))
 			addElementQueue(m);
@@ -201,18 +256,43 @@ public class SocketServer implements Server {
 		queuedMessageCounter.put(m, queuedMessageCounter.get(m) + 1);
 	}
 
+	/**
+	 * Getter per il contatore della coda
+	 * 
+	 * @param	m	matchSet di riferimento
+	 * 
+	 * @return		il numero di messaggi accodati per il matchSet di riferimento
+	 */
 	public int getElementQueue(MatchSet m) {
 		return queuedMessageCounter.get(m);
 	}
 
+	/**
+	 * Metodo per azzerare il contatore dei messaggi in coda
+	 * 
+	 * @param	m	matchSet di riferimento
+	 */
 	public void clearQueue(MatchSet m) {
 		queuedMessageCounter.put(m, 0);
 	}
 
+	/**
+	 * Metodo di verifica della completezza della coda
+	 * 
+	 * @param	m		matchSet di riferimento
+	 * 
+	 * @return	true	se la coda è piena
+	 */
 	public boolean isFullQueue(MatchSet m) {
 		return ( queuedMessageCounter.get(m) == m.getAll().size() );
 	}
 
+
+	/**
+	 * Metodo per l'avvio di un contatore che allo scadere del tempo avvia una nuova partita
+	 * 
+	 * @param	seconds		numero di secondi da impostare
+	 */
 	public void startCountdown(int seconds) {
 
 		t = new Timer();
@@ -228,13 +308,12 @@ public class SocketServer implements Server {
 				);
 	}
 
+	/**
+	 * Metodo per l'annullamento del contatore
+	 */
 	public void stopCountdown() {
 		t.cancel();
 		t.purge();
-	}
-
-	public int getTimeoutAction() {
-		return timeSettings.getTimeoutAction();
 	}
 
 	/**

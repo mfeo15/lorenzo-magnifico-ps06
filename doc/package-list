@@ -6,4 +6,5 @@ it.polimi.ingsw.ps06.model.cards.developement
 it.polimi.ingsw.ps06.model.cards.leader
 it.polimi.ingsw.ps06.model.effects
 it.polimi.ingsw.ps06.model.events
+it.polimi.ingsw.ps06.networking
 it.polimi.ingsw.ps06.networking.messages
