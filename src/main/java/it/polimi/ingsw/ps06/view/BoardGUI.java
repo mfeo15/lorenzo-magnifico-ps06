@@ -45,6 +45,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JRootPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.Timer;
@@ -64,6 +65,7 @@ import it.polimi.ingsw.ps06.model.events.EventMemberPlaced;
 import it.polimi.ingsw.ps06.model.events.EventMemberPlacedWithPrivilege;
 import it.polimi.ingsw.ps06.networking.messages.MessageObtainPersonalBoardStatus;
 import it.polimi.ingsw.ps06.networking.messages.MessagePlayerPassed;
+import it.polimi.ingsw.ps06.networking.messages.MessageTelegram;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -76,7 +78,8 @@ public class BoardGUI extends Observable implements Board {
 	private int height, escHeight;
 	private JLabel leaderBack;
 	private Font mediumBold;
-	private boolean chatOpen;
+	private Font extraSmall;
+	private boolean chatOpen=false;
 	
 	private JButton scrollTowers = new JButton();
 	private JButton scrollOthers = new JButton();
@@ -121,9 +124,9 @@ public class BoardGUI extends Observable implements Board {
 	private JButton servants = new JButton();
 	
 	//Componenti per chat
-	private JButton chat = new JButton();
+	private JButton chat = new JButton("Chat");
 	private JButton send = new JButton();
-	private JTextField chatBox = new JTextField();
+	private JTextArea chatBox = new JTextArea();
 	private JTextField message = new JTextField();
 	
 	private JTextField servantsCount = new JTextField();
@@ -236,7 +239,8 @@ public class BoardGUI extends Observable implements Board {
 		
 		escWidth=(int)(width*60/100);
         escHeight=(int)(height*80/100);
-	
+        
+        extraSmall= new Font("Lucida Handwriting",Font.PLAIN,(int)(12*(screenSize.getHeight()/1080)) );
         fontSMALL = new Font("Lucida Handwriting",Font.PLAIN,(int)(20*(screenSize.getHeight()/1080)) );
 		fontMEDIUM = new Font("Lucida Handwriting",Font.PLAIN,(int)(25*(screenSize.getHeight()/1080)) );
 		mediumBold = new Font("Lucida Handwriting",Font.BOLD,(int)(25*(screenSize.getHeight()/1080)) );
@@ -744,32 +748,40 @@ public class BoardGUI extends Observable implements Board {
         
         //Componenti per la chat
         
-        chat.setLocation((int)(screenSize.getWidth()*90/100),(int)(screenSize.getHeight()*97/100));
-        chat.setSize((int)(screenSize.getWidth()*8/100),(int)(screenSize.getHeight()*3/100));
+        chat.setLocation((int)(screenSize.getWidth()*84/100),(int)(screenSize.getHeight()*97/100));
+        chat.setSize((int)(screenSize.getWidth()*15/100),(int)(screenSize.getHeight()*3/100));
         chat.setContentAreaFilled(false);
         chat.setFocusPainted(false);
-        chat.setDisabledIcon( chat.getIcon() );
-        chat.setForeground(Color.BLUE);
+        chat.setOpaque(true);
+        chat.setFont(fontSMALL);
+        chat.setBackground(new Color(78,52,46));
+        chat.setForeground(Color.WHITE);
         chat.setVisible(true);
         
-        send.setLocation((int)(screenSize.getWidth()*96/100),(int)(screenSize.getHeight()*98/100));
-        send.setSize((int)(screenSize.getWidth()*2/100),(int)(screenSize.getHeight()*2/100));
+        send.setLocation((int)(screenSize.getWidth()*95/100),(int)(screenSize.getHeight()*97/100));
+        send.setSize((int)(screenSize.getWidth()*4/100),(int)(screenSize.getHeight()*3/100));
         send.setContentAreaFilled(false);
         send.setFocusPainted(false);
+        send.setOpaque(true);
         send.setDisabledIcon( send.getIcon() );
+        send.setBackground(new Color(78,52,46));
         send.setForeground(Color.BLUE);
         send.setVisible(false);
         
-        message.setLocation((int)(screenSize.getWidth()*90/100),(int)(screenSize.getHeight()*98/100));
-        message.setSize((int)(screenSize.getWidth()*6/100),(int)(screenSize.getHeight()*2/100));
+        message.setLocation((int)(screenSize.getWidth()*84/100),(int)(screenSize.getHeight()*97/100));
+        message.setSize((int)(screenSize.getWidth()*11/100),(int)(screenSize.getHeight()*3/100));
         message.setEditable(true);
-        message.setForeground(Color.BLUE);
+        message.setForeground(Color.BLACK);
+        message.setFont(extraSmall);
+        message.setBackground(new Color(235,235,235));
         message.setVisible(false);
         
-        chatBox.setLocation((int)(screenSize.getWidth()*90/100),(int)(screenSize.getHeight()*88/100));
-        chatBox.setSize((int)(screenSize.getWidth()*8/100),(int)(screenSize.getHeight()*10/100));
+        chatBox.setLocation((int)(screenSize.getWidth()*84/100),(int)(screenSize.getHeight()*73/100));
+        chatBox.setSize((int)(screenSize.getWidth()*15/100),(int)(screenSize.getHeight()*24/100));
         chatBox.setEditable(true);
-        chatBox.setForeground(Color.BLUE);
+        chatBox.setForeground(Color.BLACK);
+        chatBox.setFont(extraSmall);
+        chatBox.setBackground(new Color(235,235,235));
         chatBox.setVisible(false);
 
         
@@ -777,8 +789,8 @@ public class BoardGUI extends Observable implements Board {
        	{        		
        		public void mousePressed(MouseEvent evt)
 	        {
-       			if(chatOpen=false){
-       				chat.setLocation((int)(screenSize.getWidth()*90/100),(int)(screenSize.getHeight()*85/100));
+       			if(chatOpen==false){
+       				chat.setLocation((int)(screenSize.getWidth()*84/100),(int)(screenSize.getHeight()*70/100));
        				send.setVisible(true);
        				message.setVisible(true);
        				chatBox.setVisible(true);
@@ -787,7 +799,7 @@ public class BoardGUI extends Observable implements Board {
        			}
        			
        			else{
-       				chat.setLocation((int)(screenSize.getWidth()*90/100),(int)(screenSize.getHeight()*97/100));
+       				chat.setLocation((int)(screenSize.getWidth()*84/100),(int)(screenSize.getHeight()*97/100));
        				send.setVisible(false);
        				message.setVisible(false);
        				chatBox.setVisible(false);
@@ -802,6 +814,7 @@ public class BoardGUI extends Observable implements Board {
        		public void mousePressed(MouseEvent evt)
 	        {
        			sendChatText(message.getText());
+       			message.setText("");
 	        }
     	});
 	        
@@ -879,6 +892,11 @@ public class BoardGUI extends Observable implements Board {
         personalBoard.setResizable(false);
         personalBoard.setVisible(true); 
          
+        desktop.add(chat);
+		desktop.add(send);
+		desktop.add(message);
+		desktop.add(chatBox);
+        
         desktop.add(servants);
         desktop.add(servantsCount);
         
@@ -889,10 +907,6 @@ public class BoardGUI extends Observable implements Board {
 	    
 		setRound();
 	    
-		desktop.add(chat);
-		desktop.add(send);
-		desktop.add(message);
-		desktop.add(chatBox);
 		desktopFrame.add(pass);
 	    desktopFrame.add(timerInfo);
 	    desktopFrame.add(resourcesInfo);
@@ -930,7 +944,7 @@ public class BoardGUI extends Observable implements Board {
 	    try {
 		    UIManager.setLookAndFeel( UIManager.getCrossPlatformLookAndFeelClassName() );
 		 } catch (Exception e) { e.printStackTrace();}
-	    
+
 	    hasLoaded();
 	}
 
@@ -2553,14 +2567,17 @@ public class BoardGUI extends Observable implements Board {
 
 	@Override
 	public void sendChatText(String s) {
-		
+		setChanged();
+		MessageTelegram msg = new MessageTelegram(s);
+		notifyObservers(msg);
 		
 	}
 
 	@Override
 	public void addChatText(int player, String s) {
+
 		String s1 = "["+player+"]: "+s;
-		chatBox.setText(chatBox.getText()+s1);
+		chatBox.setText("\n"+chatBox.getText()+s1);
 		
 	}
 	
