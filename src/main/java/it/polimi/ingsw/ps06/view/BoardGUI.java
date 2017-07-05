@@ -1723,6 +1723,10 @@ public class BoardGUI extends Observable implements Board {
 		
 		roundInfo.setText("Turno: "+round+"  Periodo: "+period);
 		
+		councilIndex=0;
+		harvestIndex=1;
+		productionIndex=1;
+		
 		setRound();
 		
 	}
@@ -2105,7 +2109,6 @@ public class BoardGUI extends Observable implements Board {
         if(lead2>=0) leadersLabel[1] = ImageHandler.setImageScreen("resources/leader/leader"+lead2+".jpg",9,(int)(13.23*ratio),width,height);
         if(lead3>=0) leadersLabel[2] = ImageHandler.setImageScreen("resources/leader/leader"+lead3+".jpg",9,(int)(13.23*ratio),width,height);
         if(lead4>=0) leadersLabel[3] = ImageHandler.setImageScreen("resources/leader/leader"+lead4+".jpg",9,(int)(13.23*ratio),width,height);
-        System.out.print(" "+lead1+" "+lead2+" "+lead3+" "+lead4);
         
         leadersLabelFade[0] = new JLabel();
         leadersLabelFade[1] = new JLabel();
@@ -2255,6 +2258,8 @@ public class BoardGUI extends Observable implements Board {
 		
 		for(int j=0; j<placements.length ; j++){placements[j].setIcon(null);}
 		for(int j=0; j<councils.length ; j++){councils[j].setIcon(null);}
+		
+		council[0].setIcon(null);
 		
 		for(int j=0; j<markets.length ; j++){
 				

@@ -340,6 +340,11 @@ public class RoomGUI extends Observable implements Room {
         	 	start.removeMouseListener( al );
         	}
 		}
+		
+		if(index==3 && name!=null){
+			start.setEnabled(false);
+			
+		}
 	}
 
 	@Override
