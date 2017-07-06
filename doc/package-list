@@ -1,6 +1,9 @@
+it.polimi.ingsw.ps06
+it.polimi.ingsw.ps06.controller
 it.polimi.ingsw.ps06.model
 it.polimi.ingsw.ps06.model.XMLparser
 it.polimi.ingsw.ps06.model.board
+it.polimi.ingsw.ps06.model.bonus_malus
 it.polimi.ingsw.ps06.model.cards
 it.polimi.ingsw.ps06.model.cards.developement
 it.polimi.ingsw.ps06.model.cards.leader

@@ -12,9 +12,24 @@ import it.polimi.ingsw.ps06.view.Menu;
 import it.polimi.ingsw.ps06.view.MenuCLI;
 import it.polimi.ingsw.ps06.view.MenuGUI;
 
-
+/**
+ * Classe di partenza dell'appliazione
+ *
+ * @author  ps06
+ * @version 1.1
+ * @since   2017-05-01
+ */
 public class App 
 {
+	
+	
+    /**
+     * Metodo main dell'applicazione
+     * 
+     * @param 	args			possibili parametri in ingresso - non richiesti e gestiti
+     * 
+     * @throws 	IOException		se il metodo setup() lancia un eccezione
+     */
     public static void main( String[] args ) throws IOException
     {
         System.out.println( "Lorenzo il magnifico!");
@@ -22,6 +37,12 @@ public class App
         setup();
     }
     
+    /**
+     * <p>Metodo per il setup iniziale dell'applicativo.</p>
+     * <p>Si occupa di impostare Server/Client, indirizzo ip di connessione, interfaccia CLI/GUI</p>
+     * 
+     * @throws IOException	se lo stream di lettura dall'utente in fase di setup genera errori
+     */
     public static void setup() throws IOException {
     	InputStreamReader reader = new InputStreamReader(System.in);
     	BufferedReader in = new BufferedReader(reader);

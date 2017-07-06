@@ -183,7 +183,9 @@ public class Connection implements Runnable, Observer {
 	/**
 	 * Metodo per l'invio di messaggi sullo stream out
 	 * 
-	 * @param	 message	messaggio da inviare al Client
+	 * @param	message			messaggio da inviare al Client
+	 * 
+	 * @throws	IOException		se la lettura dello stream causa errori
 	 */
 	private void send(Message message) throws IOException {		
 		out.writeObject(message);

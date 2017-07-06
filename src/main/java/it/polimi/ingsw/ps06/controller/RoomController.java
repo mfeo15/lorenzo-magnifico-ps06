@@ -20,22 +20,43 @@ import it.polimi.ingsw.ps06.networking.messages.MessageUser;
 import it.polimi.ingsw.ps06.networking.messages.Server2Client;
 import it.polimi.ingsw.ps06.view.Room;
 
+/**
+ * Controller associato alla View Room
+ *
+ * @author  ps06
+ * @version 1.1
+ * @since   2017-05-23
+ */
 public class RoomController extends Observable implements Observer {
 	
 	private Room theView;
 	private Client theModel;
 	
-	private ArrayList<String> players;
-	
+	/**
+	 * Costruttore della classe
+	 * 
+	 * @param 	model	model associato al controller
+	 * @param 	view	view associata al controller
+	 */
 	public RoomController(Client model, Room view) {
 		this.theView = view;
 		this.theModel = model;
 	}
 	
+	/**
+	 * Metodo per l'aggiunta di un nuovo Observer
+	 * 
+	 * @param	o	observer da aggiungere
+	 */
 	public void addNewObserver(Observer o) {
 		addObserver(o);
 	}
 	
+	/**
+	 * Metodo per la notifica dei messaggi verso gli Observes
+	 * 
+	 * @param	o	oggetto da notificare
+	 */
 	public void notifyChangement(Object o) {
 		setChanged();
 		notifyObservers(o);
@@ -43,10 +64,6 @@ public class RoomController extends Observable implements Observer {
 
 	@Override
 	public void update(Observable o, Object arg) {
-		/*
-		if (!( arg instanceof Message))
-			return;
-		*/
 		
 		//Smista le comunicazioni provenienti dal Client
 		if ( o.getClass().isInstance(theModel) ) {
@@ -69,6 +86,11 @@ public class RoomController extends Observable implements Observer {
 		}
 	}
 	
+	/**
+	 * Metodo per la gestione di un messaggio in/out
+	 * 
+	 * @param	m	messaggio da gestire
+	 */
 	private void handleMessage(Message m) {
 		
 		if (m instanceof MessageUser)
@@ -85,6 +107,11 @@ public class RoomController extends Observable implements Observer {
 		}
 	}
 	
+	/**
+	 * Metodo per la gestione degli eventi in/out
+	 * 
+	 * @param	e	evento da gestire
+	 */
 	private void handleEvent(Event e) {
 		
 		if ( e instanceof StoryBoard) 
@@ -101,8 +128,19 @@ public class RoomController extends Observable implements Observer {
 		}
 	}
 	
-	private String encrypt(String s) {
+	/**
+	 * Metodo per la protezione di un dato a rischio proveniente dalla view.
+	 * Viene eseguit una cifratura SHA-224 su elementi della view che richiedono un 
+	 * trattamento particolare (le password delle utenze ad esempio)
+	 * 
+	 * @param	s	stringa da crpitare
+	 * 
+	 * @return		stringa criptata
+	 */
+	private String encrypt(String s) 
+	{
 		String hash = "";
+		
 		try {
 			MessageDigest messageDigest = MessageDigest.getInstance("SHA-224");
 			messageDigest.update( s.getBytes() );

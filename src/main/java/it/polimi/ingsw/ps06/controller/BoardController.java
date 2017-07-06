@@ -14,20 +14,43 @@ import it.polimi.ingsw.ps06.networking.messages.MessageParser;
 import it.polimi.ingsw.ps06.networking.messages.Server2Client;
 import it.polimi.ingsw.ps06.view.Board;
 
+/**
+ * Controller associato alla View Board
+ *
+ * @author  ps06
+ * @version 1.1
+ * @since   2017-05-23
+ */
 public class BoardController extends Observable implements Observer {
 	
 	private Board theView;
 	private Client theModel;
 	
+	/**
+	 * Costruttore della classe
+	 * 
+	 * @param 	model	model associato al controller
+	 * @param 	view	view associata al controller
+	 */
 	public BoardController(Client model, Board view) {
 		this.theView = view;
 		this.theModel = model;
 	}
 
+	/**
+	 * Metodo per l'aggiunta di un nuovo Observer
+	 * 
+	 * @param	o	observer da aggiungere
+	 */
 	public void addNewObserver(Observer o) {
 		addObserver(o);
 	}
 	
+	/**
+	 * Metodo per la notifica dei messaggi verso gli Observes
+	 * 
+	 * @param	m	messaggio da notificare
+	 */
 	public void notifyChangement(Message m) {
 		setChanged();
 		notifyObservers(m);
@@ -35,10 +58,6 @@ public class BoardController extends Observable implements Observer {
 	
 	@Override
 	public void update(Observable o, Object arg) {
-		/*
-		if (!( arg instanceof Message))
-			return;
-		*/
 		
 		//Smista le comunicazioni provenienti dal Client
 		if ( o.getClass().isInstance(theModel) ) {
@@ -61,6 +80,11 @@ public class BoardController extends Observable implements Observer {
 		}
 	}
 	
+	/**
+	 * Metodo per la gestione di un messaggio in/out
+	 * 
+	 * @param	m	messaggio da gestire
+	 */
 	private void handleMessage(Message m) {
 		
 		
@@ -76,6 +100,11 @@ public class BoardController extends Observable implements Observer {
 		}	
 	}
 	
+	/**
+	 * Metodo per la gestione degli eventi in/out
+	 * 
+	 * @param	e	evento da gestire
+	 */
 	private void handleEvent(Event e) {
 		
 		if ( e instanceof StoryBoard) 
