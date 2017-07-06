@@ -8,7 +8,7 @@ import it.polimi.ingsw.ps06.model.events.EventParser;
 import it.polimi.ingsw.ps06.model.events.StoryBoard;
 import it.polimi.ingsw.ps06.networking.Client;
 import it.polimi.ingsw.ps06.networking.messages.Client2Server;
-import it.polimi.ingsw.ps06.networking.messages.EventMessage;
+import it.polimi.ingsw.ps06.networking.messages.MessageEvent;
 import it.polimi.ingsw.ps06.networking.messages.Message;
 import it.polimi.ingsw.ps06.networking.messages.MessageParser;
 import it.polimi.ingsw.ps06.networking.messages.Server2Client;
@@ -116,7 +116,7 @@ public class BoardController extends Observable implements Observer {
 		else 
 		{
 			//Event to let the model handle
-			EventMessage m = new EventMessage(e);
+			MessageEvent m = new MessageEvent(e);
 			notifyChangement(m);
 		}
 	}

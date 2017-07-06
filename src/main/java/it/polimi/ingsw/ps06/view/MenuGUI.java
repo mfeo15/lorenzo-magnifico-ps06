@@ -100,7 +100,7 @@ public class MenuGUI extends Observable implements Menu {
                 	
                	MediaPlayer mediaPlayer2 = new MediaPlayer(hit2);
                	mediaPlayer2.play();
-               	startGame();
+               	gotToRoom();
 				f.dispose();
 					
             }});
@@ -167,7 +167,7 @@ public class MenuGUI extends Observable implements Menu {
 
 
 	@Override
-	public void startGame() {
+	public void gotToRoom() {
 		setChanged();
 		StoryBoard2Room storyBoard;
 		storyBoard = new StoryBoard2Room(new RoomGUI());

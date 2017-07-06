@@ -1,6 +1,6 @@
 package it.polimi.ingsw.ps06.networking.messages;
 
-public class BoardReady extends Client2Server {
+public class MessageBoardReady extends Client2Server {
 
 	/**
 	 * 

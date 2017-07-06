@@ -8,7 +8,7 @@ import it.polimi.ingsw.ps06.model.Game;
 import it.polimi.ingsw.ps06.networking.Client;
 import it.polimi.ingsw.ps06.networking.Connection;
 import it.polimi.ingsw.ps06.networking.SocketServer;
-import it.polimi.ingsw.ps06.networking.messages.BoardReady;
+import it.polimi.ingsw.ps06.networking.messages.MessageBoardReady;
 import it.polimi.ingsw.ps06.networking.messages.MessageDisconnect;
 
 
@@ -124,7 +124,7 @@ public class EventParser implements EventVisitor {
 
 	@Override
 	public void visit(BoardHasLoaded boardHasLoaded) {
-		BoardReady br = new BoardReady();
+		MessageBoardReady br = new MessageBoardReady();
 		Client.getInstance().asyncSend(br);
 	}
 }

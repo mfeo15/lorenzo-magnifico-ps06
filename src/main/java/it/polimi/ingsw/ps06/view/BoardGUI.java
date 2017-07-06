@@ -666,7 +666,7 @@ public class BoardGUI extends Observable implements Board {
 		          	MediaPlayer mediaPlayer3 = new MediaPlayer(hit2);
 		      		mediaPlayer3.play();
 		       		view.close();
-		       		startGame(0);
+		       		showPersonalView(0);
 	            }
         	});
        	}
@@ -679,7 +679,7 @@ public class BoardGUI extends Observable implements Board {
 		          	MediaPlayer mediaPlayer3 = new MediaPlayer(hit2);
 		      		mediaPlayer3.play();
 		       		view.close();
-		       		startGame(1);
+		       		showPersonalView(1);
 	            }
         	});
        	}
@@ -692,7 +692,7 @@ public class BoardGUI extends Observable implements Board {
 		          	MediaPlayer mediaPlayer3 = new MediaPlayer(hit2);
 		      		mediaPlayer3.play();
 		       		view.close();
-		       		startGame(2);
+		       		showPersonalView(2);
 	            }
         	});
        	}
@@ -705,7 +705,7 @@ public class BoardGUI extends Observable implements Board {
 		          	MediaPlayer mediaPlayer3 = new MediaPlayer(hit2);
 		      		mediaPlayer3.play();
 		       		view.close();
-		       		startGame(3);
+		       		showPersonalView(3);
 	            }
         	});
        	}
@@ -718,7 +718,7 @@ public class BoardGUI extends Observable implements Board {
 		          	MediaPlayer mediaPlayer3 = new MediaPlayer(hit2);
 		      		mediaPlayer3.play();
 		       		view.close();
-		       		startGame(4);
+		       		showPersonalView(4);
 	            }
         	});
        	}
@@ -2061,7 +2061,7 @@ public class BoardGUI extends Observable implements Board {
 	
 	
 	@Override
-	public void startGame(int index) {
+	public void showPersonalView(int index) {
 		this.pvIndex=index;
 		
 		view = new PersonalViewGUI(pvIndex, this);

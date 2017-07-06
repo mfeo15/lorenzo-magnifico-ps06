@@ -367,8 +367,6 @@ public class Game extends Observable implements Observer {
 	 */
 	private void reorderPlayers() 
 	{
-		setCurrentPlayerIndex(0);
-
 		ArrayList<Player> councilPlayers = board.getOrder();
 		if (councilPlayers != null) {
 
@@ -383,6 +381,8 @@ public class Game extends Observable implements Observer {
 			players.removeAll(newOrderPlayers);
 			players.addAll(0, newOrderPlayers);
 		}
+		
+		this.setCurrentPlayerIndex(0);
 
 		ArrayList<Integer> playersID = new ArrayList<Integer>();
 		players.forEach(p -> playersID.add(p.getID()));

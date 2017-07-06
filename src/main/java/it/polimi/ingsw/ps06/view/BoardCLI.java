@@ -282,7 +282,7 @@ public class BoardCLI extends Observable implements Board,Runnable {
 		}
 		else 
 		{
-			startGame(index);
+			showPersonalView(index);
 		}
 	}
 
@@ -479,7 +479,7 @@ public class BoardCLI extends Observable implements Board,Runnable {
 	}
 
 	@Override
-	public void startGame(int index) {
+	public void showPersonalView(int index) {
 		
 		setChanged();
 		MessageObtainPersonalBoardStatus obtainPbStatus = new MessageObtainPersonalBoardStatus(index); 

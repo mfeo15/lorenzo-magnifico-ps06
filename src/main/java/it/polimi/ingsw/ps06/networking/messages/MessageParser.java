@@ -124,7 +124,7 @@ public class MessageParser implements MessageVisitor {
 	}
 
 	@Override
-	public synchronized void visit(BoardReady br) 
+	public synchronized void visit(MessageBoardReady br) 
 	{
 		Connection c = ((Connection) theSupporter);
 		MatchSet match = SocketServer.getInstance().retrieveMatch(c);
@@ -151,7 +151,7 @@ public class MessageParser implements MessageVisitor {
 	}
 
 	@Override
-	public void visit(EventMessage event) 
+	public void visit(MessageEvent event) 
 	{
 		event.getEvent().accept( new EventParser(theSupporter) );
 	}
@@ -178,6 +178,8 @@ public class MessageParser implements MessageVisitor {
 	@Override
 	public void visit(MessageCurrentPlayer currentPlayer) 
 	{
+		System.out.println("CURRENT PLAYER: " + currentPlayer.getID());
+		
 		Board b = ((Board) theSupporter);
 		b.setCurrentPlayerID( currentPlayer.getID() );
 	}
@@ -304,6 +306,10 @@ public class MessageParser implements MessageVisitor {
 	public void visit(MessageCurrentPlayerOrder currentPlayerOrder) 
 	{
 		Board b = ((Board) theSupporter);
+		
+		System.out.print("Current Order: ");
+		currentPlayerOrder.getPlayerOrder().forEach(p -> System.out.print(p + " ") );
+		System.out.print("\n");
 		
 		int[] playerOrder = new int[ currentPlayerOrder.getPlayerOrder().size() ];
 		for(int i=0; i < currentPlayerOrder.getPlayerOrder().size(); i++) playerOrder[i] = currentPlayerOrder.getPlayerOrder().get(i);

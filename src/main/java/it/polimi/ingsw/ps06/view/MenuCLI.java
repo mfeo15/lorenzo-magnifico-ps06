@@ -87,7 +87,7 @@ public class MenuCLI extends Observable implements Menu {
 		int i = Integer.parseInt(input.readLine());
 
 		switch (i) {
-			case 1: startGame(); break;
+			case 1: gotToRoom(); break;
 			case 2: notifyExit(); break;
 			default: System.out.println("ERRORE");
 		}
@@ -104,7 +104,7 @@ public class MenuCLI extends Observable implements Menu {
 	}
 
 	@Override
-	public void startGame() {
+	public void gotToRoom() {
 		cond=false;
 		setChanged();
 		StoryBoard2Room storyBoard = new StoryBoard2Room(new RoomCLI(input));

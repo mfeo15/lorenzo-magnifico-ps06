@@ -12,7 +12,7 @@ import java.util.Random;
 
 import it.polimi.ingsw.ps06.model.Player;
 import it.polimi.ingsw.ps06.networking.messages.Broadcast;
-import it.polimi.ingsw.ps06.networking.messages.EventMessage;
+import it.polimi.ingsw.ps06.networking.messages.MessageEvent;
 import it.polimi.ingsw.ps06.networking.messages.Message;
 import it.polimi.ingsw.ps06.networking.messages.MessageParser;
 import it.polimi.ingsw.ps06.networking.messages.Server2Client;
@@ -171,9 +171,9 @@ public class Connection implements Runnable, Observer {
 
 		System.out.println("[ SERVER ] Message received from " + getInetAddress() + " (" + getUsername() + "): " + m +"\n");
 
-		if ( m instanceof EventMessage ) {
+		if ( m instanceof MessageEvent ) {
 
-			((EventMessage) m).accept(new MessageParser( this ));
+			((MessageEvent) m).accept(new MessageParser( this ));
 			return;
 		}
 
