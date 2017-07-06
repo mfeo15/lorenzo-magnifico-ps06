@@ -794,9 +794,8 @@
 			<production_requirement>2</production_requirement>
 </card>
 
-<card kind="building">
+	<card kind="building">
 			<code>32</code>
-			
 			<period>1</period>
 			<title>Residenza</title>
 			<cost>
@@ -821,11 +820,10 @@
 				</effect>
 			</permanent_effect>
 			<production_requirement>1</production_requirement>
-</card>
+	</card>
 
-<card kind="building">
+	<card kind="building">
 			<code>33</code>
-			
 			<period>2</period>
 			<title>Mercato</title>
 			<cost>
@@ -853,7 +851,7 @@
 				</effect>
 			</permanent_effect>
 			<production_requirement>2</production_requirement>
-</card>
+	</card>
 
 <card kind="building">
 			<code>34</code>
@@ -1068,9 +1066,8 @@
 			<production_requirement>1</production_requirement>
 </card>
 
-<card kind="building">
+	<card kind="building">
 			<code>40</code>
-			
 			<period>2</period>
 			<title>Fortezza</title>
 			<cost>
@@ -1096,7 +1093,7 @@
 				</effect>
 			</permanent_effect>
 			<production_requirement>6</production_requirement>
-</card>
+	</card>
 
 <card kind="building">
 			<code>41</code>

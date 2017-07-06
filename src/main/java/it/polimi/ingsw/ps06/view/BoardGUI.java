@@ -180,7 +180,7 @@ public class BoardGUI extends Observable implements Board {
     
     private int excomm1Count=0, excomm2Count=0, excomm3Count=0;
     private Media hit2;
-    private Media exc, sendA, messageA, behaviourA;
+    private Media exc, sendA, messageA, behaviourA, hit;
     
     PersonalViewGUI view= new PersonalViewGUI(0,this);
 	private JFXPanel fxPanel = new JFXPanel();
@@ -312,6 +312,10 @@ public class BoardGUI extends Observable implements Board {
 		String behaviourS = "/behaviour.wav";
 		String mediaURL9 = getClass().getResource(behaviourS).toExternalForm();
 		behaviourA = new Media(mediaURL9);
+		
+		String hoverSound = "/place.wav";
+		String mediaURL10 = getClass().getResource(hoverSound).toExternalForm();
+		hit = new Media(mediaURL10);
 		
         //Inizializzazione dei componenti
 		
@@ -1955,8 +1959,7 @@ public class BoardGUI extends Observable implements Board {
 		
 		btn.setIcon((ImageHandler.setImage("resources/member/"+pColor+mColor+".png",5,7,width,height)).getIcon());
     	
-        String hoverSound = "resources/place.wav";
-		Media hit = new Media(new File(hoverSound).toURI().toString());
+        
 		MediaPlayer mediaPlayer1 = new MediaPlayer(hit);
 		mediaPlayer1.play();
 		

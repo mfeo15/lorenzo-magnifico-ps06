@@ -55,7 +55,7 @@ public class MessageParser implements MessageVisitor {
 	public void visit(MessageUser userMessage) 
 	{
 		Connection c = ((Connection) theSupporter);
-		ParserUsers users = new ParserUsers("resources/XML/users.xml");
+		ParserUsers users = new ParserUsers("resources/XML/Users.xml");
 		
 		if (users.contains( userMessage.getUsername() )) 
 		{
