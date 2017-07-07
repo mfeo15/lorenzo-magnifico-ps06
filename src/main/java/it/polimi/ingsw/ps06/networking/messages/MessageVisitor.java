@@ -10,13 +10,6 @@ public interface MessageVisitor {
 	void visit(MessageEvent message);
 	
 	/**
-	 * Messaggio di inizio connessione di un Client al Server
-	 * 
-	 * @param 	message		messaggio da visitare
-	 */
-	void visit(MessageConnectionStart message);
-	
-	/**
 	 * Messaggio di disconnesione di un Client dal Server
 	 * 
 	 * @param 	message		messaggio da visitare

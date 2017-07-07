@@ -147,8 +147,6 @@ public class RoomController extends Observable implements Observer {
 			byte[] digestedBytes = messageDigest.digest();
 			hash = DatatypeConverter.printHexBinary(digestedBytes).toLowerCase();
 			
-			System.out.println(hash);
-			
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}

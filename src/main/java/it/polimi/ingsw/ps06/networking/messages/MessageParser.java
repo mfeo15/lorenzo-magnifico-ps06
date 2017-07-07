@@ -25,17 +25,17 @@ import it.polimi.ingsw.ps06.view.Room;
  * @since	2017-06-10
  */
 public class MessageParser implements MessageVisitor {
-	
+
 	private Object theSupporter;
-	
+
 	/**
 	 * Costruttore di default della classe
 	 */
 	public MessageParser() 
 	{
-		
+
 	}
-	
+
 	/**
 	 * Costruttore della classe con parametro di supporto alle gestione delle attività
 	 * 
@@ -45,41 +45,31 @@ public class MessageParser implements MessageVisitor {
 	{
 		this.theSupporter = theSupporter;
 	}
-	
-	@Override
-	public void visit(MessageConnectionStart startConnection) {
-		
-	}
 
 	@Override
 	public void visit(MessageUser userMessage) 
 	{
 		Connection c = ((Connection) theSupporter);
 		ParserUsers users = new ParserUsers("resources/XML/Users.xml");
-		
+
 		if (users.contains( userMessage.getUsername() )) 
 		{
 			User u = users.getUser( userMessage.getUsername() );
-			
+
 			if (u.autenticate(userMessage.getUsername(), userMessage.getPassword())) 
-			{
-				System.out.println("Login...");
-				System.out.println("usr: " + u.getUsername());
-				System.out.println("psw: " + u.getPassword());
-				System.out.println("total game  " + u.getGameCounter());
-				
+			{	
 				MessageUserHasLogged usrLogged = new MessageUserHasLogged(u.getUsername(), 
-																		  u.getGameCounter(), 
-																		  u.getWinCounder(), 
-																		  u.getSecondPlaceCounter(),
-																		  u.getMaxScore());
+						u.getGameCounter(), 
+						u.getWinCounder(), 
+						u.getSecondPlaceCounter(),
+						u.getMaxScore());
 
 				c.asyncSend(usrLogged);
-					
+
 				c.setAssociatedUser(u);
 			}
 		}
-	
+
 		SocketServer.getInstance().sendWaitingConnectionsStats();
 	}
 
@@ -87,29 +77,29 @@ public class MessageParser implements MessageVisitor {
 	public void visit(MessageWaitingRoomConnections waitingConnections) 
 	{
 		Room r = ((Room) theSupporter);
-		
+
 		for (String s : waitingConnections.getWaitingConnections())
 			r.setPlayer(s, waitingConnections.getWaitingConnections().indexOf(s));
 	}
-	
+
 	@Override
 	public void visit(MessagePlayingConnections playingConnections) 
 	{
 		Board b = ((Board) theSupporter);
-		
+
 		b.setPlayerNumber( playingConnections.getWaitingConnections().size() );
-		
+
 		for (String s : playingConnections.getWaitingConnections())
 			b.setPlayersNames(s, playingConnections.getWaitingConnections().indexOf(s));
 	}
-	
+
 	@Override
 	public void visit(MessageGameHasStarted hasStarted) 
 	{
 		Room r = ((Room) theSupporter);
 		r.hasStarted();
 	}
-	
+
 	@Override
 	public void visit(MessageGameStart gameStart) 
 	{
@@ -128,10 +118,10 @@ public class MessageParser implements MessageVisitor {
 	{
 		Connection c = ((Connection) theSupporter);
 		MatchSet match = SocketServer.getInstance().retrieveMatch(c);
-		
+
 		MessagePlayerID messageID = new MessagePlayerID(c.getPlayer().getID());
 		c.asyncSend(messageID);
-		
+
 		SocketServer.getInstance().increaseQueue(match);
 		if (!( SocketServer.getInstance().isFullQueue(match) ))
 			return;
@@ -142,10 +132,10 @@ public class MessageParser implements MessageVisitor {
 		match.getAll().forEach(connection -> a.add(connection.getUsername()));		
 		MessagePlayingConnections messagePlayingCs = new MessagePlayingConnections( a );		
 		SocketServer.getInstance().sendToPlayingConnections(c, messagePlayingCs);
-		
+
 		MessageBoardSetupTimeoutAction timeoutAction = new MessageBoardSetupTimeoutAction( SocketServer.getInstance().getTimeoutAction() );
 		SocketServer.getInstance().sendToPlayingConnections(c, timeoutAction);
-		
+
 		match.getGame().start();
 
 	}
@@ -160,7 +150,7 @@ public class MessageParser implements MessageVisitor {
 	public void visit(MessageBoardMemberHasBeenPlaced newMember) 
 	{
 		Board b = ((Board) theSupporter);
-		
+
 		try {
 			b.addMember(newMember.getActionExecuted(), newMember.getColor(), newMember.getPlayerIndex());
 		} catch (IOException e) {
@@ -178,8 +168,6 @@ public class MessageParser implements MessageVisitor {
 	@Override
 	public void visit(MessageCurrentPlayer currentPlayer) 
 	{
-		System.out.println("CURRENT PLAYER: " + currentPlayer.getID());
-		
 		Board b = ((Board) theSupporter);
 		b.setCurrentPlayerID( currentPlayer.getID() );
 	}
@@ -195,7 +183,7 @@ public class MessageParser implements MessageVisitor {
 	public void visit(MessageVaticanReport vaticanRep) 
 	{
 		Board b = ((Board) theSupporter);
-		
+
 		for (int excommunicatedPlayer : vaticanRep.getExcommunicatedPlayers())
 			b.excommunicate(vaticanRep.getPeriod(), excommunicatedPlayer);
 	}
@@ -211,25 +199,25 @@ public class MessageParser implements MessageVisitor {
 	public void visit(MessagePersonalBoardStatus pbStatus) 
 	{
 		Board b = ((Board) theSupporter);
-		
+
 		try {
 			b.setBonusTilePersonalView( pbStatus.getBonusTileCode() );
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		b.setResourcesPersonalView(pbStatus.getResourceValue(MaterialsKind.COIN), 
-										pbStatus.getResourceValue(MaterialsKind.WOOD), 
-										pbStatus.getResourceValue(MaterialsKind.STONE), 
-										pbStatus.getResourceValue(MaterialsKind.SERVANT), 
-										pbStatus.getResourceValue(PointsKind.VICTORY_POINTS), 
-										pbStatus.getResourceValue(PointsKind.MILITARY_POINTS), 
-										pbStatus.getResourceValue(PointsKind.FAITH_POINTS));
-		
+				pbStatus.getResourceValue(MaterialsKind.WOOD), 
+				pbStatus.getResourceValue(MaterialsKind.STONE), 
+				pbStatus.getResourceValue(MaterialsKind.SERVANT), 
+				pbStatus.getResourceValue(PointsKind.VICTORY_POINTS), 
+				pbStatus.getResourceValue(PointsKind.MILITARY_POINTS), 
+				pbStatus.getResourceValue(PointsKind.FAITH_POINTS));
+
 		for (int i : pbStatus.getBuilding()) 
 			b.setBuildingCardPersonalView(i, pbStatus.getBuilding().indexOf(i));
-		
+
 		for (int i : pbStatus.getTerritory()) 
 			b.setTerritoryCardPersonalView(i, pbStatus.getTerritory().indexOf(i));
 	}
@@ -239,31 +227,31 @@ public class MessageParser implements MessageVisitor {
 	{
 		Connection connection = ((Connection) theSupporter);
 		Game game = SocketServer.getInstance().retrieveMatch(connection).getGame();
-		
+
 		Player player =  game.getPlayer( obtainPbStatus.getPlayer() );
-		
+
 		if ( player != null) {
 			PersonalBoard pb = player.getPersonalBoard();
-			
+
 			ArrayList<Integer> territoriesCode = new ArrayList<Integer>();
 			pb.getTerritories().forEach(t -> territoriesCode.add( t.getCode() ));
-			
+
 			ArrayList<Integer> buildingsCode = new ArrayList<Integer>();
 			pb.getBuildings().forEach(b -> buildingsCode.add( b.getCode() ));
-			
+
 			ArrayList<Integer> charactersCode = new ArrayList<Integer>();
 			pb.getCharacters().forEach(c -> charactersCode.add( c.getCode() ));
-			
+
 			ArrayList<Integer> venturesCode = new ArrayList<Integer>();
 			pb.getVentures().forEach(v -> venturesCode.add( v.getCode() ));
-			
+
 			MessagePersonalBoardStatus pbStatus = new MessagePersonalBoardStatus ( 
-														pb.getBonusTile().getCode(), 
-														territoriesCode, 
-														buildingsCode, 
-														charactersCode, 
-														venturesCode
-													);
+					pb.getBonusTile().getCode(), 
+					territoriesCode, 
+					buildingsCode, 
+					charactersCode, 
+					venturesCode
+					);
 			for (MaterialsKind m : MaterialsKind.values()) pbStatus.setResourceValue(m, pb.getInventory().getResourceValue(m));
 			for (PointsKind p : PointsKind.values()) pbStatus.setResourceValue(p, pb.getInventory().getResourceValue(p));
 			connection.asyncSend(pbStatus);
@@ -282,7 +270,7 @@ public class MessageParser implements MessageVisitor {
 		int faith = resStatus.getResourceValue(PointsKind.FAITH_POINTS);
 		int victory = resStatus.getResourceValue(PointsKind.VICTORY_POINTS);
 		int military = resStatus.getResourceValue(PointsKind.MILITARY_POINTS);
-		
+
 		b.setPersonalResources(coin, wood, stone, servant, victory, military, faith);
 	}
 
@@ -292,24 +280,21 @@ public class MessageParser implements MessageVisitor {
 		Board b = ((Board) theSupporter);
 		b.setCards( boardSetupDevCards.getRoundCards() );
 	}
-	
+
 	@Override
-	public void visit(MessageBoardSetupExcomCards boardSetupExcomCards) {
+	public void visit(MessageBoardSetupExcomCards boardSetupExcomCards) 
+	{
 		Board b = ((Board) theSupporter);
 		b.setExcommunicationTiles(boardSetupExcomCards.getPeriodOne(), 
-								  boardSetupExcomCards.getPeriodTwo(), 
-								  boardSetupExcomCards.getPeriodThree()
-								 );
+				boardSetupExcomCards.getPeriodTwo(), 
+				boardSetupExcomCards.getPeriodThree()
+				);
 	}
 
 	@Override
 	public void visit(MessageCurrentPlayerOrder currentPlayerOrder) 
 	{
 		Board b = ((Board) theSupporter);
-		
-		System.out.print("Current Order: ");
-		currentPlayerOrder.getPlayerOrder().forEach(p -> System.out.print(p + " ") );
-		System.out.print("\n");
 		
 		int[] playerOrder = new int[ currentPlayerOrder.getPlayerOrder().size() ];
 		for(int i=0; i < currentPlayerOrder.getPlayerOrder().size(); i++) playerOrder[i] = currentPlayerOrder.getPlayerOrder().get(i);
@@ -320,12 +305,12 @@ public class MessageParser implements MessageVisitor {
 	public void visit(MessageLeaderCards leaderCards) 
 	{
 		Board b = ((Board) theSupporter);
-		
+
 		b.setLeaders(leaderCards.getLeaderCards().get(0), 
-						leaderCards.getLeaderCards().get(1), 
-						leaderCards.getLeaderCards().get(2), 
-						leaderCards.getLeaderCards().get(3)
-					);
+				leaderCards.getLeaderCards().get(1), 
+				leaderCards.getLeaderCards().get(2), 
+				leaderCards.getLeaderCards().get(3)
+				);
 	}
 
 	@Override
@@ -371,34 +356,31 @@ public class MessageParser implements MessageVisitor {
 	}
 
 	@Override
-	public void visit(MessageGameHasEnded hasEnded) {
-		// TODO Auto-generated method stub
-		System.out.println("THE GAME IS NOW OVER");
-		System.out.println("The player_" + hasEnded.getWinnerPlayerCode() + " just won!");
-		
+	public void visit(MessageGameHasEnded hasEnded) 
+	{
 		Board b = ((Board) theSupporter);
 		b.gameHasEnded( hasEnded.getWinnerPlayerCode() );
 	}
 
 	@Override
-	public void visit(MessageUserHasLogged hasLogged) {
-		
+	public void visit(MessageUserHasLogged hasLogged) 
+	{
 		Room r = ((Room) theSupporter);
 		r.userHasLoggedIn( hasLogged.getUsername(), 
-							hasLogged.getGameCounter(), 
-							hasLogged.getWinCounder(), 
-							hasLogged.getSecondPlaceCounter(), 
-							hasLogged.getMaxScore() 
-						);
+				hasLogged.getGameCounter(), 
+				hasLogged.getWinCounder(), 
+				hasLogged.getSecondPlaceCounter(), 
+				hasLogged.getMaxScore() 
+				);
 	}
 
 	@Override
 	public void visit(MessageTelegram tel) 
 	{
 		Connection connection = ((Connection) theSupporter);
-		
+
 		if ( tel.getTelegram() != null ) {
-			
+
 			MessageTelegramHasBeenSent telegram = new MessageTelegramHasBeenSent( connection.getPlayer().getID(), tel.getTelegram() );
 			SocketServer.getInstance().sendToPlayingConnections(connection, telegram);
 		}

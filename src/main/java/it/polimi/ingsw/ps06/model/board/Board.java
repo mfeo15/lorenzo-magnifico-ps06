@@ -175,7 +175,7 @@ public class Board extends Observable{
 		}
 		
 		//Check that the action space is not occupied already
-		if ( marketZone.getFamilySpace(chosenAction) == null ) {
+		if ( marketZone.getFamilySpace(chosenAction) != null ) {
 			return;
 		}
 		

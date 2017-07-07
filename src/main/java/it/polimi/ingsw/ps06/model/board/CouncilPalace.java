@@ -10,6 +10,7 @@ import it.polimi.ingsw.ps06.model.Privilege;
 import it.polimi.ingsw.ps06.model.Types;
 import it.polimi.ingsw.ps06.model.Types.Action;
 import it.polimi.ingsw.ps06.model.Types.CouncilPrivilege;
+import it.polimi.ingsw.ps06.model.Types.MaterialsKind;
 import it.polimi.ingsw.ps06.networking.messages.MessageBoardMemberHasBeenPlaced;
 import it.polimi.ingsw.ps06.networking.messages.MessageModel2ViewNotification;
 
@@ -126,6 +127,8 @@ public class CouncilPalace extends Observable implements PlaceSpace {
 	 * @see						it.polimi.ingsw.ps06.model.Types
 	 */
 	public void giveRewards(FamilyMember member, int servantsUsed, CouncilPrivilege chosen){
+		
+		member.getPlayer().getPersonalBoard().addResource(MaterialsKind.COIN, 1);
 		
 		Privilege priv = new Privilege(servantsUsed, member, chosen);
 		priv.activate();

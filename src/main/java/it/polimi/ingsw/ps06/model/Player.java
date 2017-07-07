@@ -226,10 +226,6 @@ public class Player extends Observable implements Observer {
 		LeaderRequirement playerStats = generatePlayerStats();
 		Leader leader = this.leaders.get(n);
 		
-		System.out.println("PLAYER:\n" + playerStats.toString());
-		System.out.println("");
-		System.out.println("LEADER:\n" + leader.getRequirement().toString());
-		
 		if ( playerStats.isBiggerThan( leader.getRequirement() ) ) {
 			
 			boolean result = leader.playLeader();

@@ -80,7 +80,7 @@ public class EventParser implements EventVisitor {
 
 		if (game.getCurrentPlayer().equals(c.getPlayer())) {
 			
-			if (event instanceof EventMemberPlacedWithPrivilege) {
+			if (event.getClass() == EventMemberPlacedWithPrivilege.class) {
 				game.doMemberPlacement(c.getPlayer(), 
 										event.getAction(), 
 										event.getColor(), 
@@ -90,7 +90,7 @@ public class EventParser implements EventVisitor {
 				return;
 			}
 			
-			if (event instanceof EventMemberPlacedWithDoublePrivilege) {
+			if (event.getClass() == EventMemberPlacedWithDoublePrivilege.class) {
 				game.doMemberPlacement(c.getPlayer(), 
 								event.getAction(), 
 								event.getColor(), 
