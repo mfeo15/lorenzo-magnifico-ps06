@@ -26,6 +26,8 @@ import it.polimi.ingsw.ps06.networking.messages.Server2Client;
 */
 public class Player extends Observable implements Observer {
 	
+	private boolean active;
+	
 	private int ID;
 	
 	private ArrayList<Leader> leaders;
@@ -46,6 +48,7 @@ public class Player extends Observable implements Observer {
 	*/
 	public Player(int ID) {
 		
+		this.active = true;
 		this.ID = ID;
 		
 		memberBlack = new FamilyMember(this, ColorPalette.DICE_BLACK);
@@ -75,6 +78,14 @@ public class Player extends Observable implements Observer {
 	*/
 	public int getID() {
 		return ID;
+	}
+	
+	public void deactivate() {
+		this.active = false;
+	}
+	
+	public boolean isActive() {
+		return this.active;
 	}
 	
 	/**

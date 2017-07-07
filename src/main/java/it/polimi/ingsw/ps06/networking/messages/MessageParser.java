@@ -316,8 +316,22 @@ public class MessageParser implements MessageVisitor {
 	@Override
 	public void visit(MessageDisconnect disconnect) 
 	{
-		Connection connection = ((Connection) theSupporter);	
+		Connection connection = ((Connection) theSupporter);
+		Game game = SocketServer.getInstance().retrieveMatch(connection).getGame();
+		Player disconnecting_player = connection.getPlayer();
+		
 		connection.closeConnection();
+		
+		disconnecting_player.deactivate();
+		
+		if (game.getPlayerList().size() == 2)
+			game.end();
+		else 
+		{
+			if ( game.getCurrentPlayer().equals(disconnecting_player) ) {
+				game.advanceCurrentPlayer();
+			}
+		}
 	}
 
 	@Override

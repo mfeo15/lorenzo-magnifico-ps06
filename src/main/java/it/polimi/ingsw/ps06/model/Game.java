@@ -97,7 +97,13 @@ public class Game extends Observable implements Observer {
 	 * 
 	 */
 	public void setCurrentPlayerIndex(int currentPlayerIndex) {
+
 		this.currentPlayerIndex = currentPlayerIndex;
+
+		if ( ! getCurrentPlayer().isActive() ) {
+			advanceCurrentPlayer();
+			return;
+		}
 
 		MessageCurrentPlayer messageCurrentP = new MessageCurrentPlayer( getCurrentPlayer().getID() );
 		notifyChangement(messageCurrentP);
