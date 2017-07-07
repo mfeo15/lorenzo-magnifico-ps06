@@ -426,6 +426,25 @@ public class Game extends Observable implements Observer {
 		if (players.contains(p)) 
 			board.placeMember(p.getMember(color), action, servants, privilege);
 	}
+	
+	/**
+	 * Metodo invocato per l'esecuzione di un piazzamento di un Family Member 
+	 * da parte di un giocatore all'interno del quarto spazio mercato, che richiede un extra paramatro per i privilegi richiesti
+	 *
+	 * @param	p				giocatore che ha eseguito il piazzamento
+	 * @param 	action			azione eseguita dal giocatore	
+	 * @param 	color			colore del familiare usato
+	 * @param	servants		numero di servitori impiegati per alterare il valore del familiare
+	 * @param	firstPrivilege	primo tipo di privilegio richiesto al consiglio	
+	 * @param	seconPrivilege	secondo tipo di privilegio richiesto al consiglio (diverso dal primo)
+	 * 
+	 * @see		it.polimi.ingsw.ps06.model.Types
+	 */
+	public void doMemberPlacement(Player p, Action action, ColorPalette color, int servants, CouncilPrivilege firstPrivilege, CouncilPrivilege secondPrivilege) {
+
+		if (players.contains(p)) 
+			board.placeMember(p.getMember(color), action, servants, firstPrivilege, secondPrivilege);
+	}
 
 	/**
 	 * Metodo per gestire, a seguito di una corretta inizializzazione della classe, l'inizio della partita.

@@ -6,6 +6,13 @@ import java.util.Observer;
 import it.polimi.ingsw.ps06.model.Types.Action;
 import it.polimi.ingsw.ps06.model.Types.ColorPalette;
 
+/**
+ * Interfaccia comune per tutti i tipi di Board View (CLI/GUI) per incapsularne il comportamento a discapito delle tecnologie differenti
+ *
+ * @author  ps06
+ * @version 1.1
+ * @since   2017-05-18
+ */
 public interface Board {
 	
 	/**

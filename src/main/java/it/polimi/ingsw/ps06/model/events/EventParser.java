@@ -40,79 +40,94 @@ public class EventParser implements EventVisitor {
 	}
 	
 	@Override
-	public void visit(EventClose eventClose) {
+	public void visit(EventClose event) {
 		Client.getInstance().asyncSend( new MessageDisconnect() );
 		System.exit(0);
 	}
 
 	@Override
-	public void visit(StoryBoard2Room storyboard) {
+	public void visit(StoryBoard2Room event) {
 		
 		Client.getInstance().deleteAllObservers();
 		
-		RoomController controller = new RoomController(Client.getInstance() ,storyboard.getView());
+		RoomController controller = new RoomController(Client.getInstance() ,event.getView());
 		
 		controller.addNewObserver(Client.getInstance());
-		storyboard.getView().addNewObserver(controller);
+		event.getView().addNewObserver(controller);
 		Client.getInstance().addNewObserver(controller);
-		try {storyboard.getView().show();} catch (IOException e) {e.printStackTrace();}
+		try {event.getView().show();} catch (IOException e) {e.printStackTrace();}
 	}
 
 	@Override
-	public void visit(StoryBoard2Board storyboard) {
+	public void visit(StoryBoard2Board event) {
 		
 		Client.getInstance().deleteAllObservers();
 		
-		BoardController controller = new BoardController(Client.getInstance(), storyboard.getView());
+		BoardController controller = new BoardController(Client.getInstance(), event.getView());
 		
 		controller.addNewObserver(Client.getInstance());
-		storyboard.getView().addNewObserver(controller);
+		event.getView().addNewObserver(controller);
 		Client.getInstance().addNewObserver(controller);
-		try {storyboard.getView().show();} catch (IOException e) {e.printStackTrace();}	
+		try {event.getView().show();} catch (IOException e) {e.printStackTrace();}	
 	}
 
 	@Override
-	public void visit(EventMemberPlaced memberPlaced) {
+	public void visit(EventMemberPlaced event) 
+	{
 		Connection c = ((Connection) theSupporter);
  		
 		Game game = SocketServer.getInstance().retrieveMatch(c).getGame();
 
 		if (game.getCurrentPlayer().equals(c.getPlayer())) {
 			
-			if (memberPlaced instanceof EventMemberPlacedWithPrivilege)
+			if (event instanceof EventMemberPlacedWithPrivilege) {
 				game.doMemberPlacement(c.getPlayer(), 
-										memberPlaced.getAction(), 
-										memberPlaced.getColor(), 
-										memberPlaced.getServantsBonus(), 
-										((EventMemberPlacedWithPrivilege) memberPlaced).getPrivilege());
-			else
-				game.doMemberPlacement(c.getPlayer(), memberPlaced.getAction(), memberPlaced.getColor(), memberPlaced.getServantsBonus());
+										event.getAction(), 
+										event.getColor(), 
+										event.getServantsBonus(), 
+										((EventMemberPlacedWithPrivilege) event).getPrivilege()
+									  );
+				return;
+			}
+			
+			if (event instanceof EventMemberPlacedWithDoublePrivilege) {
+				game.doMemberPlacement(c.getPlayer(), 
+								event.getAction(), 
+								event.getColor(), 
+								event.getServantsBonus(), 
+								((EventMemberPlacedWithDoublePrivilege) event).getPrivilege(),
+								((EventMemberPlacedWithDoublePrivilege) event).getSecondPrivilegeDifferentFromTheFirstOne()
+							);
+				return;
+			}
+			
+			game.doMemberPlacement(c.getPlayer(), event.getAction(), event.getColor(), event.getServantsBonus());
 		}
 	}
 
 	@Override
-	public void visit(EventLeaderDiscarded leaderDiscarded) {
+	public void visit(EventLeaderDiscarded event) {
 
 		Connection c = ((Connection) theSupporter);
-		c.getPlayer().doLeaderDiscarding( leaderDiscarded.getCode() );
+		c.getPlayer().doLeaderDiscarding( event.getCode() );
 	}
 
 	@Override
-	public void visit(EventLeaderActivated leaderActivated) 
+	public void visit(EventLeaderActivated event) 
 	{
 		Connection c = ((Connection) theSupporter);
-		c.getPlayer().doLeaderActivating( leaderActivated.getCode() );
+		c.getPlayer().doLeaderActivating( event.getCode() );
 	}
 
 	@Override
-	public void visit(EventLeaderPlayed leaderPlayed) 
+	public void visit(EventLeaderPlayed event) 
 	{
 		Connection c = ((Connection) theSupporter);
-		c.getPlayer().doLeaderPlaying( leaderPlayed.getCode() );
+		c.getPlayer().doLeaderPlaying( event.getCode() );
 	}
 
 	@Override
-	public void visit(RoomHasLoaded roomHasLoaded) {
+	public void visit(RoomHasLoaded event) {
 		
         try {
 			Client.getInstance().init();
@@ -123,7 +138,7 @@ public class EventParser implements EventVisitor {
 	}
 
 	@Override
-	public void visit(BoardHasLoaded boardHasLoaded) {
+	public void visit(BoardHasLoaded event) {
 		MessageBoardReady br = new MessageBoardReady();
 		Client.getInstance().asyncSend(br);
 	}
