@@ -19,8 +19,8 @@ public class LeaderOnTableFaceDown implements LeaderState {
 	}
 
 	@Override
-	public boolean deactivateLeader() {
-		
+	public boolean deactivateLeader() 
+	{	
 		leader.setLeaderState( leader.getDeactivatedLeaderState() );
 		return true;
 	}

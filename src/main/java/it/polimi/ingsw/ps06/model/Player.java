@@ -177,8 +177,6 @@ public class Player extends Observable implements Observer {
 		ArrayList<Integer> ls = new ArrayList<Integer>();
 		this.leaders.forEach(leader -> ls.add(leader.getCode() ));
 		
-		System.out.println("LEADERS: " + ls.get(0) + " " + ls.get(1) + " " + ls.get(2) + " " + ls.get(3));
-		
 		MessageLeaderCards leaderCards = new MessageLeaderCards(ls);
 		leaderCards.setRecipient(this.getID());
 		notifyChangement(leaderCards);
@@ -324,6 +322,27 @@ public class Player extends Observable implements Observer {
 		notifyChangement(m);
 	}
 	
+	private LeaderRequirement buildPlayerSituation() {
+		LeaderRequirement playerSituation = new LeaderRequirement();
+		
+		for (MaterialsKind m : MaterialsKind.values())
+			playerSituation.setResourceValue(m, getPersonalBoard().getAmount(m) );
+		
+		for (PointsKind p : PointsKind.values())
+			playerSituation.setResourceValue(p, getPersonalBoard().getAmount(p) );
+		
+		playerSituation.setResourceValue(CardType.TERRITORY, getPersonalBoard().getTerritories().size());
+		playerSituation.setResourceValue(CardType.BUILDING, getPersonalBoard().getBuildings().size());
+		playerSituation.setResourceValue(CardType.CHARACTER, getPersonalBoard().getCharacters().size());
+		playerSituation.setResourceValue(CardType.VENTURE, getPersonalBoard().getVentures().size());
+		
+		playerSituation.setAnyCardReq(getPersonalBoard().getTerritories().size() 
+												+ getPersonalBoard().getBuildings().size() 
+												+ getPersonalBoard().getCharacters().size() 
+												+ getPersonalBoard().getVentures().size());
+		
+		return playerSituation;
+	}
 	
 	public void notifyChangement(Object o) {
 		setChanged();

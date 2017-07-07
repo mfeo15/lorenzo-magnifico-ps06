@@ -114,6 +114,7 @@ public class Leader extends Card {
 		return( leaderState.activateLeader() );
 	}
 
+
 	/**
 	 * Metodo per disattivare una carta
 	 * 

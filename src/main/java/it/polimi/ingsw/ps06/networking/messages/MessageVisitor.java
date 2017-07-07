@@ -61,6 +61,7 @@ public interface MessageVisitor {
 	 */
 	void visit(MessageCurrentPlayerOrder message);
 	
+
 	/**
 	 * Messaggio contenitore delle credenziali di accesso ad una utenza di gioco
 	 * 

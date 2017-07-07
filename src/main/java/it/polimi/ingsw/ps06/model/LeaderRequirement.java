@@ -292,5 +292,5 @@ public class LeaderRequirement {
 		+ "AnyCard:" + this.anyCard;
 
 		return s;
-	}	
+	}
 }
