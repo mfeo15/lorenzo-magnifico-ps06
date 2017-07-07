@@ -20,8 +20,7 @@ public class Building extends DevelopementCard {
 	 * @param	dice_requirement	valore del requisito da settare
 	 */
 	public void setDiceReq(int dice_requirement){
-		this.dice_requirement=dice_requirement;
-		return;
+		this.dice_requirement = dice_requirement;
  	}	
 	
 	/**

@@ -5,24 +5,24 @@ import java.util.ArrayList;
 import it.polimi.ingsw.ps06.model.Resources;
 
 /**
-* Classe per la gestione delle carte di tipo impresa
-*
-* @author  ps06
-* @version 1.1
-* @since   2017-05-11
-*/
+ * Classe per la gestione delle carte di tipo impresa
+ *
+ * @author  ps06
+ * @version 1.1
+ * @since   2017-05-11
+ */
 public class Venture extends DevelopementCard {
-	
+
 	private ArrayList<Resources> costs;
 	private int militaryRequirement = -1;
-	
+
 	/**
 	 * Costruttore di default della classe
 	 */
 	public Venture() {
 		this.costs = new ArrayList<Resources>();
 	}
-	
+
 	/**
 	 * Setter per il costo della carta
 	 * 
@@ -31,7 +31,7 @@ public class Venture extends DevelopementCard {
 	public void setCost(Resources cost) {
 		costs.add(cost);
 	}
-	
+
 	/**
 	 * Getter per i costi associati alla carta
 	 * 
@@ -40,7 +40,7 @@ public class Venture extends DevelopementCard {
 	public ArrayList<Resources> getCosts() {
 		return costs;
 	}
-	
+
 	/**
 	 * Setter per un eventuale requisito militare come pre-condizione
 	 * all'acquisizione di una carta impresa
@@ -48,10 +48,14 @@ public class Venture extends DevelopementCard {
 	 * @param	militaryRequirement		requisito militare da associare alla carta
 	 */
 	public void setMilRequirement(int militaryRequirement) {
+		if (militaryRequirement < 0) {
+			this.militaryRequirement = 0;
+			return;
+		}
+
 		this.militaryRequirement = militaryRequirement;
-		return;
 	}
-	
+
 	/**
 	 * Getter per il requisito militare associato alla carta
 	 * 
@@ -60,7 +64,7 @@ public class Venture extends DevelopementCard {
 	public int getMilitaryRequirement() {
 		return militaryRequirement;
 	}
-	
+
 	/**
 	 * Metodo per controllare la presenza di un requisito militare nella carta
 	 * 
