@@ -125,14 +125,13 @@ public class BoardGUI extends Observable implements Board {
 	private JButton servants = new JButton();
 	
 	//Componenti per chat
-	private JButton chat = new JButton("• Chat  ");
+	private JButton chat = new JButton("Chat");
 	private JButton send = new JButton();
 	private JTextArea chatBox = new JTextArea();
 	private JTextField message = new JTextField();
 	private int privilegeCount = 0 ;
 	
 	private JTextField servantsCount = new JTextField();
-	//private int[] cardsCodes = new int[16];
 	private int[] cardsCodes = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
     
     private JLabel membersLabel[] = new JLabel[4];
