@@ -437,12 +437,12 @@ public class Game extends Observable implements Observer {
 	 * Metodo invocato per l'esecuzione di un piazzamento di un Family Member 
 	 * da parte di un giocatore all'interno del quarto spazio mercato, che richiede un extra paramatro per i privilegi richiesti
 	 *
-	 * @param	p				giocatore che ha eseguito il piazzamento
-	 * @param 	action			azione eseguita dal giocatore	
-	 * @param 	color			colore del familiare usato
-	 * @param	servants		numero di servitori impiegati per alterare il valore del familiare
-	 * @param	firstPrivilege	primo tipo di privilegio richiesto al consiglio	
-	 * @param	seconPrivilege	secondo tipo di privilegio richiesto al consiglio (diverso dal primo)
+	 * @param	p					giocatore che ha eseguito il piazzamento
+	 * @param 	action				azione eseguita dal giocatore	
+	 * @param 	color				colore del familiare usato
+	 * @param	servants			numero di servitori impiegati per alterare il valore del familiare
+	 * @param	firstPrivilege		primo tipo di privilegio richiesto al consiglio	
+	 * @param	secondPrivilege		secondo tipo di privilegio richiesto al consiglio (diverso dal primo)
 	 * 
 	 * @see		it.polimi.ingsw.ps06.model.Types
 	 */
@@ -482,6 +482,25 @@ public class Game extends Observable implements Observer {
 
 		MessageGameHasEnded endGame = new MessageGameHasEnded( winnerPlayerCode );
 		notifyChangement(endGame);
+	}
+	
+	/**
+	 * Metodo per gestire il termine di una partita, nel caso in cui l'avversario (nel caso players == 2)
+	 * si sia ritirato e lasciando dunque la vittoria all'ultimo rimasto in partita
+	 *
+	 * @param	withdrawnPlayerID	codice identificativo del giocatore ritirato
+	 *
+	 */
+	public void end(int withdrawnPlayerID) {
+		
+		for (Player p : players) 
+		{
+			if (p.getID() != withdrawnPlayerID) {
+				MessageGameHasEnded endGame = new MessageGameHasEnded( p.getID() );
+				notifyChangement(endGame);
+				return;
+			}
+		}
 	}
 
 	/**

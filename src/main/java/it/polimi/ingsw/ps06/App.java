@@ -3,7 +3,6 @@ package it.polimi.ingsw.ps06;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Scanner;
 
 import it.polimi.ingsw.ps06.controller.MenuController;
 import it.polimi.ingsw.ps06.networking.Client;
@@ -53,9 +52,7 @@ public class App
     		SocketServer.getInstance().start();
     
     		in.close();
-    		return;
     	} 
-    	
     	else 
     	{	
     		System.out.print("Insert the Server IP > ");
@@ -64,7 +61,18 @@ public class App
     		Client.getInstance().setupParameters(host, 12345);
     		
     		System.out.print("\n" + "Press 1 for CLI or 2 for GUI > ");
-    		Menu menuView = ( Integer.parseInt(in.readLine()) == 1 ) ? new MenuCLI(in) : new MenuGUI();
+    		
+    		Menu menuView;
+    		
+    		if ( Integer.parseInt(in.readLine()) == 1 ) 
+        	{
+    			menuView =  new MenuCLI(in);
+    			Client.getInstance().setTalkToTheCLI(false);
+        	}
+    		else
+    		{
+    			menuView =  new MenuGUI();
+    		}
     		
     		System.out.println("\n" + "\n");
 				

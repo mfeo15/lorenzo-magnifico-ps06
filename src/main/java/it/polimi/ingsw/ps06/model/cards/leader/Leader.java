@@ -1,12 +1,8 @@
 package it.polimi.ingsw.ps06.model.cards.leader;
 
-import java.util.Observer;
-
 import it.polimi.ingsw.ps06.model.LeaderRequirement;
-import it.polimi.ingsw.ps06.model.Types;
 import it.polimi.ingsw.ps06.model.Types.LeaderStates;
 import it.polimi.ingsw.ps06.model.cards.Card;
-import it.polimi.ingsw.ps06.networking.messages.MessageModel2ViewNotification;
 
 /**
  * Classe per la definizione e gestione delle carte leader
@@ -41,6 +37,11 @@ public class Leader extends Card {
 		leaderState = inHand;
 	}
 	
+	/**
+	 * Getter per il requirement per giocare un Leader
+	 * 
+	 * @return	il requisito di gioco del Leader
+	 */
 	public LeaderRequirement getRequirement() {
 		return requirement;
 	}

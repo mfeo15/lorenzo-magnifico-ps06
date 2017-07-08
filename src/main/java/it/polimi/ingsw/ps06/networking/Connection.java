@@ -59,10 +59,10 @@ public class Connection implements Runnable, Observer {
 	/**
 	 * Costruttore della classe
 	 * 
-	 * @param socket				Socket del Client di riferimento
+	 * @param 	socket					Socket del Client di riferimento
 	 * 
-	 * @throws UnknownHostException
-	 * @throws IOException
+	 * @throws 	UnknownHostException	se l'host indicato non corrisponde ad un Server pronto all'accettazione di Client
+	 * @throws 	IOException				se l'istanza degli stream in/out genera eccezioni non gestite
 	 */
 	public Connection(Socket socket) throws UnknownHostException, IOException {
 		this.socket = socket;
@@ -163,8 +163,8 @@ public class Connection implements Runnable, Observer {
 	/**
 	 * Metodo per la ricezione di messaggi in entrata sullo stream in
 	 * 
-	 * @throws ClassNotFoundException
-	 * @throws IOException
+	 * @throws ClassNotFoundException	se la lettura del messaggio non è un tipo atteso
+	 * @throws IOException				se la lettura sullo stream in genera eccezioni non gestite
 	 */
 	public void receive() throws ClassNotFoundException, IOException {
 		Message m = (Message) in.readObject();
@@ -213,7 +213,7 @@ public class Connection implements Runnable, Observer {
 			}
 		}).start();
 
-		try { Thread.sleep(300); } catch (InterruptedException e1) { e1.printStackTrace(); } 
+		try { Thread.sleep(100); } catch (InterruptedException e1) { e1.printStackTrace(); } 
 	}
 
 
