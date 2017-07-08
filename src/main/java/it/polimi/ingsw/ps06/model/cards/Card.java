@@ -81,6 +81,6 @@ public abstract class Card extends Observable {
 	public void activateEffect(Player player)
 	{
 		for(Effect i : effect)
-			i.activate(player);
+			if (i != null) i.activate(player);
 	}
 }
