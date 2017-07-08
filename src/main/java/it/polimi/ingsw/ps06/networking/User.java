@@ -92,6 +92,11 @@ public class User {
 		return winCounder;
 	}
 
+	/**
+	 * Setter per il contatore delle partite vinte
+	 * 
+	 * @param 	winCounder	il numero di partite vinte da settare
+	 */
 	public void setWinCounder(int winCounder) {
 		this.winCounder = winCounder;
 	}
@@ -105,6 +110,11 @@ public class User {
 		return secondPlaceCounter;
 	}
 
+	/**
+	 * Setter per il contatore delle partite con piazzamento al secondo posto
+	 * 
+	 * @param 	secondPlaceCounter	il numero di partite con piazzamento al secondo posto da settare
+	 */
 	public void setSecondPlaceCounter(int secondPlaceCounter) {
 		this.secondPlaceCounter = secondPlaceCounter;
 	}
@@ -118,6 +128,11 @@ public class User {
 		return maxScore;
 	}
 
+	/**
+	 * Setter per il punteggio massimo totalizzato
+	 * 
+	 * @param 	maxScore	punteggio massimo totalizzato da settare
+	 */
 	public void setMaxScore(int maxScore) {
 		this.maxScore = maxScore;
 	}

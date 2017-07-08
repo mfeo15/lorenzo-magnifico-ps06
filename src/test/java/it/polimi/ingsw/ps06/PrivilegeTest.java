@@ -47,24 +47,21 @@ public class PrivilegeTest {
 		
 		Privilege p;
 		
-		//Get the bonus_1 (1 wood and 1 stone) -> player will have +1 coin, +1 wood, +1 stone
+		//Get the bonus_1 (1 wood and 1 stone) -> player will have +1 wood, +1 stone
 		p = new Privilege(0, member, CouncilPrivilege.BONUS_1);
 		p.activate();
-		assertEquals( member.getPlayer().getPersonalBoard().getAmount(MaterialsKind.COIN), initial_player_coins += 1 );
 		assertEquals( member.getPlayer().getPersonalBoard().getAmount(MaterialsKind.STONE), initial_player_stone += 1 );
 		assertEquals( member.getPlayer().getPersonalBoard().getAmount(MaterialsKind.WOOD), initial_player_wood += 1 );
 		
-		//Get the bonus_4 (2 military) -> player will have +1 coin, +2 military
+		//Get the bonus_4 (2 military) -> player will have +2 military
 		p = new Privilege(0, member, CouncilPrivilege.BONUS_4);
 		p.activate();
-		assertEquals( member.getPlayer().getPersonalBoard().getAmount(MaterialsKind.COIN), initial_player_coins += 1 );
 		assertEquals( member.getPlayer().getPersonalBoard().getAmount(PointsKind.MILITARY_POINTS), initial_player_military += 2 );
 		
-		//Get the bonus_2 (2 servants) while using 2 servants to do so -> player will have +1 coin, +1 servants
+		//Get the bonus_2 (2 servants) while using 2 servants to do so -> player will have +2 servants
 		int servantsUsed = 2;
 		p = new Privilege(servantsUsed, member, CouncilPrivilege.BONUS_2);
 		p.activate();
-		assertEquals( member.getPlayer().getPersonalBoard().getAmount(MaterialsKind.COIN), initial_player_coins += 1 );
 		assertEquals( member.getPlayer().getPersonalBoard().getAmount(MaterialsKind.SERVANT), initial_player_servants - servantsUsed + 2 );
 	}
 
