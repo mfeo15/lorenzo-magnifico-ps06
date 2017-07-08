@@ -51,15 +51,15 @@ public class MenuGUI extends Observable implements Menu {
 		JLabel cover3 = ImageHandler.setImage("resources/cover6.png", 100, 100, width, height);
         
       //Caricamento suoni del gioco
-        String hoverSound = "/menuhover.wav";
+        String hoverSound = "/menuhover.mp3";
         String mediaURL = getClass().getResource(hoverSound).toExternalForm();
 		Media hit = new Media(mediaURL);
 		
-		String selectSound = "/menuselect.wav";
+		String selectSound = "/menuselect.mp3";
         String mediaURL2 = getClass().getResource(selectSound).toExternalForm();
 		Media hit2 = new Media(mediaURL2);
 		
-		String exitSound = "/exit.wav";
+		String exitSound = "/exit.mp3";
         String mediaURL3 = getClass().getResource(exitSound).toExternalForm();
 		Media music1 = new Media(mediaURL3);
 		
@@ -100,7 +100,7 @@ public class MenuGUI extends Observable implements Menu {
                 	
                	MediaPlayer mediaPlayer2 = new MediaPlayer(hit2);
                	mediaPlayer2.play();
-               	startGame();
+               	gotToRoom();
 				f.dispose();
 					
             }});
@@ -167,7 +167,7 @@ public class MenuGUI extends Observable implements Menu {
 
 
 	@Override
-	public void startGame() {
+	public void gotToRoom() {
 		setChanged();
 		StoryBoard2Room storyBoard;
 		storyBoard = new StoryBoard2Room(new RoomGUI());

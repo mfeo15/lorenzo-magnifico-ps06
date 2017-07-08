@@ -29,6 +29,8 @@ public class Client extends Observable implements Runnable, Observer {
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
 	
+	private boolean talkToTheCLI = true;;
+
 	/**
 	 * <p>SINGLETON DESIGN PATTERN</p>
 	 * <p>Metodo per ottenere l'istanza statica della classe, in modo univoco</p>
@@ -79,17 +81,25 @@ public class Client extends Observable implements Runnable, Observer {
 		this.port = port;
 	}
 	
+	public boolean canTalkToTheCLI() {
+		return talkToTheCLI;
+	}
+
+	public void setTalkToTheCLI(boolean talkToTheCLI) {
+		this.talkToTheCLI = talkToTheCLI;
+	}
+	
 	/**
 	 * Metodo di ricezione sullo stream in ingresso di messaggi spediti dal server.
 	 * Si occupa di passare il messaggio al controller corretto.
 	 * 
-	 * @throws ClassNotFoundException
-	 * @throws IOException
+	 * @throws ClassNotFoundException	se la lettura del messaggio non è un tipo atteso
+	 * @throws IOException				se la lettura sullo stream in genera eccesioni non gestite
 	 */
 	private void receive() throws ClassNotFoundException, IOException {
 		Message m = (Message) in.readObject();
 
-		System.out.println("[ CLIENT ] Message received : " + m + "\n");
+		if ( canTalkToTheCLI() ) System.out.println("[ CLIENT ] Message received : " + m + "\n");
 
 		notifyChangement(m);
 	}
@@ -99,7 +109,7 @@ public class Client extends Observable implements Runnable, Observer {
 	 * 
 	 * @param message		messaggio da spedire al server
 	 * 
-	 * @throws IOException
+	 * @throws IOException	se la scrittura sullo stream out genera eccezioni non gestite
 	 */
 	private void send(Message message) throws IOException {
 		
@@ -109,7 +119,7 @@ public class Client extends Observable implements Runnable, Observer {
 		out.writeObject(message);
 		out.flush();
 		
-		System.out.println("[ CLIENT ] Message sent : " + message + "\n");
+		if ( canTalkToTheCLI() ) System.out.println("[ CLIENT ] Message sent : " + message + "\n");
 	}
 	
 	/**

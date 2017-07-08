@@ -1,7 +1,6 @@
 package it.polimi.ingsw.ps06.model.cards.leader;
 
 public interface LeaderState {
-
 	
 	/**
 	 * Metodo invocato per cambiare stato al'oggetto, da uno qualunque 

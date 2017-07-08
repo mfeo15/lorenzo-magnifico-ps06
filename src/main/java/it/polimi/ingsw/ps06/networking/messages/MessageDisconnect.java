@@ -11,5 +11,4 @@ public class MessageDisconnect extends Client2Server {
 	public void accept(MessageVisitor visitor) {
 		visitor.visit(this);
 	}
-
 }

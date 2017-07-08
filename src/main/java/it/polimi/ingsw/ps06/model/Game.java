@@ -97,7 +97,13 @@ public class Game extends Observable implements Observer {
 	 * 
 	 */
 	public void setCurrentPlayerIndex(int currentPlayerIndex) {
+
 		this.currentPlayerIndex = currentPlayerIndex;
+
+		if ( ! getCurrentPlayer().isActive() ) {
+			advanceCurrentPlayer();
+			return;
+		}
 
 		MessageCurrentPlayer messageCurrentP = new MessageCurrentPlayer( getCurrentPlayer().getID() );
 		notifyChangement(messageCurrentP);
@@ -367,8 +373,6 @@ public class Game extends Observable implements Observer {
 	 */
 	private void reorderPlayers() 
 	{
-		setCurrentPlayerIndex(0);
-
 		ArrayList<Player> councilPlayers = board.getOrder();
 		if (councilPlayers != null) {
 
@@ -383,6 +387,8 @@ public class Game extends Observable implements Observer {
 			players.removeAll(newOrderPlayers);
 			players.addAll(0, newOrderPlayers);
 		}
+		
+		this.setCurrentPlayerIndex(0);
 
 		ArrayList<Integer> playersID = new ArrayList<Integer>();
 		players.forEach(p -> playersID.add(p.getID()));
@@ -426,6 +432,25 @@ public class Game extends Observable implements Observer {
 		if (players.contains(p)) 
 			board.placeMember(p.getMember(color), action, servants, privilege);
 	}
+	
+	/**
+	 * Metodo invocato per l'esecuzione di un piazzamento di un Family Member 
+	 * da parte di un giocatore all'interno del quarto spazio mercato, che richiede un extra paramatro per i privilegi richiesti
+	 *
+	 * @param	p					giocatore che ha eseguito il piazzamento
+	 * @param 	action				azione eseguita dal giocatore	
+	 * @param 	color				colore del familiare usato
+	 * @param	servants			numero di servitori impiegati per alterare il valore del familiare
+	 * @param	firstPrivilege		primo tipo di privilegio richiesto al consiglio	
+	 * @param	secondPrivilege		secondo tipo di privilegio richiesto al consiglio (diverso dal primo)
+	 * 
+	 * @see		it.polimi.ingsw.ps06.model.Types
+	 */
+	public void doMemberPlacement(Player p, Action action, ColorPalette color, int servants, CouncilPrivilege firstPrivilege, CouncilPrivilege secondPrivilege) {
+
+		if (players.contains(p)) 
+			board.placeMember(p.getMember(color), action, servants, firstPrivilege, secondPrivilege);
+	}
 
 	/**
 	 * Metodo per gestire, a seguito di una corretta inizializzazione della classe, l'inizio della partita.
@@ -457,6 +482,25 @@ public class Game extends Observable implements Observer {
 
 		MessageGameHasEnded endGame = new MessageGameHasEnded( winnerPlayerCode );
 		notifyChangement(endGame);
+	}
+	
+	/**
+	 * Metodo per gestire il termine di una partita, nel caso in cui l'avversario (nel caso players == 2)
+	 * si sia ritirato e lasciando dunque la vittoria all'ultimo rimasto in partita
+	 *
+	 * @param	withdrawnPlayerID	codice identificativo del giocatore ritirato
+	 *
+	 */
+	public void end(int withdrawnPlayerID) {
+		
+		for (Player p : players) 
+		{
+			if (p.getID() != withdrawnPlayerID) {
+				MessageGameHasEnded endGame = new MessageGameHasEnded( p.getID() );
+				notifyChangement(endGame);
+				return;
+			}
+		}
 	}
 
 	/**

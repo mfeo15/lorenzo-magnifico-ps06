@@ -28,7 +28,7 @@ public class LeaderRequirement {
 	 */
 	public LeaderRequirement () 
 	{
-		anyCard=0;
+		anyCard = 0;
 		materials = new EnumMap<MaterialsKind, Integer>(MaterialsKind.class);
 		points = new EnumMap<PointsKind, Integer>(PointsKind.class);
 		cards = new EnumMap<CardType, Integer>(CardType.class);
@@ -111,12 +111,16 @@ public class LeaderRequirement {
 	}
 
 	/**
-	 * Setter per il valore del requisito di numero di carte totali
+	 * Setter per il valore del requisito di numero di carte totali. Il valore viene automaticamente messo
+	 * nullo (a zero) se il parametro è negativo. Un valore non postivo non ha significato in questo contesto
 	 *
 	 * @param	amount	quantità di carte da avere
 	 */
 	public void setAnyCardReq(int amount) {
-		this.anyCard = amount;
+		if (amount < 0)
+			this.anyCard = 0;
+		else
+			this.anyCard = amount;
 	}
 
 	/**
@@ -264,7 +268,7 @@ public class LeaderRequirement {
 			if ( getResourceValue(currentCard) < r.getResourceValue(currentCard) ) flagCards = false;
 		}
 		
-		if (anyCard < r.getAnyCardReq())
+		if (this.getAnyCardReq() < r.getAnyCardReq())
 			flagAnyCard = false;
 
 		return (flagMaterials && flagPoints && flagCards && flagAnyCard);
@@ -288,5 +292,5 @@ public class LeaderRequirement {
 		+ "AnyCard:" + this.anyCard;
 
 		return s;
-	}	
+	}
 }

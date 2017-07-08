@@ -63,11 +63,11 @@ public class PersonalViewGUI  {
 			
 			JLabel stanza = ImageHandler.setImage("resources/personalView.png", 100, 100, width, height);
 	        
-			String hoverSound = "/menuhover.wav";
+			String hoverSound = "/menuhover.mp3";
 	        String mediaURL = getClass().getResource(hoverSound).toExternalForm();
 			Media hit = new Media(mediaURL);
 			
-			String exitSound = "/exit.wav";
+			String exitSound = "/exit.mp3";
 	        String mediaURL3 = getClass().getResource(exitSound).toExternalForm();
 			Media music1 = new Media(mediaURL3);
 			

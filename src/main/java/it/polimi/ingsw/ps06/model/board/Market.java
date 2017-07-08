@@ -167,6 +167,27 @@ public class Market extends Observable implements PlaceSpace {
 		return new ArrayList<FamilyMember>(Arrays.asList(memberSpaces));
 	}
 	
+	/**
+	 * Getter per uno specifico posto nell'insieme dei familiari piazzati nel Mercato
+	 * 
+	 * @param	space	spazio azione di cui ottenere il famigliare piazzato
+	 * 
+	 * @return			il famigliare piazzato
+	 */
+	public FamilyMember getFamilySpace(Action space) {
+		return ( this.memberSpaces[ space.ordinal() - marketIndex ] );
+	}
+	
+	/**
+	 * Setter per uno specifico posto nell'insieme dei familiari piazzati nel Mercato
+	 * 
+	 * @param 	space		spazio azione di cui ottenere il famigliare piazzato
+	 * @param 	member		familiare da piazzare
+	 */
+	public void setFamilySpace(Action space, FamilyMember member) {
+		this.memberSpaces[ space.ordinal() - marketIndex ] = member;
+	}
+	
 	public void notifyChangement(Object o) {
 		
 		setChanged();

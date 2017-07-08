@@ -60,7 +60,5 @@ public class Privilege extends Actions {
 		default:
 			break;
 		}
-		
-		member.getPlayer().getPersonalBoard().addResource(MaterialsKind.COIN, 1);
 	}
 }

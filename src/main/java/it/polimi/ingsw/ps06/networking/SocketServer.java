@@ -320,7 +320,7 @@ public class SocketServer implements Server {
 	 * Metodo invocato per concludere la normale attività del Server. 
 	 * Predispone la chiusura del proprio socket e di tutte le connessioni attive.
 	 * 
-	 * @throws IOException
+	 * @throws IOException	se la chiusura dello stream ha generato eccezioni non gestite
 	 */
 	@Override
 	public void close() throws IOException {

@@ -1,20 +1,21 @@
 package it.polimi.ingsw.ps06.model.board;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Random;
 
 import it.polimi.ingsw.ps06.model.FamilyMember;
 import it.polimi.ingsw.ps06.model.Player;
+import it.polimi.ingsw.ps06.model.Privilege;
 import it.polimi.ingsw.ps06.model.Types.Action;
 import it.polimi.ingsw.ps06.model.Types.CouncilPrivilege;
 import it.polimi.ingsw.ps06.model.XMLparser.ParserBonusBoard;
 import it.polimi.ingsw.ps06.model.XMLparser.ParserExcommunicationTiles;
 import it.polimi.ingsw.ps06.model.cards.ExcommunicationTile;
+import it.polimi.ingsw.ps06.networking.messages.MessageBoardMemberHasBeenPlaced;
 import it.polimi.ingsw.ps06.networking.messages.MessageBoardSetupExcomCards;
+import it.polimi.ingsw.ps06.networking.messages.MessageModel2ViewNotification;
 
 /**
  * Classe per la gestione del tabellone
@@ -148,6 +149,64 @@ public class Board extends Observable{
 
 		councilPalaceZone.setChosenCouncilPrivilege(privilege);
 		councilPalaceZone.placeMember(member, chosenAction, servants);
+	}
+	
+	/**
+	 * Metodo invocato per eseguire un piazzamento di un famigliare all'interno del quarto spazio azione del Mercato
+	 * 
+	 * @param 	member				Family Member che vuole eseguire il piazzamento
+	 * @param 	chosenAction		tipo di azione eseguita (per verifica di correttezza)
+	 * @param 	servants			numero di servitori impiegati per completare l'azione
+	 * @param 	firstPrivilege		primo tipo di privilegio richiesto
+	 * @param 	secondPrivilege		secondo tipo di privilegio richiesto (diverso dal primo)
+	 * 
+	 * @see						it.polimi.ingsw.ps06.model.Types
+	 */
+	public void placeMember(FamilyMember member, Action chosenAction, int servants, CouncilPrivilege firstPrivilege, CouncilPrivilege secondPrivilege) {
+		
+		//Check wheater the action required is actually correct for this method call
+		if (chosenAction != Action.MARKET_4) {
+			return;
+		}
+		
+		//Check that the two privileges are different as required by the game rules
+		if (firstPrivilege == secondPrivilege) {
+			return;
+		}
+		
+		//Check that the action space is not occupied already
+		if ( marketZone.getFamilySpace(chosenAction) != null ) {
+			return;
+		}
+		
+		//Check that the member value is enough to compute the action
+		if ( (member.getValue() + servants) < 1 ) 
+		{
+			String notification = "Il giocatore " + member.getPlayer().getColorAssociatedToID() 
+										+ " ha piazzato un familiare di valore non sufficiente per l'azione";
+			MessageModel2ViewNotification m = new MessageModel2ViewNotification(notification);
+			notifyChangement(m);
+			return;
+		}
+		
+		//Occupy the space now that you can
+		marketZone.setFamilySpace(chosenAction, member);
+		
+		//Give the two privileges
+		Privilege firstGivenPrivilege = new Privilege(servants, member, firstPrivilege);
+		firstGivenPrivilege.activate();
+		
+		Privilege secondGivenPrivilege = new Privilege(servants, member, secondPrivilege);
+		secondGivenPrivilege.activate();
+		
+		//Tell the view what happened
+		MessageBoardMemberHasBeenPlaced newMember 
+				= new MessageBoardMemberHasBeenPlaced(chosenAction, member.getColor(), member.getPlayer().getID() );
+		notifyChangement(newMember);
+				
+		//Tell the model what happened
+		Integer i = 1;
+		notifyChangement(i);
 	}
 
 	/**

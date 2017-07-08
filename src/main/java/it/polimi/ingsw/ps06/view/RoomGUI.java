@@ -68,15 +68,15 @@ public class RoomGUI extends Observable implements Room {
 		
         //Caricamento suoni del gioco
 
-		String hoverSound = "/menuhover.wav";
+		String hoverSound = "/menuhover.mp3";
         String mediaURL = getClass().getResource(hoverSound).toExternalForm();
 		Media hit = new Media(mediaURL);
 		
-		String selectSound = "/menuselect.wav";
+		String selectSound = "/menuselect.mp3";
         String mediaURL2 = getClass().getResource(selectSound).toExternalForm();
 		hit2 = new Media(mediaURL2);
 		
-		String exitSound = "/exit.wav";
+		String exitSound = "/exit.mp3";
         String mediaURL3 = getClass().getResource(exitSound).toExternalForm();
 		Media music1 = new Media(mediaURL3);
 		
@@ -84,11 +84,11 @@ public class RoomGUI extends Observable implements Room {
         String mediaURL4 = getClass().getResource(menu).toExternalForm();
 		Media menuMusic = new Media(mediaURL4);
 		
-		String yesS = "/yes.wav";
+		String yesS = "/yes.mp3";
 		String mediaURL5 = getClass().getResource(yesS).toExternalForm();
 		yes = new Media(mediaURL5);
 		
-		String noS = "/no.wav";
+		String noS = "/no.mp3";
 		String mediaURL6 = getClass().getResource(noS).toExternalForm();
 		no = new Media(mediaURL6);
 

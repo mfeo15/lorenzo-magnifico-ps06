@@ -12,7 +12,7 @@ import java.util.Random;
 
 import it.polimi.ingsw.ps06.model.Player;
 import it.polimi.ingsw.ps06.networking.messages.Broadcast;
-import it.polimi.ingsw.ps06.networking.messages.EventMessage;
+import it.polimi.ingsw.ps06.networking.messages.MessageEvent;
 import it.polimi.ingsw.ps06.networking.messages.Message;
 import it.polimi.ingsw.ps06.networking.messages.MessageParser;
 import it.polimi.ingsw.ps06.networking.messages.Server2Client;
@@ -59,10 +59,10 @@ public class Connection implements Runnable, Observer {
 	/**
 	 * Costruttore della classe
 	 * 
-	 * @param socket				Socket del Client di riferimento
+	 * @param 	socket					Socket del Client di riferimento
 	 * 
-	 * @throws UnknownHostException
-	 * @throws IOException
+	 * @throws 	UnknownHostException	se l'host indicato non corrisponde ad un Server pronto all'accettazione di Client
+	 * @throws 	IOException				se l'istanza degli stream in/out genera eccezioni non gestite
 	 */
 	public Connection(Socket socket) throws UnknownHostException, IOException {
 		this.socket = socket;
@@ -163,17 +163,17 @@ public class Connection implements Runnable, Observer {
 	/**
 	 * Metodo per la ricezione di messaggi in entrata sullo stream in
 	 * 
-	 * @throws ClassNotFoundException
-	 * @throws IOException
+	 * @throws ClassNotFoundException	se la lettura del messaggio non è un tipo atteso
+	 * @throws IOException				se la lettura sullo stream in genera eccezioni non gestite
 	 */
 	public void receive() throws ClassNotFoundException, IOException {
 		Message m = (Message) in.readObject();
 
 		System.out.println("[ SERVER ] Message received from " + getInetAddress() + " (" + getUsername() + "): " + m +"\n");
 
-		if ( m instanceof EventMessage ) {
+		if ( m instanceof MessageEvent ) {
 
-			((EventMessage) m).accept(new MessageParser( this ));
+			((MessageEvent) m).accept(new MessageParser( this ));
 			return;
 		}
 
@@ -183,7 +183,9 @@ public class Connection implements Runnable, Observer {
 	/**
 	 * Metodo per l'invio di messaggi sullo stream out
 	 * 
-	 * @param	 message	messaggio da inviare al Client
+	 * @param	message			messaggio da inviare al Client
+	 * 
+	 * @throws	IOException		se la lettura dello stream causa errori
 	 */
 	private void send(Message message) throws IOException {		
 		out.writeObject(message);
@@ -211,7 +213,7 @@ public class Connection implements Runnable, Observer {
 			}
 		}).start();
 
-		try { Thread.sleep(300); } catch (InterruptedException e1) { e1.printStackTrace(); } 
+		try { Thread.sleep(100); } catch (InterruptedException e1) { e1.printStackTrace(); } 
 	}
 
 

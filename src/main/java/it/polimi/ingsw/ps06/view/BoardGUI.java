@@ -62,6 +62,7 @@ import it.polimi.ingsw.ps06.model.events.EventLeaderActivated;
 import it.polimi.ingsw.ps06.model.events.EventLeaderDiscarded;
 import it.polimi.ingsw.ps06.model.events.EventLeaderPlayed;
 import it.polimi.ingsw.ps06.model.events.EventMemberPlaced;
+import it.polimi.ingsw.ps06.model.events.EventMemberPlacedWithDoublePrivilege;
 import it.polimi.ingsw.ps06.model.events.EventMemberPlacedWithPrivilege;
 import it.polimi.ingsw.ps06.networking.messages.MessageObtainPersonalBoardStatus;
 import it.polimi.ingsw.ps06.networking.messages.MessagePlayerPassed;
@@ -124,13 +125,13 @@ public class BoardGUI extends Observable implements Board {
 	private JButton servants = new JButton();
 	
 	//Componenti per chat
-	private JButton chat = new JButton("• Chat  ");
+	private JButton chat = new JButton("Chat");
 	private JButton send = new JButton();
 	private JTextArea chatBox = new JTextArea();
 	private JTextField message = new JTextField();
+	private int privilegeCount = 0 ;
 	
 	private JTextField servantsCount = new JTextField();
-	//private int[] cardsCodes = new int[16];
 	private int[] cardsCodes = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
     
     private JLabel membersLabel[] = new JLabel[4];
@@ -180,9 +181,9 @@ public class BoardGUI extends Observable implements Board {
     
     private int excomm1Count=0, excomm2Count=0, excomm3Count=0;
     private Media hit2;
-    private Media exc, sendA, messageA, behaviourA;
+    private Media exc, sendA, messageA, behaviourA, hit, goldS, goldES;
     
-    PersonalViewGUI view= new PersonalViewGUI(0,this);
+    private PersonalViewGUI view= new PersonalViewGUI(0,this);
 	private JFXPanel fxPanel = new JFXPanel();
 	
     public enum Direction {
@@ -281,11 +282,11 @@ public class BoardGUI extends Observable implements Board {
 	    
         //Caricamento suoni del gioco
 		
-		String selectSound = "/menuselect.wav";
+		String selectSound = "/menuselect.mp3";
 	    String mediaURL2 = getClass().getResource(selectSound).toExternalForm();
 		hit2 = new Media(mediaURL2);
 			
-		String exitSounds = "/exit.wav";
+		String exitSounds = "/exit.mp3";
 	    String mediaURL3 = getClass().getResource(exitSounds).toExternalForm();
 		Media exitSound = new Media(mediaURL3);
 		
@@ -297,21 +298,33 @@ public class BoardGUI extends Observable implements Board {
 	    String mediaURL5 = getClass().getResource(switchSounds).toExternalForm();
 		Media switchSound = new Media(mediaURL5);
 		 
-		String excommunicate = "/excommunicate.wav";
+		String excommunicate = "/excommunicate.mp3";
 		String mediaURL6 = getClass().getResource(excommunicate).toExternalForm();
 		exc = new Media(mediaURL6);
 		
-		String sendS = "/send.wav";
+		String sendS = "/send.mp3";
 		String mediaURL7 = getClass().getResource(sendS).toExternalForm();
 		sendA = new Media(mediaURL7);
 		
-		String messageS = "/message.wav";
+		String messageS = "/message.mp3";
 		String mediaURL8 = getClass().getResource(messageS).toExternalForm();
 		messageA = new Media(mediaURL8);
 		
-		String behaviourS = "/behaviour.wav";
+		String behaviourS = "/behaviour.mp3";
 		String mediaURL9 = getClass().getResource(behaviourS).toExternalForm();
 		behaviourA = new Media(mediaURL9);
+		
+		String hoverSound = "/place.mp3";
+		String mediaURL10 = getClass().getResource(hoverSound).toExternalForm();
+		hit = new Media(mediaURL10);
+		
+		String goldSound = "/gold.mp3";
+        String mediaURL11 = getClass().getResource(goldSound).toExternalForm();
+		goldS = new Media(mediaURL11);
+		
+		String goldEffect = "/marketsell.mp3";
+        String mediaURL12 = getClass().getResource(goldEffect).toExternalForm();
+		goldES = new Media(mediaURL12);
 		
         //Inizializzazione dei componenti
 		
@@ -662,7 +675,7 @@ public class BoardGUI extends Observable implements Board {
 		          	MediaPlayer mediaPlayer3 = new MediaPlayer(hit2);
 		      		mediaPlayer3.play();
 		       		view.close();
-		       		startGame(0);
+		       		showPersonalView(0);
 	            }
         	});
        	}
@@ -675,7 +688,7 @@ public class BoardGUI extends Observable implements Board {
 		          	MediaPlayer mediaPlayer3 = new MediaPlayer(hit2);
 		      		mediaPlayer3.play();
 		       		view.close();
-		       		startGame(1);
+		       		showPersonalView(1);
 	            }
         	});
        	}
@@ -688,7 +701,7 @@ public class BoardGUI extends Observable implements Board {
 		          	MediaPlayer mediaPlayer3 = new MediaPlayer(hit2);
 		      		mediaPlayer3.play();
 		       		view.close();
-		       		startGame(2);
+		       		showPersonalView(2);
 	            }
         	});
        	}
@@ -701,7 +714,7 @@ public class BoardGUI extends Observable implements Board {
 		          	MediaPlayer mediaPlayer3 = new MediaPlayer(hit2);
 		      		mediaPlayer3.play();
 		       		view.close();
-		       		startGame(3);
+		       		showPersonalView(3);
 	            }
         	});
        	}
@@ -714,7 +727,7 @@ public class BoardGUI extends Observable implements Board {
 		          	MediaPlayer mediaPlayer3 = new MediaPlayer(hit2);
 		      		mediaPlayer3.play();
 		       		view.close();
-		       		startGame(4);
+		       		showPersonalView(4);
 	            }
         	});
        	}
@@ -1432,8 +1445,26 @@ public class BoardGUI extends Observable implements Board {
 	                                 
 	                    if (component instanceof JButton && component.isEnabled() && ((JButton) component).getIcon()==null && members[Integer.parseInt(value.toString())].isEnabled()) {
 	                        
-	                    	if(component == council[0]){activateCouncil(identifySpot(component),Integer.parseInt(value.toString()),servantsCountNumber);}
-	                    	else notifyAction(identifySpot(component),Integer.parseInt(value.toString()),servantsCountNumber);
+	                    	if(component == markets[0]) {
+	                    		MediaPlayer mediaPlayer1 = new MediaPlayer(goldS);
+		                		mediaPlayer1.play();
+	                    	}
+	                    	
+	                    	if(component == council[0]){
+	                    			activateCouncil(identifySpot(component),Integer.parseInt(value.toString()),servantsCountNumber);
+	                    		}
+	                    	
+	                    	else {
+	                    		
+		                    		if(component == markets[3]){
+		                    			int[] privilegesIndex = new int[2];
+		                    			activateCouncilMultiple(identifySpot(component),Integer.parseInt(value.toString()),servantsCountNumber,privilegesIndex);
+		                    		}
+		                    	
+		                    		else {
+		                    			notifyAction(identifySpot(component),Integer.parseInt(value.toString()),servantsCountNumber);
+		                    		}
+	                    	}
 	                    	
 		                    servantsCountNumber=0;
 		                    servantsCount.setText(""+servantsCountNumber);
@@ -1955,8 +1986,7 @@ public class BoardGUI extends Observable implements Board {
 		
 		btn.setIcon((ImageHandler.setImage("resources/member/"+pColor+mColor+".png",5,7,width,height)).getIcon());
     	
-        String hoverSound = "resources/place.wav";
-		Media hit = new Media(new File(hoverSound).toURI().toString());
+        
 		MediaPlayer mediaPlayer1 = new MediaPlayer(hit);
 		mediaPlayer1.play();
 		
@@ -2058,7 +2088,7 @@ public class BoardGUI extends Observable implements Board {
 	
 	
 	@Override
-	public void startGame(int index) {
+	public void showPersonalView(int index) {
 		this.pvIndex=index;
 		
 		view = new PersonalViewGUI(pvIndex, this);
@@ -2182,12 +2212,10 @@ public class BoardGUI extends Observable implements Board {
         	
         	harvest[0].setDisabledIcon(harvestCover.getIcon());
         	harvest[0].setIcon(harvestCover.getIcon());
-        	harvest[0].setBorderPainted(false);
         	harvest[0].setEnabled(false);
         	
         	production[0].setDisabledIcon(productionCover.getIcon());
         	production[0].setIcon(productionCover.getIcon());
-        	production[0].setBorderPainted(false);
         	production[0].setEnabled(false);
         	
         case 3:
@@ -2199,16 +2227,18 @@ public class BoardGUI extends Observable implements Board {
         	
         	markets[2].setDisabledIcon(marketCover1.getIcon());
         	markets[2].setIcon(marketCover1.getIcon());
-        	markets[2].setBorderPainted(false);
         	markets[2].setEnabled(false);
         	
         	markets[3].setDisabledIcon(marketCover2.getIcon());
         	markets[3].setIcon(marketCover2.getIcon());
-        	markets[3].setBorderPainted(false);
         	markets[3].setEnabled(false);
        
         case 4:
         	players[4].setEnabled(false);
+        	harvest[0].setBorderPainted(false);
+        	production[0].setBorderPainted(false);
+        	markets[2].setBorderPainted(false);
+        	markets[3].setBorderPainted(false);
         	
         	for( MouseListener al : players[4].getMouseListeners() ) {
         	 	players[4].removeMouseListener( al );
@@ -2399,7 +2429,7 @@ public class BoardGUI extends Observable implements Board {
     	privileges[2].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent ae) {
         	            	      	
-               	MediaPlayer mediaPlayer2 = new MediaPlayer(hit2);
+               	MediaPlayer mediaPlayer2 = new MediaPlayer(goldES);
         		mediaPlayer2.play();
     	    		
         		for(int j=0; j<privileges.length; j++){
@@ -2466,6 +2496,165 @@ public class BoardGUI extends Observable implements Board {
     	});
    	}
 	
+private void activateCouncilMultiple(it.polimi.ingsw.ps06.model.Types.Action chosenAction, int memberIndex, int servants, int privilegesIndex[]){
+	
+	if(privilegeCount < privilegesIndex.length){
+
+    	for(int j=0; j<privileges.length; j++){
+    		privileges[j].setEnabled(true);
+    		privileges[j].setBorderPainted(true);
+    	}
+    	
+    	setChanged();
+		
+       	new java.util.Timer().schedule( 
+  	        new java.util.TimerTask() {
+  	            @Override
+   	            public void run() {
+  	            	
+  	            	for(int j=0; j<privileges.length; j++){
+  	            		privileges[j].setEnabled(false);
+  	            		privileges[j].setBorderPainted(false);
+  	            		
+  	            		ActionListener[] actionListeners = privileges[j].getActionListeners();
+  	            		for (ActionListener actionListener : actionListeners) {
+  	            			privileges[j].removeActionListener(actionListener);
+  	            		}
+  	            		
+  	            }
+  	            	
+  	        }}, 10000 );
+       	
+       	    		
+    	privileges[0].addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent ae) {
+        	            	      	
+               	MediaPlayer mediaPlayer2 = new MediaPlayer(hit2);
+        		mediaPlayer2.play();
+    	    		
+        		for(int j=0; j<privileges.length; j++){
+        			
+        			privileges[j].setEnabled(false);
+                   	privileges[j].setBorderPainted(false);
+                   		
+                  	ActionListener[] actionListeners = privileges[j].getActionListeners();
+                   	for (ActionListener actionListener : actionListeners) {
+                   		privileges[j].removeActionListener(actionListener);
+                   	}
+        		}
+            	
+        		privilegesIndex[privilegeCount] = 0;
+        		privilegeCount++;
+        		activateCouncilMultiple(chosenAction, memberIndex, servants, privilegesIndex);
+    	    }
+    	});
+    	
+    	privileges[1].addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent ae) {
+        	            	      	
+               	MediaPlayer mediaPlayer2 = new MediaPlayer(hit2);
+        		mediaPlayer2.play();
+    	    		
+        		for(int j=0; j<privileges.length; j++){
+        			
+        			privileges[j].setEnabled(false);
+                   	privileges[j].setBorderPainted(false);
+                   		
+                  	ActionListener[] actionListeners = privileges[j].getActionListeners();
+                   	for (ActionListener actionListener : actionListeners) {
+                   		privileges[j].removeActionListener(actionListener);
+                   	}
+        		}
+        			
+        		privilegesIndex[privilegeCount] = 1;
+        		privilegeCount++;
+        		activateCouncilMultiple(chosenAction, memberIndex, servants, privilegesIndex);
+        		
+    	    }
+    	});
+    	
+    	privileges[2].addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent ae) {
+        	            	      	
+               	MediaPlayer mediaPlayer2 = new MediaPlayer(goldES);
+        		mediaPlayer2.play();
+    	    		
+        		for(int j=0; j<privileges.length; j++){
+        			
+        			privileges[j].setEnabled(false);
+                   	privileges[j].setBorderPainted(false);
+                   		
+                  	ActionListener[] actionListeners = privileges[j].getActionListeners();
+                   	for (ActionListener actionListener : actionListeners) {
+                   		privileges[j].removeActionListener(actionListener);
+                   	}
+        		}
+        			
+        		privilegesIndex[privilegeCount] = 2;
+        		privilegeCount++;
+        		activateCouncilMultiple(chosenAction, memberIndex, servants, privilegesIndex);
+        		
+    	    }
+    	});
+    	
+    	privileges[3].addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent ae) {
+        	            	      	
+               	MediaPlayer mediaPlayer2 = new MediaPlayer(hit2);
+        		mediaPlayer2.play();
+    	    		
+        		for(int j=0; j<privileges.length; j++){
+        			
+        			privileges[j].setEnabled(false);
+                   	privileges[j].setBorderPainted(false);
+                   		
+                  	ActionListener[] actionListeners = privileges[j].getActionListeners();
+                   	for (ActionListener actionListener : actionListeners) {
+                   		privileges[j].removeActionListener(actionListener);
+                   	}
+        		}
+        			
+        		privilegesIndex[privilegeCount] = 3;
+        		privilegeCount++;
+        		activateCouncilMultiple(chosenAction, memberIndex, servants, privilegesIndex);
+        		
+    	    }
+    	});
+    	
+    	privileges[4].addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent ae) {
+        	            	      	
+               	MediaPlayer mediaPlayer2 = new MediaPlayer(hit2);
+        		mediaPlayer2.play();
+    	    		
+        		for(int j=0; j<privileges.length; j++){
+        			
+        			privileges[j].setEnabled(false);
+                   	privileges[j].setBorderPainted(false);
+                   		
+                  	ActionListener[] actionListeners = privileges[j].getActionListeners();
+                   	for (ActionListener actionListener : actionListeners) {
+                   		privileges[j].removeActionListener(actionListener);
+                   	}
+        		}
+        			
+        		privilegesIndex[privilegeCount] = 4;
+        		privilegeCount++;
+        		activateCouncilMultiple(chosenAction, memberIndex, servants, privilegesIndex);
+        		
+    	    }
+    	});
+		
+	}
+	else{
+		
+		privilegeCount=0;
+		EventMemberPlacedWithDoublePrivilege memberPlaced = new EventMemberPlacedWithDoublePrivilege(chosenAction, findColor(memberIndex), servants, CouncilPrivilege.getPrivilege(privilegesIndex[0]), CouncilPrivilege.getPrivilege(privilegesIndex[1]) );
+		notifyObservers(memberPlaced);
+		
+		
+	}
+}
 	
 	@Override
 	public void setOrder(int[] players) {

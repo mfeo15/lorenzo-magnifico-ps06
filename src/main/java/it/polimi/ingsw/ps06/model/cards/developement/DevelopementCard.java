@@ -90,6 +90,6 @@ public class DevelopementCard extends Card {
 	 */
 	public void activateIstantEffect(Player player) {
 		for( Effect i : instant_effect )
-			i.activate(player);
+			if(i != null) i.activate(player);
 	}
 }
