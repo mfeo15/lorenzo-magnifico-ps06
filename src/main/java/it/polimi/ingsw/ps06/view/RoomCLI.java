@@ -98,10 +98,7 @@ public class RoomCLI extends Observable implements Room {
 
 	@Override
 	public void giveCredentials(String username, String password) {
-		System.out.println("--> Login Effettuato!");
-		System.out.println();
-		System.out.print(" > ");
-		
+
 		setChanged();
 		MessageUser userMessage = new MessageUser(username,password);
 		notifyObservers(userMessage);
@@ -154,6 +151,8 @@ public class RoomCLI extends Observable implements Room {
 	@Override
 	public void userHasLoggedIn(String username, int stat1, int stat2, int stat3, int stat4) {
 		System.out.println("--> L'utente "+username+" ha eseguito il login");
+		System.out.println();
+		System.out.print(" > ");
 		
 	}
 

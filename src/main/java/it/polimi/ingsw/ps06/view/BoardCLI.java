@@ -114,7 +114,6 @@ public class BoardCLI extends Observable implements Board,Runnable {
 		System.out.println();
 		System.out.println(" Per ottenere una lista dei comandi possibili premi \"?\".");
 		System.out.println();
-		System.out.print(" > ");
 		
 		hasLoaded();
 
@@ -337,7 +336,7 @@ public class BoardCLI extends Observable implements Board,Runnable {
 		}
 		
 		System.out.println();
-		System.out.println("--> ");
+		System.out.println("--> Turno del giocatore: "+id);
 	}
 
 	@Override
@@ -562,7 +561,8 @@ public class BoardCLI extends Observable implements Board,Runnable {
 	@Override
 	public void setOwnerPlayerIndex(int index) {
 		playerID = index;
-		
+		System.out.println();
+		System.out.println("--> Sei il giocatore numero: "+index);
 	}
 
 	
@@ -595,6 +595,8 @@ public class BoardCLI extends Observable implements Board,Runnable {
 	@Override
 	public void setOrder(int[] players) {
 		System.out.println("--> Inizia il round il giocatore: "+players[0]);
+		System.out.println();
+		System.out.print(" > ");
 	}
 	
 	
@@ -647,19 +649,23 @@ public class BoardCLI extends Observable implements Board,Runnable {
 	@Override
 	public void activateLeader(int value) {
 		System.out.println("--> Hai attivato il leader: "+value);
-		
+		System.out.println();
+		System.out.print(" > ");
 	}
 
 	@Override
 	public void playLeader(int value) {
 		System.out.println("--> Hai giocato il leader: "+value);
+		System.out.println();
+		System.out.print(" > ");
 		
 	}
 
 	@Override
 	public void discardLeader(int value) {
 		System.out.println("--> Hai scartato il leader: "+value);
-		
+		System.out.println();
+		System.out.print(" > ");
 	}
 
 	@Override
@@ -738,10 +744,8 @@ public class BoardCLI extends Observable implements Board,Runnable {
 								notifyAction(Action.valueOf(s1.toUpperCase()),index,servants); 
 						}
 					} 
-			} else {
-				System.out.println();
-				System.out.println("Attendi il tuo turno per eseguire questo comando!");
-			}
+				
+			} 
 			
 			}catch (IOException e) {}
 		}
