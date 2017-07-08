@@ -70,7 +70,7 @@ public class BonusMalusSet {
 	 * 
 	 * @see			it.polimi.ingsw.ps06.model.Types
 	 */
-	public BonusMalusAction getBonusMalus(ColorPalette c) {
+	public BonusMalusMember getBonusMalus(ColorPalette c) {
 		
 		if (! contains(BonusMalusMember.class))
 			return null;
@@ -78,7 +78,7 @@ public class BonusMalusSet {
 		for (BonusMalus bm : this.bonusMalus) {
 			if (bm instanceof BonusMalusMember)
 				if ( ((BonusMalusMember) bm).getMemberColors().contains(c) ) 
-					return ((BonusMalusAction) bm);
+					return ((BonusMalusMember) bm);
 		}
 		
 		return null;

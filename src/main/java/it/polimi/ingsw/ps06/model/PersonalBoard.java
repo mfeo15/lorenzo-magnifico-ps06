@@ -89,7 +89,7 @@ public class PersonalBoard extends Observable {
 	 * @see				it.polimi.ingsw.ps06.model.Types
 	 */
 	public int getAmount(MaterialsKind kind) {
-		return inventory.getMaterial(kind);
+		return inventory.getResourceValue(kind);
 	}
 	
 	/**
@@ -102,7 +102,7 @@ public class PersonalBoard extends Observable {
 	 * @see				it.polimi.ingsw.ps06.model.Types
 	 */
 	public int getAmount(PointsKind kind) {
-		return inventory.getPoints(kind);
+		return inventory.getResourceValue(kind);
 	}	
 	
 	/**
@@ -148,7 +148,7 @@ public class PersonalBoard extends Observable {
 	 * @param	quantity	quantità di materiale da aggiungere
 	 */
 	public void addResource(MaterialsKind kind, int quantity) {
-		inventory.increaseMaterials(kind, quantity);
+		inventory.increaseResourceValue(kind, quantity);
 		notifyChangement();
 	}
 	
@@ -159,7 +159,7 @@ public class PersonalBoard extends Observable {
 	 * @param	quantity	quantità di punti da aggiungere
 	 */
 	public void addResource(PointsKind kind, int quantity) {
-		inventory.increasePoints(kind, quantity);
+		inventory.increaseResourceValue(kind, quantity);
 		notifyChangement();
 	}
 	
@@ -191,25 +191,25 @@ public class PersonalBoard extends Observable {
 			territories.add(cardTerritory);
 			break;
 		case 2:
-			if ( (inventory.getPoints(PointsKind.MILITARY_POINTS) >= 3) || noMilitaryRequirement )
+			if ( (inventory.getResourceValue(PointsKind.MILITARY_POINTS) >= 3) || noMilitaryRequirement )
 				territories.add(cardTerritory);
 			else 
 				notifyError("Ottenere la 3° carta territorio richiede 3 punti Militari");
 			break;
 		case 3:
-			if ( (inventory.getPoints(PointsKind.MILITARY_POINTS) >= 7) || noMilitaryRequirement )
+			if ( (inventory.getResourceValue(PointsKind.MILITARY_POINTS) >= 7) || noMilitaryRequirement )
 				territories.add(cardTerritory);
 			else 
 				notifyError("Ottenere la 4° carta territorio richiede 7 punti Militari");
 			break;
 		case 4:
-			if ( (inventory.getPoints(PointsKind.MILITARY_POINTS) >= 12) || noMilitaryRequirement )
+			if ( (inventory.getResourceValue(PointsKind.MILITARY_POINTS) >= 12) || noMilitaryRequirement )
 				territories.add(cardTerritory);
 			else 
 				notifyError("Ottenere la 5° carta territorio richiede 12 punti Militari");
 			break;
 		case 5:
-			if ( (inventory.getPoints(PointsKind.MILITARY_POINTS) >= 18) || noMilitaryRequirement )
+			if ( (inventory.getResourceValue(PointsKind.MILITARY_POINTS) >= 18) || noMilitaryRequirement )
 				territories.add(cardTerritory);
 			else 
 				notifyError("Ottenere la 6° carta territorio richiede 18 punti Militari");
@@ -270,7 +270,7 @@ public class PersonalBoard extends Observable {
 	 * @param 	decrese		quantità di materiale
 	 */
 	public void reduceResource(MaterialsKind kind, int decrese) {
-		inventory.decreaseMaterial(kind, decrese);
+		inventory.decreaseResourceValue(kind, decrese);
 		notifyChangement();
 	}
 	
@@ -281,7 +281,7 @@ public class PersonalBoard extends Observable {
 	 * @param 	decrease	quantità di punti
 	 */
 	public void reduceResource(PointsKind kind, int decrease) {
-		inventory.decreasePoints(kind, decrease);
+		inventory.decreaseResourceValue(kind, decrease);
 		notifyChangement();
 	}
 	

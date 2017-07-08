@@ -47,7 +47,7 @@ public class Warehouse {
 	* @param	kind	tipo di materiale richiesto
 	* @return 			quantità del materiale
 	*/
-	public int getMaterial(MaterialsKind kind){
+	public int getResourceValue(MaterialsKind kind){
 		return status.getResourceValue(kind);
 	}
 	
@@ -57,7 +57,7 @@ public class Warehouse {
 	* @param	kind	tipo di punteggio richiesto
 	* @return 			quantità del punteggio
 	*/
-	public int getPoints(PointsKind kind){
+	public int getResourceValue(PointsKind kind){
 		return status.getResourceValue(kind);
 	}
 	
@@ -67,7 +67,7 @@ public class Warehouse {
 	* @param 	kind		tipo del materiale da aumentare
 	* @param	increase	quantità di cui aumentare il materiale
 	*/
-	public void increaseMaterials(MaterialsKind kind, int increase){
+	public void increaseResourceValue(MaterialsKind kind, int increase){
 		status.increaseResourceValue(kind, increase);
 	}
 	
@@ -77,7 +77,7 @@ public class Warehouse {
 	* @param 	type		tipo di punteggio da aumentare
 	* @param	increase	quantità di cui aumentare i punteggio
 	*/
-	public void increasePoints(PointsKind type, int increase){
+	public void increaseResourceValue(PointsKind type, int increase){
 		status.increaseResourceValue(type, increase);
 	}
 	
@@ -105,7 +105,7 @@ public class Warehouse {
 	* @param 	kind		tipo di materiale da sottrare
 	* @param	decrese		quantità di cui sottrare il materiale
 	*/
-	public void decreaseMaterial(MaterialsKind kind, int decrese){
+	public void decreaseResourceValue(MaterialsKind kind, int decrese){
 		status.decreaseResourceValue(kind, decrese);
 	}
 	
@@ -115,7 +115,7 @@ public class Warehouse {
 	* @param 	kind		tipo di punteggio da sottrare
 	* @param	decrese		quantità di cui sottrare il punteggio
 	*/
-	public void decreasePoints(PointsKind kind, int decrese){
+	public void decreaseResourceValue(PointsKind kind, int decrese){
 		status.decreaseResourceValue(kind, decrese);
 	}
 	
