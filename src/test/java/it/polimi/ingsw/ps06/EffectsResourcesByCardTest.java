@@ -38,7 +38,6 @@ public class EffectsResourcesByCardTest {
 		p.getPersonalBoard().addResource(MaterialsKind.COIN, player_coin);
 		p.getPersonalBoard().addResource(PointsKind.FAITH_POINTS, player_faith);
 		for(int i = 0; i < player_building; i++) {
-			System.out.println(i);
 			p.getPersonalBoard().addCard( new Building() );
 		}
 	}
@@ -46,8 +45,6 @@ public class EffectsResourcesByCardTest {
 	@Test
 	public void test() {
 		e.activate(p);
-		
-		System.out.println(p.getPersonalBoard().getAmount(MaterialsKind.COIN));
 		
 		assertEquals( player_coin + (bonus_coin * player_building), p.getPersonalBoard().getAmount(MaterialsKind.COIN) );
 		assertEquals( player_faith + (bonus_faith * player_building), p.getPersonalBoard().getAmount(PointsKind.FAITH_POINTS) );
