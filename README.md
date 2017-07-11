@@ -56,9 +56,16 @@ Tramite repository di GitHub è possibile scaricare l'ultima versione che è sta
 
 All'avvio sarà possibile scegliere se eseguire un Server oppure un Client, nel secondo casò bisognerà quindi scrivere l'IP del server che è stato avviato in precedenza, in seguto verrà richiesto se avviare il gioco con interfaccia GUI o con interfaccia CLI.
 
+#### N.B.
+In questa release sono state pre-inserite delle utenze prova presenti nel file XML, le password sono state criptate con l'algoritmo SHA-224. Le utenze prova sono: 
+- *Username:* mfeo15 *Password:* password
+- *Username:* dragonet95 *Password:* password
+- *Username:* yaoberga *Password:* password
+
 ## Testing
 
-...
+Il testing è stato eseguito sulla maggior parte del codice del Model, con particolare attenzione per le classi fondamentali come Resources, Actions, Cards e Effects.
+Anche parte del networking è stato testato.
 
 ## Documentazione Java
 
