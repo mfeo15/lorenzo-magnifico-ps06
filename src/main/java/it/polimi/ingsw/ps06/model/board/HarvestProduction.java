@@ -120,7 +120,7 @@ public class HarvestProduction extends Observable implements PlaceSpace {
 		// Gestione condizioni della PRIMA casella di Produzione
 		if(chosenAction==Action.PRODUCTION_1) {
 			
-			if ((memberValue - 3) < 1) {
+			if (memberValue < 1) {
 				handleBadPlacing(1, member);
 				return;
 			}

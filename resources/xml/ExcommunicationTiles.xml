@@ -1,0 +1,269 @@
+<card kind="excommunication">
+			<code>1</code>
+			<period>1</period>
+			<permanent_effect>
+				<effect>
+					<kind>bonusMalusRisorsa</kind>
+					<bonus>
+						<military>-1</military>
+					</bonus>
+				</effect>
+			</permanent_effect>
+</card>
+
+<card kind="excommunication">
+			<code>2</code>
+			<period>1</period>
+			<permanent_effect>
+				<effect>
+					<kind>bonusMalusRisorsa</kind>
+					<bonus>
+						<coin>-1</coin>
+					</bonus>
+				</effect>
+			</permanent_effect>
+</card>
+
+<card kind="excommunication">
+			<code>3</code>
+			<period>1</period>
+			<permanent_effect>
+				<effect>
+					<kind>bonusMalusRisorsa</kind>
+					<bonus>
+						<servant>-1</servant>
+					</bonus>
+				</effect>
+			</permanent_effect>
+</card>
+
+<card kind="excommunication">
+			<code>4</code>
+			<period>1</period>
+			<permanent_effect>
+				<effect>
+					<kind>bonusMalusRisorsa</kind>
+					<bonus>
+						<stone>-1</stone>
+					</bonus>
+				</effect>
+				<effect>
+					<kind>bonusMalusRisorsa</kind>
+					<bonus>
+						<wood>-1</wood>
+					</bonus>
+				</effect>
+			</permanent_effect>
+</card>
+
+<card kind="excommunication">
+			<code>5</code>
+			<period>1</period>
+			<permanent_effect>
+				<effect>
+					<kind>bonusMalusAzione</kind>
+					<bonus>
+						<harvest>-3</harvest>
+					</bonus>
+				</effect>
+			</permanent_effect>
+</card>
+
+<card kind="excommunication">
+			<code>6</code>
+			<period>1</period>
+			<permanent_effect>
+				<effect>
+					<kind>bonusMalusAzione</kind>
+					<bonus>
+						<production>-3</production>
+					</bonus>
+				</effect>
+			</permanent_effect>
+</card>
+
+<card kind="excommunication">
+			<code>7</code>
+			<period>1</period>
+			<permanent_effect>
+				<effect>
+					<kind>bonusMalusAzione</kind>
+					<bonus>
+						<dice>-1</dice>
+					</bonus>
+				</effect>
+			</permanent_effect>
+</card>
+
+<card kind="excommunication">
+			<code>8</code>
+			<period>2</period>
+			<permanent_effect>
+				<effect>
+					<kind>bonusMalusAzione</kind>
+					<bonus>
+						<dice>-4</dice>
+						<color>verde</color>
+					</bonus>
+				</effect>
+			</permanent_effect>
+</card>
+
+<card kind="excommunication">
+			<code>9</code>
+			<period>2</period>
+			<permanent_effect>
+				<effect>
+					<kind>bonusMalusAzione</kind>
+					<bonus>
+						<dice>-4</dice>
+						<color>giallo</color>
+					</bonus>
+				</effect>
+			</permanent_effect>
+</card>
+
+<card kind="excommunication">
+			<code>10</code>
+			<period>2</period>
+			<permanent_effect>
+				<effect>
+					<kind>bonusMalusAzione</kind>
+					<bonus>
+						<dice>-4</dice>
+						<color>blu</color>
+					</bonus>
+				</effect>
+			</permanent_effect>
+</card>
+
+<card kind="excommunication">
+			<code>11</code>
+			<period>2</period>
+			<permanent_effect>
+				<effect>
+					<kind>bonusMalusAzione</kind>
+					<bonus>
+						<dice>-4</dice>
+						<color>viola</color>
+					</bonus>
+				</effect>
+			</permanent_effect>
+</card>
+
+<card kind="excommunication">
+			<code>12</code>
+			<period>2</period>
+			<permanent_effect>
+				<effect>
+					<kind>mercato</kind>
+					<active>1</active>
+				</effect>
+			</permanent_effect>
+</card>
+
+<card kind="excommunication">
+			<code>13</code>
+			<period>2</period>
+			<permanent_effect>
+				<effect>
+					
+				</effect>
+			</permanent_effect>
+</card>
+
+<card kind="excommunication">
+			<code>14</code>
+			<period>2</period>
+			<permanent_effect>
+				<effect>
+					
+				</effect>
+			</permanent_effect>
+</card>
+
+<card kind="excommunication">
+			<code>15</code>
+			<period>3</period>
+			<permanent_effect>
+				<effect>
+					<kind>noFinali</kind>
+					<color>blu</color>
+				</effect>
+			</permanent_effect>
+</card>
+
+<card kind="excommunication">
+			<code>16</code>
+			<period>3</period>
+			<permanent_effect>
+				<effect>
+					<kind>noFinali</kind>
+					<color>viola</color>
+				</effect>
+			</permanent_effect>
+</card>
+
+<card kind="excommunication">
+			<code>17</code>
+			<period>3</period>
+			<permanent_effect>
+				<effect>
+					<kind>noFinali</kind>
+					<color>verdi</color>
+				</effect>
+			</permanent_effect>
+</card>
+
+<card kind="excommunication">
+			<code>18</code>
+			<period>3</period>
+			<permanent_effect>
+				<effect>
+					<kind>byPoint</kind>
+                    <victory>5</victory>
+                    <bonus>
+						<victory>-1</victory>
+					</bonus>
+				</effect>
+			</permanent_effect>
+</card>
+
+<card kind="excommunication">
+			<code>19</code>
+			<period>3</period>
+			<permanent_effect>
+				<effect>
+					<kind>byPoint</kind>
+                    <military>1</military>
+                    <bonus>
+						<victory>-1</victory>
+					</bonus>
+				</effect>
+			</permanent_effect>
+</card>
+
+<card kind="excommunication">
+			<code>20</code>
+			<period>3</period>
+			<permanent_effect>
+				<effect>
+					
+					
+				</effect>
+			</permanent_effect>
+</card>
+
+<card kind="excommunication">
+			<code>21</code>
+			<period>3</period>
+			<permanent_effect>
+				<effect>
+					<kind>byPoint</kind>
+                    <anyResource>1</anyResource>
+                    <bonus>
+						<victory>-1</victory>
+					</bonus>
+				</effect>
+			</permanent_effect>
+</card>

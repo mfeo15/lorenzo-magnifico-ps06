@@ -1,0 +1,2549 @@
+﻿<deckCards>
+<card kind="territory">
+			<code>1</code>
+			
+			<period>1</period>
+			<title>Avamposto Commerciale</title>
+			<permanent_effect>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<coin>1</coin>
+					</bonus>
+				</effect>
+			</permanent_effect>
+			<harvest_requirement>1</harvest_requirement>
+</card>
+
+<card kind="territory">
+			<code>2</code>
+			
+			<period>1</period>
+			<title>Bosco</title>
+			<instant_effects>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<wood>1</wood>
+					</bonus>
+				</effect>
+			</instant_effects>
+			<permanent_effect>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<wood>1</wood>
+					</bonus>
+				</effect>
+			</permanent_effect>
+			<harvest_requirement>2</harvest_requirement>
+</card>
+
+<card kind="territory">
+			<code>3</code>
+			
+			<period>1</period>
+			<title>Borgo</title>
+			<permanent_effect>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<coin>2</coin>
+						<servant>1</servant>
+					</bonus>
+				</effect>
+			</permanent_effect>
+			<harvest_requirement>3</harvest_requirement>
+</card>
+
+<card kind="territory">
+			<code>4</code>
+			
+			<period>1</period>
+			<title>Cava di Ghiaia</title>
+			<instant_effects>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<stone>2</stone>
+					</bonus>
+				</effect>
+			</instant_effects>
+			<permanent_effect>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<stone>2</stone>
+					</bonus>
+				</effect>
+			</permanent_effect>
+			<harvest_requirement>4</harvest_requirement>
+</card>
+
+<card kind="territory">
+			<code>5</code>
+			
+			<period>1</period>
+			<title>Foresta</title>
+			<instant_effects>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<wood>1</wood>
+					</bonus>
+				</effect>
+			</instant_effects>
+			<permanent_effect>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<wood>3</wood>
+					</bonus>
+				</effect>
+			</permanent_effect>
+			<harvest_requirement>5</harvest_requirement>
+</card>
+
+<card kind="territory">
+			<code>6</code>
+			
+			<period>1</period>
+			<title>Monastero</title>
+			<instant_effects>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<servant>1</servant>
+						<military>2</military>
+					</bonus>
+				</effect>
+			</instant_effects>
+			<permanent_effect>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<stone>1</stone>
+						<faith>1</faith>
+					</bonus>
+				</effect>
+			</permanent_effect>
+			<harvest_requirement>6</harvest_requirement>
+</card>
+
+<card kind="territory">
+			<code>7</code>
+			
+			<period>1</period>
+			<title>Rocca</title>
+			<permanent_effect>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<stone>1</stone>
+						<military>2</military>
+					</bonus>
+				</effect>
+			</permanent_effect>
+			<harvest_requirement>5</harvest_requirement>
+</card>
+
+<card kind="territory">
+			<code>8</code>
+			
+			<period>1</period>
+			<title>Città</title>
+			<instant_effects>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<coin>3</coin>
+					</bonus>
+				</effect>
+			</instant_effects>
+			<permanent_effect>
+				<effect>
+				    <kind>privilege</kind>
+				    <amount>1</amount>
+				</effect>
+			</permanent_effect>
+			<harvest_requirement>6</harvest_requirement>
+</card>
+
+<card kind="territory">
+			<code>9</code>
+			
+			<period>2</period>
+			<title>Miniera d'Oro</title>
+			<instant_effects>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<coin>1</coin>
+					</bonus>
+				</effect>
+			</instant_effects>
+			<permanent_effect>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<coin>1</coin>
+					</bonus>
+				</effect>
+			</permanent_effect>
+			<harvest_requirement>1</harvest_requirement>
+</card>
+
+<card kind="territory">
+			<code>10</code>
+			
+			<period>2</period>
+			<title>Villaggio Montano</title>
+			<instant_effects>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<servant>1</servant>
+					</bonus>
+				</effect>
+			</instant_effects>
+			<permanent_effect>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<military>1</military>
+						<wood>2</wood>
+					</bonus>
+				</effect>
+			</permanent_effect>
+			<harvest_requirement>3</harvest_requirement>
+</card>
+
+<card kind="territory">
+			<code>11</code>
+			
+			<period>2</period>
+			<title>Villaggio Minerario</title>
+			<instant_effects>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<servant>2</servant>
+						<stone>1</stone>
+					</bonus>
+				</effect>
+			</instant_effects>
+			<permanent_effect>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<servant>1</servant>
+						<stone>2</stone>
+					</bonus>
+				</effect>
+			</permanent_effect>
+			<harvest_requirement>4</harvest_requirement>
+</card>
+
+<card kind="territory">
+			<code>12</code>
+			
+			<period>2</period>
+			<title>Cava di Pietra</title>
+			<instant_effects>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<wood>1</wood>
+					</bonus>
+				</effect>
+			</instant_effects>
+			<permanent_effect>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<stone>3</stone>
+					</bonus>
+				</effect>
+			</permanent_effect>
+			<harvest_requirement>3</harvest_requirement>
+</card>
+
+<card kind="territory">
+			<code>13</code>
+			
+			<period>2</period>
+			<title>Possedimento</title>
+			<instant_effects>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<servant>2</servant>
+						<wood>1</wood>
+					</bonus>
+				</effect>
+			</instant_effects>
+			<permanent_effect>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+					    <coin>1</coin>
+						<wood>2</wood>
+					</bonus>
+				</effect>
+			</permanent_effect>
+			<harvest_requirement>4</harvest_requirement>
+</card>
+
+<card kind="territory">
+			<code>14</code>
+			
+			<period>2</period>
+			<title>Eremo</title>
+			<instant_effects>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<faith>1</faith>
+					</bonus>
+				</effect>
+			</instant_effects>
+			<permanent_effect>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<faith>1</faith>
+					</bonus>
+				</effect>
+			</permanent_effect>
+			<harvest_requirement>2</harvest_requirement>
+</card>
+
+<card kind="territory">
+			<code>15</code>
+			
+			<period>2</period>
+			<title>Maniero</title>
+			<permanent_effect>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<military>2</military>
+						<servant>2</servant>
+					</bonus>
+				</effect>
+			</permanent_effect>
+			<harvest_requirement>5</harvest_requirement>
+</card>
+
+<card kind="territory">
+			<code>16</code>
+			
+			<period>2</period>
+			<title>Ducato</title>
+			<instant_effects>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<coin>4</coin>
+					</bonus>
+				</effect>
+			</instant_effects>
+			<permanent_effect>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<stone>1</stone>
+						<coin>1</coin>
+						<wood>2</wood>
+					</bonus>
+				</effect>
+			</permanent_effect>
+			<harvest_requirement>6</harvest_requirement>
+</card>
+
+<card kind="territory">
+			<code>17</code>
+			
+			<period>3</period>
+			<title>Città Mercantile</title>
+			<instant_effects>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<coin>1</coin>
+						<servant>1</servant>
+					</bonus>
+				</effect>
+			</instant_effects>
+			<permanent_effect>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<coin>3</coin>
+					</bonus>
+				</effect>
+			</permanent_effect>
+			<harvest_requirement>1</harvest_requirement>
+</card>
+
+<card kind="territory">
+			<code>18</code>
+			
+			<period>3</period>
+			<title>Tenuta</title>
+			<instant_effects>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<victory>1</victory>
+						<wood>1</wood>
+					</bonus>
+				</effect>
+			</instant_effects>
+			<permanent_effect>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<victory>2</victory>
+						<wood>2</wood>
+					</bonus>
+				</effect>
+			</permanent_effect>
+			<harvest_requirement>3</harvest_requirement>
+</card>
+
+<card kind="territory">
+			<code>19</code>
+			
+			<period>3</period>
+			<title>Colonia</title>
+			<instant_effects>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<military>2</military>
+					</bonus>
+				</effect>
+			</instant_effects>
+			<permanent_effect>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<victory>4</victory>
+						<wood>1</wood>
+					</bonus>
+				</effect>
+			</permanent_effect>
+			<harvest_requirement>5</harvest_requirement>
+</card>
+
+<card kind="territory">
+			<code>20</code>
+			
+			<period>3</period>
+			<title>Cava di Marmo</title>
+			<instant_effects>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<victory>3</victory>
+					</bonus>
+				</effect>
+			</instant_effects>
+			<permanent_effect>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<victory>1</victory>
+						<stone>2</stone>
+					</bonus>
+				</effect>
+			</permanent_effect>
+			<harvest_requirement>2</harvest_requirement>
+</card>
+
+<card kind="territory">
+			<code>21</code>
+			
+			<period>3</period>
+			<title>Provincia</title>
+			<instant_effects>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<stone>1</stone>
+					</bonus>
+				</effect>
+				<effect>
+				    <kind>privilege</kind>
+				    <amount>1</amount>
+				</effect>
+			</instant_effects>
+			<permanent_effect>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<victory>4</victory>
+						<stone>1</stone>
+					</bonus>
+				</effect>
+			</permanent_effect>
+			<harvest_requirement>6</harvest_requirement>
+</card>
+
+<card kind="territory">
+			<code>22</code>
+			
+			<period>3</period>
+			<title>Santuario</title>
+			<instant_effects>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<faith>1</faith>
+					</bonus>
+				</effect>
+			</instant_effects>
+			<permanent_effect>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<faith>1</faith>
+						<coin>1</coin>
+					</bonus>
+				</effect>
+			</permanent_effect>
+			<harvest_requirement>1</harvest_requirement>
+</card>
+
+<card kind="territory">
+			<code>23</code>
+			
+			<period>3</period>
+			<title>Castello</title>
+			<instant_effects>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<coin>2</coin>
+						<victory>2</victory>
+					</bonus>
+				</effect>
+			</instant_effects>
+			<permanent_effect>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<servant>1</servant>
+						<military>3</military>
+					</bonus>
+				</effect>
+			</permanent_effect>
+			<harvest_requirement>4</harvest_requirement>
+</card>
+
+<card kind="territory">
+			<code>24</code>
+			
+			<period>3</period>
+			<title>Città Fortificata</title>
+			<instant_effects>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<military>2</military>
+						<sevant>1</sevant>
+					</bonus>
+				</effect>
+			</instant_effects>
+			<permanent_effect>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<military>1</military>
+						<servant>2</servant>
+					</bonus>
+				</effect>
+			</permanent_effect>
+			<harvest_requirement>2</harvest_requirement>
+</card>
+
+<card kind="building">
+			<code>25</code>
+			
+			<period>1</period>
+			<title>Zecca</title>
+			<cost>
+			    <wood>1</wood>
+			    <stone>3</stone>
+			</cost>
+			<instant_effects>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<victory>5</victory>
+					</bonus>
+				</effect>
+			</instant_effects>
+			<permanent_effect>
+				<effect>
+					<kind>byCard</kind>
+                    <color>giallo</color>
+                    <bonus>
+						<coin>1</coin>
+					</bonus>
+				</effect>
+			</permanent_effect>
+			<production_requirement>5</production_requirement>
+</card>
+
+<card kind="building">
+			<code>26</code>
+			
+			<period>1</period>
+			<title>Esattoria</title>
+			<cost>
+			    <wood>3</wood>
+			    <stone>1</stone>
+			</cost>
+			<instant_effects>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<victory>5</victory>
+					</bonus>
+				</effect>
+			</instant_effects>
+			<permanent_effect>
+				<effect>
+					<kind>byCard</kind>
+                    <color>verde</color>
+                    <bonus>
+						<coin>1</coin>
+					</bonus>
+				</effect>
+			</permanent_effect>
+			<production_requirement>5</production_requirement>
+</card>
+
+<card kind="building">
+			<code>27</code>
+			
+			<period>1</period>
+			<title>Arco di Trionfo</title>
+			<cost>
+			    <coin>2</coin>
+			    <stone>2</stone>
+			</cost>
+			<instant_effects>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<victory>6</victory>
+					</bonus>
+				</effect>
+			</instant_effects>
+			<permanent_effect>
+				<effect>
+					<kind>byCard</kind>
+                    <color>viola</color>
+                    <bonus>
+						<victory>1</victory>
+					</bonus>
+				</effect>
+			</permanent_effect>
+			<production_requirement>6</production_requirement>
+</card>
+
+<card kind="building">
+			<code>28</code>
+			
+			<period>1</period>
+			<title>Teatro</title>
+			<cost>
+			    <coin>2</coin>
+			    <wood>2</wood>
+			</cost>
+			<instant_effects>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<victory>6</victory>
+					</bonus>
+				</effect>
+			</instant_effects>
+			<permanent_effect>
+				<effect>
+					<kind>byCard</kind>
+                    <color>blu</color>
+                    <bonus>
+						<victory>1</victory>
+					</bonus>
+				</effect>
+			</permanent_effect>
+			<production_requirement>6</production_requirement>
+</card>
+
+<card kind="building">
+			<code>29</code>
+			
+			<period>1</period>
+			<title>Falegnameria</title>
+			<cost>
+			    <coin>1</coin>
+			    <wood>2</wood>
+			</cost>
+			<instant_effects>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<victory>3</victory>
+					</bonus>
+				</effect>
+			</instant_effects>
+			<permanent_effect>
+				<effect>
+					<kind>swapResources</kind>
+					<input>
+						<wood>1</wood>
+					</input>
+					<bonus>
+						<coin>3</coin>
+					</bonus>
+				</effect>
+				<effect>
+					<kind>swapResources</kind>
+					<input>
+						<wood>2</wood>
+					</input>
+					<bonus>
+						<coin>5</coin>
+					</bonus>
+				</effect>
+			</permanent_effect>
+			<production_requirement>4</production_requirement>
+</card>
+
+<card kind="building">
+			<code>30</code>
+			
+			<period>1</period>
+			<title>Tagliapietre</title>
+			<cost>
+			    <coin>1</coin>
+			    <stone>2</stone>
+			</cost>
+			<instant_effects>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<victory>2</victory>
+					</bonus>
+				</effect>
+			</instant_effects>
+			<permanent_effect>
+				<effect>
+					<kind>swapResources</kind>
+					<input>
+						<stone>1</stone>
+					</input>
+					<bonus>
+						<coin>3</coin>
+					</bonus>
+				</effect>
+				<effect>
+					<kind>swapResources</kind>
+					<input>
+						<stone>2</stone>
+					</input>
+					<bonus>
+						<coin>5</coin>
+					</bonus>
+				</effect>
+			</permanent_effect>
+			<production_requirement>3</production_requirement>
+</card>
+
+<card kind="building">
+			<code>31</code>
+			
+			<period>1</period>
+			<title>Cappella</title>
+			<cost>
+			    <wood>2</wood>
+			</cost>
+			<instant_effects>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<faith>1</faith>
+					</bonus>
+				</effect>
+			</instant_effects>
+			<permanent_effect>
+				<effect>
+					<kind>swapResources</kind>
+					<input>
+						<coin>1</coin>
+					</input>
+					<bonus>
+						<faith>1</faith>
+					</bonus>
+				</effect>
+			</permanent_effect>
+			<production_requirement>2</production_requirement>
+</card>
+
+<card kind="building">
+			<code>32</code>
+			
+			<period>1</period>
+			<title>Residenza</title>
+			<cost>
+			    <stone>2</stone>
+			</cost>
+			<instant_effects>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<victory>1</victory>
+					</bonus>
+				</effect>
+			</instant_effects>
+			<permanent_effect>
+				<effect>
+					<kind>swapAzione</kind>
+					<input>
+						<coin>1</coin>
+					</input>
+					<kind>privilege</kind>
+					<amount>1</amount>
+				</effect>
+			</permanent_effect>
+			<production_requirement>1</production_requirement>
+</card>
+
+<card kind="building">
+			<code>33</code>
+			
+			<period>2</period>
+			<title>Mercato</title>
+			<cost>
+			    <wood>2</wood>
+			    <stone>1</stone>
+			</cost>
+			<instant_effects>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<victory>3</victory>
+					</bonus>
+				</effect>
+			</instant_effects>
+			<permanent_effect>
+				<effect>
+					<kind>swapResources</kind>
+					<input>
+						<coin>3</coin>
+					</input>
+					<bonus>
+						<stone>2</stone>
+						<wood>2</wood>
+					</bonus>
+				</effect>
+			</permanent_effect>
+			<production_requirement>2</production_requirement>
+</card>
+
+<card kind="building">
+			<code>34</code>
+			
+			<period>2</period>
+			<title>Tesoreria</title>
+			<cost>
+			    <wood>3</wood>
+			</cost>
+			<instant_effects>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<victory>4</victory>
+					</bonus>
+				</effect>
+			</instant_effects>
+			<permanent_effect>
+				<effect>
+					<kind>swapResources</kind>
+					<input>
+						<coin>1</coin>
+					</input>
+					<bonus>
+						<victory>3</victory>
+					</bonus>
+				</effect>
+				<effect>
+					<kind>swapResources</kind>
+					<input>
+						<coin>2</coin>
+					</input>
+					<bonus>
+						<victory>5</victory>
+					</bonus>
+				</effect>
+			</permanent_effect>
+			<production_requirement>3</production_requirement>
+</card>
+
+<card kind="building">
+			<code>35</code>
+			
+			<period>2</period>
+			<title>Gilda dei Pittori</title>
+			<cost>
+			    <wood>4</wood>
+			</cost>
+			<instant_effects>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<victory>5</victory>
+					</bonus>
+				</effect>
+			</instant_effects>
+			<permanent_effect>
+				<effect>
+					<kind>swapResources</kind>
+					<input>
+						<wood>1</wood>
+					</input>
+					<bonus>
+						<victory>3</victory>
+					</bonus>
+				</effect>
+				<effect>
+					<kind>swapResources</kind>
+					<input>
+						<wood>3</wood>
+					</input>
+					<bonus>
+						<victory>7</victory>
+					</bonus>
+				</effect>
+			</permanent_effect>
+			<production_requirement>4</production_requirement>
+</card>
+
+<card kind="building">
+			<code>36</code>
+			
+			<period>2</period>
+			<title>Gilda degli Scultori</title>
+			<cost>
+			    <stone>4</stone>
+			</cost>
+			<instant_effects>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<victory>6</victory>
+					</bonus>
+				</effect>
+			</instant_effects>
+			<permanent_effect>
+				<effect>
+					<kind>swapResources</kind>
+					<input>
+						<stone>1</stone>
+					</input>
+					<bonus>
+						<victory>3</victory>
+					</bonus>
+				</effect>
+				<effect>
+					<kind>swapResources</kind>
+					<input>
+						<stone>3</stone>
+					</input>
+					<bonus>
+						<victory>7</victory>
+					</bonus>
+				</effect>
+			</permanent_effect>
+			<production_requirement>5</production_requirement>
+</card>
+
+<card kind="building">
+			<code>37</code>
+			
+			<period>2</period>
+			<title>Gilda dei Costruttori</title>
+			<cost>
+			    <wood>1</wood>
+			    <stone>2</stone>
+			</cost>
+			<instant_effects>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<victory>4</victory>
+					</bonus>
+				</effect>
+			</instant_effects>
+			<permanent_effect>
+				<effect>
+					<kind>swapResources</kind>
+					<input>
+						<stone>1</stone>
+						<wood>1</wood>
+						<servant>1</servant>
+					</input>
+					<bonus>
+						<victory>6</victory>
+					</bonus>
+				</effect>
+			</permanent_effect>
+			<production_requirement>4</production_requirement>
+</card>
+
+<card kind="building">
+			<code>38</code>
+			
+			<period>2</period>
+			<title>Battistero</title>
+			<cost>
+			    <stone>3</stone>
+			</cost>
+			<instant_effects>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<victory>2</victory>
+						<faith>1</faith>
+					</bonus>
+				</effect>
+			</instant_effects>
+			<permanent_effect>
+				<effect>
+					<kind>swapResources</kind>
+					<input>
+						<faith>1</faith>
+					</input>
+					<bonus>
+						<victory>2</victory>
+						<coin>2</coin>
+					</bonus>
+				</effect>
+			</permanent_effect>
+			<production_requirement>2</production_requirement>
+</card>
+
+<card kind="building">
+			<code>39</code>
+			
+			<period>2</period>
+			<title>Caserma</title>
+			<cost>
+			    <wood>1</wood>
+			    <stone>1</stone>
+			</cost>
+			<instant_effects>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<victory>3</victory>
+					</bonus>
+				</effect>
+			</instant_effects>
+			<permanent_effect>
+				<effect>
+					<kind>swapResources</kind>
+					<input>
+						<servant>1</servant>
+					</input>
+					<bonus>
+						<military>3</military>
+					</bonus>
+				</effect>
+			</permanent_effect>
+			<production_requirement>1</production_requirement>
+</card>
+
+<card kind="building">
+			<code>40</code>
+			
+			<period>2</period>
+			<title>Fortezza</title>
+			<cost>
+			    <wood>2</wood>
+			    <stone>2</stone>
+			    <coin>2</coin>
+			</cost>
+			<instant_effects>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<victory>8</victory>
+					</bonus>
+				</effect>
+			</instant_effects>
+			<permanent_effect>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<military>2</military>
+						<victory>2</victory>
+					</bonus>
+				</effect>
+			</permanent_effect>
+			<production_requirement>6</production_requirement>
+</card>
+
+<card kind="building">
+			<code>41</code>
+			
+			<period>3</period>
+			<title>Banca</title>
+			<cost>
+			    <wood>1</wood>
+			    <stone>3</stone>
+			    <coin>3</coin>
+			</cost>
+			<instant_effects>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<victory>7</victory>
+					</bonus>
+				</effect>
+			</instant_effects>
+			<permanent_effect>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<coin>5</coin>
+					</bonus>
+				</effect>
+			</permanent_effect>
+			<production_requirement>2</production_requirement>
+</card>
+
+<card kind="building">
+			<code>42</code>
+			
+			<period>3</period>
+			<title>Fiera</title>
+			<cost>
+			    <wood>3</wood>
+			    <coin>4</coin>
+			</cost>
+			<instant_effects>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<victory>8</victory>
+					</bonus>
+				</effect>
+			</instant_effects>
+			<permanent_effect>
+				<effect>
+					<kind>swapResources</kind>
+					<input>
+						<coin>4</coin>
+					</input>
+					<bonus>
+						<wood>3</wood>
+						<stone>3</stone>
+					</bonus>
+				</effect>
+			</permanent_effect>
+			<production_requirement>4</production_requirement>
+</card>
+
+<card kind="building">
+			<code>43</code>
+			
+			<period>3</period>
+			<title>Giardino</title>
+			<cost>
+			    <wood>4</wood>
+			    <stone>2</stone>
+			    <servant>2</servant>
+			</cost>
+			<instant_effects>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<victory>10</victory>
+					</bonus>
+				</effect>
+			</instant_effects>
+			<permanent_effect>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<victory>3</victory>
+					</bonus>
+				</effect>
+			</permanent_effect>
+			<production_requirement>1</production_requirement>
+</card>
+
+<card kind="building">
+			<code>44</code>
+			
+			<period>3</period>
+			<title>Castelletto</title>
+			<cost>
+			    <wood>2</wood>
+			    <stone>4</stone>
+			    <coin>2</coin>
+			</cost>
+			<instant_effects>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<victory>9</victory>
+					</bonus>
+				</effect>
+			</instant_effects>
+			<permanent_effect>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<victory>2</victory>
+					</bonus>
+				</effect>
+				<effect>
+				    <kind>privilege</kind>
+				    <amount>1</amount>
+				</effect>
+			</permanent_effect>
+			<production_requirement>5</production_requirement>
+</card>
+
+<card kind="building">
+			<code>45</code>
+			
+			<period>3</period>
+			<title>Palazzo</title>
+			<cost>
+			    <wood>3</wood>
+			    <stone>1</stone>
+			    <coin>3</coin>
+			</cost>
+			<instant_effects>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<victory>9</victory>
+					</bonus>
+				</effect>
+			</instant_effects>
+			<permanent_effect>
+				<effect>
+					<kind>swapResources</kind>
+					<input>
+						<coin>1</coin>
+					</input>
+					<bonus>
+						<servant>2</servant>
+						<victory>4</victory>
+					</bonus>
+				</effect>
+			</permanent_effect>
+			<production_requirement>6</production_requirement>
+</card>
+
+<card kind="building">
+			<code>46</code>
+			
+			<period>3</period>
+			<title>Basilica</title>
+			<cost>
+			    <wood>1</wood>
+			    <stone>4</stone>
+			</cost>
+			<instant_effects>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<victory>5</victory>
+						<faith>1</faith>
+					</bonus>
+				</effect>
+			</instant_effects>
+			<permanent_effect>
+				<effect>
+					<kind>swapResources</kind>
+					<input>
+						<wood>1</wood>
+					</input>
+					<bonus>
+						<faith>2</faith>
+					</bonus>
+				</effect>
+				<effect>
+					<kind>swapResources</kind>
+					<input>
+						<stone>1</stone>
+					</input>
+					<bonus>
+						<faith>2</faith>
+					</bonus>
+				</effect>
+			</permanent_effect>
+			<production_requirement>1</production_requirement>
+</card>
+
+<card kind="building">
+			<code>47</code>
+			
+			<period>3</period>
+			<title>Accademia Militare</title>
+			<cost>
+			    <servant>1</servant>
+			    <wood>2</wood>
+			    <stone>2</stone>
+			</cost>
+			<instant_effects>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<victory>7</victory>
+					</bonus>
+				</effect>
+			</instant_effects>
+			<permanent_effect>
+				<effect>
+					<kind>swapResources</kind>
+					<input>
+						<servant>1</servant>
+					</input>
+					<bonus>
+						<military>3</military>
+						<victory>1</victory>
+					</bonus>
+				</effect>
+			</permanent_effect>
+			<production_requirement>3</production_requirement>
+</card>
+
+<card kind="building">
+			<code>48</code>
+			
+			<period>3</period>
+			<title>Cattedrale</title>
+			<cost>
+			    <wood>4</wood>
+			    <stone>4</stone>
+			</cost>
+			<instant_effects>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<victory>7</victory>
+						<faith>3</faith>
+					</bonus>
+				</effect>
+			</instant_effects>
+			<permanent_effect>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+						<victory>1</victory>
+					</bonus>
+				</effect>
+			</permanent_effect>
+			<production_requirement>2</production_requirement>
+</card>
+
+<card kind="character">
+			<code>49</code>
+			
+			<period>1</period>
+			<title>Condottiero</title>
+			<cost>
+			    <coin>2</coin>
+			</cost>
+			<instant_effects>
+				<effect>
+					<kind>resources</kind>
+					<bonus>
+                        <military>3</military>
+					</bonus>
+				</effect>
+			</instant_effects>
+			<permanent_effect>
+				<effect>
+					<kind>bmAction</kind>
+					<action>verde</action>
+					<amount>2</amount>
+				</effect>
+			</permanent_effect>
+</card>
+
+<card kind="character">
+			<code>50</code>
+			
+			<period>1</period>
+			<title>Costruttore</title>
+			<cost>
+			    <coin>4</coin>
+			</cost>
+			<permanent_effect>
+				<effect>
+					<kind>bmAction</kind>
+					<action>giallo</action>
+					<amount>2</amount>
+				</effect>
+				<effect>
+					<kind>discount</kind>
+					    <color>giallo</color>
+					    <wood>1</wood>
+				</effect>
+				<effect>
+					<kind>discount</kind>
+					    <color>giallo</color>
+					    <stone>1</stone>
+				</effect>
+			</permanent_effect>
+</card>
+
+<card kind="character">
+			<code>51</code>
+			
+			<period>1</period>
+			<title>Dama</title>
+			<cost>
+			    <coin>4</coin>
+			</cost>
+			<permanent_effect>
+				<effect>
+					<kind>bmAction</kind>
+					<action>blu</action>
+					<amount>2</amount>
+				</effect>
+				<effect>
+					<kind>discount</kind>
+					    <color>blu</color>
+					    <coin>1</coin>
+				</effect>
+			</permanent_effect>
+</card>
+
+<card kind="character">
+			<code>52</code>
+			
+			<period>1</period>
+			<title>Cavaliere</title>
+			<cost>
+			    <coin>2</coin>
+			</cost>
+			<instant_effects>
+			    <effect>
+					<kind>privilege</kind>
+					    <amount>1</amount>
+				</effect>
+			</instant_effects>
+			<permanent_effect>
+			    <effect>
+			    	<kind>bmAction</kind>
+					<action>viola</action>
+					<amount>2</amount>
+				</effect>
+			</permanent_effect>
+</card>
+
+<card kind="character">
+			<code>53</code>
+			
+			<period>1</period>
+			<title>Contadino</title>
+			<cost>
+			    <coin>3</coin>
+			</cost>
+			<permanent_effect>
+			    <effect>
+			    	<kind>bmAction</kind>
+					<action>raccolto</action>
+					<amount>2</amount>
+				</effect>
+			</permanent_effect>
+</card>
+
+<card kind="character">
+			<code>54</code>
+			
+			<period>1</period>
+			<title>Artigiano</title>
+			<cost>
+			    <coin>3</coin>
+			</cost>
+			<permanent_effect>
+				<effect>
+					<kind>bmAction</kind>
+					<action>produzione</action>
+					<amount>2</amount>
+				</effect>
+			</permanent_effect>
+</card>
+
+<card kind="character">
+			<code>55</code>
+			
+			<period>1</period>
+			<title>Predicatore</title>
+			<cost>
+			    <coin>2</coin>
+			</cost>
+			<instant_effects>
+			    <effect>
+					<kind>resources</kind>
+					<bonus>
+					    <faith>4</faith>
+					</bonus>
+				</effect>
+			</instant_effects>
+			<permanent_effect>
+			    <effect>
+					<kind>noEffettoTorri</kind>
+				</effect>
+			</permanent_effect>
+</card>
+
+<card kind="character">
+			<code>56</code>
+			
+			<period>1</period>
+			<title>Badessa</title>
+			<cost>
+			    <coin>3</coin>
+			</cost>
+			<instant_effects>
+			    <effect>
+					<kind>resources</kind>
+					<bonus>
+					    <faith>1</faith>
+					</bonus>
+				</effect>
+				<effect>
+					<kind>colorful</kind>
+					<value>4</value>
+				</effect>
+			</instant_effects>
+</card>
+
+<card kind="character">
+			<code>57</code>
+			
+			<period>2</period>
+			<title>Capitano</title>
+			<cost>
+			    <coin>4</coin>
+			</cost>
+			<instant_effects>
+			    <effect>
+					<kind>resources</kind>
+					<bonus>
+					    <military>2</military>
+					</bonus>
+				</effect>
+				<effect>
+					<kind>green</kind>
+					<value>6</value>
+				</effect>
+			</instant_effects>
+</card>
+
+<card kind="character">
+			<code>58</code>
+			
+			<period>2</period>
+			<title>Architetto</title>
+			<cost>
+			    <coin>4</coin>
+			</cost>
+			<instant_effects>
+			    <effect>
+					<kind>yellow</kind>
+					<value>6</value>
+				</effect>
+				<effect>
+					<kind>discount</kind>
+					    <color>giallo</color>
+					    <wood>1</wood>
+				</effect>
+				<effect>
+					<kind>discount</kind>
+					    <color>giallo</color>
+					    <stone>1</stone>
+				</effect>
+			</instant_effects>
+</card>
+
+<card kind="character">
+			<code>59</code>
+			
+			<period>2</period>
+			<title>Mecenate</title>
+			<cost>
+			    <coin>3</coin>
+			</cost>
+			<instant_effects>
+			    <effect>
+					<kind>blue</kind>
+					<value>6</value>
+				</effect>
+				<effect>
+					<kind>discount</kind>
+					    <color>blu</color>
+					    <coin>2</coin>
+				</effect>
+			</instant_effects>
+</card>
+
+<card kind="character">
+			<code>60</code>
+			
+			<period>2</period>
+			<title>Eroe</title>
+			<cost>
+			    <coin>4</coin>
+			</cost>
+			<instant_effects>
+			    <effect>
+					<kind>purple</kind>
+					<value>6</value>
+				</effect>
+				<effect>
+					<kind>privilege</kind>
+					<amount>1</amount>
+				</effect>
+			</instant_effects>
+</card>
+
+<card kind="character">
+			<code>61</code>
+			
+			<period>2</period>
+			<title>Fattore</title>
+			<cost>
+			    <coin>4</coin>
+			</cost>
+			<permanent_effect>
+			    <effect>
+					<kind>bmAction</kind>
+					<action>blu</action>
+					<amount>3</amount>
+				</effect>
+			</permanent_effect>
+</card>
+
+<card kind="character">
+			<code>62</code>
+			
+			<period>2</period>
+			<title>Studioso</title>
+			<cost>
+			    <coin>4</coin>
+			</cost>
+			<permanent_effect>
+			    <effect>
+					<kind>bmAction</kind>
+					<action>produzione</action>
+					<amount>3</amount>
+				</effect>
+			</permanent_effect>
+</card>
+
+<card kind="character">
+			<code>63</code>
+			
+			<period>2</period>
+			<title>Messo Papale</title>
+			<cost>
+			    <coin>5</coin>
+			</cost>
+			<instant_effects>
+			    <effect>
+					<kind>resources</kind>
+					<bonus>
+					    <faith>3</faith>
+					</bonus>
+			    </effect>
+			</instant_effects>
+</card>
+
+<card kind="character">
+			<code>64</code>
+			
+			<period>2</period>
+			<title>Messo Reale</title>
+			<cost>
+			    <coin>5</coin>
+			</cost>
+			<instant_effects>
+			    <effect>
+					<kind>privilege</kind>
+                    <amount>3</amount>
+                </effect>
+			</instant_effects>
+</card>
+
+<card kind="character">
+			<code>65</code>
+			
+			<period>3</period>
+			<title>Nobile</title>
+			<cost>
+			    <coin>6</coin>
+			</cost>
+			<instant_effects>
+			    <effect>
+			    	<kind>byCard</kind>
+                    <color>verde</color>
+                    <bonus>
+						<victory>2</victory>
+					</bonus>
+				</effect>
+			</instant_effects>
+</card>
+
+<card kind="character">
+			<code>66</code>
+			
+			<period>3</period>
+			<title>Governatore</title>
+			<cost>
+			    <coin>6</coin>
+			</cost>
+			<instant_effects>
+			    <effect>
+			    	<kind>byCard</kind>
+                    <color>giallo</color>
+                    <bonus>
+						<victory>2</victory>
+					</bonus>
+				</effect>
+			</instant_effects>
+</card>
+
+<card kind="character">
+			<code>67</code>
+			
+			<period>3</period>
+			<title>Cortigiana</title>
+			<cost>
+			    <coin>7</coin>
+			</cost>
+			<instant_effects>
+			    <effect>
+			    	<kind>byCard</kind>
+                    <color>blu</color>
+                    <bonus>
+						<victory>2</victory>
+					</bonus>
+				</effect>
+			</instant_effects>
+</card>
+
+<card kind="character">
+			<code>68</code>
+			
+			<period>3</period>
+			<title>Arido</title>
+			<cost>
+			    <coin>6</coin>
+			</cost>
+			<instant_effects>
+			    <effect>
+			    	<kind>byCard</kind>
+                    <color>viola</color>
+                    <bonus>
+						<victory>2</victory>
+					</bonus>
+				</effect>
+			</instant_effects>
+</card>
+
+<card kind="character">
+			<code>69</code>
+			
+			<period>3</period>
+			<title>Cardinale</title>
+			<cost>
+			    <coin>4</coin>
+			</cost>
+			<instant_effects>
+			    <effect>
+			    	<kind>harvest</kind>
+                    <value>2</value>
+                </effect>
+                <effect>
+			    	<kind>resources</kind>
+			    	<bonus>
+			    	    <faith>2</faith>
+			    	</bonus>
+                </effect>
+			</instant_effects>
+</card>
+
+<card kind="character">
+			<code>70</code>
+			
+			<period>3</period>
+			<title>Vescovo</title>
+			<cost>
+			    <coin>5</coin>
+			</cost>
+			<instant_effects>
+			    <effect>
+			    	<kind>production</kind>
+                    <value>4</value>
+                </effect>
+                <effect>
+			    	<kind>resources</kind>
+			    	<bonus>
+			    	    <faith>1</faith>
+			    	</bonus>
+                </effect>
+			</instant_effects>
+</card>
+
+<card kind="character">
+			<code>71</code>
+			
+			<period>3</period>
+			<title>Generale</title>
+			<cost>
+			    <coin>5</coin>
+			</cost>
+			<instant_effects>
+			    <effect>
+			    	<kind>byPoints</kind>
+                    <military>2</military>
+                    <bonus>
+						<victory>1</victory>
+					</bonus>
+				</effect>
+			</instant_effects>
+</card>
+
+<card kind="character">
+			<code>72</code>
+			
+			<period>3</period>
+			<title>Ambasciatore</title>
+			<cost>
+			    <coin>6</coin>
+			</cost>
+			<instant_effects>
+			    <effect>
+			    	<kind>privilege</kind>
+                    <amount>1</amount>
+                </effect>
+                <effect>
+                    <kind>colorful</kind>
+					<value>7</value>
+				</effect>
+			</instant_effects>
+</card>
+
+<card kind="venture">
+			<code>73</code>
+			
+			<period>1</period>
+			<title>Ingaggiare Reclute</title>
+			<cost>
+			    <coin>4</coin>
+			</cost>
+			<instant_effects>
+			    <effect>
+			    	<kind>resources</kind>
+			    	<bonus>
+			    	    <military>5</military>
+			    	</bonus>
+                </effect>
+    		</instant_effects>
+            <permanent_effect>
+			    <effect>
+			    	<kind>resources</kind>
+			    	<bonus>
+			    	    <victory>4</victory>
+			    	</bonus>
+                </effect>
+			</permanent_effect>
+</card>
+
+<card kind="venture">
+			<code>74</code>
+			
+			<period>1</period>
+			<title>Riparare la Chiesa</title>
+			<cost>
+			    <coin>1</coin>
+			    <wood>1</wood>
+			    <stone>1</stone>
+			</cost>
+			<instant_effects>
+			    <effect>
+			    	<kind>resources</kind>
+			    	<bonus>
+			    	    <faith>1</faith>
+			    	</bonus>
+                </effect>
+    		</instant_effects>
+            <permanent_effect>
+			    <effect>
+			    	<kind>resources</kind>
+			    	<bonus>
+			    	    <victory>5</victory>
+			    	</bonus>
+                </effect>
+			</permanent_effect>
+</card>
+
+<card kind="venture">
+			<code>75</code>
+			
+			<period>1</period>
+			<title>Costruire le Mura</title>
+			<cost>
+			    <stone>4</stone>
+			</cost>
+			<instant_effects>
+			    <effect>
+			    	<kind>resources</kind>
+			    	<bonus>
+			    	    <military>2</military>
+			    	</bonus>
+                </effect>
+                <effect>
+                    <kind>privilege</kind>
+                    <amount>1</amount>
+                </effect>
+    		</instant_effects>
+            <permanent_effect>
+			    <effect>
+			    	<kind>resources</kind>
+			    	<bonus>
+			    	    <victory>3</victory>
+			    	</bonus>
+                </effect>
+			</permanent_effect>
+</card>
+
+<card kind="venture">
+			<code>76</code>
+			
+			<period>1</period>
+			<title>Innalzare una Statua</title>
+			<cost>
+			    <stone>2</stone>
+			    <wood>2</wood>
+			</cost>
+			<instant_effects>
+                <effect>
+                    <kind>privilege</kind>
+                    <amount>2</amount>
+                </effect>
+    		</instant_effects>
+            <permanent_effect>
+			    <effect>
+			    	<kind>resources</kind>
+			    	<bonus>
+			    	    <victory>4</victory>
+			    	</bonus>
+                </effect>
+			</permanent_effect>
+</card>
+
+<card kind="venture">
+			<code>77</code>
+			
+			<period>1</period>
+			<title>Campagna Militare</title>
+			<requirement>
+			    <military>3</military>
+			</requirement>
+			<cost>
+			    <military>2</military>
+			</cost>
+			<instant_effects>
+			    <effect>
+			    	<kind>resources</kind>
+			    	<bonus>
+			    	    <coin>3</coin>
+			    	</bonus>
+                </effect>
+    		</instant_effects>
+            <permanent_effect>
+			    <effect>
+			    	<kind>resources</kind>
+			    	<bonus>
+			    	    <victory>5</victory>
+			    	</bonus>
+                </effect>
+			</permanent_effect>
+</card>
+
+<card kind="venture">
+			<code>78</code>
+			
+			<period>1</period>
+			<title>Ospitare i Mendicanti</title>
+			<cost>
+			    <wood>3</wood>
+			</cost>
+			<instant_effects>
+			    <effect>
+			    	<kind>resources</kind>
+			    	<bonus>
+			    	    <servant>4</servant>
+			    	</bonus>
+                </effect>
+    		</instant_effects>
+            <permanent_effect>
+			    <effect>
+			    	<kind>resources</kind>
+			    	<bonus>
+			    	    <victory>4</victory>
+			    	</bonus>
+                </effect>
+			</permanent_effect>
+</card>
+
+<card kind="venture">
+			<code>79</code>
+			
+			<period>1</period>
+			<title>Combattere le Eresie</title>
+			<requirement>
+			    <military>5</military>
+			</requirement>
+			<cost>
+			    <military>3</military>
+			</cost>
+			<instant_effects>
+			    <effect>
+			    	<kind>resources</kind>
+			    	<bonus>
+			    	    <faith>2</faith>
+			    	</bonus>
+                </effect>
+    		</instant_effects>
+            <permanent_effect>
+			    <effect>
+			    	<kind>resources</kind>
+			    	<bonus>
+			    	    <victory>5</victory>
+			    	</bonus>
+                </effect>
+			</permanent_effect>
+</card>
+
+<card kind="venture">
+			<code>80</code>
+			
+			<period>1</period>
+			<title>Sostegno al Vescovo</title>
+			<requirement>
+			    <military>4</military>
+			</requirement>
+			<cost>
+			    <military>2</military>
+			</cost>
+			<cost>
+			    <coin>2</coin>
+			    <wood>1</wood>
+			    <stone>1</stone>
+			</cost>
+			<instant_effects>
+			    <effect>
+			    	<kind>resources</kind>
+			    	<bonus>
+			    	    <faith>3</faith>
+			    	</bonus>
+                </effect>
+    		</instant_effects>
+            <permanent_effect>
+			    <effect>
+			    	<kind>resources</kind>
+			    	<bonus>
+			    	    <victory>1</victory>
+			    	</bonus>
+                </effect>
+			</permanent_effect>
+</card>
+
+<card kind="venture">
+			<code>81</code>
+			
+			<period>2</period>
+			<title>Ingaggiare Soldati</title>
+			<cost>
+			    <coin>6</coin>
+			</cost>
+			<instant_effects>
+			    <effect>
+			    	<kind>resources</kind>
+			    	<bonus>
+			    	    <military>6</military>
+			    	</bonus>
+                </effect>
+    		</instant_effects>
+            <permanent_effect>
+			    <effect>
+			    	<kind>resources</kind>
+			    	<bonus>
+			    	    <victory>5</victory>
+			    	</bonus>
+                </effect>
+			</permanent_effect>
+</card>
+
+<card kind="venture">
+			<code>82</code>
+			
+			<period>2</period>
+			<title>Riparare l'Abbazia</title>
+			<cost>
+			    <coin>2</coin>
+			    <wood>2</wood>
+			    <stone>2</stone>
+			</cost>
+			<instant_effects>
+			    <effect>
+			    	<kind>resources</kind>
+			    	<bonus>
+			    	    <faith>2</faith>
+			    	</bonus>
+                </effect>
+    		</instant_effects>
+            <permanent_effect>
+			    <effect>
+			    	<kind>resources</kind>
+			    	<bonus>
+			    	    <victory>6</victory>
+			    	</bonus>
+                </effect>
+			</permanent_effect>
+</card>
+
+<card kind="venture">
+			<code>83</code>
+			
+			<period>2</period>
+			<title>Costruire i Bastioni</title>
+			<cost>
+			    <stone>4</stone>
+			</cost>
+			<instant_effects>
+			    <effect>
+			    	<kind>resources</kind>
+			    	<bonus>
+			    	    <military>3</military>
+			    	</bonus>
+                </effect>
+                <effect>
+                    <kind>privilege</kind>
+                    <amount>1</amount>
+                </effect>
+    		</instant_effects>
+            <permanent_effect>
+			    <effect>
+			    	<kind>resources</kind>
+			    	<bonus>
+			    	    <victory>2</victory>
+			    	</bonus>
+                </effect>
+			</permanent_effect>
+</card>
+
+<card kind="venture">
+			<code>84</code>
+			
+			<period>2</period>
+			<title>Supporto al Re</title>
+			<requirement>
+			    <military>6</military>
+			</requirement>
+			<cost>
+			    <military>3</military>
+			</cost>
+			<instant_effects>
+			    <effect>
+			    	<kind>resources</kind>
+			    	<bonus>
+			    	    <coin>5</coin>
+			    	</bonus>
+                </effect>
+                <effect>
+                    <kind>privilege</kind>
+                    <amount>1</amount>
+                </effect>
+    		</instant_effects>
+            <permanent_effect>
+			    <effect>
+			    	<kind>resources</kind>
+			    	<bonus>
+			    	    <victory>3</victory>
+			    	</bonus>
+                </effect>
+			</permanent_effect>
+</card>
+
+<card kind="venture">
+			<code>85</code>
+			
+			<period>2</period>
+			<title>Scavare Canalizzazioni</title>
+			<cost>
+			    <servant>2</servant>
+			    <coin>3</coin>
+			</cost>
+			<instant_effects>
+			    <effect>
+			    	<kind>harvest</kind>
+			    	<value>4</value>
+                </effect>
+    		</instant_effects>
+            <permanent_effect>
+			    <effect>
+			    	<kind>resources</kind>
+			    	<bonus>
+			    	    <victory>5</victory>
+			    	</bonus>
+                </effect>
+			</permanent_effect>
+</card>
+
+<card kind="venture">
+			<code>86</code>
+			
+			<period>2</period>
+			<title>Accogliere gli Stranieri</title>
+			<cost>
+			    <wood>4</wood>
+			</cost>
+			<instant_effects>
+			    <effect>
+			    	<kind>resources</kind>
+			    	<bonus>
+			    	    <servant>5</servant>
+			    	</bonus>
+                </effect>
+    		</instant_effects>
+            <permanent_effect>
+			    <effect>
+			    	<kind>resources</kind>
+			    	<bonus>
+			    	    <victory>4</victory>
+			    	</bonus>
+                </effect>
+			</permanent_effect>
+</card>
+
+<card kind="venture">
+			<code>87</code>
+			
+			<period>2</period>
+			<title>Crociata</title>
+			<requirement>
+			    <military>8</military>
+			</requirement>
+			<cost>
+			    <military>4</military>
+			</cost>
+			<instant_effects>
+			    <effect>
+			    	<kind>resources</kind>
+			    	<bonus>
+			    	    <coin>5</coin>
+			    	</bonus>
+                </effect>
+                <effect>
+			    	<kind>resources</kind>
+			    	<bonus>
+			    	    <faith>1</faith>
+			    	</bonus>
+                </effect>
+    		</instant_effects>
+            <permanent_effect>
+			    <effect>
+			    	<kind>resources</kind>
+			    	<bonus>
+			    	    <victory>5</victory>
+			    	</bonus>
+                </effect>
+			</permanent_effect>
+</card>
+
+<card kind="venture">
+			<code>88</code>
+			
+			<period>2</period>
+			<title>Sostegno al Cardinale</title>
+			<requirement>
+			    <military>7</military>
+			</requirement>
+			<cost>
+			    <military>4</military>
+			</cost>
+			<cost>
+			    <wood>2</wood>
+			    <stone>2</stone>
+			    <coin>3</coin>
+			</cost>
+			<instant_effects>
+                <effect>
+			    	<kind>resources</kind>
+			    	<bonus>
+			    	    <faith>3</faith>
+			    	</bonus>
+                </effect>
+    		</instant_effects>
+            <permanent_effect>
+			    <effect>
+			    	<kind>resources</kind>
+			    	<bonus>
+			    	    <victory>4</victory>
+			    	</bonus>
+                </effect>
+			</permanent_effect>
+</card>
+
+<card kind="venture">
+			<code>89</code>
+			
+			<period>3</period>
+			<title>Ingaggiare Mercenari</title>
+			<cost>
+			    <coin>8</coin>
+			</cost>
+			<instant_effects>
+			    <effect>
+			    	<kind>resources</kind>
+			    	<bonus>
+			    	    <military>7</military>
+			    	</bonus>
+                </effect>
+    		</instant_effects>
+            <permanent_effect>
+			    <effect>
+			    	<kind>resources</kind>
+			    	<bonus>
+			    	    <victory>6</victory>
+			    	</bonus>
+                </effect>
+			</permanent_effect>
+</card>
+
+<card kind="venture">
+			<code>90</code>
+			
+			<period>3</period>
+			<title>Ingaggiare Mercenari</title>
+			<cost>
+			    <coin>3</coin>
+			    <wood>3</wood>
+			    <stone>3</stone>
+			</cost>
+			<instant_effects>
+			    <effect>
+			    	<kind>colorful</kind>
+			    	<value>7</value>
+                </effect>
+                <effect>
+			    	<kind>resources</kind>
+			    	<bonus>
+			    	    <faith>1</faith>
+			    	</bonus>
+                </effect>
+    		</instant_effects>
+            <permanent_effect>
+			    <effect>
+			    	<kind>resources</kind>
+			    	<bonus>
+			    	    <victory>5</victory>
+			    	</bonus>
+                </effect>
+			</permanent_effect>
+</card>
+
+<card kind="venture">
+			<code>91</code>
+			
+			<period>3</period>
+			<title>Costruire le Torri</title>
+			<cost>
+			    <stone>6</stone>
+			</cost>
+			<instant_effects>
+			    <effect>
+			    	<kind>privilege</kind>
+			    	<amount>1</amount>
+                </effect>
+                <effect>
+			    	<kind>resources</kind>
+			    	<bonus>
+			    	    <military>4</military>
+			    	</bonus>
+                </effect>
+    		</instant_effects>
+            <permanent_effect>
+			    <effect>
+			    	<kind>resources</kind>
+			    	<bonus>
+			    	    <victory>4</victory>
+			    	</bonus>
+                </effect>
+			</permanent_effect>
+</card>
+
+<card kind="venture">
+			<code>92</code>
+			
+			<period>3</period>
+			<title>Commissionare Arte Sacra</title>
+			<cost>
+			    <wood>6</wood>
+			</cost>
+			<instant_effects>
+                <effect>
+			    	<kind>resources</kind>
+			    	<bonus>
+			    	    <faith>3</faith>
+			    	</bonus>
+                </effect>
+    		</instant_effects>
+            <permanent_effect>
+			    <effect>
+			    	<kind>resources</kind>
+			    	<bonus>
+			    	    <victory>3</victory>
+			    	</bonus>
+                </effect>
+			</permanent_effect>
+</card>
+
+<card kind="venture">
+			<code>93</code>
+			
+			<period>3</period>
+			<title>Conquista Militare</title>
+			<requirement>
+			    <military>12</military>
+			</requirement>
+			<cost>
+			    <military>6</military>
+			</cost>
+			<instant_effects>
+                <effect>
+			    	<kind>resources</kind>
+			    	<bonus>
+			    	    <wood>3</wood>
+			    	    <stone>3</stone>
+			    	    <coin>3</coin>
+			    	</bonus>
+                </effect>
+    		</instant_effects>
+            <permanent_effect>
+			    <effect>
+			    	<kind>resources</kind>
+			    	<bonus>
+			    	    <victory>7</victory>
+			    	</bonus>
+                </effect>
+			</permanent_effect>
+</card>
+
+<card kind="venture">
+			<code>94</code>
+			
+			<period>3</period>
+			<title>Migliorare le Strade</title>
+			<cost>
+			    <coin>4</coin>
+			    <servant>3</servant>
+			</cost>
+			<instant_effects>
+			    <effect>
+			    	<kind>production</kind>
+			    	<value>3</value>
+                </effect>
+    		</instant_effects>
+            <permanent_effect>
+			    <effect>
+			    	<kind>resources</kind>
+			    	<bonus>
+			    	    <victory>5</victory>
+			    	</bonus>
+                </effect>
+			</permanent_effect>
+</card>
+
+<card kind="venture">
+			<code>95</code>
+			
+			<period>3</period>
+			<title>Guerra Santa</title>
+			<requirement>
+			    <military>15</military>
+			</requirement>
+			<cost>
+			    <military>8</military>
+			</cost>
+			<instant_effects>
+                <effect>
+			    	<kind>resources</kind>
+			    	<bonus>
+			    	    <faith>4</faith>
+			    	</bonus>
+                </effect>
+    		</instant_effects>
+            <permanent_effect>
+			    <effect>
+			    	<kind>resources</kind>
+			    	<bonus>
+			    	    <victory>8</victory>
+			    	</bonus>
+                </effect>
+			</permanent_effect>
+</card>
+
+<card kind="venture">
+			<code>96</code>
+			
+			<period>3</period>
+			<title>Sostegno al Papa</title>
+			<requirement>
+			    <military>10</military>
+			</requirement>
+			<cost>
+			    <military>5</military>
+			</cost>
+			<cost>
+			    <wood>3</wood>
+			    <stone>3</stone>
+			    <coin>4</coin>
+			</cost>
+			<instant_effects>
+                <effect>
+			    	<kind>resources</kind>
+			    	<bonus>
+			    	    <faith>2</faith>
+			    	</bonus>
+                </effect>
+    		</instant_effects>
+            <permanent_effect>
+			    <effect>
+			    	<kind>resources</kind>
+			    	<bonus>
+			    	    <victory>10</victory>
+			    	</bonus>
+                </effect>
+			</permanent_effect>
+</card>
+</deckCards>
+
